@@ -1,3 +1,4 @@
+# Unity自動生成フォルダ（Gitに含めない）
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -5,11 +6,41 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+/[Mm]emory[Cc]aptures/
 
+# Visual Studio / Rider IDE ファイル
 *.csproj
 *.sln
 *.user
 *.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+.vs/
+.idea/
+ExportedObj/
 
+# macOS
 .DS_Store
+*.DS_Store
+
+# Windows
 Thumbs.db
+Desktop.ini
+
+# Git LFS用メタデータ（LFS使う場合は削除しない）
+# *.fbx filter=lfs diff=lfs merge=lfs -text
+
+# 個人設定ファイル
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+# Asset Store/サードパーティ大容量アセットは各自ダウンロード
+# （必要に応じてコメントアウトを解除）
+# Assets/Plugins/
