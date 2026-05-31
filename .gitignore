@@ -8,6 +8,16 @@
 /[Uu]ser[Ss]ettings/
 /[Mm]emory[Cc]aptures/
 
+# Unity project generated folders
+UnityProject/[Ll]ibrary/
+UnityProject/[Tt]emp/
+UnityProject/[Oo]bj/
+UnityProject/[Bb]uild/
+UnityProject/[Bb]uilds/
+UnityProject/[Ll]ogs/
+UnityProject/[Uu]ser[Ss]ettings/
+UnityProject/[Mm]emory[Cc]aptures/
+
 # Visual Studio / Rider IDE ファイル
 *.csproj
 *.sln
