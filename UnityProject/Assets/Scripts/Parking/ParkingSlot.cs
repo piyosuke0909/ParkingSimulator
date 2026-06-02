@@ -20,6 +20,9 @@ public class ParkingSlot : MonoBehaviour
     [Header("Parking Point")]
     public Transform parkingPoint;
 
+    [Header("Detection")]
+    public Transform detectionPoint;
+
     [Header("Visual")]
     public Renderer slotBaseRenderer;
 
