@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class ImageBasedHeatmapManager : MonoBehaviour
 {
+    [Header("Editor Visibility")]
+    public GameObject heatmapPlaneObject;
+    public bool showHeatmapOnlyInPlayMode = true;
+
     [Header("Detection Camera")]
     public Camera detectionCamera;
     public RenderTexture detectionRenderTexture;
@@ -55,6 +59,11 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
     private void Start()
     {
+        if (heatmapPlaneObject != null && showHeatmapOnlyInPlayMode)
+        {
+            heatmapPlaneObject.SetActive(true);
+        }
+
         Initialize();
 
         if (addTestHeatOnStart)
