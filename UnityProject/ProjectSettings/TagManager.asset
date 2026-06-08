@@ -14,8 +14,8 @@ TagManager:
   - Car
   - Ground
   - ParkingLot
-  - 
-  - 
+  - ParkingStatus
+  - ERoads
   - 
   - 
   - 
