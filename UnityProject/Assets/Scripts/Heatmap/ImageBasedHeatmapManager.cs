@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ImageBasedHeatmapManager : MonoBehaviour
@@ -28,6 +29,12 @@ public class ImageBasedHeatmapManager : MonoBehaviour
     [Header("Image Processing")]
     [Range(0f, 1f)]
     public float brightnessThreshold = 0.1f;
+
+    [Tooltip("車として扱う最小ピクセル数。小さすぎる白点ノイズを無視します。")]
+    public int minBlobPixelCount = 6;
+
+    [Tooltip("1回の更新で検出する最大車両数。多すぎる誤検出を防ぎます。")]
+    public int maxDetectedCars = 50;
 
     [Tooltip("画像処理時に何ピクセルおきに確認するか。小さいほど精度が高いが重くなります。")]
     public int pixelStep = 4;
@@ -189,10 +196,12 @@ public class ImageBasedHeatmapManager : MonoBehaviour
         int width = captureTexture.width;
         int height = captureTexture.height;
 
-        int detectedCount = 0;
-        float sumX = 0f;
-        float sumY = 0f;
+        bool[,] detectedPixels = new bool[width, height];
+        bool[,] visited = new bool[width, height];
 
+        int brightPixelCount = 0;
+
+        // まず、車と思われる明るいピクセルを記録する
         for (int y = 0; y < height; y += pixelStep)
         {
             for (int x = 0; x < width; x += pixelStep)
@@ -205,34 +214,125 @@ public class ImageBasedHeatmapManager : MonoBehaviour
                     continue;
                 }
 
-                detectedCount++;
-                sumX += x;
-                sumY += y;
+                detectedPixels[x, y] = true;
+                brightPixelCount++;
+            }
+        }
+
+        int detectedCarCount = 0;
+
+        // 白いピクセルの塊を探す
+        for (int y = 0; y < height; y += pixelStep)
+        {
+            for (int x = 0; x < width; x += pixelStep)
+            {
+                if (!detectedPixels[x, y])
+                {
+                    continue;
+                }
+
+                if (visited[x, y])
+                {
+                    continue;
+                }
+
+                BlobInfo blob = FindBlob(x, y, detectedPixels, visited, width, height);
+
+                if (blob.pixelCount < minBlobPixelCount)
+                {
+                    continue;
+                }
+
+                int centerPixelX = Mathf.RoundToInt(blob.sumX / blob.pixelCount);
+                int centerPixelY = Mathf.RoundToInt(blob.sumY / blob.pixelCount);
+
+                if (TryConvertPixelToWorldPosition(centerPixelX, centerPixelY, out Vector3 worldPosition))
+                {
+                    AddSmoothHeatAtWorldPosition(worldPosition);
+                    detectedCarCount++;
+
+                    if (showDebugLog)
+                    {
+                        Debug.Log($"車両検出 {detectedCarCount}: Pixel({centerPixelX}, {centerPixelY}) → World {worldPosition}");
+                    }
+                }
+
+                if (detectedCarCount >= maxDetectedCars)
+                {
+                    break;
+                }
+            }
+
+            if (detectedCarCount >= maxDetectedCars)
+            {
+                break;
             }
         }
 
         if (showDebugLog)
         {
-            Debug.Log($"検出ピクセル数: {detectedCount}");
+            Debug.Log($"明るいピクセル数: {brightPixelCount} / 検出車両数: {detectedCarCount}");
         }
+    }
 
-        if (detectedCount <= 0)
+    private BlobInfo FindBlob(
+        int startX,
+        int startY,
+        bool[,] detectedPixels,
+        bool[,] visited,
+        int width,
+        int height
+    )
+    {
+        BlobInfo blob = new BlobInfo();
+
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        queue.Enqueue(new Vector2Int(startX, startY));
+        visited[startX, startY] = true;
+
+        while (queue.Count > 0)
         {
-            return;
-        }
+            Vector2Int current = queue.Dequeue();
 
-        int centerPixelX = Mathf.RoundToInt(sumX / detectedCount);
-        int centerPixelY = Mathf.RoundToInt(sumY / detectedCount);
+            blob.pixelCount++;
+            blob.sumX += current.x;
+            blob.sumY += current.y;
 
-        if (TryConvertPixelToWorldPosition(centerPixelX, centerPixelY, out Vector3 worldPosition))
-        {
-            if (showDebugLog)
+            // 周囲8方向を確認する
+            for (int offsetY = -pixelStep; offsetY <= pixelStep; offsetY += pixelStep)
             {
-                Debug.Log($"検出中心 Pixel: ({centerPixelX}, {centerPixelY}) → World: {worldPosition}");
-            }
+                for (int offsetX = -pixelStep; offsetX <= pixelStep; offsetX += pixelStep)
+                {
+                    if (offsetX == 0 && offsetY == 0)
+                    {
+                        continue;
+                    }
 
-            AddSmoothHeatAtWorldPosition(worldPosition);
+                    int nextX = current.x + offsetX;
+                    int nextY = current.y + offsetY;
+
+                    if (nextX < 0 || nextX >= width || nextY < 0 || nextY >= height)
+                    {
+                        continue;
+                    }
+
+                    if (visited[nextX, nextY])
+                    {
+                        continue;
+                    }
+
+                    if (!detectedPixels[nextX, nextY])
+                    {
+                        continue;
+                    }
+
+                    visited[nextX, nextY] = true;
+                    queue.Enqueue(new Vector2Int(nextX, nextY));
+                }
+            }
         }
+
+        return blob;
     }
 
     private bool TryConvertPixelToWorldPosition(int pixelX, int pixelY, out Vector3 worldPosition)
@@ -339,7 +439,7 @@ public class ImageBasedHeatmapManager : MonoBehaviour
         // 何も検出されていない場所も、薄い青で表示
         if (value <= 0.001f)
         {
-            return new Color(0f, 0.15f, 1f, 0.05f);
+            return new Color(0f, 0.2f, 1f, 0.01f);
         }
 
         Color c1 = new Color(0f, 0.25f, 1f, 1f);   // blue
@@ -424,4 +524,12 @@ public class ImageBasedHeatmapManager : MonoBehaviour
             Debug.Log("中央にテスト用ヒートを追加しました。");
         }
     }
+
+    private struct BlobInfo
+    {
+        public int pixelCount;
+        public float sumX;
+        public float sumY;
+    }
+
 }
