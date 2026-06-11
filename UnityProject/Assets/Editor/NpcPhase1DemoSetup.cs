@@ -76,12 +76,23 @@ public static class NpcPhase1DemoSetup
 
         Transform parkingPoint = EnsurePoint(targetSlot, "NPC_Demo_ParkingPoint", Vector3.zero, true, carObject.transform.position.y);
         Transform approachPoint = EnsurePoint(targetSlot, "NPC_Demo_ApproachPoint", -targetSlot.transform.forward * 8f, false, carObject.transform.position.y);
+        Transform frontEntryPoint = EnsurePoint(targetSlot, "NPC_Demo_FrontEntryPoint", -targetSlot.transform.forward * 3f, false, carObject.transform.position.y);
+        Transform reverseEntryPoint = EnsurePoint(targetSlot, "NPC_Demo_ReverseEntryPoint", -targetSlot.transform.forward * 3f + targetSlot.transform.right * 1.5f, false, carObject.transform.position.y);
 
         targetSlot.parkingPoint = parkingPoint;
         targetSlot.approachPoint = approachPoint;
+        targetSlot.frontEntryPoint = frontEntryPoint;
+        targetSlot.reverseEntryPoint = reverseEntryPoint;
+        targetSlot.slotWidth = 2.5f;
+        targetSlot.slotDepth = 5.0f;
+        targetSlot.aisleWidth = 6.0f;
         targetSlot.allowFrontIn = true;
         targetSlot.allowReverseIn = true;
         targetSlot.preferredManeuver = ParkingManeuverPreference.Auto;
+        ParkingSlotGeometry slotGeometry = EnsureComponent<ParkingSlotGeometry>(targetSlot.gameObject);
+        slotGeometry.allowedVehicleMargin = 0.2f;
+        slotGeometry.BuildRectangleFromSlot(targetSlot);
+        targetSlot.geometry = slotGeometry;
 
         Transform waypointsRoot = EnsureRoot("Waypoints");
         GameObject graphObject = EnsureGameObject("NPC_Phase1_RouteSystem");
@@ -113,6 +124,16 @@ public static class NpcPhase1DemoSetup
         pathFollower.turnSpeed = 8f;
         pathFollower.drawDebugPath = true;
 
+        VehicleCollisionShape collisionShape = EnsureComponent<VehicleCollisionShape>(carObject);
+        collisionShape.bodyLength = 4.5f;
+        collisionShape.bodyWidth = 1.8f;
+        collisionShape.bodyHeight = 1.6f;
+        collisionShape.sideSafetyMargin = 0.2f;
+        collisionShape.frontSafetyMargin = 0.6f;
+        collisionShape.rearSafetyMargin = 0.2f;
+
+        EnsureComponent<DynamicObstacle>(carObject);
+
         ParkingAction parkingAction = EnsureComponent<ParkingAction>(carObject);
         parkingAction.parkingSpeed = 2.5f;
 
@@ -121,6 +142,8 @@ public static class NpcPhase1DemoSetup
         npcDriver.assignedSlot = targetSlot;
         npcDriver.useAssignedSlotOnly = true;
         npcDriver.startOnPlay = true;
+        npcDriver.usePhase2SafetyChecks = true;
+        npcDriver.requireDrivableAreaForManeuver = false;
         npcDriver.logStateChanges = true;
 
         GameObject parkingAreas = GameObject.Find("ParkingAreas");

@@ -14,10 +14,13 @@ public class PathFollower : MonoBehaviour
     public bool drawDebugPath = true;
 
     public event Action PathCompleted;
+    public event Action<float> PathBlocked;
 
     private readonly List<Vector3> currentPath = new List<Vector3>();
     private int currentIndex;
     private bool isFollowing;
+    private float blockedTimer;
+    private VehicleCollisionShape collisionShape;
 
     public bool IsFollowing
     {
@@ -28,6 +31,7 @@ public class PathFollower : MonoBehaviour
     {
         currentPath.Clear();
         currentIndex = 0;
+        blockedTimer = 0f;
 
         if (path == null || path.Count == 0)
         {
@@ -48,6 +52,7 @@ public class PathFollower : MonoBehaviour
         isFollowing = false;
         currentPath.Clear();
         currentIndex = 0;
+        blockedTimer = 0f;
     }
 
     private void Update()
@@ -79,6 +84,15 @@ public class PathFollower : MonoBehaviour
             return;
         }
 
+        if (IsForwardBlocked())
+        {
+            blockedTimer += Time.deltaTime;
+            PathBlocked?.Invoke(blockedTimer);
+            return;
+        }
+
+        blockedTimer = 0f;
+
         if (rotateTowardsMovement && toTarget.sqrMagnitude > 0.001f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(toTarget.normalized, Vector3.up);
@@ -95,6 +109,22 @@ public class PathFollower : MonoBehaviour
         currentPath.Clear();
         currentIndex = 0;
         PathCompleted?.Invoke();
+    }
+
+    private bool IsForwardBlocked()
+    {
+        if (collisionShape == null)
+        {
+            collisionShape = GetComponent<VehicleCollisionShape>();
+        }
+
+        if (collisionShape == null)
+        {
+            return false;
+        }
+
+        RaycastHit hit;
+        return collisionShape.TryGetForwardObstacle(out hit);
     }
 
     private void OnDrawGizmos()

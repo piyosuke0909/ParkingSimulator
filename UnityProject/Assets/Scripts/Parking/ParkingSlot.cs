@@ -39,9 +39,13 @@ public class ParkingSlot : MonoBehaviour
     public string roadNodeId;
 
     [Header("NPC Maneuver")]
+    public float slotWidth = 2.5f;
+    public float slotDepth = 5.0f;
+    public float aisleWidth = 6.0f;
     public bool allowFrontIn = true;
     public bool allowReverseIn = true;
     public ParkingManeuverPreference preferredManeuver = ParkingManeuverPreference.Auto;
+    public ParkingSlotGeometry geometry;
 
     [Header("Visual")]
     public Renderer slotBaseRenderer;
@@ -95,6 +99,22 @@ public class ParkingSlot : MonoBehaviour
         }
 
         return transform;
+    }
+
+    public ParkingSlotGeometry GetGeometry()
+    {
+        if (geometry != null)
+        {
+            return geometry;
+        }
+
+        geometry = GetComponentInChildren<ParkingSlotGeometry>();
+        return geometry;
+    }
+
+    public ManeuverPath[] GetManeuverPaths()
+    {
+        return GetComponentsInChildren<ManeuverPath>();
     }
 
     public void SetEmpty()
@@ -158,6 +178,13 @@ public class ParkingSlot : MonoBehaviour
                 break;
         }
 
+    }
+
+    private void OnValidate()
+    {
+        slotWidth = Mathf.Max(0.01f, slotWidth);
+        slotDepth = Mathf.Max(0.01f, slotDepth);
+        aisleWidth = Mathf.Max(0.01f, aisleWidth);
     }
 
 }

@@ -5,7 +5,8 @@ public enum ParkingActionState
 {
     Idle,
     Parking,
-    Parked
+    Parked,
+    Failed
 }
 
 public class ParkingAction : MonoBehaviour
@@ -17,9 +18,15 @@ public class ParkingAction : MonoBehaviour
     public bool snapToParkingPointOnComplete = true;
 
     public event Action<ParkingSlot> ParkingCompleted;
+    public event Action<ParkingSlot, string> ParkingFailed;
 
     private ParkingSlot targetSlot;
+    private ManeuverPath maneuverPath;
+    private ParkingManeuverType maneuverType = ParkingManeuverType.FrontIn;
+    private readonly System.Collections.Generic.List<Vector3> parkingPath = new System.Collections.Generic.List<Vector3>();
+    private int currentPathIndex;
     private ParkingActionState state = ParkingActionState.Idle;
+    private VehicleCollisionShape collisionShape;
 
     public ParkingActionState State
     {
@@ -28,6 +35,11 @@ public class ParkingAction : MonoBehaviour
 
     public void StartParking(ParkingSlot slot)
     {
+        StartParking(slot, ParkingManeuverType.FrontIn, null);
+    }
+
+    public void StartParking(ParkingSlot slot, ParkingManeuverType selectedManeuverType, ManeuverPath selectedManeuverPath)
+    {
         if (slot == null)
         {
             Debug.LogWarning($"{name}: Parking slot is not set.");
@@ -35,6 +47,9 @@ public class ParkingAction : MonoBehaviour
         }
 
         targetSlot = slot;
+        maneuverType = selectedManeuverType;
+        maneuverPath = selectedManeuverPath;
+        BuildParkingPath();
         state = ParkingActionState.Parking;
     }
 
@@ -46,15 +61,28 @@ public class ParkingAction : MonoBehaviour
         }
 
         Transform parkingPoint = targetSlot.GetParkingPoint();
-        Vector3 targetPosition = parkingPoint.position;
+
+        if (currentPathIndex >= parkingPath.Count)
+        {
+            RotateAndComplete(parkingPoint);
+            return;
+        }
+
+        Vector3 targetPosition = parkingPath[currentPathIndex];
         Vector3 toTarget = targetPosition - transform.position;
         toTarget.y = 0f;
 
         if (toTarget.magnitude > stoppingDistance)
         {
+            if (IsForwardBlocked())
+            {
+                return;
+            }
+
             if (toTarget.sqrMagnitude > 0.001f)
             {
-                Quaternion moveRotation = Quaternion.LookRotation(toTarget.normalized, Vector3.up);
+                Vector3 facingDirection = ShouldFaceAgainstMovement() ? -toTarget.normalized : toTarget.normalized;
+                Quaternion moveRotation = Quaternion.LookRotation(facingDirection, Vector3.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, moveRotation, rotationSpeed * Time.deltaTime);
             }
 
@@ -62,6 +90,11 @@ public class ParkingAction : MonoBehaviour
             return;
         }
 
+        currentPathIndex++;
+    }
+
+    private void RotateAndComplete(Transform parkingPoint)
+    {
         transform.rotation = Quaternion.Slerp(transform.rotation, parkingPoint.rotation, rotationSpeed * Time.deltaTime);
         if (Quaternion.Angle(transform.rotation, parkingPoint.rotation) > 2f)
         {
@@ -71,8 +104,58 @@ public class ParkingAction : MonoBehaviour
         CompleteParking(parkingPoint);
     }
 
+    private void BuildParkingPath()
+    {
+        parkingPath.Clear();
+        currentPathIndex = 0;
+
+        if (maneuverPath != null)
+        {
+            parkingPath.AddRange(maneuverPath.BuildWorldPoints(targetSlot));
+        }
+
+        if (parkingPath.Count == 0)
+        {
+            Transform entryPoint = maneuverType == ParkingManeuverType.ReverseIn ? targetSlot.reverseEntryPoint : targetSlot.frontEntryPoint;
+
+            if (entryPoint != null)
+            {
+                parkingPath.Add(entryPoint.position);
+            }
+
+            parkingPath.Add(targetSlot.GetParkingPoint().position);
+        }
+    }
+
+    private bool ShouldFaceAgainstMovement()
+    {
+        return maneuverType == ParkingManeuverType.ReverseIn && currentPathIndex >= parkingPath.Count - 1;
+    }
+
+    private bool IsForwardBlocked()
+    {
+        if (collisionShape == null)
+        {
+            collisionShape = GetComponent<VehicleCollisionShape>();
+        }
+
+        if (collisionShape == null)
+        {
+            return false;
+        }
+
+        RaycastHit hit;
+        return collisionShape.TryGetForwardObstacle(out hit);
+    }
+
     private void CompleteParking(Transform parkingPoint)
     {
+        if (!IsFinalPoseSafe(parkingPoint))
+        {
+            FailParking("Final parking pose is outside the slot geometry or overlaps an obstacle.");
+            return;
+        }
+
         if (snapToParkingPointOnComplete)
         {
             transform.position = parkingPoint.position;
@@ -82,5 +165,49 @@ public class ParkingAction : MonoBehaviour
         state = ParkingActionState.Parked;
         targetSlot.SetOccupied();
         ParkingCompleted?.Invoke(targetSlot);
+    }
+
+    private bool IsFinalPoseSafe(Transform parkingPoint)
+    {
+        if (collisionShape == null)
+        {
+            collisionShape = GetComponent<VehicleCollisionShape>();
+        }
+
+        ParkingSlotGeometry geometry = targetSlot.GetGeometry();
+        if (geometry != null && collisionShape != null && !geometry.IsVehiclePoseInside(collisionShape, parkingPoint.position, parkingPoint.rotation))
+        {
+            return false;
+        }
+
+        if (collisionShape != null && HasBlockingOverlap(parkingPoint.position, parkingPoint.rotation))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool HasBlockingOverlap(Vector3 position, Quaternion rotation)
+    {
+        Vector3 center = collisionShape.GetCastCenter(position, rotation);
+        Vector3 halfExtents = collisionShape.GetHalfExtents();
+        Collider[] colliders = Physics.OverlapBox(center, halfExtents, rotation, collisionShape.obstacleLayerMask, QueryTriggerInteraction.Ignore);
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider != null && collider.transform.root != transform.root)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void FailParking(string reason)
+    {
+        state = ParkingActionState.Failed;
+        ParkingFailed?.Invoke(targetSlot, reason);
     }
 }
