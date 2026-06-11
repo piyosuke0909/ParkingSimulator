@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public static class NpcPhase1DemoSetup
 {
     private const string ScenePath = "Assets/Scenes/Parking/SampleScene.unity";
+    private const string CarNpcPrefabPath = "Assets/Prefabs/Cars/Car_NPC/Car_NPC.prefab";
+    private const string CarNpcVisualPrefabPath = "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Prefabs/Mesh Only/Sports Car.prefab";
     private const string MarkerAssetPath = "Assets/Editor/NPCPhase1DemoSetup.run";
     private const string MarkerRelativePath = "Editor/NPCPhase1DemoSetup.run";
 
@@ -59,11 +61,12 @@ public static class NpcPhase1DemoSetup
         }
 
         OpenSampleSceneIfNeeded();
+        EnsureCarNpcPrefabVisual();
 
-        GameObject carObject = GameObject.Find("DummyCar_001");
+        GameObject carObject = ResolveDemoCarObject();
         if (carObject == null)
         {
-            Debug.LogWarning("NPC Phase 1 demo setup failed: DummyCar_001 was not found.");
+            Debug.LogWarning("NPC Phase 1 demo setup failed: Car_NPC prefab or DummyCar_001 was not found.");
             return;
         }
 
@@ -152,6 +155,8 @@ public static class NpcPhase1DemoSetup
             npcDriver.parkingSlotsRoot = parkingAreas.transform;
         }
 
+        EnsureCarNpcVisual(carObject);
+
         Selection.activeGameObject = carObject;
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         EditorSceneManager.SaveOpenScenes();
@@ -161,6 +166,108 @@ public static class NpcPhase1DemoSetup
         if (enterPlayMode)
         {
             EditorApplication.isPlaying = true;
+        }
+    }
+
+    private static GameObject ResolveDemoCarObject()
+    {
+        GameObject existingCarNpc = GameObject.Find("Car_NPC");
+        if (existingCarNpc != null)
+        {
+            return existingCarNpc;
+        }
+
+        GameObject dummyCar = GameObject.Find("DummyCar_001");
+        GameObject carNpcPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(CarNpcPrefabPath);
+        if (carNpcPrefab == null)
+        {
+            return dummyCar;
+        }
+
+        GameObject carNpc = PrefabUtility.InstantiatePrefab(carNpcPrefab) as GameObject;
+        if (carNpc == null)
+        {
+            return dummyCar;
+        }
+
+        carNpc.name = "Car_NPC";
+
+        if (dummyCar != null)
+        {
+            carNpc.transform.position = dummyCar.transform.position;
+            carNpc.transform.rotation = dummyCar.transform.rotation;
+            dummyCar.SetActive(false);
+        }
+
+        return carNpc;
+    }
+
+    private static void EnsureCarNpcVisual(GameObject carObject)
+    {
+        if (carObject == null)
+        {
+            return;
+        }
+
+        GameObject visualPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(CarNpcVisualPrefabPath);
+        if (visualPrefab == null)
+        {
+            Debug.LogWarning($"Car_NPC visual prefab was not found: {CarNpcVisualPrefabPath}");
+            return;
+        }
+
+        for (int i = carObject.transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = carObject.transform.GetChild(i);
+            if (child.name == "Visual")
+            {
+                UnityEngine.Object.DestroyImmediate(child.gameObject);
+            }
+        }
+
+        GameObject visualObject = PrefabUtility.InstantiatePrefab(visualPrefab, carObject.transform) as GameObject;
+        if (visualObject == null)
+        {
+            Debug.LogWarning($"Car_NPC visual prefab could not be instantiated: {CarNpcVisualPrefabPath}");
+            return;
+        }
+
+        visualObject.name = "Visual";
+        visualObject.layer = carObject.layer;
+        SetLayerRecursively(visualObject.transform, carObject.layer);
+
+        visualObject.transform.localPosition = new Vector3(0f, 0f, -0.1f);
+        visualObject.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        visualObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
+    }
+
+    private static void EnsureCarNpcPrefabVisual()
+    {
+        GameObject carNpcPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(CarNpcPrefabPath);
+        if (carNpcPrefab == null)
+        {
+            return;
+        }
+
+        GameObject prefabRoot = PrefabUtility.LoadPrefabContents(CarNpcPrefabPath);
+        try
+        {
+            EnsureCarNpcVisual(prefabRoot);
+            PrefabUtility.SaveAsPrefabAsset(prefabRoot, CarNpcPrefabPath);
+        }
+        finally
+        {
+            PrefabUtility.UnloadPrefabContents(prefabRoot);
+        }
+    }
+
+    private static void SetLayerRecursively(Transform target, int layer)
+    {
+        target.gameObject.layer = layer;
+
+        for (int i = 0; i < target.childCount; i++)
+        {
+            SetLayerRecursively(target.GetChild(i), layer);
         }
     }
 
