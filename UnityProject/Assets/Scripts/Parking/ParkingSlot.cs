@@ -8,6 +8,15 @@ public enum ParkingSlotState
     Disabled
 }
 
+public enum ParkingManeuverPreference
+{
+    Auto,
+    FrontInOnly,
+    ReverseInOnly,
+    PreferFrontIn,
+    PreferReverseIn
+}
+
 public class ParkingSlot : MonoBehaviour
 {
     [Header("Slot Info")]
@@ -22,6 +31,17 @@ public class ParkingSlot : MonoBehaviour
 
     [Header("Detection")]
     public Transform detectionPoint;
+
+    [Header("NPC Route")]
+    public Transform approachPoint;
+    public Transform frontEntryPoint;
+    public Transform reverseEntryPoint;
+    public string roadNodeId;
+
+    [Header("NPC Maneuver")]
+    public bool allowFrontIn = true;
+    public bool allowReverseIn = true;
+    public ParkingManeuverPreference preferredManeuver = ParkingManeuverPreference.Auto;
 
     [Header("Visual")]
     public Renderer slotBaseRenderer;
@@ -39,6 +59,42 @@ public class ParkingSlot : MonoBehaviour
     public bool IsAvailable()
     {
         return state == ParkingSlotState.Empty;
+    }
+
+    public bool TryReserve()
+    {
+        if (!IsAvailable())
+        {
+            return false;
+        }
+
+        SetReserved();
+        return true;
+    }
+
+    public Transform GetApproachPoint()
+    {
+        if (approachPoint != null)
+        {
+            return approachPoint;
+        }
+
+        if (parkingPoint != null)
+        {
+            return parkingPoint;
+        }
+
+        return transform;
+    }
+
+    public Transform GetParkingPoint()
+    {
+        if (parkingPoint != null)
+        {
+            return parkingPoint;
+        }
+
+        return transform;
     }
 
     public void SetEmpty()
@@ -79,7 +135,7 @@ public class ParkingSlot : MonoBehaviour
 
         if (slotBaseRenderer == null)
         {
-            Debug.LogWarning($"Slot_Base ÇÃ Renderer Ç™å©Ç¬Ç©ÇËÇ‹ÇπÇÒ: {gameObject.name}");
+            Debug.LogWarning($"Slot_Base „ÅÆ Renderer „ÅåË¶ã„Å§„Åã„Çä„Åæ„Åõ„Çì: {gameObject.name}");
             return;
         }
 

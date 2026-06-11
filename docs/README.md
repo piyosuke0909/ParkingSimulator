@@ -54,3 +54,5 @@ docs/           ← このドキュメント（全員）
 ### アーキテクチャ
 - [フォルダ構成](architecture/folder-structure.md)
 - [ブランチ運用ルール](architecture/branch-strategy.md)
+- [NPC駐車判断データ設計](architecture/npc-parking-decision-data.md)
+- [NPC Phase 1 実装ハンドオフ](architecture/npc-phase1-implementation-handoff.md)

@@ -73,6 +73,23 @@ git push origin feature/vehicle-npc
 
 ---
 
+## NPC駐車判断に必要なデータ
+
+NPCが前向き駐車・バック駐車・最短経路を判断するには、駐車枠の向き、通路グラフ、車両サイズ、他車や予約の状態が必要。
+
+詳細は [NPC駐車判断データ設計](../architecture/npc-parking-decision-data.md) を参照する。
+
+Phase 1の実装をチームに渡す場合は [NPC Phase 1 実装ハンドオフ](../architecture/npc-phase1-implementation-handoff.md) を先に読む。
+
+この担当では特に以下を実装対象にする。
+
+- `PathFollower.cs`: `RoadGraph` から受け取った経路を追従する
+- `NPCDriver.cs`: 空き枠選択、予約、前向き/バック駐車の判断を行う
+- `ParkingAction.cs`: `ApproachPoint` から `ParkingPoint` までの駐車動作を行う
+- `CarSpawner.cs`: 2台、4台、6台、8台、10台の比較実験用にNPCを生成する
+
+---
+
 ## データ連携の仕様（3人目と要確認）
 
 ```csharp
