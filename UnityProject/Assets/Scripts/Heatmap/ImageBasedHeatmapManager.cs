@@ -89,6 +89,17 @@ public class ImageBasedHeatmapManager : MonoBehaviour
             return;
         }
 
+        if (captureTexture == null || heatmapTexture == null || heatValues == null)
+        {
+            initialized = false;
+            Initialize();
+
+            if (!initialized)
+            {
+                return;
+            }
+        }
+
         timer += Time.deltaTime;
 
         if (timer < updateInterval)
@@ -106,6 +117,8 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
     private void Initialize()
     {
+        initialized = false;
+
         if (detectionCamera == null)
         {
             Debug.LogError("Detection Camera ‚ªÝ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
@@ -157,7 +170,16 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
     private void SetHeatmapTextureToMaterial()
     {
+        if (heatmapRenderer == null || heatmapTexture == null)
+        {
+            return;
+        }
+
         Material material = heatmapRenderer.material;
+        if (material == null)
+        {
+            return;
+        }
 
         material.mainTexture = heatmapTexture;
 
@@ -176,6 +198,11 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
     private void CaptureDetectionImage()
     {
+        if (captureTexture == null || detectionRenderTexture == null)
+        {
+            return;
+        }
+
         RenderTexture previous = RenderTexture.active;
 
         RenderTexture.active = detectionRenderTexture;
@@ -402,6 +429,11 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
     private void DecayHeatValues()
     {
+        if (heatValues == null)
+        {
+            return;
+        }
+
         for (int y = 0; y < heatmapHeight; y++)
         {
             for (int x = 0; x < heatmapWidth; x++)
@@ -418,6 +450,11 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
     private void UpdateHeatmapTexture()
     {
+        if (heatmapTexture == null || heatValues == null)
+        {
+            return;
+        }
+
         for (int y = 0; y < heatmapHeight; y++)
         {
             for (int x = 0; x < heatmapWidth; x++)

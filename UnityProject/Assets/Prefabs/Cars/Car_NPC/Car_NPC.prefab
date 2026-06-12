@@ -40,7 +40,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2417418622459671323}
+  - {fileID: 1549738873309049050}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &540000
@@ -89,8 +89,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.65, y: 0.7, z: 3.35}
-  m_Center: {x: 0, y: 0.55, z: 0}
+  m_Size: {x: 4.5, y: 3, z: 10}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,8 +104,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carId: Car_NPC_001
-  length: 3.35
-  width: 1.65
+  length: 10
+  width: 4.5
   currentState: 0
 --- !u!114 &11400001
 MonoBehaviour:
@@ -128,7 +128,7 @@ MonoBehaviour:
   autoCollectCandidateSlots: 1
   useAssignedSlotOnly: 0
   usePhase2SafetyChecks: 1
-  requireDrivableAreaForManeuver: 0
+  requireDrivableAreaForManeuver: 1
   blockedTimeout: 5
   state: 0
   logStateChanges: 1
@@ -169,6 +169,11 @@ MonoBehaviour:
   stoppingDistance: 0.25
   rotateTowardsMovement: 1
   drawDebugPath: 1
+  debugCurrentIndex: 0
+  debugBlockedTimer: 0
+  debugLastDeltaTime: 0
+  debugCurrentTarget: {x: 0, y: 0, z: 0}
+  debugUpdateCount: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,9 +204,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vehicleType: Standard
-  bodyLength: 3.35
-  bodyWidth: 1.65
-  bodyHeight: 1.4
+  bodyLength: 10
+  bodyWidth: 4.5
+  bodyHeight: 3
   frontOverhang: 0.6
   rearOverhang: 0.6
   sideSafetyMargin: 0.2
@@ -209,7 +214,7 @@ MonoBehaviour:
   rearSafetyMargin: 0.2
   obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   lookAheadDistance: 4
   drawDebug: 1
 --- !u!114 &11400006
@@ -257,13 +262,13 @@ MonoBehaviour:
   detectionDistance: 8
   warningDistance: 5
   emergencyStopDistance: 1.2
-  sensorHeight: 0.65
-  sensorWidth: 0.65
-  frontSensorZ: 1.9
-  rearSensorZ: -1.9
+  sensorHeight: 1.5
+  sensorWidth: 1.8000001
+  frontSensorZ: 4.7999997
+  rearSensorZ: -4.7999997
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   drawDebugRays: 1
   minimumSpeedFactor: 0.18
 --- !u!114 &11400008
@@ -294,7 +299,7 @@ MonoBehaviour:
   leftTurnLights: []
   rightTurnLights: []
   brakeLights: []
---- !u!1001 &1687445127876281836
+--- !u!1001 &2550902443310040621
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -320,15 +325,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.15
+      value: 3.2
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.15
+      value: 3.2
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.15
+      value: 3.2
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalPosition.x
@@ -340,7 +345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.1
+      value: -0.93
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalRotation.w
@@ -391,8 +396,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
---- !u!4 &2417418622459671323 stripped
+--- !u!4 &1549738873309049050 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
-  m_PrefabInstance: {fileID: 1687445127876281836}
+  m_PrefabInstance: {fileID: 2550902443310040621}
   m_PrefabAsset: {fileID: 0}

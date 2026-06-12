@@ -52,6 +52,7 @@ public class NPCDriver : MonoBehaviour
         parkingAction = GetComponent<ParkingAction>();
         collisionShape = GetComponent<VehicleCollisionShape>();
         car = GetComponent<Car>();
+        SyncVehicleCollisionFromCar();
 
         if (string.IsNullOrWhiteSpace(npcId))
         {
@@ -104,6 +105,31 @@ public class NPCDriver : MonoBehaviour
         if (startOnPlay)
         {
             StartDriving();
+        }
+    }
+
+    private void SyncVehicleCollisionFromCar()
+    {
+        if (car == null || collisionShape == null)
+        {
+            return;
+        }
+
+        float length = Mathf.Max(0.01f, car.length);
+        float width = Mathf.Max(0.01f, car.width);
+        collisionShape.bodyLength = length;
+        collisionShape.bodyWidth = width;
+
+        if (length >= 9f || width >= 4f)
+        {
+            collisionShape.bodyHeight = Mathf.Max(collisionShape.bodyHeight, 3f);
+        }
+
+        BoxCollider boxCollider = GetComponent<BoxCollider>();
+        if (boxCollider != null)
+        {
+            boxCollider.size = new Vector3(width, collisionShape.bodyHeight, length);
+            boxCollider.center = new Vector3(0f, collisionShape.bodyHeight * 0.5f, 0f);
         }
     }
 
@@ -439,14 +465,18 @@ public class NPCDriver : MonoBehaviour
             return false;
         }
 
-        if (requireDrivableAreaForManeuver && drivableAreas.Count > 0)
+        for (int i = 0; i < points.Count; i++)
         {
-            foreach (Vector3 point in points)
+            Quaternion poseRotation = EstimateManeuverPoseRotation(slot, points, i);
+
+            if (collisionShape != null && HasBlockingOverlap(points[i], poseRotation))
             {
-                if (!IsInsideAnyDrivableArea(point))
-                {
-                    return false;
-                }
+                return false;
+            }
+
+            if (requireDrivableAreaForManeuver && drivableAreas.Count > 0 && !IsVehiclePoseInsideAnyDrivableArea(points[i], poseRotation))
+            {
+                return false;
             }
         }
 
@@ -470,17 +500,36 @@ public class NPCDriver : MonoBehaviour
         return false;
     }
 
-    private bool IsInsideAnyDrivableArea(Vector3 point)
+    private bool IsVehiclePoseInsideAnyDrivableArea(Vector3 point, Quaternion rotation)
     {
         foreach (DrivableArea area in drivableAreas)
         {
-            if (area != null && area.ContainsPoint(point))
+            if (area != null && area.ContainsVehiclePose(collisionShape, point, rotation))
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private Quaternion EstimateManeuverPoseRotation(ParkingSlot slot, List<Vector3> points, int index)
+    {
+        Transform parkingPoint = slot.GetParkingPoint();
+        if (index >= points.Count - 1)
+        {
+            return parkingPoint.rotation;
+        }
+
+        Vector3 direction = points[index + 1] - points[index];
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude <= 0.001f)
+        {
+            return parkingPoint.rotation;
+        }
+
+        return Quaternion.LookRotation(direction.normalized, Vector3.up);
     }
 
     private List<Vector3> BuildManeuverPoints(ParkingSlot slot, ParkingManeuverType maneuverType, ManeuverPath maneuverPath)

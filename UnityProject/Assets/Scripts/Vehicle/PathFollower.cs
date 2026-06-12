@@ -12,6 +12,11 @@ public class PathFollower : MonoBehaviour
 
     [Header("Debug")]
     public bool drawDebugPath = true;
+    public int debugCurrentIndex;
+    public float debugBlockedTimer;
+    public float debugLastDeltaTime;
+    public Vector3 debugCurrentTarget;
+    public int debugUpdateCount;
 
     public event Action PathCompleted;
     public event Action<float> PathBlocked;
@@ -32,6 +37,7 @@ public class PathFollower : MonoBehaviour
         currentPath.Clear();
         currentIndex = 0;
         blockedTimer = 0f;
+        UpdateDebugState(Vector3.zero);
 
         if (path == null || path.Count == 0)
         {
@@ -53,6 +59,7 @@ public class PathFollower : MonoBehaviour
         currentPath.Clear();
         currentIndex = 0;
         blockedTimer = 0f;
+        UpdateDebugState(Vector3.zero);
     }
 
     private void Update()
@@ -62,6 +69,8 @@ public class PathFollower : MonoBehaviour
             return;
         }
 
+        debugUpdateCount++;
+
         if (currentIndex >= currentPath.Count)
         {
             CompletePath();
@@ -69,6 +78,7 @@ public class PathFollower : MonoBehaviour
         }
 
         Vector3 targetPosition = currentPath[currentIndex];
+        UpdateDebugState(targetPosition);
         Vector3 currentPosition = transform.position;
         Vector3 toTarget = targetPosition - currentPosition;
         toTarget.y = 0f;
@@ -76,6 +86,7 @@ public class PathFollower : MonoBehaviour
         if (toTarget.magnitude <= stoppingDistance)
         {
             currentIndex++;
+            UpdateDebugState(currentIndex < currentPath.Count ? currentPath[currentIndex] : Vector3.zero);
             if (currentIndex >= currentPath.Count)
             {
                 CompletePath();
@@ -87,11 +98,13 @@ public class PathFollower : MonoBehaviour
         if (IsForwardBlocked())
         {
             blockedTimer += Time.deltaTime;
+            UpdateDebugState(targetPosition);
             PathBlocked?.Invoke(blockedTimer);
             return;
         }
 
         blockedTimer = 0f;
+        UpdateDebugState(targetPosition);
 
         if (rotateTowardsMovement && toTarget.sqrMagnitude > 0.001f)
         {
@@ -108,7 +121,16 @@ public class PathFollower : MonoBehaviour
         isFollowing = false;
         currentPath.Clear();
         currentIndex = 0;
+        UpdateDebugState(Vector3.zero);
         PathCompleted?.Invoke();
+    }
+
+    private void UpdateDebugState(Vector3 targetPosition)
+    {
+        debugCurrentIndex = currentIndex;
+        debugBlockedTimer = blockedTimer;
+        debugLastDeltaTime = Time.deltaTime;
+        debugCurrentTarget = targetPosition;
     }
 
     private bool IsForwardBlocked()

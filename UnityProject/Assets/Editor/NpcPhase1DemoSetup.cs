@@ -12,11 +12,44 @@ public static class NpcPhase1DemoSetup
     private const string CarNpcVisualPrefabPath = "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Prefabs/Mesh Only/Sports Car.prefab";
     private const string MarkerAssetPath = "Assets/Editor/NPCPhase1DemoSetup.run";
     private const string MarkerRelativePath = "Editor/NPCPhase1DemoSetup.run";
+    private const int VerificationMaxFrames = 2400;
+    private const string VerificationRequestedKey = "NpcPhase1DemoSetup.VerificationRequested";
+    private const string VerificationFrameCountKey = "NpcPhase1DemoSetup.VerificationFrameCount";
+    private const string CarLayerName = "Car";
+    private const float CarNpcBodyLength = 10.0f;
+    private const float CarNpcBodyWidth = 4.5f;
+    private const float CarNpcBodyHeight = 3.0f;
+    private const float CarNpcVisualScale = 3.2f;
+    private const float CarNpcVisualCenterOffsetZ = -0.93f;
+    private const float DemoSlotWidth = 6.0f;
+    private const float DemoSlotDepth = 11.5f;
+    private const float DemoSlotAisleWidth = 12.0f;
+    private static readonly string[] CarNpcPaintMaterialPaths =
+    {
+        "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Materials/Paint/Black Paint.mat",
+        "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Materials/Paint/Blue Paint.mat",
+        "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Materials/Paint/Gold Paint.mat",
+        "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Materials/Paint/Green Paint.mat",
+        "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Materials/Paint/Light Blue Paint.mat",
+        "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Materials/Paint/Purple Paint.mat",
+        "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Materials/Paint/Red Paint.mat",
+        "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Materials/Paint/Silver Paint.mat",
+        "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Materials/Paint/White Paint.mat",
+        "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Materials/Paint/Yellow Paint.mat",
+    };
+
+    private static bool verificationRunning;
+    private static int verificationFrameCount;
 
     static NpcPhase1DemoSetup()
     {
         EditorApplication.delayCall += RunIfRequested;
         EditorApplication.update += RunIfRequested;
+
+        if (SessionState.GetBool(VerificationRequestedKey, false))
+        {
+            EditorApplication.update += RunParkingVerification;
+        }
     }
 
     [MenuItem("Parking Simulator/NPC Phase 1/Setup Demo Scene")]
@@ -29,6 +62,58 @@ public static class NpcPhase1DemoSetup
     public static void SetupDemoSceneAndPlayMenu()
     {
         SetupDemoScene(true);
+    }
+
+    [MenuItem("Parking Simulator/NPC Phase 1/Resume Play")]
+    public static void ResumePlayMenu()
+    {
+        Time.timeScale = 1f;
+        EditorApplication.isPaused = false;
+    }
+
+    [MenuItem("Parking Simulator/NPC Phase 1/Stop Play")]
+    public static void StopPlayMenu()
+    {
+        Time.timeScale = 1f;
+        EditorApplication.isPaused = false;
+        EditorApplication.isPlaying = false;
+    }
+
+    [MenuItem("Parking Simulator/NPC Phase 1/Log Play State")]
+    public static void LogPlayStateMenu()
+    {
+        GameObject carObject = GameObject.Find("Car_NPC");
+        NPCDriver npcDriver = carObject != null ? carObject.GetComponent<NPCDriver>() : null;
+        PathFollower pathFollower = carObject != null ? carObject.GetComponent<PathFollower>() : null;
+        VehicleCollisionShape collisionShape = carObject != null ? carObject.GetComponent<VehicleCollisionShape>() : null;
+
+        string position = carObject != null ? carObject.transform.position.ToString("F2") : "missing";
+        string npcState = npcDriver != null ? npcDriver.state.ToString() : "missing";
+        string followerState = pathFollower != null ? $"{pathFollower.IsFollowing}, updates={pathFollower.debugUpdateCount}, target={pathFollower.debugCurrentTarget:F2}" : "missing";
+        string collisionState = collisionShape != null ? $"{collisionShape.bodyLength:F2}x{collisionShape.bodyWidth:F2}x{collisionShape.bodyHeight:F2}" : "missing";
+
+        Debug.Log($"NPC Phase 1 play state: isPlaying={EditorApplication.isPlaying}, isPaused={EditorApplication.isPaused}, timeScale={Time.timeScale:F2}, frame={Time.frameCount}, carPosition={position}, npcState={npcState}, pathFollowing={followerState}, collision={collisionState}");
+    }
+
+    [MenuItem("Parking Simulator/NPC Phase 1/Verify Demo Parking")]
+    public static void VerifyDemoParkingMenu()
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            Debug.LogWarning("NPC Phase 1 verification can be started from Edit Mode only.");
+            return;
+        }
+
+        SetupDemoScene(false);
+        verificationRunning = false;
+        verificationFrameCount = 0;
+        SessionState.SetBool(VerificationRequestedKey, true);
+        SessionState.SetInt(VerificationFrameCountKey, 0);
+        EditorApplication.update -= RunParkingVerification;
+        EditorApplication.update += RunParkingVerification;
+        Time.timeScale = 1f;
+        EditorApplication.isPaused = false;
+        EditorApplication.isPlaying = true;
     }
 
     private static void RunIfRequested()
@@ -78,24 +163,27 @@ public static class NpcPhase1DemoSetup
         }
 
         Transform parkingPoint = EnsurePoint(targetSlot, "NPC_Demo_ParkingPoint", Vector3.zero, true, carObject.transform.position.y);
-        Transform approachPoint = EnsurePoint(targetSlot, "NPC_Demo_ApproachPoint", -targetSlot.transform.forward * 8f, false, carObject.transform.position.y);
-        Transform frontEntryPoint = EnsurePoint(targetSlot, "NPC_Demo_FrontEntryPoint", -targetSlot.transform.forward * 3f, false, carObject.transform.position.y);
-        Transform reverseEntryPoint = EnsurePoint(targetSlot, "NPC_Demo_ReverseEntryPoint", -targetSlot.transform.forward * 3f + targetSlot.transform.right * 1.5f, false, carObject.transform.position.y);
+        Transform approachPoint = EnsurePoint(targetSlot, "NPC_Demo_ApproachPoint", -targetSlot.transform.forward * 14f, false, carObject.transform.position.y);
+        Transform frontEntryPoint = EnsurePoint(targetSlot, "NPC_Demo_FrontEntryPoint", -targetSlot.transform.forward * 6f, false, carObject.transform.position.y);
+        Transform reverseEntryPoint = EnsurePoint(targetSlot, "NPC_Demo_ReverseEntryPoint", -targetSlot.transform.forward * 6f + targetSlot.transform.right * 2.5f, false, carObject.transform.position.y);
 
         targetSlot.parkingPoint = parkingPoint;
         targetSlot.approachPoint = approachPoint;
         targetSlot.frontEntryPoint = frontEntryPoint;
         targetSlot.reverseEntryPoint = reverseEntryPoint;
-        targetSlot.slotWidth = 2.5f;
-        targetSlot.slotDepth = 5.0f;
-        targetSlot.aisleWidth = 6.0f;
+        targetSlot.slotWidth = DemoSlotWidth;
+        targetSlot.slotDepth = DemoSlotDepth;
+        targetSlot.aisleWidth = DemoSlotAisleWidth;
         targetSlot.allowFrontIn = true;
         targetSlot.allowReverseIn = true;
         targetSlot.preferredManeuver = ParkingManeuverPreference.Auto;
         ParkingSlotGeometry slotGeometry = EnsureComponent<ParkingSlotGeometry>(targetSlot.gameObject);
-        slotGeometry.allowedVehicleMargin = 0.2f;
+        slotGeometry.allowedVehicleMargin = 0.25f;
         slotGeometry.BuildRectangleFromSlot(targetSlot);
         targetSlot.geometry = slotGeometry;
+
+        EnsureManeuverPath(targetSlot, "NPC_Demo_FrontInPath", ParkingManeuverType.FrontIn, false, frontEntryPoint, parkingPoint);
+        EnsureManeuverPath(targetSlot, "NPC_Demo_ReverseInPath", ParkingManeuverType.ReverseIn, true, reverseEntryPoint, parkingPoint);
 
         Transform waypointsRoot = EnsureRoot("Waypoints");
         GameObject graphObject = EnsureGameObject("NPC_Phase1_RouteSystem");
@@ -108,6 +196,7 @@ public static class NpcPhase1DemoSetup
         RoadNode entranceNode = EnsureRoadNode(waypointsRoot, "NPC_Demo_Entrance", entrancePosition);
         RoadNode middleNode = EnsureRoadNode(waypointsRoot, "NPC_Demo_Mid", Vector3.Lerp(entrancePosition, approachPoint.position, 0.5f));
         RoadNode slotNode = EnsureRoadNode(waypointsRoot, "NPC_Demo_SlotApproach", approachPoint.position);
+        EnsureDemoDrivableArea(entrancePosition, middleNode.transform.position, approachPoint.position, frontEntryPoint.position, reverseEntryPoint.position, parkingPoint.position);
 
         ConnectOneWay(entranceNode, middleNode);
         ConnectOneWay(middleNode, slotNode);
@@ -127,13 +216,7 @@ public static class NpcPhase1DemoSetup
         pathFollower.turnSpeed = 8f;
         pathFollower.drawDebugPath = true;
 
-        VehicleCollisionShape collisionShape = EnsureComponent<VehicleCollisionShape>(carObject);
-        collisionShape.bodyLength = 4.5f;
-        collisionShape.bodyWidth = 1.8f;
-        collisionShape.bodyHeight = 1.6f;
-        collisionShape.sideSafetyMargin = 0.2f;
-        collisionShape.frontSafetyMargin = 0.6f;
-        collisionShape.rearSafetyMargin = 0.2f;
+        ConfigureCarNpcCollision(carObject);
 
         EnsureComponent<DynamicObstacle>(carObject);
 
@@ -146,7 +229,7 @@ public static class NpcPhase1DemoSetup
         npcDriver.useAssignedSlotOnly = true;
         npcDriver.startOnPlay = true;
         npcDriver.usePhase2SafetyChecks = true;
-        npcDriver.requireDrivableAreaForManeuver = false;
+        npcDriver.requireDrivableAreaForManeuver = true;
         npcDriver.logStateChanges = true;
 
         GameObject parkingAreas = GameObject.Find("ParkingAreas");
@@ -156,6 +239,8 @@ public static class NpcPhase1DemoSetup
         }
 
         EnsureCarNpcVisual(carObject);
+        ApplyRandomPaint(carObject);
+        ConvertDemoCarsToNpcVisuals();
 
         Selection.activeGameObject = carObject;
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
@@ -165,8 +250,69 @@ public static class NpcPhase1DemoSetup
 
         if (enterPlayMode)
         {
+            Time.timeScale = 1f;
+            EditorApplication.isPaused = false;
             EditorApplication.isPlaying = true;
         }
+    }
+
+    private static void RunParkingVerification()
+    {
+        if (!SessionState.GetBool(VerificationRequestedKey, false))
+        {
+            EditorApplication.update -= RunParkingVerification;
+            return;
+        }
+
+        if (!EditorApplication.isPlaying)
+        {
+            return;
+        }
+
+        verificationRunning = true;
+        verificationFrameCount = SessionState.GetInt(VerificationFrameCountKey, 0);
+        EditorApplication.isPaused = false;
+        Time.timeScale = 1f;
+
+        GameObject carObject = GameObject.Find("Car_NPC");
+        NPCDriver npcDriver = carObject != null ? carObject.GetComponent<NPCDriver>() : null;
+
+        if (npcDriver != null)
+        {
+            if (npcDriver.state == NPCDrivingState.Parked)
+            {
+                Debug.Log($"NPC Phase 1 verification passed in {verificationFrameCount} frames. Car_NPC reached Parked.");
+                StopParkingVerification();
+                return;
+            }
+
+            if (npcDriver.state == NPCDrivingState.Blocked)
+            {
+                Debug.LogWarning($"NPC Phase 1 verification failed after {verificationFrameCount} frames. Car_NPC is Blocked.");
+                StopParkingVerification();
+                return;
+            }
+        }
+
+        if (verificationRunning && verificationFrameCount >= VerificationMaxFrames)
+        {
+            string stateName = npcDriver != null ? npcDriver.state.ToString() : "missing NPCDriver";
+            Debug.LogWarning($"NPC Phase 1 verification timed out after {verificationFrameCount} frames. State={stateName}.");
+            StopParkingVerification();
+            return;
+        }
+
+        verificationFrameCount++;
+        SessionState.SetInt(VerificationFrameCountKey, verificationFrameCount);
+    }
+
+    private static void StopParkingVerification()
+    {
+        verificationRunning = false;
+        SessionState.SetBool(VerificationRequestedKey, false);
+        SessionState.SetInt(VerificationFrameCountKey, 0);
+        EditorApplication.update -= RunParkingVerification;
+        EditorApplication.isPaused = false;
     }
 
     private static GameObject ResolveDemoCarObject()
@@ -236,9 +382,116 @@ public static class NpcPhase1DemoSetup
         visualObject.layer = carObject.layer;
         SetLayerRecursively(visualObject.transform, carObject.layer);
 
-        visualObject.transform.localPosition = new Vector3(0f, 0f, -0.1f);
+        visualObject.transform.localPosition = new Vector3(0f, 0f, CarNpcVisualCenterOffsetZ);
         visualObject.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-        visualObject.transform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        visualObject.transform.localScale = new Vector3(CarNpcVisualScale, CarNpcVisualScale, CarNpcVisualScale);
+    }
+
+    private static void ConvertDemoCarsToNpcVisuals()
+    {
+        foreach (GameObject demoCar in Resources.FindObjectsOfTypeAll<GameObject>())
+        {
+            if (demoCar == null || !demoCar.scene.IsValid() || !demoCar.name.StartsWith("DummyCar_"))
+            {
+                continue;
+            }
+
+            demoCar.transform.localScale = Vector3.one;
+            ConfigureCarNpcCollision(demoCar);
+
+            DynamicObstacle obstacle = EnsureComponent<DynamicObstacle>(demoCar);
+            obstacle.obstacleId = demoCar.name;
+
+            EnsureCarNpcVisual(demoCar);
+            ApplyRandomPaint(demoCar);
+            SetLegacyDemoRenderersVisible(demoCar, false);
+        }
+    }
+
+    private static void ApplyRandomPaint(GameObject carObject)
+    {
+        Material paintMaterial = LoadRandomPaintMaterial();
+        if (carObject == null || paintMaterial == null)
+        {
+            return;
+        }
+
+        Transform visual = carObject.transform.Find("Visual");
+        if (visual == null)
+        {
+            return;
+        }
+
+        MeshRenderer bodyRenderer = null;
+        foreach (MeshRenderer renderer in visual.GetComponentsInChildren<MeshRenderer>(true))
+        {
+            if (renderer.gameObject.name == "Body")
+            {
+                bodyRenderer = renderer;
+                break;
+            }
+        }
+
+        if (bodyRenderer == null)
+        {
+            return;
+        }
+
+        Material[] materials = bodyRenderer.sharedMaterials;
+        if (materials.Length == 0)
+        {
+            return;
+        }
+
+        materials[0] = paintMaterial;
+        bodyRenderer.sharedMaterials = materials;
+    }
+
+    private static Material LoadRandomPaintMaterial()
+    {
+        if (CarNpcPaintMaterialPaths.Length == 0)
+        {
+            return null;
+        }
+
+        int startIndex = UnityEngine.Random.Range(0, CarNpcPaintMaterialPaths.Length);
+        for (int i = 0; i < CarNpcPaintMaterialPaths.Length; i++)
+        {
+            int index = (startIndex + i) % CarNpcPaintMaterialPaths.Length;
+            Material material = AssetDatabase.LoadAssetAtPath<Material>(CarNpcPaintMaterialPaths[index]);
+            if (material != null)
+            {
+                return material;
+            }
+        }
+
+        return null;
+    }
+
+    private static void SetLegacyDemoRenderersVisible(GameObject demoCar, bool visible)
+    {
+        foreach (Renderer renderer in demoCar.GetComponentsInChildren<Renderer>(true))
+        {
+            if (!IsUnderVisual(renderer.transform))
+            {
+                renderer.enabled = visible;
+            }
+        }
+    }
+
+    private static bool IsUnderVisual(Transform transform)
+    {
+        while (transform != null)
+        {
+            if (transform.name == "Visual")
+            {
+                return true;
+            }
+
+            transform = transform.parent;
+        }
+
+        return false;
     }
 
     private static void EnsureCarNpcPrefabVisual()
@@ -253,12 +506,148 @@ public static class NpcPhase1DemoSetup
         try
         {
             EnsureCarNpcVisual(prefabRoot);
+            ConfigureCarNpcCollision(prefabRoot);
             PrefabUtility.SaveAsPrefabAsset(prefabRoot, CarNpcPrefabPath);
         }
         finally
         {
             PrefabUtility.UnloadPrefabContents(prefabRoot);
         }
+    }
+
+    private static void ConfigureCarNpcCollision(GameObject carObject)
+    {
+        if (carObject == null)
+        {
+            return;
+        }
+
+        int carLayer = ResolveCarLayer();
+        if (carLayer >= 0)
+        {
+            SetLayerRecursively(carObject.transform, carLayer);
+        }
+
+        Car car = EnsureComponent<Car>(carObject);
+        car.length = CarNpcBodyLength;
+        car.width = CarNpcBodyWidth;
+
+        BoxCollider boxCollider = EnsureComponent<BoxCollider>(carObject);
+        boxCollider.size = new Vector3(CarNpcBodyWidth, CarNpcBodyHeight, CarNpcBodyLength);
+        boxCollider.center = new Vector3(0f, CarNpcBodyHeight * 0.5f, 0f);
+
+        VehicleCollisionShape collisionShape = EnsureComponent<VehicleCollisionShape>(carObject);
+        collisionShape.bodyLength = CarNpcBodyLength;
+        collisionShape.bodyWidth = CarNpcBodyWidth;
+        collisionShape.bodyHeight = CarNpcBodyHeight;
+        collisionShape.sideSafetyMargin = 0.2f;
+        collisionShape.frontSafetyMargin = 0.6f;
+        collisionShape.rearSafetyMargin = 0.2f;
+        collisionShape.obstacleLayerMask = ResolveCarObstacleMask();
+
+        CarObstacleDetection obstacleDetection = EnsureComponent<CarObstacleDetection>(carObject);
+        obstacleDetection.sensorHeight = CarNpcBodyHeight * 0.5f;
+        obstacleDetection.sensorWidth = CarNpcBodyWidth * 0.4f;
+        obstacleDetection.frontSensorZ = CarNpcBodyLength * 0.48f;
+        obstacleDetection.rearSensorZ = -CarNpcBodyLength * 0.48f;
+        obstacleDetection.obstacleMask = ResolveCarObstacleMask();
+
+        DynamicObstacle obstacle = EnsureComponent<DynamicObstacle>(carObject);
+        obstacle.kind = DynamicObstacleKind.Vehicle;
+        obstacle.collisionShape = collisionShape;
+
+        NPCDriver npcDriver = carObject.GetComponent<NPCDriver>();
+        if (npcDriver != null)
+        {
+            npcDriver.usePhase2SafetyChecks = true;
+            npcDriver.requireDrivableAreaForManeuver = true;
+        }
+    }
+
+    private static int ResolveCarLayer()
+    {
+        return LayerMask.NameToLayer(CarLayerName);
+    }
+
+    private static LayerMask ResolveCarObstacleMask()
+    {
+        int carLayer = ResolveCarLayer();
+        if (carLayer < 0)
+        {
+            return 0;
+        }
+
+        return 1 << carLayer;
+    }
+
+    private static void EnsureManeuverPath(ParkingSlot slot, string pathName, ParkingManeuverType maneuverType, bool requiresReverse, params Transform[] controlPoints)
+    {
+        if (slot == null)
+        {
+            return;
+        }
+
+        Transform pathTransform = slot.transform.Find(pathName);
+        if (pathTransform == null)
+        {
+            pathTransform = new GameObject(pathName).transform;
+            pathTransform.SetParent(slot.transform);
+        }
+
+        pathTransform.localPosition = Vector3.zero;
+        pathTransform.localRotation = Quaternion.identity;
+
+        ManeuverPath path = EnsureComponent<ManeuverPath>(pathTransform.gameObject);
+        path.pathId = pathName;
+        path.slotId = slot.slotId;
+        path.maneuverType = maneuverType;
+        path.requiresReverse = requiresReverse;
+        path.estimatedDuration = requiresReverse ? 5f : 4f;
+        path.requiredClearance = 0.2f;
+        path.controlPoints = controlPoints;
+    }
+
+    private static void EnsureDemoDrivableArea(params Vector3[] points)
+    {
+        if (points == null || points.Length == 0)
+        {
+            return;
+        }
+
+        GameObject areaObject = EnsureGameObject("NPC_Demo_DrivableArea");
+        DrivableArea area = EnsureComponent<DrivableArea>(areaObject);
+        area.areaId = "NPC_Demo_DrivableArea";
+        area.areaType = DrivableAreaType.ParkingApproach;
+        area.defaultSpeedLimit = 8f;
+        area.allowStop = true;
+        area.priority = 100;
+
+        float minX = points[0].x;
+        float maxX = points[0].x;
+        float minZ = points[0].z;
+        float maxZ = points[0].z;
+
+        foreach (Vector3 point in points)
+        {
+            minX = Mathf.Min(minX, point.x);
+            maxX = Mathf.Max(maxX, point.x);
+            minZ = Mathf.Min(minZ, point.z);
+            maxZ = Mathf.Max(maxZ, point.z);
+        }
+
+        const float margin = 12f;
+        minX -= margin;
+        maxX += margin;
+        minZ -= margin;
+        maxZ += margin;
+
+        area.polygon = new[]
+        {
+            new Vector3(minX, 0f, minZ),
+            new Vector3(maxX, 0f, minZ),
+            new Vector3(maxX, 0f, maxZ),
+            new Vector3(minX, 0f, maxZ)
+        };
     }
 
     private static void SetLayerRecursively(Transform target, int layer)
