@@ -8,7 +8,10 @@ public enum NPCDrivingState
     DrivingToSlot,
     Parking,
     Parked,
-    Blocked
+    Blocked,
+    WaitingToExit,
+    DrivingToExit,
+    Exited
 }
 
 [RequireComponent(typeof(PathFollower))]
@@ -23,6 +26,7 @@ public class NPCDriver : MonoBehaviour
     public Transform parkingSlotsRoot;
     public ParkingSlot assignedSlot;
     public List<ParkingSlot> candidateSlots = new List<ParkingSlot>();
+    public RoadNode exitNode;
 
     [Header("Behavior")]
     public bool startOnPlay = false;
@@ -30,6 +34,11 @@ public class NPCDriver : MonoBehaviour
     public bool useAssignedSlotOnly = false;
     public bool usePhase2SafetyChecks = true;
     public bool requireDrivableAreaForManeuver = true;
+    public bool validateExitRouteAreas = true;
+    public bool requireLaneDrivableAreaForExit = true;
+    public bool autoExitAfterParking = false;
+    public bool deactivateOnExit = false;
+    public float exitWaitSeconds = 8f;
     public float blockedTimeout = 5f;
 
     [Header("Debug")]
@@ -39,12 +48,17 @@ public class NPCDriver : MonoBehaviour
     public ParkingManeuverType selectedManeuver = ParkingManeuverType.FrontIn;
     public ManeuverPath selectedManeuverPath;
     public List<Vector3> assignedRoute = new List<Vector3>();
+    public float debugExitWaitTimer;
+    public string debugLastBlockedReason;
 
     private PathFollower pathFollower;
     private ParkingAction parkingAction;
     private VehicleCollisionShape collisionShape;
     private Car car;
+    private float exitWaitTimer;
+    private bool exitSequenceStarted;
     private readonly List<DrivableArea> drivableAreas = new List<DrivableArea>();
+    private readonly List<NoDriveArea> noDriveAreas = new List<NoDriveArea>();
 
     private void Awake()
     {
@@ -108,6 +122,28 @@ public class NPCDriver : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (state == NPCDrivingState.Parked && autoExitAfterParking && !exitSequenceStarted)
+        {
+            StartExitWait();
+            return;
+        }
+
+        if (state != NPCDrivingState.WaitingToExit)
+        {
+            return;
+        }
+
+        exitWaitTimer -= Time.deltaTime;
+        debugExitWaitTimer = Mathf.Max(0f, exitWaitTimer);
+
+        if (exitWaitTimer <= 0f)
+        {
+            StartExitRoute();
+        }
+    }
+
     private void SyncVehicleCollisionFromCar()
     {
         if (car == null || collisionShape == null)
@@ -136,12 +172,18 @@ public class NPCDriver : MonoBehaviour
     [ContextMenu("Start Driving")]
     public void StartDriving()
     {
+        debugLastBlockedReason = string.Empty;
+        exitSequenceStarted = false;
+        exitWaitTimer = 0f;
+        debugExitWaitTimer = 0f;
+
         if (autoCollectCandidateSlots)
         {
             AutoCollectCandidateSlots();
         }
 
         CollectDrivableAreas();
+        CollectNoDriveAreas();
         SetState(NPCDrivingState.SeekingSlot);
         targetSlot = SelectTargetSlot();
 
@@ -290,8 +332,27 @@ public class NPCDriver : MonoBehaviour
 
     private void HandlePathCompleted()
     {
+        if (state == NPCDrivingState.DrivingToExit)
+        {
+            CompleteExit();
+            return;
+        }
+
         if (state != NPCDrivingState.DrivingToSlot || targetSlot == null)
         {
+            return;
+        }
+
+        Vector3 parkingStartPosition = ResolveParkingStartPosition(targetSlot);
+        Vector3 toParkingStart = parkingStartPosition - transform.position;
+        toParkingStart.y = 0f;
+        if (toParkingStart.magnitude > 1.25f)
+        {
+            List<Vector3> remainingRoute = new List<Vector3>();
+            remainingRoute.Add(parkingStartPosition);
+            assignedRoute.Clear();
+            assignedRoute.AddRange(remainingRoute);
+            pathFollower.SetPath(remainingRoute);
             return;
         }
 
@@ -307,6 +368,10 @@ public class NPCDriver : MonoBehaviour
         }
 
         SetState(NPCDrivingState.Parked);
+        if (autoExitAfterParking)
+        {
+            StartExitWait();
+        }
     }
 
     private void HandleParkingFailed(ParkingSlot slot, string reason)
@@ -323,7 +388,7 @@ public class NPCDriver : MonoBehaviour
 
     private void HandlePathBlocked(float blockedDuration)
     {
-        if (state != NPCDrivingState.DrivingToSlot || blockedDuration < blockedTimeout)
+        if ((state != NPCDrivingState.DrivingToSlot && state != NPCDrivingState.DrivingToExit) || blockedDuration < blockedTimeout)
         {
             return;
         }
@@ -336,6 +401,219 @@ public class NPCDriver : MonoBehaviour
         }
 
         SetState(NPCDrivingState.Blocked);
+    }
+
+    private void StartExitWait()
+    {
+        exitSequenceStarted = true;
+        exitWaitTimer = Mathf.Max(0f, exitWaitSeconds);
+        debugExitWaitTimer = exitWaitTimer;
+
+        if (exitWaitTimer <= 0f)
+        {
+            StartExitRoute();
+            return;
+        }
+
+        SetState(NPCDrivingState.WaitingToExit);
+    }
+
+    private void StartExitRoute()
+    {
+        List<Vector3> route = BuildExitRoute();
+        if (route.Count == 0)
+        {
+            debugLastBlockedReason = "Exit route is empty.";
+            Debug.LogWarning($"{npcId}: {debugLastBlockedReason}");
+            SetState(NPCDrivingState.Blocked);
+            return;
+        }
+
+        CollectDrivableAreas();
+        CollectNoDriveAreas();
+        if (!IsExitRouteSafe(route, out string unsafeReason))
+        {
+            debugLastBlockedReason = $"Exit route is unsafe. {unsafeReason}";
+            Debug.LogWarning($"{npcId}: {debugLastBlockedReason}");
+            SetState(NPCDrivingState.Blocked);
+            return;
+        }
+
+        if (targetSlot != null)
+        {
+            targetSlot.SetEmpty();
+        }
+
+        assignedRoute.Clear();
+        assignedRoute.AddRange(route);
+        debugLastBlockedReason = string.Empty;
+        SetState(NPCDrivingState.DrivingToExit);
+        pathFollower.SetPath(route);
+    }
+
+    private List<Vector3> BuildExitRoute()
+    {
+        List<Vector3> route = new List<Vector3>();
+
+        if (routePlanner == null)
+        {
+            routePlanner = FindObjectOfType<RoutePlanner>();
+        }
+
+        if (exitNode == null)
+        {
+            GameObject exitObject = GameObject.Find("NPC_Demo_ExitGate");
+            if (exitObject == null)
+            {
+                exitObject = GameObject.Find("NPC_Demo_Exit");
+            }
+
+            exitNode = exitObject != null ? exitObject.GetComponent<RoadNode>() : null;
+        }
+
+        if (targetSlot != null)
+        {
+            RoadNode slotNode = routePlanner != null ? routePlanner.ResolveSlotNode(targetSlot) : null;
+            Vector3 roadExitPoint = ResolveSlotRoadExitPoint(targetSlot, slotNode);
+            AddExitPoint(route, BuildSlotExitPoint(targetSlot, roadExitPoint));
+            AddExitPoint(route, roadExitPoint);
+        }
+
+        if (routePlanner != null && exitNode != null)
+        {
+            RoadNode slotNode = routePlanner.ResolveSlotNode(targetSlot);
+            if (slotNode != null)
+            {
+                AppendRoute(route, routePlanner.BuildRouteBetweenNodes(slotNode, exitNode));
+                return route;
+            }
+
+            AppendRoute(route, routePlanner.BuildRouteToNode(GetLastRoutePosition(route, transform.position), exitNode));
+            return route;
+        }
+
+        if (exitNode != null)
+        {
+            AddExitPoint(route, exitNode.transform);
+        }
+
+        return route;
+    }
+
+    private Vector3 ResolveParkingStartPosition(ParkingSlot slot)
+    {
+        Transform parkingPoint = slot.GetParkingPoint();
+        Transform approachPoint = slot.GetApproachPoint();
+        Vector3 approachPosition = approachPoint.position;
+
+        Vector3 fromParking = approachPosition - parkingPoint.position;
+        fromParking.y = 0f;
+        if (fromParking.sqrMagnitude > 0.001f)
+        {
+            return approachPosition;
+        }
+
+        if (routePlanner == null)
+        {
+            routePlanner = FindObjectOfType<RoutePlanner>();
+        }
+
+        RoadNode slotNode = routePlanner != null ? routePlanner.ResolveSlotNode(slot) : null;
+        return slotNode != null ? slotNode.Position : approachPosition;
+    }
+
+    private Vector3 ResolveSlotRoadExitPoint(ParkingSlot slot, RoadNode slotNode)
+    {
+        Transform parkingPoint = slot.GetParkingPoint();
+        Transform approachPoint = slot.GetApproachPoint();
+        Vector3 roadExitPoint = approachPoint.position;
+        roadExitPoint.y = parkingPoint.position.y;
+
+        Vector3 fromParkingToApproach = roadExitPoint - parkingPoint.position;
+        fromParkingToApproach.y = 0f;
+        if (fromParkingToApproach.sqrMagnitude > 0.001f)
+        {
+            return roadExitPoint;
+        }
+
+        if (slotNode != null)
+        {
+            roadExitPoint = slotNode.Position;
+            roadExitPoint.y = parkingPoint.position.y;
+        }
+
+        return roadExitPoint;
+    }
+
+    private Vector3 BuildSlotExitPoint(ParkingSlot slot, Vector3 roadExitPoint)
+    {
+        Transform parkingPoint = slot.GetParkingPoint();
+        Vector3 fromParkingToApproach = roadExitPoint - parkingPoint.position;
+        fromParkingToApproach.y = 0f;
+
+        if (fromParkingToApproach.sqrMagnitude <= 0.001f)
+        {
+            return parkingPoint.position;
+        }
+
+        float exitDistance = Mathf.Min(fromParkingToApproach.magnitude, Mathf.Max(slot.slotDepth * 0.5f, 1f));
+        Vector3 exitPoint = parkingPoint.position + fromParkingToApproach.normalized * exitDistance;
+        exitPoint.y = parkingPoint.position.y;
+        return exitPoint;
+    }
+
+    private void AddExitPoint(List<Vector3> route, Transform point)
+    {
+        if (route == null || point == null)
+        {
+            return;
+        }
+
+        AddExitPoint(route, point.position);
+    }
+
+    private void AddExitPoint(List<Vector3> route, Vector3 point)
+    {
+        if (route == null)
+        {
+            return;
+        }
+
+        if (route.Count > 0 && Vector3.Distance(route[route.Count - 1], point) <= 0.1f)
+        {
+            return;
+        }
+
+        route.Add(point);
+    }
+
+    private void AppendRoute(List<Vector3> route, List<Vector3> points)
+    {
+        if (route == null || points == null)
+        {
+            return;
+        }
+
+        foreach (Vector3 point in points)
+        {
+            AddExitPoint(route, point);
+        }
+    }
+
+    private Vector3 GetLastRoutePosition(List<Vector3> route, Vector3 fallback)
+    {
+        return route != null && route.Count > 0 ? route[route.Count - 1] : fallback;
+    }
+
+    private void CompleteExit()
+    {
+        SetState(NPCDrivingState.Exited);
+        debugExitWaitTimer = 0f;
+
+        if (deactivateOnExit)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private bool TrySelectManeuver(ParkingSlot slot, out ParkingManeuverType maneuverType, out ManeuverPath maneuverPath, out float score)
@@ -516,7 +794,7 @@ public class NPCDriver : MonoBehaviour
     private Quaternion EstimateManeuverPoseRotation(ParkingSlot slot, List<Vector3> points, int index)
     {
         Transform parkingPoint = slot.GetParkingPoint();
-        if (index >= points.Count - 1)
+        if (index >= points.Count - 2)
         {
             return parkingPoint.rotation;
         }
@@ -588,6 +866,116 @@ public class NPCDriver : MonoBehaviour
     {
         drivableAreas.Clear();
         drivableAreas.AddRange(FindObjectsOfType<DrivableArea>());
+    }
+
+    private void CollectNoDriveAreas()
+    {
+        noDriveAreas.Clear();
+        noDriveAreas.AddRange(FindObjectsOfType<NoDriveArea>());
+    }
+
+    private bool IsExitRouteSafe(List<Vector3> route, out string reason)
+    {
+        reason = string.Empty;
+        if (!validateExitRouteAreas || route == null || route.Count == 0)
+        {
+            return true;
+        }
+
+        if (collisionShape == null)
+        {
+            collisionShape = GetComponent<VehicleCollisionShape>();
+        }
+
+        // The first two exit segments are the vehicle leaving its own slot and merging into the aisle.
+        const int firstValidatedSegmentIndex = 3;
+        for (int i = firstValidatedSegmentIndex; i < route.Count; i++)
+        {
+            Vector3 from = route[i - 1];
+            Vector3 to = route[i];
+            Vector3 direction = to - from;
+            direction.y = 0f;
+
+            if (direction.sqrMagnitude <= 0.001f)
+            {
+                continue;
+            }
+
+            Quaternion rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+            float distance = direction.magnitude;
+            int sampleCount = Mathf.Max(1, Mathf.CeilToInt(distance / 2f));
+
+            for (int sampleIndex = 0; sampleIndex <= sampleCount; sampleIndex++)
+            {
+                float t = sampleIndex / (float)sampleCount;
+                Vector3 sample = Vector3.Lerp(from, to, t);
+
+                if (requireLaneDrivableAreaForExit && HasRouteDrivableAreas() && !IsVehiclePoseInsideAnyRouteDrivableArea(sample, rotation))
+                {
+                    reason = $"Sample outside lane drivable area at {sample:F2}.";
+                    return false;
+                }
+
+                if (IsVehiclePoseInsideAnyNoDriveArea(sample, rotation, out NoDriveArea noDriveArea))
+                {
+                    string areaId = noDriveArea != null ? noDriveArea.areaId : "unknown";
+                    reason = $"Sample intersects no-drive area '{areaId}' at {sample:F2}.";
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private bool HasRouteDrivableAreas()
+    {
+        foreach (DrivableArea area in drivableAreas)
+        {
+            if (IsRouteDrivableArea(area))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsVehiclePoseInsideAnyRouteDrivableArea(Vector3 point, Quaternion rotation)
+    {
+        foreach (DrivableArea area in drivableAreas)
+        {
+            if (IsRouteDrivableArea(area) && area.ContainsVehiclePose(collisionShape, point, rotation))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsRouteDrivableArea(DrivableArea area)
+    {
+        return area != null
+            && area.HasPolygon
+            && (area.areaType == DrivableAreaType.Lane
+                || area.areaType == DrivableAreaType.Entrance
+                || area.areaType == DrivableAreaType.Exit);
+    }
+
+    private bool IsVehiclePoseInsideAnyNoDriveArea(Vector3 point, Quaternion rotation, out NoDriveArea hitArea)
+    {
+        foreach (NoDriveArea area in noDriveAreas)
+        {
+            if (area != null && area.ContainsVehiclePose(collisionShape, point, rotation))
+            {
+                hitArea = area;
+                return true;
+            }
+        }
+
+        hitArea = null;
+        return false;
     }
 
     private void SetState(NPCDrivingState nextState)

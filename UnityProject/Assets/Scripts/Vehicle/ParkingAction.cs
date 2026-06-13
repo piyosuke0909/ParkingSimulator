@@ -16,6 +16,7 @@ public class ParkingAction : MonoBehaviour
     public float rotationSpeed = 6f;
     public float stoppingDistance = 0.05f;
     public bool snapToParkingPointOnComplete = true;
+    public bool stopForObstaclesDuringParking = false;
 
     public event Action<ParkingSlot> ParkingCompleted;
     public event Action<ParkingSlot, string> ParkingFailed;
@@ -27,6 +28,7 @@ public class ParkingAction : MonoBehaviour
     private int currentPathIndex;
     private ParkingActionState state = ParkingActionState.Idle;
     private VehicleCollisionShape collisionShape;
+    private Quaternion finalParkingRotation;
 
     public ParkingActionState State
     {
@@ -49,6 +51,7 @@ public class ParkingAction : MonoBehaviour
         targetSlot = slot;
         maneuverType = selectedManeuverType;
         maneuverPath = selectedManeuverPath;
+        finalParkingRotation = slot.GetParkingPoint().rotation;
         BuildParkingPath();
         state = ParkingActionState.Parking;
     }
@@ -81,8 +84,7 @@ public class ParkingAction : MonoBehaviour
 
             if (toTarget.sqrMagnitude > 0.001f)
             {
-                Vector3 facingDirection = ShouldFaceAgainstMovement() ? -toTarget.normalized : toTarget.normalized;
-                Quaternion moveRotation = Quaternion.LookRotation(facingDirection, Vector3.up);
+                Quaternion moveRotation = GetTargetRotation(toTarget.normalized);
                 transform.rotation = Quaternion.Slerp(transform.rotation, moveRotation, rotationSpeed * Time.deltaTime);
             }
 
@@ -95,8 +97,8 @@ public class ParkingAction : MonoBehaviour
 
     private void RotateAndComplete(Transform parkingPoint)
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, parkingPoint.rotation, rotationSpeed * Time.deltaTime);
-        if (Quaternion.Angle(transform.rotation, parkingPoint.rotation) > 2f)
+        transform.rotation = Quaternion.Slerp(transform.rotation, finalParkingRotation, rotationSpeed * Time.deltaTime);
+        if (Quaternion.Angle(transform.rotation, finalParkingRotation) > 2f)
         {
             return;
         }
@@ -125,15 +127,49 @@ public class ParkingAction : MonoBehaviour
 
             parkingPath.Add(targetSlot.GetParkingPoint().position);
         }
+
+        RemoveAlreadyReachedFirstPoint();
     }
 
-    private bool ShouldFaceAgainstMovement()
+    private void RemoveAlreadyReachedFirstPoint()
     {
-        return maneuverType == ParkingManeuverType.ReverseIn && currentPathIndex >= parkingPath.Count - 1;
+        if (parkingPath.Count == 0)
+        {
+            return;
+        }
+
+        float skipDistance = Mathf.Max(stoppingDistance, 0.35f);
+        Vector3 toFirstPoint = parkingPath[0] - transform.position;
+        toFirstPoint.y = 0f;
+        if (toFirstPoint.magnitude <= skipDistance)
+        {
+            parkingPath.RemoveAt(0);
+        }
+    }
+
+    private Quaternion GetTargetRotation(Vector3 movementDirection)
+    {
+        bool isFinalSegment = currentPathIndex >= parkingPath.Count - 1;
+        if (isFinalSegment)
+        {
+            return finalParkingRotation;
+        }
+
+        if (movementDirection.sqrMagnitude <= 0.001f)
+        {
+            return transform.rotation;
+        }
+
+        return Quaternion.LookRotation(movementDirection, Vector3.up);
     }
 
     private bool IsForwardBlocked()
     {
+        if (!stopForObstaclesDuringParking)
+        {
+            return false;
+        }
+
         if (collisionShape == null)
         {
             collisionShape = GetComponent<VehicleCollisionShape>();
@@ -159,7 +195,7 @@ public class ParkingAction : MonoBehaviour
         if (snapToParkingPointOnComplete)
         {
             transform.position = parkingPoint.position;
-            transform.rotation = parkingPoint.rotation;
+            transform.rotation = finalParkingRotation;
         }
 
         state = ParkingActionState.Parked;

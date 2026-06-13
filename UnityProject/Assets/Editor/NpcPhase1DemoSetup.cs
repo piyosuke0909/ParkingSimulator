@@ -12,7 +12,7 @@ public static class NpcPhase1DemoSetup
     private const string CarNpcVisualPrefabPath = "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Prefabs/Mesh Only/Sports Car.prefab";
     private const string MarkerAssetPath = "Assets/Editor/NPCPhase1DemoSetup.run";
     private const string MarkerRelativePath = "Editor/NPCPhase1DemoSetup.run";
-    private const int VerificationMaxFrames = 2400;
+    private const int VerificationMaxFrames = 6000;
     private const string VerificationRequestedKey = "NpcPhase1DemoSetup.VerificationRequested";
     private const string VerificationFrameCountKey = "NpcPhase1DemoSetup.VerificationFrameCount";
     private const string CarLayerName = "Car";
@@ -24,6 +24,10 @@ public static class NpcPhase1DemoSetup
     private const float DemoSlotWidth = 6.0f;
     private const float DemoSlotDepth = 11.5f;
     private const float DemoSlotAisleWidth = 12.0f;
+    private const float DemoRoadWidth = 12.0f;
+    private const float DemoLeftLaneOffset = DemoRoadWidth * 0.25f;
+    private const float DemoCruiseSpeed = 18.0f;
+    private const float DemoExitWaitSeconds = 5.0f;
     private static readonly string[] CarNpcPaintMaterialPaths =
     {
         "Assets/Models/Cars/NPCCarComplete/Free Sports Car/Materials/Paint/Black Paint.mat",
@@ -89,10 +93,12 @@ public static class NpcPhase1DemoSetup
 
         string position = carObject != null ? carObject.transform.position.ToString("F2") : "missing";
         string npcState = npcDriver != null ? npcDriver.state.ToString() : "missing";
+        string exitWait = npcDriver != null ? npcDriver.debugExitWaitTimer.ToString("F1") : "missing";
+        string routeCount = npcDriver != null ? npcDriver.assignedRoute.Count.ToString() : "missing";
         string followerState = pathFollower != null ? $"{pathFollower.IsFollowing}, updates={pathFollower.debugUpdateCount}, target={pathFollower.debugCurrentTarget:F2}" : "missing";
         string collisionState = collisionShape != null ? $"{collisionShape.bodyLength:F2}x{collisionShape.bodyWidth:F2}x{collisionShape.bodyHeight:F2}" : "missing";
 
-        Debug.Log($"NPC Phase 1 play state: isPlaying={EditorApplication.isPlaying}, isPaused={EditorApplication.isPaused}, timeScale={Time.timeScale:F2}, frame={Time.frameCount}, carPosition={position}, npcState={npcState}, pathFollowing={followerState}, collision={collisionState}");
+        Debug.Log($"NPC Phase 1 play state: isPlaying={EditorApplication.isPlaying}, isPaused={EditorApplication.isPaused}, timeScale={Time.timeScale:F2}, frame={Time.frameCount}, carPosition={position}, npcState={npcState}, exitWait={exitWait}, routeCount={routeCount}, pathFollowing={followerState}, collision={collisionState}");
     }
 
     [MenuItem("Parking Simulator/NPC Phase 1/Verify Demo Parking")]
@@ -165,7 +171,7 @@ public static class NpcPhase1DemoSetup
         Transform parkingPoint = EnsurePoint(targetSlot, "NPC_Demo_ParkingPoint", Vector3.zero, true, carObject.transform.position.y);
         Transform approachPoint = EnsurePoint(targetSlot, "NPC_Demo_ApproachPoint", -targetSlot.transform.forward * 14f, false, carObject.transform.position.y);
         Transform frontEntryPoint = EnsurePoint(targetSlot, "NPC_Demo_FrontEntryPoint", -targetSlot.transform.forward * 6f, false, carObject.transform.position.y);
-        Transform reverseEntryPoint = EnsurePoint(targetSlot, "NPC_Demo_ReverseEntryPoint", -targetSlot.transform.forward * 6f + targetSlot.transform.right * 2.5f, false, carObject.transform.position.y);
+        Transform reverseEntryPoint = EnsurePoint(targetSlot, "NPC_Demo_ReverseEntryPoint", targetSlot.transform.forward * 7f, true, carObject.transform.position.y);
 
         targetSlot.parkingPoint = parkingPoint;
         targetSlot.approachPoint = approachPoint;
@@ -191,28 +197,79 @@ public static class NpcPhase1DemoSetup
         RoutePlanner routePlanner = EnsureComponent<RoutePlanner>(graphObject);
 
         Vector3 entrancePosition = ResolveEntrancePosition(carObject.transform.position);
+        Vector3 exitPosition = ResolveExitPosition(carObject.transform.position);
         carObject.transform.position = entrancePosition;
 
         RoadNode entranceNode = EnsureRoadNode(waypointsRoot, "NPC_Demo_Entrance", entrancePosition);
         RoadNode middleNode = EnsureRoadNode(waypointsRoot, "NPC_Demo_Mid", Vector3.Lerp(entrancePosition, approachPoint.position, 0.5f));
-        RoadNode slotNode = EnsureRoadNode(waypointsRoot, "NPC_Demo_SlotApproach", approachPoint.position);
-        EnsureDemoDrivableArea(entrancePosition, middleNode.transform.position, approachPoint.position, frontEntryPoint.position, reverseEntryPoint.position, parkingPoint.position);
+        RoadNode slotNode = EnsureRoadNode(waypointsRoot, "Lane_C_01_Aisle", BuildLeftLaneAislePoint(approachPoint.position));
+        RoadNode legacySlotNode = FindRoadNode(waypointsRoot, "NPC_Demo_SlotApproach");
+        RoadNode laneExitNode01 = EnsureRoadNode(waypointsRoot, "Lane_C_Exit_01", BuildLeftLanePoint(approachPoint.position, exitPosition, 0.35f));
+        RoadNode laneExitNode02 = EnsureRoadNode(waypointsRoot, "Lane_C_Exit_02", BuildLeftLanePoint(approachPoint.position, exitPosition, 1f));
+        RoadNode mainExitNode01 = EnsureRoadNode(waypointsRoot, "Lane_Main_Exit_01", BuildMainLeftLanePoint(approachPoint.position, exitPosition, 0.45f));
+        RoadNode mainExitNode02 = EnsureRoadNode(waypointsRoot, "Lane_Main_Exit_02", BuildExitApproachPoint(exitPosition, approachPoint.position.y));
+        RoadNode exitNode = EnsureRoadNode(waypointsRoot, "NPC_Demo_ExitGate", BuildExitGatePoint(exitPosition, approachPoint.position.y));
+        RoadNode publicRoadMergeNode = EnsureRoadNode(waypointsRoot, "NPC_Demo_PublicRoadMerge", BuildPublicRoadMergePoint(exitPosition, approachPoint.position.y));
+        RoadNode legacyExitNode = EnsureRoadNode(waypointsRoot, "NPC_Demo_Exit", exitNode.Position);
+        EnsureDemoDrivableArea(
+            entrancePosition,
+            middleNode.transform.position,
+            slotNode.transform.position,
+            laneExitNode01.transform.position,
+            laneExitNode02.transform.position,
+            mainExitNode01.transform.position,
+            mainExitNode02.transform.position,
+            frontEntryPoint.position,
+            reverseEntryPoint.position,
+            parkingPoint.position,
+            exitPosition);
 
         ConnectOneWay(entranceNode, middleNode);
         ConnectOneWay(middleNode, slotNode);
+        DisconnectOneWay(middleNode, legacySlotNode);
+        DisconnectOneWay(middleNode, legacyExitNode);
+        ConnectOneWay(slotNode, laneExitNode01);
+        ConnectOneWay(laneExitNode01, laneExitNode02);
+        ConnectOneWay(laneExitNode02, mainExitNode01);
+        ConnectOneWay(mainExitNode01, mainExitNode02);
+        DisconnectOneWay(mainExitNode02, legacyExitNode);
+        ConnectOneWay(mainExitNode02, exitNode);
+        ConnectOneWay(exitNode, publicRoadMergeNode);
+
+        Transform roadEdgesRoot = EnsureChildRoot(graphObject.transform, "RoadEdges");
+        EnsureRoadEdge(roadEdgesRoot, "Edge_Entrance_To_Mid", entranceNode, middleNode);
+        EnsureRoadEdge(roadEdgesRoot, "Edge_Mid_To_Lane_C_01_Aisle", middleNode, slotNode);
+        EnsureRoadEdge(roadEdgesRoot, "Edge_Lane_C_01_Aisle_To_Lane_C_Exit_01", slotNode, laneExitNode01);
+        EnsureRoadEdge(roadEdgesRoot, "Edge_Lane_C_Exit_01_To_Lane_C_Exit_02", laneExitNode01, laneExitNode02);
+        EnsureRoadEdge(
+            roadEdgesRoot,
+            "Edge_Lane_C_Exit_02_To_Lane_Main_Exit_01",
+            laneExitNode02,
+            mainExitNode01,
+            BuildLeftTurnPathPoints(laneExitNode02.Position, mainExitNode01.Position));
+        EnsureRoadEdge(roadEdgesRoot, "Edge_Lane_Main_Exit_01_To_Lane_Main_Exit_02", mainExitNode01, mainExitNode02);
+        EnsureRoadEdge(roadEdgesRoot, "Edge_Lane_Main_Exit_02_To_Exit", mainExitNode02, exitNode);
+        EnsureRoadEdge(roadEdgesRoot, "Edge_ExitGate_To_PublicRoadMerge", exitNode, publicRoadMergeNode);
+        EnsureDemoRouteValidationAreas(slotNode, laneExitNode02, mainExitNode01, mainExitNode02, exitNode, slotGeometry);
 
         roadGraph.nodesRoot = waypointsRoot;
+        roadGraph.edgesRoot = roadEdgesRoot;
         roadGraph.treatConnectionsAsBidirectional = true;
-        roadGraph.AutoCollectNodes();
+        roadGraph.useRoadEdgesWhenAvailable = true;
+        roadGraph.AutoCollect();
 
         routePlanner.roadGraph = roadGraph;
         routePlanner.entranceNode = entranceNode;
         routePlanner.useEntranceNodeAsDefaultStart = true;
 
         targetSlot.roadNodeId = slotNode.nodeId;
+        EditorUtility.SetDirty(targetSlot);
+        EditorUtility.SetDirty(slotGeometry);
+        EditorUtility.SetDirty(roadGraph);
+        EditorUtility.SetDirty(routePlanner);
 
         PathFollower pathFollower = EnsureComponent<PathFollower>(carObject);
-        pathFollower.moveSpeed = 8f;
+        pathFollower.moveSpeed = DemoCruiseSpeed;
         pathFollower.turnSpeed = 8f;
         pathFollower.drawDebugPath = true;
 
@@ -226,10 +283,16 @@ public static class NpcPhase1DemoSetup
         NPCDriver npcDriver = EnsureComponent<NPCDriver>(carObject);
         npcDriver.routePlanner = routePlanner;
         npcDriver.assignedSlot = targetSlot;
+        npcDriver.exitNode = exitNode;
         npcDriver.useAssignedSlotOnly = true;
         npcDriver.startOnPlay = true;
         npcDriver.usePhase2SafetyChecks = true;
         npcDriver.requireDrivableAreaForManeuver = true;
+        npcDriver.validateExitRouteAreas = true;
+        npcDriver.requireLaneDrivableAreaForExit = true;
+        npcDriver.autoExitAfterParking = true;
+        npcDriver.exitWaitSeconds = DemoExitWaitSeconds;
+        npcDriver.deactivateOnExit = false;
         npcDriver.logStateChanges = true;
 
         GameObject parkingAreas = GameObject.Find("ParkingAreas");
@@ -281,7 +344,17 @@ public static class NpcPhase1DemoSetup
         {
             if (npcDriver.state == NPCDrivingState.Parked)
             {
-                Debug.Log($"NPC Phase 1 verification passed in {verificationFrameCount} frames. Car_NPC reached Parked.");
+                if (!npcDriver.autoExitAfterParking)
+                {
+                    Debug.Log($"NPC Phase 1 verification passed in {verificationFrameCount} frames. Car_NPC reached Parked.");
+                    StopParkingVerification();
+                    return;
+                }
+            }
+
+            if (npcDriver.state == NPCDrivingState.Exited)
+            {
+                Debug.Log($"NPC Phase 3 verification passed in {verificationFrameCount} frames. Car_NPC reached Exited.");
                 StopParkingVerification();
                 return;
             }
@@ -650,6 +723,130 @@ public static class NpcPhase1DemoSetup
         };
     }
 
+    private static void EnsureDemoRouteValidationAreas(
+        RoadNode slotNode,
+        RoadNode laneExitNode,
+        RoadNode mainExitNode,
+        RoadNode mainExitEndNode,
+        RoadNode exitNode,
+        ParkingSlotGeometry slotGeometry)
+    {
+        Transform root = EnsureRoot("NPC_Demo_RouteValidationAreas");
+
+        float laneHalfWidth = Mathf.Max(CarNpcBodyLength * 0.5f + 3.0f, CarNpcBodyWidth * 0.5f + 2.5f);
+        float y = 0f;
+
+        if (slotNode != null && laneExitNode != null)
+        {
+            float minZ = Mathf.Min(slotNode.Position.z, laneExitNode.Position.z) - laneHalfWidth;
+            float maxZ = Mathf.Max(slotNode.Position.z, laneExitNode.Position.z) + laneHalfWidth;
+            EnsureDrivableArea(
+                root,
+                "DrivableArea_C_Aisle",
+                "DrivableArea_C_Aisle",
+                DrivableAreaType.Lane,
+                BuildAxisAlignedPolygon(
+                    slotNode.Position.x - laneHalfWidth,
+                    slotNode.Position.x + laneHalfWidth,
+                    minZ,
+                    maxZ,
+                    y));
+        }
+
+        if (laneExitNode != null && mainExitNode != null && mainExitEndNode != null)
+        {
+            float minX = Mathf.Min(laneExitNode.Position.x, Mathf.Min(mainExitNode.Position.x, mainExitEndNode.Position.x)) - laneHalfWidth;
+            float maxX = Mathf.Max(exitNode != null ? exitNode.Position.x : mainExitEndNode.Position.x, Mathf.Max(mainExitNode.Position.x, mainExitEndNode.Position.x)) + laneHalfWidth;
+            EnsureDrivableArea(
+                root,
+                "DrivableArea_Main_Exit",
+                "DrivableArea_Main_Exit",
+                DrivableAreaType.Lane,
+                BuildAxisAlignedPolygon(
+                    minX,
+                    maxX,
+                    mainExitNode.Position.z - laneHalfWidth,
+                    mainExitNode.Position.z + laneHalfWidth,
+                    y));
+        }
+
+        if (exitNode != null)
+        {
+            EnsureDrivableArea(
+                root,
+                "DrivableArea_Exit",
+                "DrivableArea_Exit",
+                DrivableAreaType.Exit,
+                BuildAxisAlignedPolygon(
+                    exitNode.Position.x - laneHalfWidth,
+                    exitNode.Position.x + laneHalfWidth,
+                    exitNode.Position.z - laneHalfWidth,
+                    exitNode.Position.z + laneHalfWidth,
+                    y));
+        }
+
+        if (slotGeometry != null && slotGeometry.corners != null && slotGeometry.corners.Length >= 3)
+        {
+            EnsureNoDriveArea(root, "NoDriveArea_Slot_C_01", "NoDriveArea_Slot_C_01", slotGeometry.corners);
+        }
+    }
+
+    private static void EnsureDrivableArea(Transform root, string objectName, string areaId, DrivableAreaType areaType, Vector3[] polygon)
+    {
+        Transform areaTransform = root.Find(objectName);
+        if (areaTransform == null)
+        {
+            areaTransform = new GameObject(objectName).transform;
+            areaTransform.SetParent(root);
+        }
+
+        areaTransform.localPosition = Vector3.zero;
+        areaTransform.localRotation = Quaternion.identity;
+        areaTransform.localScale = Vector3.one;
+
+        DrivableArea area = EnsureComponent<DrivableArea>(areaTransform.gameObject);
+        area.areaId = areaId;
+        area.areaType = areaType;
+        area.defaultSpeedLimit = DemoCruiseSpeed;
+        area.allowStop = true;
+        area.priority = 200;
+        area.drawDebug = true;
+        area.debugColor = areaType == DrivableAreaType.Exit ? new Color(0.1f, 0.9f, 0.3f, 1f) : new Color(0f, 0.7f, 1f, 1f);
+        area.polygon = polygon;
+    }
+
+    private static void EnsureNoDriveArea(Transform root, string objectName, string areaId, Vector3[] polygon)
+    {
+        Transform areaTransform = root.Find(objectName);
+        if (areaTransform == null)
+        {
+            areaTransform = new GameObject(objectName).transform;
+            areaTransform.SetParent(root);
+        }
+
+        areaTransform.localPosition = Vector3.zero;
+        areaTransform.localRotation = Quaternion.identity;
+        areaTransform.localScale = Vector3.one;
+
+        NoDriveArea area = EnsureComponent<NoDriveArea>(areaTransform.gameObject);
+        area.areaId = areaId;
+        area.active = true;
+        area.drawDebug = true;
+        area.debugColor = new Color(1f, 0.15f, 0.05f, 1f);
+        area.polygon = polygon;
+    }
+
+    private static Vector3[] BuildAxisAlignedPolygon(float minX, float maxX, float minZ, float maxZ, float y)
+    {
+        return new[]
+        {
+            new Vector3(minX, y, minZ),
+            new Vector3(maxX, y, minZ),
+            new Vector3(maxX, y, maxZ),
+            new Vector3(minX, y, maxZ)
+        };
+    }
+
     private static void SetLayerRecursively(Transform target, int layer)
     {
         target.gameObject.layer = layer;
@@ -720,6 +917,21 @@ public static class NpcPhase1DemoSetup
         return gameObject;
     }
 
+    private static Transform EnsureChildRoot(Transform parent, string childName)
+    {
+        Transform child = parent.Find(childName);
+        if (child == null)
+        {
+            child = new GameObject(childName).transform;
+            child.SetParent(parent);
+        }
+
+        child.localPosition = Vector3.zero;
+        child.localRotation = Quaternion.identity;
+        child.localScale = Vector3.one;
+        return child;
+    }
+
     private static Transform EnsurePoint(ParkingSlot slot, string pointName, Vector3 localOffset, bool alignToSlot, float worldY)
     {
         Transform point = slot.transform.Find(pointName);
@@ -758,6 +970,19 @@ public static class NpcPhase1DemoSetup
         return entrancePosition;
     }
 
+    private static Vector3 ResolveExitPosition(Vector3 fallbackPosition)
+    {
+        GameObject exitObject = GameObject.Find("Exit_Road_01");
+        if (exitObject == null)
+        {
+            return fallbackPosition;
+        }
+
+        Vector3 exitPosition = exitObject.transform.position;
+        exitPosition.y = fallbackPosition.y;
+        return exitPosition;
+    }
+
     private static RoadNode EnsureRoadNode(Transform root, string nodeId, Vector3 position)
     {
         Transform nodeTransform = root.Find(nodeId);
@@ -773,6 +998,111 @@ public static class NpcPhase1DemoSetup
         return roadNode;
     }
 
+    private static RoadNode FindRoadNode(Transform root, string nodeId)
+    {
+        if (root == null)
+        {
+            return null;
+        }
+
+        Transform nodeTransform = root.Find(nodeId);
+        return nodeTransform != null ? nodeTransform.GetComponent<RoadNode>() : null;
+    }
+
+    private static RoadEdge EnsureRoadEdge(Transform root, string edgeId, RoadNode fromNode, RoadNode toNode)
+    {
+        return EnsureRoadEdge(root, edgeId, fromNode, toNode, new Vector3[0]);
+    }
+
+    private static RoadEdge EnsureRoadEdge(Transform root, string edgeId, RoadNode fromNode, RoadNode toNode, Vector3[] pathPoints)
+    {
+        Transform edgeTransform = root.Find(edgeId);
+        if (edgeTransform == null)
+        {
+            edgeTransform = new GameObject(edgeId).transform;
+            edgeTransform.SetParent(root);
+        }
+
+        edgeTransform.localPosition = Vector3.zero;
+        edgeTransform.localRotation = Quaternion.identity;
+        edgeTransform.localScale = Vector3.one;
+
+        RoadEdge edge = EnsureComponent<RoadEdge>(edgeTransform.gameObject);
+        edge.edgeId = edgeId;
+        edge.fromNodeId = fromNode != null ? fromNode.nodeId : string.Empty;
+        edge.toNodeId = toNode != null ? toNode.nodeId : string.Empty;
+        edge.oneWay = true;
+        edge.blocked = false;
+        edge.speedLimit = DemoCruiseSpeed;
+        edge.costMultiplier = 1f;
+        edge.laneSide = RoadLaneSide.LeftHandTraffic;
+        edge.laneWidth = DemoRoadWidth * 0.5f;
+        edge.roadWidth = DemoRoadWidth;
+        edge.turnRadius = Mathf.Max(3f, DemoLeftLaneOffset);
+        edge.pathPoints = pathPoints ?? new Vector3[0];
+        return edge;
+    }
+
+    private static Vector3 BuildLeftLaneAislePoint(Vector3 aislePosition)
+    {
+        return new Vector3(aislePosition.x - DemoLeftLaneOffset, aislePosition.y, aislePosition.z);
+    }
+
+    private static Vector3 BuildLanePoint(Vector3 aislePosition, Vector3 exitPosition, float t)
+    {
+        float exitLaneZ = exitPosition.z - 4f;
+        return new Vector3(aislePosition.x, aislePosition.y, Mathf.Lerp(aislePosition.z, exitLaneZ, t));
+    }
+
+    private static Vector3 BuildLeftLanePoint(Vector3 aislePosition, Vector3 exitPosition, float t)
+    {
+        Vector3 centerPoint = BuildLanePoint(aislePosition, exitPosition, t);
+        centerPoint.x -= DemoLeftLaneOffset;
+        return centerPoint;
+    }
+
+    private static Vector3 BuildMainExitPoint(Vector3 aislePosition, Vector3 exitPosition, float t)
+    {
+        float exitLaneZ = exitPosition.z - 4f;
+        return new Vector3(Mathf.Lerp(aislePosition.x, exitPosition.x, t), aislePosition.y, exitLaneZ);
+    }
+
+    private static Vector3 BuildMainLeftLanePoint(Vector3 aislePosition, Vector3 exitPosition, float t)
+    {
+        Vector3 centerPoint = BuildMainExitPoint(aislePosition, exitPosition, t);
+        centerPoint.x -= DemoLeftLaneOffset;
+        centerPoint.z += DemoLeftLaneOffset;
+        return centerPoint;
+    }
+
+    private static Vector3 BuildExitApproachPoint(Vector3 exitPosition, float y)
+    {
+        return new Vector3(exitPosition.x - 8f, y, BuildExitLaneZ(exitPosition));
+    }
+
+    private static Vector3 BuildExitGatePoint(Vector3 exitPosition, float y)
+    {
+        return new Vector3(exitPosition.x, y, BuildExitLaneZ(exitPosition));
+    }
+
+    private static Vector3 BuildPublicRoadMergePoint(Vector3 exitPosition, float y)
+    {
+        return new Vector3(exitPosition.x, y, exitPosition.z);
+    }
+
+    private static Vector3[] BuildLeftTurnPathPoints(Vector3 fromPosition, Vector3 toPosition)
+    {
+        return new[]
+        {
+            new Vector3(fromPosition.x, fromPosition.y, toPosition.z)
+        };
+    }
+
+    private static float BuildExitLaneZ(Vector3 exitPosition)
+    {
+        return exitPosition.z - 4f + DemoLeftLaneOffset;
+    }
+
     private static void ConnectOneWay(RoadNode fromNode, RoadNode toNode)
     {
         if (fromNode == null || toNode == null)
@@ -780,8 +1110,20 @@ public static class NpcPhase1DemoSetup
             return;
         }
 
-        fromNode.connectedNodes.Clear();
-        fromNode.connectedNodes.Add(toNode);
+        if (!fromNode.connectedNodes.Contains(toNode))
+        {
+            fromNode.connectedNodes.Add(toNode);
+        }
+    }
+
+    private static void DisconnectOneWay(RoadNode fromNode, RoadNode toNode)
+    {
+        if (fromNode == null || toNode == null)
+        {
+            return;
+        }
+
+        fromNode.connectedNodes.Remove(toNode);
     }
 
     private static T EnsureComponent<T>(GameObject gameObject) where T : Component
