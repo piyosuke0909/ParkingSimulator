@@ -5,10 +5,13 @@ public class ParkingSlotOccupancySensor : MonoBehaviour
     public ParkingSlot parkingSlot;
 
     [Header("Detection Settings")]
-    public float requiredStayTime = 2.0f;
+    public float requiredStayTime = 1.5f;
+    public float requiredLeaveTime = 2.0f;
 
     private Car detectedCar;
     private float stayTimer;
+    private float leaveTimer;
+    private bool carInside;
 
     private void Reset()
     {
@@ -77,5 +80,27 @@ public class ParkingSlotOccupancySensor : MonoBehaviour
 
             parkingSlot.SetEmpty();
         }
+
+        if (carInside)
+        {
+            stayTimer += Time.deltaTime;
+            leaveTimer = 0f;
+
+            if (stayTimer >= requiredStayTime)
+            {
+                parkingSlot.SetOccupied();
+            }
+        }
+        else
+        {
+            leaveTimer += Time.deltaTime;
+            stayTimer = 0f;
+
+            if (leaveTimer >= requiredLeaveTime)
+            {
+                parkingSlot.SetEmpty();
+            }
+        }
+
     }
 }

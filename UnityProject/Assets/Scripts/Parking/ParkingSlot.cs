@@ -8,15 +8,6 @@ public enum ParkingSlotState
     Disabled
 }
 
-public enum ParkingManeuverPreference
-{
-    Auto,
-    FrontInOnly,
-    ReverseInOnly,
-    PreferFrontIn,
-    PreferReverseIn
-}
-
 public class ParkingSlot : MonoBehaviour
 {
     [Header("Slot Info")]
@@ -26,122 +17,40 @@ public class ParkingSlot : MonoBehaviour
     [Header("State")]
     public ParkingSlotState state = ParkingSlotState.Empty;
 
-    [Header("Parking Point")]
+    [Header("Points")]
     public Transform parkingPoint;
-
-    [Header("Detection")]
     public Transform detectionPoint;
 
-    [Header("NPC Route")]
-    public Transform approachPoint;
-    public Transform frontEntryPoint;
-    public Transform reverseEntryPoint;
-    public string roadNodeId;
-
-    [Header("NPC Maneuver")]
-    public float slotWidth = 2.5f;
-    public float slotDepth = 5.0f;
-    public float aisleWidth = 6.0f;
-    public bool allowFrontIn = true;
-    public bool allowReverseIn = true;
-    public ParkingManeuverPreference preferredManeuver = ParkingManeuverPreference.Auto;
-    public ParkingSlotGeometry geometry;
-
-    [Header("Visual")]
+    [Header("Visual Target")]
     public Renderer slotBaseRenderer;
 
+    [Header("Colors")]
     public Color emptyColor = Color.gray;
     public Color occupiedColor = Color.red;
     public Color reservedColor = Color.yellow;
-    public Color disabledColor = Color.black;
+    public Color disabledColor = Color.blue;
+
+    [Header("Empty Display")]
+    public bool hideSlotBaseWhenEmpty = false;
+
+    private void Awake()
+    {
+        FindReferences();
+    }
 
     private void Start()
     {
         UpdateVisual();
     }
 
-    public bool IsAvailable()
+#if UNITY_EDITOR
+    private void OnValidate()
     {
-        return state == ParkingSlotState.Empty;
+        FindReferences();
     }
+#endif
 
-    public bool TryReserve()
-    {
-        if (!IsAvailable())
-        {
-            return false;
-        }
-
-        SetReserved();
-        return true;
-    }
-
-    public Transform GetApproachPoint()
-    {
-        if (approachPoint != null)
-        {
-            return approachPoint;
-        }
-
-        if (parkingPoint != null)
-        {
-            return parkingPoint;
-        }
-
-        return transform;
-    }
-
-    public Transform GetParkingPoint()
-    {
-        if (parkingPoint != null)
-        {
-            return parkingPoint;
-        }
-
-        return transform;
-    }
-
-    public ParkingSlotGeometry GetGeometry()
-    {
-        if (geometry != null)
-        {
-            return geometry;
-        }
-
-        geometry = GetComponentInChildren<ParkingSlotGeometry>();
-        return geometry;
-    }
-
-    public ManeuverPath[] GetManeuverPaths()
-    {
-        return GetComponentsInChildren<ManeuverPath>();
-    }
-
-    public void SetEmpty()
-    {
-        state = ParkingSlotState.Empty;
-        UpdateVisual();
-    }
-
-    public void SetOccupied()
-    {
-        state = ParkingSlotState.Occupied;
-        UpdateVisual();
-    }
-
-    public void SetReserved()
-    {
-        state = ParkingSlotState.Reserved;
-        UpdateVisual();
-    }
-
-    public void SetDisabled()
-    {
-        state = ParkingSlotState.Disabled;
-        UpdateVisual();
-    }
-
-    public void UpdateVisual()
+    private void FindReferences()
     {
         if (slotBaseRenderer == null)
         {
@@ -149,42 +58,117 @@ public class ParkingSlot : MonoBehaviour
 
             if (slotBase != null)
             {
-                slotBaseRenderer = slotBase.GetComponent<Renderer>();
+                slotBaseRenderer = slotBase.GetComponentInChildren<Renderer>(true);
             }
         }
 
+        if (parkingPoint == null)
+        {
+            Transform point = transform.Find("ParkingPoint");
+
+            if (point != null)
+            {
+                parkingPoint = point;
+            }
+        }
+
+        if (detectionPoint == null)
+        {
+            Transform point = transform.Find("DetectionPoint");
+
+            if (point != null)
+            {
+                detectionPoint = point;
+            }
+        }
+    }
+
+    public bool IsAvailable()
+    {
+        return state == ParkingSlotState.Empty;
+    }
+
+    public void SetEmpty()
+    {
+        SetState(ParkingSlotState.Empty);
+    }
+
+    public void SetOccupied()
+    {
+        SetState(ParkingSlotState.Occupied);
+    }
+
+    public void SetReserved()
+    {
+        SetState(ParkingSlotState.Reserved);
+    }
+
+    public void SetDisabled()
+    {
+        SetState(ParkingSlotState.Disabled);
+    }
+
+    public void SetState(ParkingSlotState newState)
+    {
+        if (state == newState)
+        {
+            return;
+        }
+
+        state = newState;
+        UpdateVisual();
+    }
+
+    public void UpdateVisual()
+    {
+        FindReferences();
+
         if (slotBaseRenderer == null)
         {
-            Debug.LogWarning($"Slot_Base の Renderer が見つかりません: {gameObject.name}");
             return;
         }
 
         switch (state)
         {
             case ParkingSlotState.Empty:
-                slotBaseRenderer.material.color = emptyColor;
+                ApplyEmptyVisual();
                 break;
 
             case ParkingSlotState.Occupied:
-                slotBaseRenderer.material.color = occupiedColor;
+                ApplyColorVisual(occupiedColor);
                 break;
 
             case ParkingSlotState.Reserved:
-                slotBaseRenderer.material.color = reservedColor;
+                ApplyColorVisual(reservedColor);
                 break;
 
             case ParkingSlotState.Disabled:
-                slotBaseRenderer.material.color = disabledColor;
+                ApplyColorVisual(disabledColor);
                 break;
         }
-
     }
 
-    private void OnValidate()
+    private void ApplyEmptyVisual()
     {
-        slotWidth = Mathf.Max(0.01f, slotWidth);
-        slotDepth = Mathf.Max(0.01f, slotDepth);
-        aisleWidth = Mathf.Max(0.01f, aisleWidth);
+        if (slotBaseRenderer == null)
+        {
+            return;
+        }
+
+        if (hideSlotBaseWhenEmpty)
+        {
+            slotBaseRenderer.gameObject.SetActive(false);
+        }
+        else
+        {
+            slotBaseRenderer.gameObject.SetActive(true);
+            slotBaseRenderer.material.color = emptyColor;
+        }
     }
 
+    private void ApplyColorVisual(Color color)
+    {
+        slotBaseRenderer.gameObject.SetActive(true);
+        slotBaseRenderer.material.color = color;
+    }
 }

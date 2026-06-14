@@ -13,10 +13,11 @@ public class CameraParkingSensor : MonoBehaviour
     public LayerMask carLayerMask;
     public float checkInterval = 0.2f;
     public float requiredDetectionTime = 1.5f;
-    public float lostDetectionTime = 1.0f;
+    public float lostDetectionTime = 3.0f;
 
     [Header("Debug")]
     public bool drawDebugRay = true;
+    public bool logStateChange = false;
 
     private Dictionary<ParkingSlot, float> detectedTimers = new Dictionary<ParkingSlot, float>();
     private Dictionary<ParkingSlot, float> lostTimers = new Dictionary<ParkingSlot, float>();
@@ -56,8 +57,8 @@ public class CameraParkingSensor : MonoBehaviour
 
         foreach (ParkingSlot slot in targetSlots)
         {
-            detectedTimers.Add(slot, 0f);
-            lostTimers.Add(slot, 0f);
+            detectedTimers[slot] = 0f;
+            lostTimers[slot] = lostDetectionTime;
         }
     }
 
@@ -92,7 +93,10 @@ public class CameraParkingSensor : MonoBehaviour
 
                 if (detectedTimers[slot] >= requiredDetectionTime)
                 {
-                    slot.SetOccupied();
+                    if (slot.state != ParkingSlotState.Occupied)
+                    {
+                        slot.SetOccupied();
+                    }
                 }
             }
             else
@@ -102,7 +106,10 @@ public class CameraParkingSensor : MonoBehaviour
 
                 if (lostTimers[slot] >= lostDetectionTime)
                 {
-                    slot.SetEmpty();
+                    if (slot.state != ParkingSlotState.Empty)
+                    {
+                        slot.SetEmpty();
+                    }
                 }
             }
         }

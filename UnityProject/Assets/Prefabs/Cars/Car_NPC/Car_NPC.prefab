@@ -12,14 +12,6 @@ GameObject:
   - component: {fileID: 540000}
   - component: {fileID: 650000}
   - component: {fileID: 11400000}
-  - component: {fileID: 11400001}
-  - component: {fileID: 11400002}
-  - component: {fileID: 11400003}
-  - component: {fileID: 11400004}
-  - component: {fileID: 11400005}
-  - component: {fileID: 11400006}
-  - component: {fileID: 11400007}
-  - component: {fileID: 11400008}
   m_Layer: 6
   m_Name: Car_NPC
   m_TagString: Untagged
@@ -104,210 +96,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carId: Car_NPC_001
-  length: 10
-  width: 4.5
-  currentState: 0
---- !u!114 &11400001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04ef6c0ba5c34f7a9982bb49af1a046f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  npcId: 
-  routePlanner: {fileID: 0}
-  parkingSlotsRoot: {fileID: 0}
-  assignedSlot: {fileID: 0}
-  candidateSlots: []
-  exitNode: {fileID: 0}
-  startOnPlay: 0
-  autoCollectCandidateSlots: 1
-  useAssignedSlotOnly: 0
-  usePhase2SafetyChecks: 1
-  requireDrivableAreaForManeuver: 1
-  validateExitRouteAreas: 1
-  requireLaneDrivableAreaForExit: 1
-  autoExitAfterParking: 1
-  deactivateOnExit: 0
-  exitWaitSeconds: 5
-  blockedTimeout: 5
-  state: 0
-  logStateChanges: 1
-  targetSlot: {fileID: 0}
-  selectedManeuver: 0
-  selectedManeuverPath: {fileID: 0}
-  assignedRoute: []
-  debugExitWaitTimer: 0
-  debugLastBlockedReason: 
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4b82efe62f3431aa6cc36e05ab2fd7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parkingSpeed: 2.5
-  rotationSpeed: 6
-  stoppingDistance: 0.05
-  snapToParkingPointOnComplete: 1
-  stopForObstaclesDuringParking: 0
---- !u!114 &11400003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ed6c8c02c4d4826ae3bfce2cc98ce23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 18
-  turnSpeed: 8
-  stoppingDistance: 0.25
-  rotateTowardsMovement: 1
-  drawDebugPath: 1
-  debugCurrentIndex: 0
-  debugBlockedTimer: 0
-  debugLastDeltaTime: 0
-  debugCurrentTarget: {x: 0, y: 0, z: 0}
-  debugUpdateCount: 0
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ddec36652b144daa65032c11a265180, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  obstacleId: 
-  kind: 0
-  velocity: {x: 0, y: 0, z: 0}
-  collisionShape: {fileID: 11400005}
-  plannedRoute: []
---- !u!114 &11400005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3029a6412cc142809e60794eec231992, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vehicleType: Standard
-  bodyLength: 10
-  bodyWidth: 4.5
-  bodyHeight: 3
-  frontOverhang: 0.6
-  rearOverhang: 0.6
-  sideSafetyMargin: 0.2
-  frontSafetyMargin: 0.6
-  rearSafetyMargin: 0.2
-  obstacleLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  lookAheadDistance: 4
-  drawDebug: 1
---- !u!114 &11400006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0ad84ce87a24286878d70582d378c69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxForwardSpeed: 18
-  maxReverseSpeed: 8
-  acceleration: 10
-  braking: 16
-  coastDrag: 4
-  turnSpeed: 75
-  maxSteerAngle: 30
-  wheelBase: 2.5
-  steeringResponse: 4.5
-  minimumSteerSpeed: 0.35
-  highSpeedSteerFactor: 0.35
-  lateralGrip: 7
-  forwardKey: 119
-  backwardKey: 115
-  leftKey: 97
-  rightKey: 100
-  enableManualInput: 0
-  enablePhysicsDrive: 0
---- !u!114 &11400007
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf56d91f998a4d888bbff6e1ca4475f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectionDistance: 8
-  warningDistance: 5
-  emergencyStopDistance: 1.2
-  sensorHeight: 1.5
-  sensorWidth: 1.8000001
-  frontSensorZ: 4.7999997
-  rearSensorZ: -4.7999997
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 64
-  drawDebugRays: 1
-  minimumSpeedFactor: 0.18
---- !u!114 &11400008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db5e4a078da2420f81fb3faf5bb81668, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftTurnKey: 113
-  rightTurnKey: 101
-  hazardKey: 122
-  brakeKey: 115
-  steerLeftKey: 97
-  steerRightKey: 100
-  blinkInterval: 0.35
-  turnSignalIntensity: 4
-  turnSignalColor: {r: 1, g: 0.55, b: 0.05, a: 1}
-  autoCancelTurnAngle: 35
-  tailLightIntensity: 0.8
-  brakeLightIntensity: 4
-  tailLightColor: {r: 1, g: 0, b: 0, a: 1}
-  leftTurnLights: []
-  rightTurnLights: []
-  brakeLights: []
+  currentParkingSlot: {fileID: 0}
+  isParked: 0
+  carRigidbody: {fileID: 540000}
+  stoppedSpeedThreshold: 0.2
 --- !u!1001 &78865616715249238
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -334,15 +126,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3.2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3.2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3.2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalPosition.x
@@ -354,7 +146,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.93
+      value: -0.95
       objectReference: {fileID: 0}
     - target: {fileID: 3956244092867376887, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_LocalRotation.w
@@ -399,6 +191,10 @@ PrefabInstance:
     - target: {fileID: 6512423700290957814, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8918414990637984488, guid: 63bfbfb7f44d6bf48aa5475778ae7a08, type: 3}
+      propertyPath: m_MotionVectors
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
