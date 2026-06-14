@@ -1,18 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum HeatmapDetectionMode
+{
+    ImageProcessing,
+    CarTransform
+}
+
 public class ImageBasedHeatmapManager : MonoBehaviour
 {
-    [Header("Editor Visibility")]
-    public GameObject heatmapPlaneObject;
-    public bool showHeatmapOnlyInPlayMode = true;
+    [Header("Detection Mode")]
+    public HeatmapDetectionMode detectionMode = HeatmapDetectionMode.CarTransform;
 
-    [Header("Detection Camera")]
+    [Header("Image Processing Detection")]
     public Camera detectionCamera;
     public RenderTexture detectionRenderTexture;
 
-    [Header("Heatmap Output")]
+    [Header("Heatmap Display")]
     public Renderer heatmapRenderer;
+
+    [Header("Heatmap Texture Settings")]
     public int heatmapWidth = 128;
     public int heatmapHeight = 128;
 
@@ -22,36 +29,30 @@ public class ImageBasedHeatmapManager : MonoBehaviour
     public float worldMinZ = -150f;
     public float worldMaxZ = 150f;
 
-    [Header("Coordinate Fix")]
+    [Header("Coordinate Correction")]
     public bool flipHeatmapX = true;
     public bool flipHeatmapZ = false;
 
-    [Header("Image Processing")]
-    [Range(0f, 1f)]
+    [Header("Image Processing Settings")]
     public float brightnessThreshold = 0.1f;
-
-    [Tooltip("車として扱う最小ピクセル数。小さすぎる白点ノイズを無視します。")]
+    public int pixelStep = 4;
     public int minBlobPixelCount = 6;
-
-    [Tooltip("1回の更新で検出する最大車両数。多すぎる誤検出を防ぎます。")]
     public int maxDetectedCars = 50;
 
-    [Tooltip("画像処理時に何ピクセルおきに確認するか。小さいほど精度が高いが重くなります。")]
-    public int pixelStep = 4;
-
-    [Tooltip("ヒートマップを何秒ごとに更新するか。")]
-    public float updateInterval = 0.25f;
-
     [Header("Heat Settings")]
-    [Tooltip("1回の検出で加算する熱量。")]
-    public float heatAddAmount = 0.12f;
-
-    [Tooltip("熱の減衰率。1に近いほど長く残ります。")]
-    [Range(0.8f, 1f)]
+    public float updateInterval = 0.25f;
+    public float heatAddAmount = 0.08f;
     public float heatDecay = 0.985f;
-
-    [Tooltip("熱が広がる半径。大きいほど広くぼかされます。")]
     public int heatRadius = 12;
+
+    [Header("Display Alpha")]
+    public float emptyAlpha = 0.05f;
+    public float minHeatAlpha = 0.20f;
+    public float maxHeatAlpha = 0.80f;
+
+    [Header("Heatmap Plane Object")]
+    public GameObject heatmapPlaneObject;
+    public bool showHeatmapOnlyInPlayMode = true;
 
     [Header("Debug")]
     public bool showDebugLog = false;
@@ -60,13 +61,11 @@ public class ImageBasedHeatmapManager : MonoBehaviour
     private Texture2D captureTexture;
     private Texture2D heatmapTexture;
     private float[,] heatValues;
-
-    private float timer;
-    private bool initialized;
+    private float updateTimer;
 
     private void Start()
     {
-        if (heatmapPlaneObject != null && showHeatmapOnlyInPlayMode)
+        if (showHeatmapOnlyInPlayMode && heatmapPlaneObject != null)
         {
             heatmapPlaneObject.SetActive(true);
         }
@@ -75,74 +74,38 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
         if (addTestHeatOnStart)
         {
-            AddSmoothHeatAtWorldPosition(new Vector3(0f, 0f, 0f));
-            AddSmoothHeatAtWorldPosition(new Vector3(60f, 0f, -40f));
-            AddSmoothHeatAtWorldPosition(new Vector3(-60f, 0f, 40f));
-            UpdateHeatmapTexture();
+            AddTestHeatCenter();
         }
     }
 
     private void Update()
     {
-        if (!initialized)
+        updateTimer += Time.deltaTime;
+
+        if (updateTimer < updateInterval)
         {
             return;
         }
 
-        if (captureTexture == null || heatmapTexture == null || heatValues == null)
-        {
-            initialized = false;
-            Initialize();
+        updateTimer = 0f;
 
-            if (!initialized)
-            {
-                return;
-            }
+        if (detectionMode == HeatmapDetectionMode.ImageProcessing)
+        {
+            CaptureDetectionImage();
+            ProcessDetectionImage();
+        }
+        else
+        {
+            ProcessCarTransforms();
         }
 
-        timer += Time.deltaTime;
-
-        if (timer < updateInterval)
-        {
-            return;
-        }
-
-        timer = 0f;
-
-        CaptureDetectionImage();
         DecayHeatValues();
-        ProcessDetectionImage();
         UpdateHeatmapTexture();
     }
 
     private void Initialize()
     {
-        initialized = false;
-
-        if (detectionCamera == null)
-        {
-            Debug.LogError("Detection Camera が設定されていません。");
-            return;
-        }
-
-        if (detectionRenderTexture == null)
-        {
-            Debug.LogError("Detection Render Texture が設定されていません。");
-            return;
-        }
-
-        if (heatmapRenderer == null)
-        {
-            Debug.LogError("Heatmap Renderer が設定されていません。");
-            return;
-        }
-
-        captureTexture = new Texture2D(
-            detectionRenderTexture.width,
-            detectionRenderTexture.height,
-            TextureFormat.RGB24,
-            false
-        );
+        heatValues = new float[heatmapWidth, heatmapHeight];
 
         heatmapTexture = new Texture2D(
             heatmapWidth,
@@ -151,45 +114,38 @@ public class ImageBasedHeatmapManager : MonoBehaviour
             false
         );
 
-        heatValues = new float[heatmapWidth, heatmapHeight];
-
         heatmapTexture.wrapMode = TextureWrapMode.Clamp;
         heatmapTexture.filterMode = FilterMode.Bilinear;
 
+        ClearHeatmapTexture();
         SetHeatmapTextureToMaterial();
 
-        ClearHeatmapTexture();
-
-        initialized = true;
-
-        if (showDebugLog)
+        if (detectionRenderTexture != null)
         {
-            Debug.Log("ImageBasedHeatmapManager 初期化完了");
+            captureTexture = new Texture2D(
+                detectionRenderTexture.width,
+                detectionRenderTexture.height,
+                TextureFormat.RGBA32,
+                false
+            );
         }
     }
 
     private void SetHeatmapTextureToMaterial()
     {
-        if (heatmapRenderer == null || heatmapTexture == null)
+        if (heatmapRenderer == null)
         {
+            Debug.LogWarning($"{name}: heatmapRenderer が設定されていません。");
             return;
         }
 
         Material material = heatmapRenderer.material;
-        if (material == null)
-        {
-            return;
-        }
 
-        material.mainTexture = heatmapTexture;
-
-        // URP Lit Shader 用
         if (material.HasProperty("_BaseMap"))
         {
             material.SetTexture("_BaseMap", heatmapTexture);
         }
 
-        // Built-in Standard Shader 用
         if (material.HasProperty("_MainTex"))
         {
             material.SetTexture("_MainTex", heatmapTexture);
@@ -198,12 +154,27 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
     private void CaptureDetectionImage()
     {
-        if (captureTexture == null || detectionRenderTexture == null)
+        if (detectionCamera == null || detectionRenderTexture == null)
         {
             return;
         }
 
-        RenderTexture previous = RenderTexture.active;
+        if (captureTexture == null ||
+            captureTexture.width != detectionRenderTexture.width ||
+            captureTexture.height != detectionRenderTexture.height)
+        {
+            captureTexture = new Texture2D(
+                detectionRenderTexture.width,
+                detectionRenderTexture.height,
+                TextureFormat.RGBA32,
+                false
+            );
+        }
+
+        RenderTexture currentRenderTexture = RenderTexture.active;
+
+        detectionCamera.targetTexture = detectionRenderTexture;
+        detectionCamera.Render();
 
         RenderTexture.active = detectionRenderTexture;
 
@@ -215,11 +186,16 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
         captureTexture.Apply();
 
-        RenderTexture.active = previous;
+        RenderTexture.active = currentRenderTexture;
     }
 
     private void ProcessDetectionImage()
     {
+        if (captureTexture == null)
+        {
+            return;
+        }
+
         int width = captureTexture.width;
         int height = captureTexture.height;
 
@@ -228,7 +204,6 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
         int brightPixelCount = 0;
 
-        // まず、車と思われる明るいピクセルを記録する
         for (int y = 0; y < height; y += pixelStep)
         {
             for (int x = 0; x < width; x += pixelStep)
@@ -248,17 +223,11 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
         int detectedCarCount = 0;
 
-        // 白いピクセルの塊を探す
         for (int y = 0; y < height; y += pixelStep)
         {
             for (int x = 0; x < width; x += pixelStep)
             {
-                if (!detectedPixels[x, y])
-                {
-                    continue;
-                }
-
-                if (visited[x, y])
+                if (!detectedPixels[x, y] || visited[x, y])
                 {
                     continue;
                 }
@@ -277,11 +246,6 @@ public class ImageBasedHeatmapManager : MonoBehaviour
                 {
                     AddSmoothHeatAtWorldPosition(worldPosition);
                     detectedCarCount++;
-
-                    if (showDebugLog)
-                    {
-                        Debug.Log($"車両検出 {detectedCarCount}: Pixel({centerPixelX}, {centerPixelY}) → World {worldPosition}");
-                    }
                 }
 
                 if (detectedCarCount >= maxDetectedCars)
@@ -298,7 +262,7 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
         if (showDebugLog)
         {
-            Debug.Log($"明るいピクセル数: {brightPixelCount} / 検出車両数: {detectedCarCount}");
+            Debug.Log($"ImageProcessing検出: 明るいピクセル数 {brightPixelCount}, 検出数 {detectedCarCount}");
         }
     }
 
@@ -325,7 +289,6 @@ public class ImageBasedHeatmapManager : MonoBehaviour
             blob.sumX += current.x;
             blob.sumY += current.y;
 
-            // 周囲8方向を確認する
             for (int offsetY = -pixelStep; offsetY <= pixelStep; offsetY += pixelStep)
             {
                 for (int offsetX = -pixelStep; offsetX <= pixelStep; offsetX += pixelStep)
@@ -343,12 +306,7 @@ public class ImageBasedHeatmapManager : MonoBehaviour
                         continue;
                     }
 
-                    if (visited[nextX, nextY])
-                    {
-                        continue;
-                    }
-
-                    if (!detectedPixels[nextX, nextY])
+                    if (visited[nextX, nextY] || !detectedPixels[nextX, nextY])
                     {
                         continue;
                     }
@@ -362,25 +320,114 @@ public class ImageBasedHeatmapManager : MonoBehaviour
         return blob;
     }
 
-    private bool TryConvertPixelToWorldPosition(int pixelX, int pixelY, out Vector3 worldPosition)
+    private bool TryConvertPixelToWorldPosition(
+        int pixelX,
+        int pixelY,
+        out Vector3 worldPosition
+    )
     {
         worldPosition = Vector3.zero;
 
-        Ray ray = detectionCamera.ScreenPointToRay(new Vector3(pixelX, pixelY, 0f));
+        if (detectionCamera == null || captureTexture == null)
+        {
+            return false;
+        }
+
+        float screenX = pixelX;
+        float screenY = pixelY;
+
+        Ray ray = detectionCamera.ScreenPointToRay(new Vector3(screenX, screenY, 0f));
 
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 
-        if (groundPlane.Raycast(ray, out float enter))
+        if (!groundPlane.Raycast(ray, out float enter))
         {
-            worldPosition = ray.GetPoint(enter);
-            return true;
+            return false;
         }
 
-        return false;
+        worldPosition = ray.GetPoint(enter);
+        return true;
+    }
+
+    private void ProcessCarTransforms()
+    {
+#if UNITY_2023_1_OR_NEWER
+        Car[] cars = FindObjectsByType<Car>(FindObjectsSortMode.None);
+#else
+        Car[] cars = FindObjectsOfType<Car>();
+#endif
+
+        int detectedCarCount = 0;
+
+        foreach (Car car in cars)
+        {
+            if (car == null)
+            {
+                continue;
+            }
+
+            AddSmoothHeatAtWorldPosition(car.transform.position);
+            detectedCarCount++;
+        }
+
+        if (showDebugLog)
+        {
+            Debug.Log($"CarTransform検出: {detectedCarCount}台");
+        }
     }
 
     private void AddSmoothHeatAtWorldPosition(Vector3 worldPosition)
     {
+        if (!TryConvertWorldToHeatmapPosition(worldPosition, out int centerX, out int centerY))
+        {
+            return;
+        }
+
+        int radius = Mathf.Max(1, heatRadius);
+
+        for (int y = -radius; y <= radius; y++)
+        {
+            for (int x = -radius; x <= radius; x++)
+            {
+                int targetX = centerX + x;
+                int targetY = centerY + y;
+
+                if (targetX < 0 || targetX >= heatmapWidth ||
+                    targetY < 0 || targetY >= heatmapHeight)
+                {
+                    continue;
+                }
+
+                float distance = Mathf.Sqrt(x * x + y * y);
+
+                if (distance > radius)
+                {
+                    continue;
+                }
+
+                float normalizedDistance = distance / radius;
+                float power = Mathf.Exp(-normalizedDistance * normalizedDistance * 4f);
+
+                heatValues[targetX, targetY] += heatAddAmount * power;
+                heatValues[targetX, targetY] = Mathf.Clamp01(heatValues[targetX, targetY]);
+            }
+        }
+    }
+
+    private bool TryConvertWorldToHeatmapPosition(
+        Vector3 worldPosition,
+        out int heatmapX,
+        out int heatmapY
+    )
+    {
+        heatmapX = 0;
+        heatmapY = 0;
+
+        if (worldMaxX <= worldMinX || worldMaxZ <= worldMinZ)
+        {
+            return false;
+        }
+
         float normalizedX = Mathf.InverseLerp(worldMinX, worldMaxX, worldPosition.x);
         float normalizedZ = Mathf.InverseLerp(worldMinZ, worldMaxZ, worldPosition.z);
 
@@ -394,53 +441,27 @@ public class ImageBasedHeatmapManager : MonoBehaviour
             normalizedZ = 1f - normalizedZ;
         }
 
-        int centerX = Mathf.RoundToInt(normalizedX * (heatmapWidth - 1));
-        int centerY = Mathf.RoundToInt(normalizedZ * (heatmapHeight - 1));
-
-        for (int y = -heatRadius; y <= heatRadius; y++)
+        if (normalizedX < 0f || normalizedX > 1f ||
+            normalizedZ < 0f || normalizedZ > 1f)
         {
-            for (int x = -heatRadius; x <= heatRadius; x++)
-            {
-                int targetX = centerX + x;
-                int targetY = centerY + y;
-
-                if (targetX < 0 || targetX >= heatmapWidth || targetY < 0 || targetY >= heatmapHeight)
-                {
-                    continue;
-                }
-
-                float distance = Mathf.Sqrt(x * x + y * y);
-
-                if (distance > heatRadius)
-                {
-                    continue;
-                }
-
-                float normalizedDistance = distance / heatRadius;
-
-                // ガウス風の滑らかな広がり
-                float power = Mathf.Exp(-normalizedDistance * normalizedDistance * 4f);
-
-                heatValues[targetX, targetY] += heatAddAmount * power;
-                heatValues[targetX, targetY] = Mathf.Clamp01(heatValues[targetX, targetY]);
-            }
+            return false;
         }
+
+        heatmapX = Mathf.RoundToInt(normalizedX * (heatmapWidth - 1));
+        heatmapY = Mathf.RoundToInt(normalizedZ * (heatmapHeight - 1));
+
+        return true;
     }
 
     private void DecayHeatValues()
     {
-        if (heatValues == null)
-        {
-            return;
-        }
-
         for (int y = 0; y < heatmapHeight; y++)
         {
             for (int x = 0; x < heatmapWidth; x++)
             {
                 heatValues[x, y] *= heatDecay;
 
-                if (heatValues[x, y] < 0.005f)
+                if (heatValues[x, y] < 0.001f)
                 {
                     heatValues[x, y] = 0f;
                 }
@@ -450,11 +471,6 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
     private void UpdateHeatmapTexture()
     {
-        if (heatmapTexture == null || heatValues == null)
-        {
-            return;
-        }
-
         for (int y = 0; y < heatmapHeight; y++)
         {
             for (int x = 0; x < heatmapWidth; x++)
@@ -471,58 +487,47 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
     private Color GetHeatColor(float value)
     {
-        value = Mathf.Clamp01(value);
-
-        // 何も検出されていない場所も、薄い青で表示
         if (value <= 0.001f)
         {
-            return new Color(0f, 0.2f, 1f, 0.01f);
+            return new Color(0f, 0.2f, 1f, emptyAlpha);
         }
-
-        Color c1 = new Color(0f, 0.25f, 1f, 1f);   // blue
-        Color c2 = new Color(0f, 1f, 1f, 1f);      // cyan
-        Color c3 = new Color(0f, 1f, 0.2f, 1f);    // green
-        Color c4 = new Color(1f, 1f, 0f, 1f);      // yellow
-        Color c5 = new Color(1f, 0.45f, 0f, 1f);   // orange
-        Color c6 = new Color(1f, 0f, 0f, 1f);      // red
 
         Color color;
 
-        if (value < 0.2f)
+        if (value < 0.33f)
         {
-            color = Color.Lerp(c1, c2, value / 0.2f);
+            float t = value / 0.33f;
+            color = Color.Lerp(Color.blue, Color.cyan, t);
         }
-        else if (value < 0.4f)
+        else if (value < 0.66f)
         {
-            color = Color.Lerp(c2, c3, (value - 0.2f) / 0.2f);
-        }
-        else if (value < 0.6f)
-        {
-            color = Color.Lerp(c3, c4, (value - 0.4f) / 0.2f);
-        }
-        else if (value < 0.8f)
-        {
-            color = Color.Lerp(c4, c5, (value - 0.6f) / 0.2f);
+            float t = (value - 0.33f) / 0.33f;
+            color = Color.Lerp(Color.cyan, Color.yellow, t);
         }
         else
         {
-            color = Color.Lerp(c5, c6, (value - 0.8f) / 0.2f);
+            float t = (value - 0.66f) / 0.34f;
+            color = Color.Lerp(Color.yellow, Color.red, t);
         }
 
-        // 値が高いほど濃くする
-        color.a = Mathf.Lerp(0.08f, 0.75f, value);
-
+        color.a = Mathf.Lerp(minHeatAlpha, maxHeatAlpha, value);
         return color;
     }
 
     private void ClearHeatmapTexture()
     {
+        if (heatmapTexture == null)
+        {
+            return;
+        }
+
+        Color clearColor = new Color(0f, 0.2f, 1f, emptyAlpha);
+
         for (int y = 0; y < heatmapHeight; y++)
         {
             for (int x = 0; x < heatmapWidth; x++)
             {
-                heatValues[x, y] = 0f;
-                heatmapTexture.SetPixel(x, y, new Color(0f, 0.15f, 1f, 0.05f));
+                heatmapTexture.SetPixel(x, y, clearColor);
             }
         }
 
@@ -532,34 +537,33 @@ public class ImageBasedHeatmapManager : MonoBehaviour
     [ContextMenu("Clear Heatmap")]
     public void ClearHeatmap()
     {
-        if (!initialized)
+        if (heatValues == null)
         {
-            return;
+            heatValues = new float[heatmapWidth, heatmapHeight];
+        }
+
+        for (int y = 0; y < heatmapHeight; y++)
+        {
+            for (int x = 0; x < heatmapWidth; x++)
+            {
+                heatValues[x, y] = 0f;
+            }
         }
 
         ClearHeatmapTexture();
-
-        if (showDebugLog)
-        {
-            Debug.Log("ヒートマップをリセットしました。");
-        }
     }
 
     [ContextMenu("Add Test Heat Center")]
     public void AddTestHeatCenter()
     {
-        if (!initialized)
-        {
-            Initialize();
-        }
+        Vector3 center = new Vector3(
+            (worldMinX + worldMaxX) * 0.5f,
+            0f,
+            (worldMinZ + worldMaxZ) * 0.5f
+        );
 
-        AddSmoothHeatAtWorldPosition(Vector3.zero);
+        AddSmoothHeatAtWorldPosition(center);
         UpdateHeatmapTexture();
-
-        if (showDebugLog)
-        {
-            Debug.Log("中央にテスト用ヒートを追加しました。");
-        }
     }
 
     private struct BlobInfo
@@ -568,5 +572,4 @@ public class ImageBasedHeatmapManager : MonoBehaviour
         public float sumX;
         public float sumY;
     }
-
 }
