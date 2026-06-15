@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 540000}
   - component: {fileID: 650000}
   - component: {fileID: 11400000}
+  - component: {fileID: 4193712528141163363}
   m_Layer: 6
   m_Name: Car_NPC
   m_TagString: Untagged
@@ -100,6 +101,33 @@ MonoBehaviour:
   isParked: 0
   carRigidbody: {fileID: 540000}
   stoppedSpeedThreshold: 0.2
+--- !u!114 &4193712528141163363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 120a5720209cf1d4d92e382ddcf296af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  route: []
+  currentWaypointIndex: 0
+  exitRoute: []
+  targetParkingSlot: {fileID: 0}
+  moveSpeed: 20
+  parkingSpeed: 3.5
+  reverseSpeed: 2
+  rotateSpeed: 10
+  arriveDistance: 0.8
+  parkingArriveDistance: 0.15
+  backOutArriveDistance: 0.25
+  turnCompleteAngle: 3
+  parkWaitTime: 5
+  moveState: 0
+  destroyOnFinished: 0
 --- !u!1001 &78865616715249238
 PrefabInstance:
   m_ObjectHideFlags: 0

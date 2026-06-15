@@ -241,26 +241,18 @@ public class NPC_CarController : MonoBehaviour
 
     private void BackOutFromParkingSlot()
     {
-        if (exitRoute == null || exitRoute.Count == 0)
+        if (targetParkingSlot == null || targetParkingSlot.accessWaypoint == null)
         {
             FinishDriving();
             return;
         }
 
-        Waypoint backOutWaypoint = exitRoute[0];
-
-        if (backOutWaypoint == null)
-        {
-            currentExitWaypointIndex = 1;
-            moveState = NPC_CarMoveState.Leaving;
-            return;
-        }
+        Waypoint backOutWaypoint = targetParkingSlot.accessWaypoint;
 
         Vector3 targetPosition = backOutWaypoint.transform.position;
         targetPosition.y = transform.position.y;
 
-        // ここでは回転しない。
-        // ParkingPointで停まっていた向きを保ったまま、Slot前のWaypointまでバックする。
+        // 駐車中の向きを保ったままバックする
         MoveToTarget(targetPosition, reverseSpeed);
 
         float distance = Vector3.Distance(transform.position, targetPosition);
@@ -273,9 +265,9 @@ public class NPC_CarController : MonoBehaviour
                 targetPosition.z
             );
 
-            currentExitWaypointIndex = 1;
+            currentExitWaypointIndex = 0;
 
-            if (exitRoute.Count <= 1)
+            if (exitRoute == null || exitRoute.Count == 0)
             {
                 FinishDriving();
             }
@@ -286,9 +278,44 @@ public class NPC_CarController : MonoBehaviour
         }
     }
 
+    private void SkipReachedExitWaypoints()
+    {
+        while (currentExitWaypointIndex < exitRoute.Count)
+        {
+            Waypoint waypoint = exitRoute[currentExitWaypointIndex];
+
+            if (waypoint == null)
+            {
+                currentExitWaypointIndex++;
+                continue;
+            }
+
+            Vector3 waypointPosition = waypoint.transform.position;
+            waypointPosition.y = transform.position.y;
+
+            float distance = Vector3.Distance(transform.position, waypointPosition);
+
+            if (distance > arriveDistance)
+            {
+                break;
+            }
+
+            currentExitWaypointIndex++;
+        }
+    }
+
+
     private void TurnAfterBackOut()
     {
-        if (exitRoute == null || currentExitWaypointIndex >= exitRoute.Count)
+        if (exitRoute == null || exitRoute.Count == 0)
+        {
+            FinishDriving();
+            return;
+        }
+
+        SkipReachedExitWaypoints();
+
+        if (currentExitWaypointIndex >= exitRoute.Count)
         {
             FinishDriving();
             return;
@@ -299,7 +326,6 @@ public class NPC_CarController : MonoBehaviour
         if (nextWaypoint == null)
         {
             currentExitWaypointIndex++;
-            moveState = NPC_CarMoveState.Leaving;
             return;
         }
 
@@ -310,7 +336,7 @@ public class NPC_CarController : MonoBehaviour
 
         if (direction.sqrMagnitude <= 0.001f)
         {
-            moveState = NPC_CarMoveState.Leaving;
+            currentExitWaypointIndex++;
             return;
         }
 

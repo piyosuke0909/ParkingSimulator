@@ -21,6 +21,9 @@ public class ParkingSlot : MonoBehaviour
     public Transform parkingPoint;
     public Transform detectionPoint;
 
+    [Header("Waypoint")]
+    public Waypoint accessWaypoint;
+
     [Header("Visual Target")]
     public Renderer slotBaseRenderer;
 
