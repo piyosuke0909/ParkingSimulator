@@ -27,10 +27,10 @@ public class NPC_CarController : MonoBehaviour
     public ParkingSlot targetParkingSlot;
 
     [Header("Movement")]
-    public float moveSpeed = 20f;
-    public float parkingSpeed = 3.5f;
+    public float moveSpeed = 8f;
+    public float parkingSpeed = 2.5f;
     public float reverseSpeed = 2.0f;
-    public float rotateSpeed = 10f;
+    public float rotateSpeed = 5f;
     public float arriveDistance = 0.8f;
     public float parkingArriveDistance = 0.15f;
     public float backOutArriveDistance = 0.25f;
@@ -42,6 +42,28 @@ public class NPC_CarController : MonoBehaviour
     public float parkWaitTime = 5f;
     private float parkTimer;
 
+    [Header("Traffic Zone")]
+    public bool useTrafficZone = true;
+    public TrafficZone currentTrafficZone;
+    public TrafficZone waitingTrafficZone;
+    public bool isPriorityTrafficZoneEntry;
+    public bool isWaitingForTrafficZone;
+    public bool logTrafficZoneDebug = false;
+
+    [Header("Front Vehicle Detection")]
+    public bool useFrontVehicleDetection = true;
+    public Transform frontSensor;
+    public LayerMask carLayerMask;
+    public float frontCheckDistance = 15f;
+    public float frontCheckRadius = 1.8f;
+    public float frontStopHoldTime = 0.5f;
+    public bool drawFrontCheckDebug = true;
+    public bool logFrontVehicleDetection = false;
+
+    [Header("Stop State")]
+    public bool isStoppedByFrontCar;
+    private float frontStopTimer;
+
     [Header("State")]
     public NPC_CarMoveState moveState = NPC_CarMoveState.Idle;
 
@@ -49,10 +71,33 @@ public class NPC_CarController : MonoBehaviour
     public bool destroyOnFinished = false;
 
     private Car car;
+    private Rigidbody carRigidbody;
 
     private void Awake()
     {
         car = GetComponent<Car>();
+        carRigidbody = GetComponent<Rigidbody>();
+
+        if (frontSensor == null)
+        {
+            Transform sensor = transform.Find("FrontSensor");
+
+            if (sensor != null)
+            {
+                frontSensor = sensor;
+            }
+            else
+            {
+                Debug.LogWarning($"{name}: FrontSensor が見つかりません。NPC_Car直下に FrontSensor を作成してください。");
+            }
+        }
+
+        ResetRuntimeState();
+    }
+
+    private void OnDestroy()
+    {
+        ReleaseCurrentTrafficZone();
     }
 
     private void Update()
@@ -91,8 +136,26 @@ public class NPC_CarController : MonoBehaviour
         }
     }
 
+    private void ResetRuntimeState()
+    {
+        isStoppedByFrontCar = false;
+        isWaitingForTrafficZone = false;
+
+        frontStopTimer = 0f;
+        parkTimer = 0f;
+
+        currentTrafficZone = null;
+
+        if (moveState == NPC_CarMoveState.Finished)
+        {
+            moveState = NPC_CarMoveState.Idle;
+        }
+    }
+
     public void SetRoute(List<Waypoint> newRoute)
     {
+        ReleaseCurrentTrafficZone();
+
         route = newRoute;
         currentWaypointIndex = 0;
 
@@ -116,12 +179,14 @@ public class NPC_CarController : MonoBehaviour
     {
         if (route == null || route.Count == 0)
         {
+            ReleaseCurrentTrafficZone();
             moveState = NPC_CarMoveState.Idle;
             return;
         }
 
         if (currentWaypointIndex >= route.Count)
         {
+            ReleaseCurrentTrafficZone();
             StartParking();
             return;
         }
@@ -137,6 +202,18 @@ public class NPC_CarController : MonoBehaviour
         Vector3 targetPosition = targetWaypoint.transform.position;
         targetPosition.y = transform.position.y;
 
+        if (!CanEnterTrafficZone(targetWaypoint))
+        {
+            StopCarCompletely();
+            return;
+        }
+
+        if (ShouldHoldStopForFrontCar())
+        {
+            StopCarCompletely();
+            return;
+        }
+
         MoveToTarget(targetPosition, moveSpeed);
         RotateToTarget(targetPosition);
 
@@ -144,18 +221,22 @@ public class NPC_CarController : MonoBehaviour
 
         if (distance <= arriveDistance)
         {
+            TryReleaseTrafficZoneAtWaypoint(targetWaypoint);
             currentWaypointIndex++;
         }
     }
 
     private void StartParking()
     {
+        ReleaseCurrentTrafficZone();
+
         if (targetParkingSlot == null || targetParkingSlot.parkingPoint == null)
         {
             moveState = NPC_CarMoveState.Idle;
             return;
         }
 
+        StopCarCompletely();
         moveState = NPC_CarMoveState.Parking;
     }
 
@@ -183,6 +264,8 @@ public class NPC_CarController : MonoBehaviour
 
     private void CompleteParking()
     {
+        ReleaseCurrentTrafficZone();
+
         if (targetParkingSlot != null)
         {
             transform.position = new Vector3(
@@ -201,12 +284,16 @@ public class NPC_CarController : MonoBehaviour
             }
         }
 
+        StopCarCompletely();
+
         parkTimer = 0f;
         moveState = NPC_CarMoveState.Parked;
     }
 
     private void WaitInParkingSlot()
     {
+        StopCarCompletely();
+
         parkTimer += Time.deltaTime;
 
         if (parkTimer >= parkWaitTime)
@@ -217,6 +304,8 @@ public class NPC_CarController : MonoBehaviour
 
     private void StartLeaving()
     {
+        ReleaseCurrentTrafficZone();
+
         if (targetParkingSlot != null)
         {
             targetParkingSlot.SetEmpty();
@@ -229,13 +318,13 @@ public class NPC_CarController : MonoBehaviour
 
         currentExitWaypointIndex = 0;
 
-        if (exitRoute != null && exitRoute.Count > 0)
+        if (targetParkingSlot != null && targetParkingSlot.accessWaypoint != null)
         {
             moveState = NPC_CarMoveState.BackingOut;
         }
         else
         {
-            moveState = NPC_CarMoveState.Finished;
+            FinishDriving();
         }
     }
 
@@ -252,7 +341,6 @@ public class NPC_CarController : MonoBehaviour
         Vector3 targetPosition = backOutWaypoint.transform.position;
         targetPosition.y = transform.position.y;
 
-        // 駐車中の向きを保ったままバックする
         MoveToTarget(targetPosition, reverseSpeed);
 
         float distance = Vector3.Distance(transform.position, targetPosition);
@@ -264,6 +352,8 @@ public class NPC_CarController : MonoBehaviour
                 transform.position.y,
                 targetPosition.z
             );
+
+            StopCarCompletely();
 
             currentExitWaypointIndex = 0;
 
@@ -277,33 +367,6 @@ public class NPC_CarController : MonoBehaviour
             }
         }
     }
-
-    private void SkipReachedExitWaypoints()
-    {
-        while (currentExitWaypointIndex < exitRoute.Count)
-        {
-            Waypoint waypoint = exitRoute[currentExitWaypointIndex];
-
-            if (waypoint == null)
-            {
-                currentExitWaypointIndex++;
-                continue;
-            }
-
-            Vector3 waypointPosition = waypoint.transform.position;
-            waypointPosition.y = transform.position.y;
-
-            float distance = Vector3.Distance(transform.position, waypointPosition);
-
-            if (distance > arriveDistance)
-            {
-                break;
-            }
-
-            currentExitWaypointIndex++;
-        }
-    }
-
 
     private void TurnAfterBackOut()
     {
@@ -348,6 +411,8 @@ public class NPC_CarController : MonoBehaviour
             rotateSpeed * Time.deltaTime
         );
 
+        StopCarCompletely();
+
         float angle = Quaternion.Angle(transform.rotation, targetRotation);
 
         if (angle <= turnCompleteAngle)
@@ -361,12 +426,14 @@ public class NPC_CarController : MonoBehaviour
     {
         if (exitRoute == null || exitRoute.Count == 0)
         {
+            ReleaseCurrentTrafficZone();
             FinishDriving();
             return;
         }
 
         if (currentExitWaypointIndex >= exitRoute.Count)
         {
+            ReleaseCurrentTrafficZone();
             FinishDriving();
             return;
         }
@@ -382,6 +449,18 @@ public class NPC_CarController : MonoBehaviour
         Vector3 targetPosition = targetWaypoint.transform.position;
         targetPosition.y = transform.position.y;
 
+        if (!CanEnterTrafficZone(targetWaypoint))
+        {
+            StopCarCompletely();
+            return;
+        }
+
+        if (ShouldHoldStopForFrontCar())
+        {
+            StopCarCompletely();
+            return;
+        }
+
         MoveToTarget(targetPosition, moveSpeed);
         RotateToTarget(targetPosition);
 
@@ -389,18 +468,272 @@ public class NPC_CarController : MonoBehaviour
 
         if (distance <= arriveDistance)
         {
+            TryReleaseTrafficZoneAtWaypoint(targetWaypoint);
             currentExitWaypointIndex++;
         }
     }
 
-    private void FinishDriving()
+    private void SkipReachedExitWaypoints()
     {
-        moveState = NPC_CarMoveState.Finished;
-
-        if (destroyOnFinished)
+        while (currentExitWaypointIndex < exitRoute.Count)
         {
-            Destroy(gameObject);
+            Waypoint waypoint = exitRoute[currentExitWaypointIndex];
+
+            if (waypoint == null)
+            {
+                currentExitWaypointIndex++;
+                continue;
+            }
+
+            Vector3 waypointPosition = waypoint.transform.position;
+            waypointPosition.y = transform.position.y;
+
+            float distance = Vector3.Distance(transform.position, waypointPosition);
+
+            if (distance > arriveDistance)
+            {
+                break;
+            }
+
+            currentExitWaypointIndex++;
         }
+    }
+
+    private bool CanEnterTrafficZone(Waypoint targetWaypoint)
+    {
+        if (!useTrafficZone)
+        {
+            return true;
+        }
+
+        if (targetWaypoint == null)
+        {
+            return true;
+        }
+
+        TrafficZone targetZone = targetWaypoint.trafficZoneToEnter;
+
+        if (targetZone == null)
+        {
+            return true;
+        }
+
+        if (!targetWaypoint.waitBeforeTrafficZone)
+        {
+            return true;
+        }
+
+        if (currentTrafficZone == targetZone)
+        {
+            isWaitingForTrafficZone = false;
+            waitingTrafficZone = null;
+            return true;
+        }
+
+        if (currentTrafficZone != null && currentTrafficZone != targetZone)
+        {
+            ReleaseCurrentTrafficZone();
+        }
+
+        if (waitingTrafficZone != null && waitingTrafficZone != targetZone)
+        {
+            waitingTrafficZone.RemoveFromQueue(this);
+            waitingTrafficZone = null;
+        }
+
+        bool canEnter = targetZone.TryEnter(
+            this,
+            targetWaypoint.isPriorityTrafficZoneEntry
+        );
+
+        if (canEnter)
+        {
+            currentTrafficZone = targetZone;
+            waitingTrafficZone = null;
+            isWaitingForTrafficZone = false;
+
+            if (logTrafficZoneDebug)
+            {
+                Debug.Log($"{name}: TrafficZone 進入許可 {targetZone.zoneId}");
+            }
+
+            return true;
+        }
+
+        waitingTrafficZone = targetZone;
+        isWaitingForTrafficZone = true;
+
+        if (logTrafficZoneDebug)
+        {
+            Debug.Log($"{name}: TrafficZone 順番待ち {targetZone.zoneId}");
+        }
+
+        return false;
+    }
+
+    private void TryReleaseTrafficZoneAtWaypoint(Waypoint reachedWaypoint)
+    {
+        if (!useTrafficZone)
+        {
+            return;
+        }
+
+        if (reachedWaypoint == null)
+        {
+            return;
+        }
+
+        if (!reachedWaypoint.releaseTrafficZoneHere)
+        {
+            return;
+        }
+
+        ReleaseCurrentTrafficZone();
+    }
+
+    private void ReleaseCurrentTrafficZone()
+    {
+        if (waitingTrafficZone != null)
+        {
+            waitingTrafficZone.RemoveFromQueue(this);
+            waitingTrafficZone = null;
+        }
+
+        if (currentTrafficZone == null)
+        {
+            isWaitingForTrafficZone = false;
+            return;
+        }
+
+        TrafficZone releasedZone = currentTrafficZone;
+        releasedZone.Exit(this);
+
+        if (logTrafficZoneDebug)
+        {
+            Debug.Log($"{name}: TrafficZone 解放 {releasedZone.zoneId}");
+        }
+
+        currentTrafficZone = null;
+        isWaitingForTrafficZone = false;
+    }
+
+    private bool ShouldHoldStopForFrontCar()
+    {
+        if (ShouldStopForFrontCar())
+        {
+            frontStopTimer = frontStopHoldTime;
+            return true;
+        }
+
+        if (frontStopTimer > 0f)
+        {
+            frontStopTimer -= Time.deltaTime;
+            isStoppedByFrontCar = true;
+            return true;
+        }
+
+        isStoppedByFrontCar = false;
+        return false;
+    }
+
+    private bool ShouldStopForFrontCar()
+    {
+        if (!useFrontVehicleDetection)
+        {
+            isStoppedByFrontCar = false;
+            return false;
+        }
+
+        if (frontSensor == null)
+        {
+            isStoppedByFrontCar = false;
+            return false;
+        }
+
+        Vector3 origin = frontSensor.position;
+        Vector3 direction = frontSensor.forward;
+
+        if (drawFrontCheckDebug)
+        {
+            Debug.DrawRay(origin, direction * frontCheckDistance, Color.red);
+        }
+
+        RaycastHit[] hits = Physics.SphereCastAll(
+            origin,
+            frontCheckRadius,
+            direction,
+            frontCheckDistance,
+            carLayerMask
+        );
+
+        foreach (RaycastHit hit in hits)
+        {
+            Car hitCar = hit.collider.GetComponentInParent<Car>();
+
+            if (hitCar == null)
+            {
+                continue;
+            }
+
+            if (hitCar == car)
+            {
+                continue;
+            }
+
+            NPC_CarController hitCarController = hitCar.GetComponent<NPC_CarController>();
+
+            if (hitCarController != null)
+            {
+                if (ShouldIgnoreCarForFrontDetection(hitCarController))
+                {
+                    continue;
+                }
+            }
+
+            if (logFrontVehicleDetection)
+            {
+                Debug.Log($"{name}: 前方車両を検知しました → {hitCar.carId}");
+            }
+
+            isStoppedByFrontCar = true;
+            return true;
+        }
+
+        isStoppedByFrontCar = false;
+        return false;
+    }
+
+    private bool ShouldIgnoreCarForFrontDetection(NPC_CarController otherCarController)
+    {
+        if (otherCarController == null)
+        {
+            return false;
+        }
+
+        // 駐車済み・終了済みの車はすでに別処理でも無視しているが、
+        // 念のためここでも無視対象にする
+        if (otherCarController.moveState == NPC_CarMoveState.Parked ||
+            otherCarController.moveState == NPC_CarMoveState.Finished)
+        {
+            return true;
+        }
+
+        // 自分がTrafficZone内にいる間、
+        // Zone外で順番待ちしている車は前方検知対象から外す
+        if (currentTrafficZone != null)
+        {
+            bool otherIsWaitingOutsideThisZone =
+                otherCarController.isWaitingForTrafficZone &&
+                otherCarController.currentTrafficZone == null &&
+                otherCarController.waitingTrafficZone == currentTrafficZone;
+
+            if (otherIsWaitingOutsideThisZone)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void MoveToTarget(Vector3 targetPosition, float speed)
@@ -428,5 +761,40 @@ public class NPC_CarController : MonoBehaviour
             targetRotation,
             rotateSpeed * Time.deltaTime
         );
+    }
+
+    private void StopCarCompletely()
+    {
+        if (carRigidbody == null)
+        {
+            return;
+        }
+
+        if (carRigidbody.isKinematic)
+        {
+            return;
+        }
+
+#if UNITY_6000_0_OR_NEWER
+        carRigidbody.linearVelocity = Vector3.zero;
+#else
+        carRigidbody.velocity = Vector3.zero;
+#endif
+
+        carRigidbody.angularVelocity = Vector3.zero;
+    }
+
+    private void FinishDriving()
+    {
+        ReleaseCurrentTrafficZone();
+
+        StopCarCompletely();
+
+        moveState = NPC_CarMoveState.Finished;
+
+        if (destroyOnFinished)
+        {
+            Destroy(gameObject);
+        }
     }
 }

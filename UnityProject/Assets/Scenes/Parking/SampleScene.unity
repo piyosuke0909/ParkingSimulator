@@ -356,10 +356,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059136864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &8965653
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -700,10 +707,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 455408923}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &20775663
 Material:
   serializedVersion: 8
@@ -937,11 +951,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
+  - {fileID: 1146035189}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &28752829
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1095,10 +1116,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1790831340}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &32421922
 Material:
   serializedVersion: 8
@@ -1875,10 +1903,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 8809859}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &54657918
 GameObject:
   m_ObjectHideFlags: 0
@@ -1926,10 +1961,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1255511315}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &55141631
 GameObject:
   m_ObjectHideFlags: 0
@@ -1977,23 +2019,18 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1922741792}
-  - {fileID: 820897712}
-  - {fileID: 2046820787}
   - {fileID: 1440355626}
-  - {fileID: 1819200715}
-  - {fileID: 1587488498}
-  - {fileID: 1632147332}
-  - {fileID: 1575259984}
-  - {fileID: 433414858}
-  - {fileID: 1052779792}
-  - {fileID: 1146035189}
-  - {fileID: 23638969}
-  - {fileID: 187011822}
-  - {fileID: 958954425}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &55181776
 Material:
   serializedVersion: 8
@@ -2284,10 +2321,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1778675231}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &62541052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2522,10 +2566,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 316733303}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &71629706
 GameObject:
   m_ObjectHideFlags: 0
@@ -2573,10 +2624,18 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1614550577}
+  - {fileID: 1337669905}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &74037976
 Material:
   serializedVersion: 8
@@ -2705,10 +2764,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059136864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &79469803
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3251,6 +3317,64 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &85363537
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 85363538}
+  - component: {fileID: 85363539}
+  m_Layer: 0
+  m_Name: WP_TZ_Reserve_south_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &85363538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85363537}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5, y: 1, z: -90}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2061963824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &85363539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85363537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 1523160212}
+  trafficZoneToEnter: {fileID: 786930539}
+  waitBeforeTrafficZone: 1
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 1
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &86235386
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3958,11 +4082,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1059834088}
+  - {fileID: 1078314725}
+  - {fileID: 1052779792}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &113635429
 Material:
   serializedVersion: 8
@@ -4539,10 +4671,17 @@ MonoBehaviour:
   - {fileID: 1469533528}
   - {fileID: 596739105}
   - {fileID: 1186743124}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &129074265
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4858,10 +4997,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1790831340}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &131910749
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5834,10 +5980,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 2109757111}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &155497862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6414,10 +6567,17 @@ MonoBehaviour:
   - {fileID: 1655010701}
   - {fileID: 585434304}
   - {fileID: 1762550501}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &166952565
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6527,10 +6687,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 8809859}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &167441481
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6801,10 +6968,17 @@ MonoBehaviour:
   - {fileID: 379937872}
   - {fileID: 1061453220}
   - {fileID: 677556062}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &186203680
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6911,6 +7085,64 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 186203680}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &186710455
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 186710456}
+  - component: {fileID: 186710457}
+  m_Layer: 0
+  m_Name: WP_TZ_Reserve_south_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &186710456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186710455}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5, y: 1, z: -100}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2061963824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &186710457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186710455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 1200069390}
+  trafficZoneToEnter: {fileID: 786930539}
+  waitBeforeTrafficZone: 1
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &187011820
 GameObject:
   m_ObjectHideFlags: 0
@@ -6957,11 +7189,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
+  - {fileID: 23638969}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &189586131
 GameObject:
   m_ObjectHideFlags: 0
@@ -7009,10 +7248,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 455408923}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &190361946
 Material:
   serializedVersion: 8
@@ -7141,10 +7387,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1958302755}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &195642751
 GameObject:
   m_ObjectHideFlags: 0
@@ -8887,10 +9140,17 @@ MonoBehaviour:
   nextWaypoints:
   - {fileID: 1790831340}
   - {fileID: 127847721}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &253746033
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9044,10 +9304,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 250871535}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &255100741
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9287,10 +9554,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1097378237}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &264478941
 Material:
   serializedVersion: 8
@@ -10590,11 +10864,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1614550577}
+  - {fileID: 2134550246}
+  - {fileID: 2052488676}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &303773486
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10748,10 +11030,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1097378237}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &305109453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11220,10 +11509,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1255511315}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &309963364
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11377,10 +11673,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1255511315}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &313970471
 GameObject:
   m_ObjectHideFlags: 0
@@ -11428,10 +11731,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 2109757111}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &315131729
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11584,11 +11894,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
+  - {fileID: 681190670}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &320299652
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11803,10 +12120,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1958302755}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &325627505
 Material:
   serializedVersion: 8
@@ -12041,10 +12365,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 250871535}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &330400953
 GameObject:
   m_ObjectHideFlags: 0
@@ -12314,10 +12645,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 455408923}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &334028207
 GameObject:
   m_ObjectHideFlags: 0
@@ -12365,10 +12703,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 316733303}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &337300571
 GameObject:
   m_ObjectHideFlags: 0
@@ -12416,10 +12761,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1505564864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &341306856
 Material:
   serializedVersion: 8
@@ -12548,10 +12900,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 455408923}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &347854181
 GameObject:
   m_ObjectHideFlags: 0
@@ -12599,10 +12958,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1790831340}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &351289230
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13304,10 +13670,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 250871535}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &382612400
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13554,10 +13927,17 @@ MonoBehaviour:
   - {fileID: 304934665}
   - {fileID: 613293602}
   - {fileID: 1804447134}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &393701311
 GameObject:
   m_ObjectHideFlags: 0
@@ -13605,10 +13985,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 2109757111}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &401827811
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13924,10 +14311,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1778675231}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &412613832
 GameObject:
   m_ObjectHideFlags: 0
@@ -13974,11 +14368,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1614550577}
+  - {fileID: 1993099549}
+  - {fileID: 786263565}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &417026330
 Material:
   serializedVersion: 8
@@ -14294,10 +14696,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 8809859}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &424342672
 Material:
   serializedVersion: 8
@@ -14506,11 +14915,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
+  - {fileID: 1575259984}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &442652427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14620,10 +15036,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1505564864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &447562829
 GameObject:
   m_ObjectHideFlags: 0
@@ -14671,10 +15094,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1505564864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &449314805
 GameObject:
   m_ObjectHideFlags: 0
@@ -14837,10 +15267,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1790831340}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &453820390
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14995,10 +15432,17 @@ MonoBehaviour:
   nextWaypoints:
   - {fileID: 250871535}
   - {fileID: 720182734}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &456586156
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15151,11 +15595,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1059834088}
+  - {fileID: 1914307341}
+  - {fileID: 1632147332}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &457537961
 GameObject:
   m_ObjectHideFlags: 0
@@ -15203,10 +15655,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1255511315}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &461346110
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15571,11 +16030,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1059834088}
+  - {fileID: 975696457}
+  - {fileID: 187011822}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &477623642
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16184,10 +16651,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1255511315}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &488961312
 Material:
   serializedVersion: 8
@@ -16830,11 +17304,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1059834088}
+  - {fileID: 111418071}
+  - {fileID: 433414858}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &510732203
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17490,10 +17972,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1505564864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &536672280
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17753,10 +18242,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059136864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &542516995
 GameObject:
   m_ObjectHideFlags: 0
@@ -17931,10 +18427,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1505564864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &547610540
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18337,10 +18840,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1255511315}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &573323757
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18637,10 +19147,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 8809859}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &586846027
 GameObject:
   m_ObjectHideFlags: 0
@@ -18721,10 +19238,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1790831340}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &589484573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19227,10 +19751,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059136864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &596861246
 Material:
   serializedVersion: 8
@@ -19564,10 +20095,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1097378237}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &615135284
 Material:
   serializedVersion: 8
@@ -19777,10 +20315,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 455408923}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &626013599
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20431,10 +20976,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1790831340}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &650460676
 Material:
   serializedVersion: 8
@@ -20563,10 +21115,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 250871535}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &656065066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20720,10 +21279,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1778675231}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &656664477
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20833,10 +21399,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 316733303}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &660097088
 Material:
   serializedVersion: 8
@@ -20965,10 +21538,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1097378237}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &663158795
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21122,10 +21702,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1958302755}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &668260812
 Material:
   serializedVersion: 8
@@ -21490,10 +22077,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 250871535}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &677571633
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21647,10 +22241,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1097378237}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &678464909
 Material:
   serializedVersion: 8
@@ -21779,10 +22380,75 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1097378237}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
+--- !u!1 &681190668
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 681190669}
+  - component: {fileID: 681190670}
+  m_Layer: 0
+  m_Name: WP_TZ_Reserve_north_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &681190669
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681190668}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 10, y: 1, z: 95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2061963824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &681190670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681190668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 1375914356}
+  trafficZoneToEnter: {fileID: 1236951022}
+  waitBeforeTrafficZone: 1
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 1
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &682655811
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22123,10 +22789,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1778675231}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &689923472
 GameObject:
   m_ObjectHideFlags: 0
@@ -22184,10 +22857,17 @@ MonoBehaviour:
   - {fileID: 393701313}
   - {fileID: 1828371307}
   - {fileID: 1113669286}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &693249231
 GameObject:
   m_ObjectHideFlags: 0
@@ -22235,10 +22915,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1255511315}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &704992526
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22520,6 +23207,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633e4e31fd5cd9f40a51c5c6e81aaed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &708538300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 708538301}
+  - component: {fileID: 708538302}
+  m_Layer: 0
+  m_Name: WP_TZ_Release_south_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &708538301
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708538300}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10, y: 1, z: -95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2061963824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &708538302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708538300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 1937589798}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 1
+  isPriorityTrafficZoneEntry: 0
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &715764579
 Material:
   serializedVersion: 8
@@ -22648,10 +23393,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1255511315}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &720115233
 Material:
   serializedVersion: 8
@@ -22781,7 +23533,6 @@ MonoBehaviour:
   nextWaypoints:
   - {fileID: 2046820787}
   - {fileID: 1505564864}
-  - {fileID: 455408923}
   - {fileID: 1867359755}
   - {fileID: 545951510}
   - {fileID: 1655766799}
@@ -22792,10 +23543,18 @@ MonoBehaviour:
   - {fileID: 534178041}
   - {fileID: 447562831}
   - {fileID: 1413175616}
+  - {fileID: 455408923}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &726109917
 Material:
   serializedVersion: 8
@@ -23111,10 +23870,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1778675231}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &732825800
 GameObject:
   m_ObjectHideFlags: 0
@@ -23162,10 +23928,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 2109757111}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &735063380
 GameObject:
   m_ObjectHideFlags: 0
@@ -23213,10 +23986,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1255511315}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &736254315
 Material:
   serializedVersion: 8
@@ -23298,6 +24078,64 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &741961708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 741961709}
+  - component: {fileID: 741961710}
+  m_Layer: 0
+  m_Name: WP_TZ_Release_north_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &741961709
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 741961708}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5, y: 1, z: 90}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2061963824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &741961710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 741961708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 958954425}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 1
+  isPriorityTrafficZoneEntry: 0
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &742692848
 Material:
   serializedVersion: 8
@@ -23775,10 +24613,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 455408923}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &762504966
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23950,10 +24795,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 2109757111}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &770784097
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24400,10 +25252,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1097378237}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &782278064
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24557,10 +25416,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1778675231}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &782810777
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24875,11 +25741,142 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1440355626}
+  - {fileID: 1629917181}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
+--- !u!1 &786930537
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 786930538}
+  - component: {fileID: 786930542}
+  - component: {fileID: 786930541}
+  - component: {fileID: 786930540}
+  - component: {fileID: 786930539}
+  m_Layer: 0
+  m_Name: TZ_Gateway_south
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &786930538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786930537}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -95.22}
+  m_LocalScale: {x: 15, y: 0.5, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 811697547}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &786930539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786930537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96b7637f5e57ce7448d4def1a01803b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: 
+  zoneType: 2
+  currentUser: {fileID: 0}
+  priorityWaitingCars: []
+  normalWaitingCars: []
+  logDebug: 0
+--- !u!65 &786930540
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786930537}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &786930541
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786930537}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &786930542
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786930537}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &792863456
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25114,10 +26111,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1958302755}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &799249814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25351,11 +26355,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1614550577}
+  - {fileID: 866280136}
+  - {fileID: 1750699951}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
+--- !u!1 &811697546
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 811697547}
+  m_Layer: 0
+  m_Name: TrafficZones
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &811697547
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 811697546}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 786930538}
+  - {fileID: 1236951021}
+  m_Father: {fileID: 976853909}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &815333590
 GameObject:
   m_ObjectHideFlags: 0
@@ -25644,62 +26689,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1778675231}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
---- !u!1 &820897710
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 820897711}
-  - component: {fileID: 820897712}
-  m_Layer: 0
-  m_Name: WP_north_02
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &820897711
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 820897710}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 1, z: 95}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2061963824}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &820897712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 820897710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waypointId: 
-  nextWaypoints:
-  - {fileID: 1059834088}
-  - {fileID: 55141633}
-  isStopPoint: 0
-  isIntersection: 0
-  isEntrance: 0
-  isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &828039207
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26283,10 +27283,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1778675231}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &848304289
 GameObject:
   m_ObjectHideFlags: 0
@@ -26333,12 +27340,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: Entrance_south
   nextWaypoints:
-  - {fileID: 1200069390}
-  - {fileID: 1200069390}
+  - {fileID: 186710457}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 1
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &850093626
 Material:
   serializedVersion: 8
@@ -26654,10 +27667,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059136864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &866280134
 GameObject:
   m_ObjectHideFlags: 0
@@ -26704,11 +27724,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1614550577}
+  - {fileID: 71629708}
+  - {fileID: 2004293741}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &866796423
 Material:
   serializedVersion: 8
@@ -27167,10 +28195,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1097378237}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &873936974
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28408,10 +29443,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1958302755}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &915717980
 GameObject:
   m_ObjectHideFlags: 0
@@ -29407,11 +30449,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1440355626}
+  - {fileID: 786263565}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &945236873
 Material:
   serializedVersion: 8
@@ -30093,11 +31142,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
+  - {fileID: 187011822}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -30480,10 +31536,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 8809859}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &967842812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30930,10 +31993,18 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059834088}
+  - {fileID: 958954425}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &976853908
 GameObject:
   m_ObjectHideFlags: 0
@@ -30972,6 +32043,7 @@ Transform:
   - {fileID: 1978506289}
   - {fileID: 1796758608}
   - {fileID: 2061963824}
+  - {fileID: 811697547}
   - {fileID: 330400954}
   - {fileID: 1744115907}
   - {fileID: 1617320321}
@@ -31105,10 +32177,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 250871535}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &985180702
 Material:
   serializedVersion: 8
@@ -31773,10 +32852,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 455408923}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1005820411
 Material:
   serializedVersion: 8
@@ -32643,6 +33729,64 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 1035991172}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1036003953
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1036003954}
+  - component: {fileID: 1036003955}
+  m_Layer: 0
+  m_Name: WP_TZ_Release_south_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1036003954
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036003953}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10, y: 1, z: -95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2061963824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1036003955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036003953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 1160690387}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 1
+  isPriorityTrafficZoneEntry: 0
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1037224814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32795,10 +33939,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: Exit_west
   nextWaypoints: []
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
-  isExit: 0
+  isExit: 1
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1041596086
 Material:
   serializedVersion: 8
@@ -32990,6 +34141,64 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 1042892536}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1051970131
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1051970132}
+  - component: {fileID: 1051970133}
+  m_Layer: 0
+  m_Name: WP_TZ_Release_south_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1051970132
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1051970131}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5, y: 1, z: -100}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2061963824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1051970133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1051970131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 1915960861}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 1
+  isPriorityTrafficZoneEntry: 0
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1052779790
 GameObject:
   m_ObjectHideFlags: 0
@@ -33016,7 +34225,7 @@ Transform:
   m_GameObject: {fileID: 1052779790}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5, y: 1, z: 54.22}
+  m_LocalPosition: {x: 5, y: 1, z: 54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33036,11 +34245,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
+  - {fileID: 433414858}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1053821009
 GameObject:
   m_ObjectHideFlags: 0
@@ -33088,10 +34304,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 2109757111}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1059136862
 GameObject:
   m_ObjectHideFlags: 0
@@ -33139,10 +34362,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1505564864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1059834086
 GameObject:
   m_ObjectHideFlags: 0
@@ -33168,7 +34398,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1059834086}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -5, y: 1, z: 95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -33189,12 +34419,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
-  - {fileID: 2046820787}
+  - {fileID: 1882500593}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1061453218
 GameObject:
   m_ObjectHideFlags: 0
@@ -33242,10 +34478,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 250871535}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1064579626
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33504,11 +34747,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1440355626}
+  - {fileID: 2052488676}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1075601184
 Material:
   serializedVersion: 8
@@ -33636,11 +34886,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1059834088}
+  - {fileID: 1659213757}
+  - {fileID: 1146035189}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1079642948
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33981,10 +35239,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 8809859}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1096640262
 Material:
   serializedVersion: 8
@@ -34113,10 +35378,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 316733303}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1098968966
 Material:
   serializedVersion: 8
@@ -34245,10 +35517,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 8809859}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1110266311
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34402,10 +35681,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 2109757111}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1115950566
 GameObject:
   m_ObjectHideFlags: 0
@@ -34979,10 +36265,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 316733303}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1145366535
 Material:
   serializedVersion: 8
@@ -35110,11 +36403,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
+  - {fileID: 1052779792}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1153577156
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35847,10 +37147,17 @@ MonoBehaviour:
   - {fileID: 718759394}
   - {fileID: 457537963}
   - {fileID: 487754523}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1162144240
 Material:
   serializedVersion: 8
@@ -35932,6 +37239,64 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &1162407026
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1162407027}
+  - component: {fileID: 1162407028}
+  m_Layer: 0
+  m_Name: WP_TZ_Release_south_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1162407027
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162407026}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5, y: 1, z: -90}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2061963824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1162407028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162407026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 1665725618}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 1
+  isPriorityTrafficZoneEntry: 0
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1165598133
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36119,11 +37484,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1440355626}
+  - {fileID: 1069478186}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1169960485
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36383,10 +37755,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 455408923}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1185773319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36727,10 +38106,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059136864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1188755618
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37437,23 +38823,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1937589798}
-  - {fileID: 1614550577}
+  - {fileID: 708538302}
   - {fileID: 1523160212}
-  - {fileID: 71629708}
-  - {fileID: 866280136}
-  - {fileID: 807061121}
-  - {fileID: 1993099549}
-  - {fileID: 412613834}
-  - {fileID: 1609734280}
-  - {fileID: 1868153758}
-  - {fileID: 2134550246}
-  - {fileID: 300953885}
-  - {fileID: 1665725618}
+  - {fileID: 1162407028}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1205082127
 Material:
   serializedVersion: 8
@@ -38039,6 +39422,130 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1236485078}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1236951020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1236951021}
+  - component: {fileID: 1236951025}
+  - component: {fileID: 1236951024}
+  - component: {fileID: 1236951023}
+  - component: {fileID: 1236951022}
+  m_Layer: 0
+  m_Name: TZ_north
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1236951021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236951020}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5, y: 0, z: 95}
+  m_LocalScale: {x: 5, y: 0.5, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 811697547}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1236951022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236951020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96b7637f5e57ce7448d4def1a01803b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: 
+  zoneType: 0
+  currentUser: {fileID: 0}
+  priorityWaitingCars: []
+  normalWaitingCars: []
+  logDebug: 0
+--- !u!65 &1236951023
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236951020}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1236951024
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236951020}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1236951025
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236951020}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!21 &1238446603
 Material:
   serializedVersion: 8
@@ -38470,10 +39977,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 455408923}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1249032984
 Material:
   serializedVersion: 8
@@ -38790,10 +40304,17 @@ MonoBehaviour:
   nextWaypoints:
   - {fileID: 1440355626}
   - {fileID: 1922741792}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1259627949
 GameObject:
   m_ObjectHideFlags: 0
@@ -38841,10 +40362,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1958302755}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1260286823
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39166,9 +40694,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1428100201}
-  - {fileID: 1470539376}
+  m_Children: []
   m_Father: {fileID: 1591024421}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1281142930
@@ -39218,10 +40744,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1505564864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1282811328
 GameObject:
   m_ObjectHideFlags: 0
@@ -39374,10 +40907,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 250871535}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1287254507
 Material:
   serializedVersion: 8
@@ -39612,10 +41152,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1790831340}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1293904416
 Material:
   serializedVersion: 8
@@ -39744,10 +41291,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 316733303}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1297524076
 Material:
   serializedVersion: 8
@@ -40330,10 +41884,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1958302755}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1326263835
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40698,11 +42259,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1440355626}
+  - {fileID: 2004293741}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1341211812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41886,6 +43454,64 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &1375914354
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1375914355}
+  - component: {fileID: 1375914356}
+  m_Layer: 0
+  m_Name: WP_north_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1375914355
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375914354}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.94, y: 1, z: 95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2061963824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1375914356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375914354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 741961710}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1379853193
 GameObject:
   m_ObjectHideFlags: 0
@@ -41933,10 +43559,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 2109757111}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1381032739
 GameObject:
   m_ObjectHideFlags: 0
@@ -41984,10 +43617,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1958302755}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1382434420
 GameObject:
   m_ObjectHideFlags: 0
@@ -43115,10 +44755,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1505564864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1427746484
 Material:
   serializedVersion: 8
@@ -43200,72 +44847,6 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
---- !u!1001 &1428100200
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1277895586}
-    m_Modifications:
-    - target: {fileID: 100000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_Name
-      value: Car_NPC_000
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -56
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -86
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8853158718984101054, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_MotionVectors
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
---- !u!4 &1428100201 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-  m_PrefabInstance: {fileID: 1428100200}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1432933443
 GameObject:
   m_ObjectHideFlags: 0
@@ -43313,10 +44894,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059136864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1435371347
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43470,12 +45058,18 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1614550577}
-  - {fileID: 1523160212}
-  - {fileID: 55141633}
+  - {fileID: 1337669905}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1441338423
 GameObject:
   m_ObjectHideFlags: 0
@@ -43523,10 +45117,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1958302755}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1445731033
 GameObject:
   m_ObjectHideFlags: 0
@@ -43573,13 +45174,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parkingLotManager: {fileID: 542516997}
   routeManager: {fileID: 707882158}
-  npcCarPrefab: {fileID: 4193712528141163363, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
+  npcCarPrefab: {fileID: 100000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
   vehicleParent: {fileID: 1277895586}
-  spawnPoint: {fileID: 322766201}
-  entranceWaypoint: {fileID: 848304291}
-  exitWaypoint: {fileID: 1039358783}
+  entranceExitPairs:
+  - pairName: west_gate
+    spawnPoint: {fileID: 1317709220}
+    entranceWaypoint: {fileID: 1853523558}
+    exitWaypoint: {fileID: 1039358783}
+  - pairName: south_gate
+    spawnPoint: {fileID: 322766201}
+    entranceWaypoint: {fileID: 848304291}
+    exitWaypoint: {fileID: 1915960861}
+  useRandomEntranceExitPair: 1
   spawnOnStart: 1
+  maxSpawnCount: 50
+  spawnInterval: 5
+  useSpawnAreaCheck: 1
+  carLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  useSpawnPointScaleAsCheckArea: 1
+  spawnCheckBoxSize: {x: 12, y: 4, z: 18}
+  spawnRetryInterval: 3
+  drawSpawnAreaGizmo: 1
   useRandomSlot: 1
+  stopWhenNoAvailableSlot: 1
+  stopWhenRouteNotFound: 0
   debugLog: 1
 --- !u!1001 &1449103372
 PrefabInstance:
@@ -43815,10 +45435,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 316733303}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1454379800
 Material:
   serializedVersion: 8
@@ -44053,10 +45680,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 250871535}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1461586722
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44210,10 +45844,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059136864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1469728673
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44320,111 +45961,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 1469728673}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1470539375
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1277895586}
-    m_Modifications:
-    - target: {fileID: 100000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_Name
-      value: Car_NPC_001
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -78
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: stoppedSpeedThreshold
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8853158718984101054, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      propertyPath: m_MotionVectors
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1470539378}
-  m_SourcePrefab: {fileID: 100100000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
---- !u!4 &1470539376 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-  m_PrefabInstance: {fileID: 1470539375}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1470539377 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
-  m_PrefabInstance: {fileID: 1470539375}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1470539378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470539377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 120a5720209cf1d4d92e382ddcf296af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  route: []
-  currentWaypointIndex: 0
-  exitRoute: []
-  targetParkingSlot: {fileID: 0}
-  moveSpeed: 20
-  parkingSpeed: 3.5
-  reverseSpeed: 2
-  rotateSpeed: 10
-  arriveDistance: 0.8
-  parkingArriveDistance: 0.15
-  backOutArriveDistance: 3.5
-  turnCompleteAngle: 5
-  parkWaitTime: 5
-  moveState: 1
-  destroyOnFinished: 0
 --- !u!1001 &1471425598
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44625,10 +46161,17 @@ MonoBehaviour:
   - {fileID: 347854183}
   - {fileID: 1722870314}
   - {fileID: 589067691}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1479013695
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45154,10 +46697,17 @@ MonoBehaviour:
   - {fileID: 1441338425}
   - {fileID: 911080603}
   - {fileID: 323647444}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1490163312
 GameObject:
   m_ObjectHideFlags: 0
@@ -45309,11 +46859,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1059834088}
+  - {fileID: 1519928092}
+  - {fileID: 1819200715}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1505564862
 GameObject:
   m_ObjectHideFlags: 0
@@ -45361,10 +46919,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059834088}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1509089520
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45598,11 +47163,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1059834088}
+  - {fileID: 456897435}
+  - {fileID: 1587488498}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1523160210
 GameObject:
   m_ObjectHideFlags: 0
@@ -45649,23 +47222,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1915960861}
-  - {fileID: 1440355626}
-  - {fileID: 1160690387}
-  - {fileID: 1958061287}
-  - {fileID: 2052488676}
-  - {fileID: 1069478186}
-  - {fileID: 1168527511}
-  - {fileID: 1629917181}
-  - {fileID: 786263565}
-  - {fileID: 943217476}
-  - {fileID: 1750699951}
-  - {fileID: 2004293741}
-  - {fileID: 1337669905}
+  - {fileID: 1036003955}
+  - {fileID: 1200069390}
+  - {fileID: 1051970133}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1523974215
 Material:
   serializedVersion: 8
@@ -46249,10 +47819,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 316733303}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1544315647
 Material:
   serializedVersion: 8
@@ -46939,10 +48516,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1255511315}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1552713563
 GameObject:
   m_ObjectHideFlags: 0
@@ -46990,10 +48574,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 316733303}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1561699954
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47281,11 +48872,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
+  - {fileID: 1632147332}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1578024878
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47545,10 +49143,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059136864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1587488496
 GameObject:
   m_ObjectHideFlags: 0
@@ -47595,11 +49200,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
+  - {fileID: 1819200715}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1591024420
 GameObject:
   m_ObjectHideFlags: 0
@@ -47851,11 +49463,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1614550577}
+  - {fileID: 412613834}
+  - {fileID: 1629917181}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1614550575
 GameObject:
   m_ObjectHideFlags: 0
@@ -47903,13 +49523,18 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 455408923}
-  - {fileID: 1200069390}
   - {fileID: 2046820787}
-  - {fileID: 1440355626}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 1
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1615765255
 GameObject:
   m_ObjectHideFlags: 0
@@ -47989,10 +49614,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1778675231}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1617320320
 GameObject:
   m_ObjectHideFlags: 0
@@ -48072,10 +49704,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 2109757111}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1619596434
 Material:
   serializedVersion: 8
@@ -48309,11 +49948,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1440355626}
+  - {fileID: 1168527511}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1631552529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48466,11 +50112,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
+  - {fileID: 1587488498}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!4 &1632376450 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8344464797788383907, guid: be78c09f998fac64eb7381c9a261dae3, type: 3}
@@ -49277,10 +50930,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 8809859}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1655010699
 GameObject:
   m_ObjectHideFlags: 0
@@ -49328,10 +50988,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 8809859}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1655766797
 GameObject:
   m_ObjectHideFlags: 0
@@ -49379,10 +51046,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1505564864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1656707343
 Material:
   serializedVersion: 8
@@ -49616,11 +51290,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1059834088}
+  - {fileID: 477311408}
+  - {fileID: 23638969}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1663405710
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49729,11 +51411,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1614550577}
+  - {fileID: 300953885}
+  - {fileID: 1958061287}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1666499762
 GameObject:
   m_ObjectHideFlags: 0
@@ -49993,10 +51683,17 @@ MonoBehaviour:
   - {fileID: 1955128209}
   - {fileID: 782497382}
   - {fileID: 731252380}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1673287173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50274,10 +51971,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 316733303}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1678855993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50570,10 +52274,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1505564864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1689000130
 Material:
   serializedVersion: 8
@@ -51030,10 +52741,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 250871535}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1707316459
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51293,10 +53011,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1790831340}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1724117443
 GameObject:
   m_ObjectHideFlags: 0
@@ -51344,10 +53069,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1790831340}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1729375944
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52050,11 +53782,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1440355626}
+  - {fileID: 943217476}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1755184783
 Material:
   serializedVersion: 8
@@ -52457,10 +54196,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 8809859}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1763853738
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52807,10 +54553,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1097378237}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1781445584
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -53152,10 +54905,17 @@ MonoBehaviour:
   nextWaypoints:
   - {fileID: 165615055}
   - {fileID: 1039358783}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1791354274
 Material:
   serializedVersion: 8
@@ -53539,10 +55299,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1097378237}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1804831890
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54069,11 +55836,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 820897712}
+  - {fileID: 55141633}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1828164848
 Material:
   serializedVersion: 8
@@ -54202,10 +55976,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 2109757111}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1828693811
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55213,10 +56994,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 316733303}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1853191184
 Material:
   serializedVersion: 8
@@ -55345,10 +57133,17 @@ MonoBehaviour:
   waypointId: Entrance_west
   nextWaypoints:
   - {fileID: 165615055}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 1
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1862967854
 Material:
   serializedVersion: 8
@@ -55477,10 +57272,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1505564864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1868153756
 GameObject:
   m_ObjectHideFlags: 0
@@ -55527,11 +57329,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1614550577}
+  - {fileID: 1609734280}
+  - {fileID: 1168527511}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1872698900
 Material:
   serializedVersion: 8
@@ -55694,6 +57504,64 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &1882500591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1882500592}
+  - component: {fileID: 1882500593}
+  m_Layer: 0
+  m_Name: WP_TZ_Reserve_north_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1882500592
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882500591}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2061963824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1882500593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882500591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 1375914356}
+  trafficZoneToEnter: {fileID: 1236951022}
+  waitBeforeTrafficZone: 1
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1886916566
 Material:
   serializedVersion: 8
@@ -56606,10 +58474,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059136864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1914307339
 GameObject:
   m_ObjectHideFlags: 0
@@ -56656,11 +58531,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1059834088}
+  - {fileID: 507251357}
+  - {fileID: 1575259984}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1915960859
 GameObject:
   m_ObjectHideFlags: 0
@@ -56707,10 +58590,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: Exit_south
   nextWaypoints: []
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 1
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1919215295
 GameObject:
   m_ObjectHideFlags: 0
@@ -56838,10 +58728,17 @@ MonoBehaviour:
   - {fileID: 1851563910}
   - {fileID: 659026663}
   - {fileID: 1295206673}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1924372387
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57423,10 +59320,17 @@ MonoBehaviour:
   - {fileID: 623398031}
   - {fileID: 19480920}
   - {fileID: 1000541798}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1942903320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58106,10 +60010,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1778675231}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1958061285
 GameObject:
   m_ObjectHideFlags: 0
@@ -58156,11 +60067,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1440355626}
+  - {fileID: 85363539}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &1958302753
 GameObject:
   m_ObjectHideFlags: 0
@@ -58209,10 +60127,17 @@ MonoBehaviour:
   nextWaypoints:
   - {fileID: 1255511315}
   - {fileID: 392482568}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &1960531632
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59103,11 +61028,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1614550577}
+  - {fileID: 807061121}
+  - {fileID: 943217476}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &1993439959
 Material:
   serializedVersion: 8
@@ -59448,10 +61381,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 455408923}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &2002909157
 Material:
   serializedVersion: 8
@@ -59579,11 +61519,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1440355626}
+  - {fileID: 1750699951}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &2006895406
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59721,7 +61668,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1a3b69ddacdaf4742b089459a1f75803, type: 2}
+  - {fileID: 2100000, guid: 14edae0b635137143b810fe038b03036, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -60155,10 +62102,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1790831340}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &2031293095
 Material:
   serializedVersion: 8
@@ -60474,10 +62428,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1059136864}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &2046820785
 GameObject:
   m_ObjectHideFlags: 0
@@ -60525,22 +62486,18 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 55141633}
-  - {fileID: 1059834088}
-  - {fileID: 1614550577}
-  - {fileID: 975696457}
-  - {fileID: 477311408}
-  - {fileID: 1659213757}
-  - {fileID: 1078314725}
-  - {fileID: 111418071}
-  - {fileID: 507251357}
-  - {fileID: 1914307341}
-  - {fileID: 456897435}
-  - {fileID: 1519928092}
   - {fileID: 1504099744}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
-  isIntersection: 1
+  isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &2048881461
 GameObject:
   m_ObjectHideFlags: 0
@@ -60588,10 +62545,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1958302755}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &2051755701
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60744,11 +62708,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1440355626}
+  - {fileID: 1958061287}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &2059192999
 GameObject:
   m_ObjectHideFlags: 0
@@ -60796,10 +62767,17 @@ MonoBehaviour:
   waypointId: 
   nextWaypoints:
   - {fileID: 1097378237}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1 &2061963823
 GameObject:
   m_ObjectHideFlags: 0
@@ -60844,11 +62822,20 @@ Transform:
   - {fileID: 165615054}
   - {fileID: 1790831339}
   - {fileID: 1200069389}
+  - {fileID: 1162407027}
   - {fileID: 1523160211}
+  - {fileID: 708538301}
+  - {fileID: 1036003954}
+  - {fileID: 1051970132}
+  - {fileID: 85363538}
+  - {fileID: 186710456}
   - {fileID: 1673191485}
   - {fileID: 2109757110}
   - {fileID: 1059834087}
-  - {fileID: 820897711}
+  - {fileID: 1375914355}
+  - {fileID: 1882500592}
+  - {fileID: 681190669}
+  - {fileID: 741961709}
   - {fileID: 2046820786}
   - {fileID: 55141632}
   - {fileID: 1614550576}
@@ -62133,10 +64120,17 @@ MonoBehaviour:
   nextWaypoints:
   - {fileID: 1958302755}
   - {fileID: 1673191486}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!1001 &2112288254
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -63053,11 +65047,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1614550577}
+  - {fileID: 1868153758}
+  - {fileID: 1069478186}
+  trafficZoneToEnter: {fileID: 0}
+  waitBeforeTrafficZone: 0
+  releaseTrafficZoneHere: 0
+  isPriorityTrafficZoneEntry: 0
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
 --- !u!21 &2143365489
 Material:
   serializedVersion: 8
