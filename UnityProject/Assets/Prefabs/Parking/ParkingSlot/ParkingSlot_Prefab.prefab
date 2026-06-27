@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 575786628282400379}
   - component: {fileID: 5062238131687248652}
   - component: {fileID: 7847077706165932696}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: Slot_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -523,7 +523,7 @@ GameObject:
   m_Component:
   - component: {fileID: 520782455731608270}
   - component: {fileID: 1806678882452183590}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ParkingSlot_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -567,11 +567,8 @@ MonoBehaviour:
   slotId: A-01
   areaId: A
   state: 0
+  reservedBy: {fileID: 0}
+  occupiedBy: {fileID: 0}
   parkingPoint: {fileID: 2763021575079234024}
   detectionPoint: {fileID: 4707466597966865710}
-  slotBaseRenderer: {fileID: 5062238131687248652}
-  emptyColor: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
-  occupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  reservedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  disabledColor: {r: 0, g: 0, b: 0, a: 1}
-  hideSlotBaseWhenEmpty: 0
+  accessWaypoint: {fileID: 0}

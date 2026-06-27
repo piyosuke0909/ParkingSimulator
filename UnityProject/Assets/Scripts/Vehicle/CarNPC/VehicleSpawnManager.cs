@@ -195,7 +195,6 @@ public class VehicleSpawnManager : MonoBehaviour
         {
             Debug.Log($"{name}: EntranceExitPair = {selectedPair.pairName}");
             Debug.Log($"{name}: Target Slot = {targetSlot.slotId}");
-            Debug.Log($"{name}: AccessWaypoint = {targetSlot.accessWaypoint.name}");
         }
 
         List<Waypoint> routeToSlot = routeManager.FindRoute(
@@ -252,6 +251,14 @@ public class VehicleSpawnManager : MonoBehaviour
         if (carController == null)
         {
             Debug.LogWarning($"{name}: 生成した車に NPC_CarController が付いていません。");
+            Destroy(carObject);
+            parkingLotManager.ReleaseReservation(targetSlot);
+            return false;
+        }
+
+        if (!targetSlot.TryAssignReservedOwner(carController))
+        {
+            Debug.LogWarning($"{name}: 予約Slotの所有者設定に失敗しました。Slot={targetSlot.slotId}");
             Destroy(carObject);
             parkingLotManager.ReleaseReservation(targetSlot);
             return false;

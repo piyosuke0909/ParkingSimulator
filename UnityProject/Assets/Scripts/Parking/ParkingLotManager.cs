@@ -8,6 +8,11 @@ public class ParkingLotManager : MonoBehaviour
 
     private Dictionary<string, ParkingSlot> slotDictionary = new Dictionary<string, ParkingSlot>();
 
+    [Header("Physical Slot Check")]
+    public bool usePhysicalSlotCheck = true;
+    public LayerMask carLayerMask;
+    public Vector3 slotCheckBoxSize = new Vector3(10f, 4f, 8f);
+
     [Header("Debug")]
     public bool logOnStart = true;
 
@@ -187,26 +192,6 @@ public class ParkingLotManager : MonoBehaviour
         return availableSlots[index];
     }
 
-    public List<ParkingSlot> GetAvailableSlots()
-    {
-        List<ParkingSlot> availableSlots = new List<ParkingSlot>();
-
-        foreach (ParkingSlot slot in allSlots)
-        {
-            if (slot == null)
-            {
-                continue;
-            }
-
-            if (slot.IsAvailable())
-            {
-                availableSlots.Add(slot);
-            }
-        }
-
-        return availableSlots;
-    }
-
     public List<ParkingSlot> GetAvailableSlotsWithAccessWaypoint()
     {
         List<ParkingSlot> availableSlots = new List<ParkingSlot>();
@@ -263,6 +248,16 @@ public class ParkingLotManager : MonoBehaviour
         return true;
     }
 
+    public bool TryReserveSlot(ParkingSlot slot, NPC_CarController owner)
+    {
+        if (!IsSelectableSlot(slot))
+        {
+            return false;
+        }
+
+        return slot.TryReserve(owner);
+    }
+
     public ParkingSlot ReserveFirstAvailableSlot()
     {
         ParkingSlot slot = GetFirstAvailableSlotWithAccessWaypoint();
@@ -302,26 +297,6 @@ public class ParkingLotManager : MonoBehaviour
         return slot;
     }
 
-    public void SetSlotOccupied(ParkingSlot slot)
-    {
-        if (slot == null)
-        {
-            return;
-        }
-
-        slot.SetOccupied();
-    }
-
-    public void SetSlotEmpty(ParkingSlot slot)
-    {
-        if (slot == null)
-        {
-            return;
-        }
-
-        slot.SetEmpty();
-    }
-
     public void ReleaseReservation(ParkingSlot slot)
     {
         if (slot == null)
@@ -331,7 +306,7 @@ public class ParkingLotManager : MonoBehaviour
 
         if (slot.state == ParkingSlotState.Reserved)
         {
-            slot.SetEmpty();
+            slot.ForceRelease();
         }
     }
 
@@ -355,6 +330,14 @@ public class ParkingLotManager : MonoBehaviour
         if (slot.accessWaypoint == null)
         {
             return false;
+        }
+
+        if (usePhysicalSlotCheck)
+        {
+            if (slot.HasCarInSlot(carLayerMask, slotCheckBoxSize))
+            {
+                return false;
+            }
         }
 
         return true;

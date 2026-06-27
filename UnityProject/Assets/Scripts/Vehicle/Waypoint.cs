@@ -9,53 +9,108 @@ public class Waypoint : MonoBehaviour
     [Header("Connections")]
     public List<Waypoint> nextWaypoints = new List<Waypoint>();
 
-    [Header("Traffic Zone")]
-    [Tooltip("このWaypointへ向かうときに予約するTrafficZone")]
-    public TrafficZone trafficZoneToEnter;
-
-    [Tooltip("TrafficZoneが使用中の場合、このWaypointへ進まず手前で待機する")]
-    public bool waitBeforeTrafficZone;
-
-    [Tooltip("このWaypointに到着したとき、現在予約中のTrafficZoneを解放する")]
-    public bool releaseTrafficZoneHere;
-
-    [Tooltip("このWaypointからTrafficZoneを予約する車を、通常キューより優先します。")]
-    public bool isPriorityTrafficZoneEntry;
-
     [Header("Settings")]
     public bool isStopPoint;
     public bool isIntersection;
     public bool isEntrance;
     public bool isExit;
 
+    [Header("Road Sections")]
+    [Tooltip("nextWaypoints と同じ順番で、そこへ向かう道の予約対象を設定します。双方向通路では反対方向にも同じRoadSectionを設定します。")]
+    public List<RoadSection> roadSectionsToNext = new List<RoadSection>();
+
     [Header("Gizmo Arrow Settings")]
     public float arrowHeadLength = 1.2f;
     public float arrowHeadAngle = 25f;
     public float arrowOffsetFromTarget = 0.8f;
 
+    public NPC_CarController reservedBy;
+    public NPC_CarController occupiedBy;
+
+    public bool TryReserve(NPC_CarController car)
+    {
+        if (car == null)
+        {
+            return false;
+        }
+
+        if (reservedBy == null || reservedBy == car)
+        {
+            reservedBy = car;
+            return true;
+        }
+
+        return false;
+    }
+
+    public void Enter(NPC_CarController car)
+    {
+        if (car == null)
+        {
+            return;
+        }
+
+        if (reservedBy == car)
+        {
+            reservedBy = null;
+        }
+
+        occupiedBy = car;
+    }
+
+    public void Release(NPC_CarController car)
+    {
+        if (reservedBy == car)
+        {
+            reservedBy = null;
+        }
+
+        if (occupiedBy == car)
+        {
+            occupiedBy = null;
+        }
+    }
+
+    public bool IsAvailableFor(NPC_CarController car)
+    {
+        return reservedBy == null ||
+               reservedBy == car;
+    }
+
+    public RoadSection GetRoadSectionTo(Waypoint nextWaypoint)
+    {
+        if (nextWaypoint == null)
+        {
+            return null;
+        }
+
+        int index = nextWaypoints.IndexOf(nextWaypoint);
+
+        if (index < 0)
+        {
+            return null;
+        }
+
+        if (roadSectionsToNext == null)
+        {
+            return null;
+        }
+
+        if (index >= roadSectionsToNext.Count)
+        {
+            return null;
+        }
+
+        return roadSectionsToNext[index];
+    }
     private void OnDrawGizmos()
     {
         DrawSelfGizmo();
         DrawNextWaypointGizmos();
-        DrawTrafficZoneGizmo();
     }
 
     private void DrawSelfGizmo()
     {
-        if (releaseTrafficZoneHere)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(transform.position, 0.65f);
-            return;
-        }
-
-        if (trafficZoneToEnter != null && waitBeforeTrafficZone)
-        {
-            Gizmos.color = new Color(1f, 0.5f, 0f);
-            Gizmos.DrawSphere(transform.position, 0.65f);
-            return;
-        }
-
         if (isEntrance)
         {
             Gizmos.color = Color.green;
@@ -98,22 +153,9 @@ public class Waypoint : MonoBehaviour
         }
     }
 
-    private void DrawTrafficZoneGizmo()
-    {
-        if (trafficZoneToEnter == null)
-        {
-            return;
-        }
-
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, trafficZoneToEnter.transform.position);
-    }
-
     private void DrawArrowLine(Vector3 from, Vector3 to, Color color)
     {
         Gizmos.color = color;
-
-        // 本体の線
         Gizmos.DrawLine(from, to);
 
         Vector3 direction = (to - from).normalized;
@@ -124,15 +166,13 @@ public class Waypoint : MonoBehaviour
             return;
         }
 
-        // 矢印の根元位置（Waypointの球と重なりすぎないよう少し手前）
         Vector3 arrowTip = to - direction * arrowOffsetFromTarget;
 
-        // 矢印の左右の線を作る
         Quaternion rightRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0);
-        Quaternion leftRotation  = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0);
+        Quaternion leftRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0);
 
         Vector3 right = arrowTip + (rightRotation * Vector3.forward) * arrowHeadLength;
-        Vector3 left  = arrowTip + (leftRotation  * Vector3.forward) * arrowHeadLength;
+        Vector3 left = arrowTip + (leftRotation * Vector3.forward) * arrowHeadLength;
 
         Gizmos.DrawLine(arrowTip, right);
         Gizmos.DrawLine(arrowTip, left);
