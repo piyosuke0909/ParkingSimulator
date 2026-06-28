@@ -360,6 +360,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -710,6 +711,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -954,6 +956,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -1117,6 +1120,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -1903,6 +1907,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -1960,6 +1965,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -2018,8 +2024,9 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext:
-  - {fileID: 1523113187}
+  - {fileID: 288878056}
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -2319,6 +2326,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -2563,6 +2571,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -2620,8 +2629,9 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext:
-  - {fileID: 1523113187}
+  - {fileID: 288878056}
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -2759,6 +2769,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -3459,7 +3470,7 @@ GameObject:
   - component: {fileID: 97400221}
   - component: {fileID: 97400220}
   m_Layer: 0
-  m_Name: WP_C_Lane_06
+  m_Name: WP_C_Lane_07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3484,6 +3495,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -4077,6 +4089,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -4652,6 +4665,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -4977,6 +4991,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -5722,7 +5737,7 @@ Transform:
   m_GameObject: {fileID: 144416003}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5, y: 1, z: -110}
+  m_LocalPosition: {x: -5, y: 1, z: -105}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5747,8 +5762,8 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
-  roadSectionsToNext:
-  - {fileID: 1420169373}
+  trafficBlock: {fileID: 0}
+  roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -6017,6 +6032,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -6592,6 +6608,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -6711,6 +6728,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -6981,6 +6999,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -7144,6 +7163,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -7201,6 +7221,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -7288,6 +7309,64 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &192758767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 192758769}
+  - component: {fileID: 192758768}
+  m_Layer: 0
+  m_Name: WP_south_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &192758768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192758767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 1915960861}
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  trafficBlock: {fileID: 0}
+  roadSectionsToNext: []
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
+  reservedBy: {fileID: 0}
+  occupiedBy: {fileID: 0}
+--- !u!4 &192758769
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192758767}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5, y: 1, z: -105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2061963824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &195067898
 GameObject:
   m_ObjectHideFlags: 0
@@ -7339,6 +7418,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -7758,7 +7838,7 @@ Transform:
   m_GameObject: {fileID: 207925444}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -20, y: 1, z: 5}
+  m_LocalPosition: {x: -15, y: 1, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7783,8 +7863,9 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext:
-  - {fileID: 1523113187}
+  - {fileID: 288878056}
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -8044,6 +8125,64 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &212979990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 212979992}
+  - component: {fileID: 212979991}
+  m_Layer: 0
+  m_Name: WP_C_Lane_05
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &212979991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212979990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 1160690387}
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  trafficBlock: {fileID: 0}
+  roadSectionsToNext: []
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
+  reservedBy: {fileID: 0}
+  occupiedBy: {fileID: 0}
+--- !u!4 &212979992
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212979990}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 30, y: 1, z: -95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 217104690}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &213111085
 GameObject:
   m_ObjectHideFlags: 0
@@ -8149,6 +8288,7 @@ Transform:
   - {fileID: 1489505137}
   - {fileID: 1662656748}
   - {fileID: 1160690386}
+  - {fileID: 212979992}
   - {fileID: 1036003954}
   - {fileID: 97400221}
   - {fileID: 1958302754}
@@ -8736,7 +8876,7 @@ GameObject:
   - component: {fileID: 236097741}
   - component: {fileID: 236097742}
   m_Layer: 0
-  m_Name: WP_A_Lane_11
+  m_Name: WP_A_Lane_12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8751,7 +8891,7 @@ Transform:
   m_GameObject: {fileID: 236097740}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -20, y: 1, z: -5}
+  m_LocalPosition: {x: -15, y: 1, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8776,6 +8916,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -8899,7 +9040,7 @@ GameObject:
   - component: {fileID: 238940264}
   - component: {fileID: 238940265}
   m_Layer: 0
-  m_Name: WP_C_Lane_11
+  m_Name: WP_C_Lane_12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8914,7 +9055,7 @@ Transform:
   m_GameObject: {fileID: 238940263}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20, y: 1, z: -5}
+  m_LocalPosition: {x: 15, y: 1, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8939,8 +9080,9 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext:
-  - {fileID: 1523113187}
+  - {fileID: 288878056}
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -9231,7 +9373,7 @@ GameObject:
   - component: {fileID: 250871534}
   - component: {fileID: 250871535}
   m_Layer: 0
-  m_Name: WP_A_Lane_07
+  m_Name: WP_A_Lane_08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9272,6 +9414,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -9435,6 +9578,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -9684,6 +9828,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -10519,6 +10664,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 288061596}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &288878054
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 288878055}
+  - component: {fileID: 288878056}
+  m_Layer: 0
+  m_Name: RS_center
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &288878055
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288878054}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 18, y: 1, z: 18}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1053517624}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &288878056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288878054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c48379744b8155c468c0666fe041bfb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sectionId: 
+  reservedBy: {fileID: 0}
+  logDebug: 0
 --- !u!1001 &293636907
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10994,6 +11186,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -11157,6 +11350,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -11635,6 +11829,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -11798,6 +11993,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -11855,6 +12051,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -12018,6 +12215,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -12242,6 +12440,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -12486,6 +12685,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -12765,6 +12965,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -12822,6 +13023,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -12879,6 +13081,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -13017,6 +13220,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -13074,6 +13278,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -13785,6 +13990,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -13989,7 +14195,7 @@ GameObject:
   - component: {fileID: 388308108}
   - component: {fileID: 388308107}
   m_Layer: 0
-  m_Name: WP_A_Lane_06
+  m_Name: WP_A_Lane_07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14014,6 +14220,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -14087,6 +14294,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -14144,6 +14352,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -14469,6 +14678,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -14526,6 +14736,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -14851,6 +15062,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -15070,6 +15282,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -15189,6 +15402,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -15246,6 +15460,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -15418,6 +15633,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -15541,7 +15757,7 @@ GameObject:
   - component: {fileID: 455408922}
   - component: {fileID: 455408923}
   m_Layer: 0
-  m_Name: WP_A_Lane_09
+  m_Name: WP_A_Lane_10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15582,6 +15798,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -15745,6 +15962,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -15802,6 +16020,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -16177,6 +16396,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -16795,6 +17015,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -17448,6 +17669,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -18121,6 +18343,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -18390,6 +18613,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -18579,6 +18803,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -18991,6 +19216,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -19297,6 +19523,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -19387,6 +19614,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -19899,6 +20127,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -20242,6 +20471,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -20461,6 +20691,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -21121,6 +21352,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -21259,6 +21491,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -21316,6 +21549,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -21479,6 +21713,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -21598,6 +21833,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -21736,6 +21972,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -21899,6 +22136,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -22273,6 +22511,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -22436,6 +22675,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -22574,6 +22814,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -22722,6 +22963,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -22981,6 +23223,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -22998,7 +23241,7 @@ GameObject:
   - component: {fileID: 688915481}
   - component: {fileID: 688915482}
   m_Layer: 0
-  m_Name: WP_C_Lane_08
+  m_Name: WP_C_Lane_09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23038,6 +23281,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -23095,6 +23339,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -23152,6 +23397,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -23450,7 +23696,7 @@ GameObject:
   - component: {fileID: 708538301}
   - component: {fileID: 708538302}
   m_Layer: 0
-  m_Name: WP_A_Lane_05
+  m_Name: WP_A_Lane_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23465,7 +23711,7 @@ Transform:
   m_GameObject: {fileID: 708538300}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -25, y: 1, z: -95}
+  m_LocalPosition: {x: -15, y: 1, z: -95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23485,11 +23731,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1937589798}
+  - {fileID: 2008655546}
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -23628,6 +23875,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -23767,6 +24015,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -24092,6 +24341,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -24149,6 +24399,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -24206,6 +24457,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -24774,6 +25026,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -24955,6 +25208,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -25411,6 +25665,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -25574,6 +25829,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -25899,6 +26155,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -26143,6 +26400,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -26387,6 +26645,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -26685,6 +26944,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -27278,6 +27538,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -27335,6 +27596,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 1
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -27645,6 +27907,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -27717,6 +27980,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -27775,6 +28039,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -28243,6 +28508,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -28553,7 +28819,7 @@ GameObject:
   - component: {fileID: 886057189}
   - component: {fileID: 886057190}
   m_Layer: 0
-  m_Name: WP_C_Lane_10
+  m_Name: WP_C_Lane_11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28593,6 +28859,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -29547,6 +29814,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -30255,7 +30523,7 @@ GameObject:
   - component: {fileID: 933750669}
   - component: {fileID: 933750670}
   m_Layer: 0
-  m_Name: WP_A_Lane_10
+  m_Name: WP_A_Lane_11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30295,6 +30563,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -30610,6 +30879,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -31302,6 +31572,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -31694,6 +31965,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -32150,8 +32422,8 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
-  roadSectionsToNext:
-  - {fileID: 1344554319}
+  trafficBlock: {fileID: 0}
+  roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -32333,6 +32605,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -33007,6 +33280,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -33890,7 +34164,7 @@ GameObject:
   - component: {fileID: 1036003954}
   - component: {fileID: 1036003955}
   m_Layer: 0
-  m_Name: WP_C_Lane_05
+  m_Name: WP_C_Lane_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33905,7 +34179,7 @@ Transform:
   m_GameObject: {fileID: 1036003953}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 25, y: 1, z: -95}
+  m_LocalPosition: {x: 15, y: 1, z: -95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33925,11 +34199,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointId: 
   nextWaypoints:
-  - {fileID: 1160690387}
+  - {fileID: 212979991}
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -34092,6 +34367,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 1
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -34340,6 +34616,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -34356,7 +34633,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1053517624}
   m_Layer: 0
-  m_Name: RoadSections
+  m_Name: TrafficBlocks/RoadSections
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34377,7 +34654,7 @@ Transform:
   m_Children:
   - {fileID: 1420169374}
   - {fileID: 1344554320}
-  - {fileID: 1523113186}
+  - {fileID: 288878055}
   m_Father: {fileID: 976853909}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1053821009
@@ -34431,6 +34708,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -34488,6 +34766,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -34545,8 +34824,8 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
-  roadSectionsToNext:
-  - {fileID: 1344554319}
+  trafficBlock: {fileID: 1344554319}
+  roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -34603,6 +34882,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -34872,6 +35152,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -35010,6 +35291,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -35052,6 +35334,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -35417,6 +35700,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -35459,8 +35743,8 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
-  roadSectionsToNext:
-  - {fileID: 1344554319}
+  trafficBlock: {fileID: 1344554319}
+  roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -35613,6 +35897,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -35751,6 +36036,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -35914,6 +36200,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -36497,6 +36784,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -36635,6 +36923,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -37367,6 +37656,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -37646,6 +37936,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -37915,6 +38206,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -38265,6 +38557,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -38984,8 +39277,8 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
-  roadSectionsToNext:
-  - {fileID: 1420169373}
+  trafficBlock: {fileID: 1420169373}
+  roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -39627,8 +39920,8 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
-  roadSectionsToNext:
-  - {fileID: 1344554319}
+  trafficBlock: {fileID: 0}
+  roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -40069,6 +40362,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -40354,7 +40648,7 @@ GameObject:
   - component: {fileID: 1255511314}
   - component: {fileID: 1255511315}
   m_Layer: 0
-  m_Name: WP_C_Lane_09
+  m_Name: WP_C_Lane_10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40395,6 +40689,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -40452,6 +40747,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -40833,6 +41129,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -40995,6 +41292,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -41239,6 +41537,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -41377,6 +41676,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -41969,6 +42269,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -42026,6 +42327,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -42401,6 +42703,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -42458,6 +42761,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -42599,7 +42903,7 @@ GameObject:
   - component: {fileID: 1344554320}
   - component: {fileID: 1344554319}
   m_Layer: 0
-  m_Name: RS_north
+  m_Name: TB_north
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42617,8 +42921,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2489dd9453ef1d3429e371578b9d4203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sectionId: 
+  blockId: 
   reservedBy: {fileID: 0}
+  occupiedBy: {fileID: 0}
   logDebug: 0
 --- !u!4 &1344554320
 Transform:
@@ -42630,7 +42935,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5, y: 0, z: 95}
-  m_LocalScale: {x: 25, y: 1, z: 5}
+  m_LocalScale: {x: 28, y: 1, z: 8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1053517624}
@@ -43443,6 +43748,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -43811,8 +44117,8 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
-  roadSectionsToNext:
-  - {fileID: 1344554319}
+  trafficBlock: {fileID: 1344554319}
+  roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -43869,6 +44175,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -43926,6 +44233,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -44815,6 +45123,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -45120,6 +45429,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -45137,7 +45447,7 @@ GameObject:
   - component: {fileID: 1420169374}
   - component: {fileID: 1420169373}
   m_Layer: 0
-  m_Name: RS_south
+  m_Name: TB_south
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45155,8 +45465,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2489dd9453ef1d3429e371578b9d4203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sectionId: 
+  blockId: 
   reservedBy: {fileID: 0}
+  occupiedBy: {fileID: 0}
   logDebug: 0
 --- !u!4 &1420169374
 Transform:
@@ -45168,7 +45479,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -95}
-  m_LocalScale: {x: 15, y: 1, z: 5}
+  m_LocalScale: {x: 18, y: 1, z: 8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1053517624}
@@ -45209,6 +45520,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -45362,6 +45674,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -45526,8 +45839,9 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext:
-  - {fileID: 1523113187}
+  - {fileID: 288878056}
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -45584,6 +45898,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -45901,6 +46216,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -46145,6 +46461,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -46308,6 +46625,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -46599,6 +46917,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -46614,7 +46933,7 @@ Transform:
   m_GameObject: {fileID: 1474510222}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20, y: 1, z: 5}
+  m_LocalPosition: {x: 15, y: 1, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46671,6 +46990,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -47196,6 +47516,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -47358,6 +47679,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -47415,6 +47737,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -47660,59 +47983,13 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
   reservedBy: {fileID: 0}
   occupiedBy: {fileID: 0}
---- !u!1 &1523113185
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1523113186}
-  - component: {fileID: 1523113187}
-  m_Layer: 0
-  m_Name: RS_center
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1523113186
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1523113185}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 15, y: 1, z: 15}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1053517624}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1523113187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1523113185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2489dd9453ef1d3429e371578b9d4203, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sectionId: 
-  reservedBy: {fileID: 0}
-  logDebug: 0
 --- !u!1 &1523160210
 GameObject:
   m_ObjectHideFlags: 0
@@ -47761,13 +48038,13 @@ MonoBehaviour:
   nextWaypoints:
   - {fileID: 1200069390}
   - {fileID: 1036003955}
-  - {fileID: 1915960861}
+  - {fileID: 192758768}
   isStopPoint: 0
   isIntersection: 0
   isEntrance: 0
   isExit: 0
-  roadSectionsToNext:
-  - {fileID: 1420169373}
+  trafficBlock: {fileID: 1420169373}
+  roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -48360,6 +48637,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -49056,6 +49334,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -49113,6 +49392,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -49411,6 +49691,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -49680,6 +49961,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -49737,6 +50019,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -50000,6 +50283,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -50058,8 +50342,9 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext:
-  - {fileID: 1523113187}
+  - {fileID: 288878056}
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -50148,6 +50433,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -50237,6 +50523,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -50481,6 +50768,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -50644,6 +50932,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -51167,6 +51456,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -51517,6 +51807,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -51574,6 +51865,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -51631,6 +51923,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -51876,6 +52169,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -51933,6 +52227,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -52052,6 +52347,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -52310,6 +52606,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -52597,6 +52894,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -52899,6 +53197,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -53365,6 +53664,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -53634,6 +53934,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -53691,6 +53992,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -54404,6 +54706,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -54816,6 +55119,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -55172,6 +55476,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -55523,6 +55828,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -55621,7 +55927,7 @@ GameObject:
   - component: {fileID: 1792064806}
   - component: {fileID: 1792064805}
   m_Layer: 0
-  m_Name: WP_A_Lane_08
+  m_Name: WP_A_Lane_09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55646,6 +55952,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -55973,6 +56280,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -56510,8 +56818,9 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext:
-  - {fileID: 1523113187}
+  - {fileID: 288878056}
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -56649,6 +56958,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -57666,6 +57976,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -57804,6 +58115,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 1
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -57942,6 +58254,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -57999,6 +58312,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -58218,8 +58532,8 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
-  roadSectionsToNext:
-  - {fileID: 1344554319}
+  trafficBlock: {fileID: 0}
+  roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -58646,6 +58960,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -59198,6 +59513,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -59256,6 +59572,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -59312,6 +59629,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 1
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -59438,6 +59756,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -60019,6 +60338,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -60708,6 +61028,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -60765,8 +61086,8 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
-  roadSectionsToNext:
-  - {fileID: 1420169373}
+  trafficBlock: {fileID: 0}
+  roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -60783,7 +61104,7 @@ GameObject:
   - component: {fileID: 1958302754}
   - component: {fileID: 1958302755}
   m_Layer: 0
-  m_Name: WP_C_Lane_07
+  m_Name: WP_C_Lane_08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60824,6 +61145,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -61319,6 +61641,7 @@ Transform:
   - {fileID: 178135073}
   - {fileID: 858796714}
   - {fileID: 1937589797}
+  - {fileID: 2008655547}
   - {fileID: 708538301}
   - {fileID: 388308108}
   - {fileID: 250871534}
@@ -61484,6 +61807,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -61791,6 +62115,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -62141,6 +62466,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -62279,6 +62605,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -62452,6 +62779,64 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2008354596}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2008655545
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2008655547}
+  - component: {fileID: 2008655546}
+  m_Layer: 0
+  m_Name: WP_A_Lane_05
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2008655546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2008655545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75367cb63a28d4f468db6d093cb02e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointId: 
+  nextWaypoints:
+  - {fileID: 1937589798}
+  isStopPoint: 0
+  isIntersection: 0
+  isEntrance: 0
+  isExit: 0
+  trafficBlock: {fileID: 0}
+  roadSectionsToNext: []
+  arrowHeadLength: 1.2
+  arrowHeadAngle: 25
+  arrowOffsetFromTarget: 0.8
+  reservedBy: {fileID: 0}
+  occupiedBy: {fileID: 0}
+--- !u!4 &2008655547
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2008655545}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -30, y: 1, z: -95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1979571077}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2009573130
 GameObject:
   m_ObjectHideFlags: 0
@@ -62750,6 +63135,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -62917,6 +63303,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -63242,6 +63629,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -63300,8 +63688,9 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext:
-  - {fileID: 1523113187}
+  - {fileID: 288878056}
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
   arrowOffsetFromTarget: 0.8
@@ -63358,6 +63747,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -63521,6 +63911,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -63578,6 +63969,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -63617,13 +64009,10 @@ Transform:
   - {fileID: 1039358782}
   - {fileID: 848304290}
   - {fileID: 1915960860}
-  - {fileID: 1979571077}
-  - {fileID: 517873031}
-  - {fileID: 217104690}
-  - {fileID: 1345490766}
   - {fileID: 1200069389}
   - {fileID: 1523160211}
   - {fileID: 144416004}
+  - {fileID: 192758769}
   - {fileID: 1059834087}
   - {fileID: 1375914355}
   - {fileID: 2046820786}
@@ -63634,6 +64023,10 @@ Transform:
   - {fileID: 1790831339}
   - {fileID: 1673191485}
   - {fileID: 2109757110}
+  - {fileID: 1979571077}
+  - {fileID: 517873031}
+  - {fileID: 217104690}
+  - {fileID: 1345490766}
   - {fileID: 213111086}
   - {fileID: 939473042}
   - {fileID: 1946223859}
@@ -64918,6 +65311,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25
@@ -65846,6 +66240,7 @@ MonoBehaviour:
   isIntersection: 0
   isEntrance: 0
   isExit: 0
+  trafficBlock: {fileID: 0}
   roadSectionsToNext: []
   arrowHeadLength: 1.2
   arrowHeadAngle: 25

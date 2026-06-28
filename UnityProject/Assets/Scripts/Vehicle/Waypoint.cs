@@ -15,6 +15,10 @@ public class Waypoint : MonoBehaviour
     public bool isEntrance;
     public bool isExit;
 
+    [Header("Traffic Block")]
+    [Tooltip("このWaypointが属する危険エリアです。同時に入れたくないWaypoint同士には同じTrafficBlockを設定します。未設定なら通常Waypointとして扱います。")]
+    public TrafficBlock trafficBlock;
+
     [Header("Road Sections")]
     [Tooltip("nextWaypoints と同じ順番で、そこへ向かう道の予約対象を設定します。双方向通路では反対方向にも同じRoadSectionを設定します。")]
     public List<RoadSection> roadSectionsToNext = new List<RoadSection>();
@@ -24,6 +28,7 @@ public class Waypoint : MonoBehaviour
     public float arrowHeadAngle = 25f;
     public float arrowOffsetFromTarget = 0.8f;
 
+    [Header("Reservation State")]
     public NPC_CarController reservedBy;
     public NPC_CarController occupiedBy;
 
@@ -34,13 +39,18 @@ public class Waypoint : MonoBehaviour
             return false;
         }
 
-        if (reservedBy == null || reservedBy == car)
+        if (occupiedBy != null && occupiedBy != car)
         {
-            reservedBy = car;
-            return true;
+            return false;
         }
 
-        return false;
+        if (reservedBy != null && reservedBy != car)
+        {
+            return false;
+        }
+
+        reservedBy = car;
+        return true;
     }
 
     public void Enter(NPC_CarController car)
@@ -50,16 +60,30 @@ public class Waypoint : MonoBehaviour
             return;
         }
 
+        if (occupiedBy != null && occupiedBy != car)
+        {
+            Debug.LogWarning(
+                $"{name}: occupiedBy が別の車のため Enter を拒否しました。NewCar={car.name}, OccupiedBy={occupiedBy.name}",
+                this
+            );
+            return;
+        }
+
+        occupiedBy = car;
+
         if (reservedBy == car)
         {
             reservedBy = null;
         }
-
-        occupiedBy = car;
     }
 
     public void Release(NPC_CarController car)
     {
+        if (car == null)
+        {
+            return;
+        }
+
         if (reservedBy == car)
         {
             reservedBy = null;
@@ -73,8 +97,22 @@ public class Waypoint : MonoBehaviour
 
     public bool IsAvailableFor(NPC_CarController car)
     {
-        return reservedBy == null ||
-               reservedBy == car;
+        if (car == null)
+        {
+            return false;
+        }
+
+        if (occupiedBy != null && occupiedBy != car)
+        {
+            return false;
+        }
+
+        if (reservedBy != null && reservedBy != car)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public RoadSection GetRoadSectionTo(Waypoint nextWaypoint)
@@ -103,6 +141,7 @@ public class Waypoint : MonoBehaviour
 
         return roadSectionsToNext[index];
     }
+
     private void OnDrawGizmos()
     {
         DrawSelfGizmo();
@@ -126,6 +165,10 @@ public class Waypoint : MonoBehaviour
         else if (isStopPoint)
         {
             Gizmos.color = Color.white;
+        }
+        else if (trafficBlock != null)
+        {
+            Gizmos.color = Color.magenta;
         }
         else
         {

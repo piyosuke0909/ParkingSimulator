@@ -9,7 +9,6 @@ public enum NPC_CarMoveState
     Parked,
     WaitingToBackOut,
     BackingOut,
-    TurningAfterBackOut,
     Leaving,
     Finished
 }
@@ -36,8 +35,6 @@ public class NPC_CarController : MonoBehaviour
     public float parkingArriveDistance = 0.15f;
     public float backOutArriveDistance = 0.25f;
 
-    [Header("Turn After Back Out")]
-    public float turnCompleteAngle = 3f;
 
     [Header("Parking Wait")]
     public float parkWaitTime = 5f;
@@ -60,15 +57,6 @@ public class NPC_CarController : MonoBehaviour
 
     private float backOutRetryTimer;
 
-    [Header("Back Out Yield")]
-    [Tooltip("バック中断時、検知した相手車両を通すために、自分を一時的に前方検知対象から外させます。")]
-    public bool useBackOutYieldToPassingCar = true;
-
-    [Tooltip("バック中断時に、相手車両へ譲っている状態を保持する秒数です。")]
-    public float backOutYieldMemoryTime = 2.0f;
-
-    private NPC_CarController yieldingToCar;
-    private float backOutYieldTimer;
 
     [Header("Front Vehicle Detection")]
     public bool useFrontVehicleDetection = true;
@@ -79,6 +67,22 @@ public class NPC_CarController : MonoBehaviour
     public float frontStopHoldTime = 0.5f;
     public bool drawFrontCheckDebug = true;
     public bool logFrontVehicleDetection = false;
+
+    [Header("Start Move Safety Check")]
+    [Tooltip("停止状態から発進する直前に、前方を広めのBoxで確認します。")]
+    public bool useStartMoveSafetyCheck = true;
+
+    [Tooltip("発進前確認Boxの大きさです。Xは横幅、Yは高さ、Zは前方距離です。")]
+    public Vector3 startMoveCheckBoxSize = new Vector3(10f, 4f, 8f);
+
+    [Tooltip("発進前確認Boxの中心位置補正です。Zを前方へずらします。")]
+    public Vector3 startMoveCheckCenterOffset = new Vector3(0f, 1f, 4f);
+
+    [Tooltip("発進前確認BoxのGizmoを表示します。")]
+    public bool drawStartMoveCheckGizmo = true;
+
+    [Tooltip("発進前確認のログを出します。")]
+    public bool logStartMoveSafetyCheck = false;
 
     [Header("Turn In Place At Waypoint")]
     [Tooltip("Waypointで大きく方向転換する場合、一度停止してからその場で回転します。")]
@@ -93,30 +97,20 @@ public class NPC_CarController : MonoBehaviour
     [Tooltip("Waypoint到着後、回転を始める前に停止する時間です。")]
     public float turnInPlacePauseTime = 0.15f;
 
+    [Tooltip("その場回転の回転速度です。1秒あたりの角度です。")]
+    public float turnInPlaceRotateSpeed = 240f;
+
+    [Tooltip("この距離以内のWaypointは、その場回転の目標にしません。近すぎるWaypointを向こうとして余計に回るのを防ぎます。")]
+    public float turnInPlaceMinTargetDistance = 1.0f;
+
     [Tooltip("その場回転中のログを出します。")]
     public bool logTurnInPlaceDebug = false;
 
     private bool isTurningInPlaceAtWaypoint;
     private float turnInPlacePauseTimer;
+    private Quaternion turnInPlaceTargetRotation = Quaternion.identity;
+    private bool hasTurnInPlaceTargetRotation;
 
-    [Header("Temporary Front Ray Ignore")]
-    [Tooltip("車同士が鉢合わせで停止したとき、片方だけ一時的に前方検知を無効化します。")]
-    public bool useTemporaryFrontRayIgnore = true;
-
-    [Tooltip("前方検知を一時的に無効化する秒数です。")]
-    public float frontRayIgnoreDuration = 0.6f;
-
-    [Tooltip("鉢合わせ判定に使う距離です。")]
-    public float deadlockCheckDistance = 12f;
-
-    [Tooltip("正面対向だけでなく、直角方向の鉢合わせも解消対象にします。")]
-    public bool allowCrossDirectionDeadlockResolve = true;
-
-    [Tooltip("鉢合わせ解消ログを出します。")]
-    public bool logDeadlockResolve = true;
-
-    private float frontRayIgnoreTimer;
-    private NPC_CarController lastDetectedFrontCarController;
 
     [Header("Waypoint Reservation")]
     [Tooltip("ONにすると、次のWaypointと道を予約してから進みます。")]
@@ -134,9 +128,12 @@ public class NPC_CarController : MonoBehaviour
     private Waypoint reservedWaypoint;
     private Waypoint occupiedWaypoint;
     private RoadSection reservedRoadSection;
+    private TrafficBlock reservedTrafficBlock;
+    private TrafficBlock occupiedTrafficBlock;
     private bool isStoppedByReservation;
     private Waypoint waitingWaypoint;
     private RoadSection waitingRoadSection;
+    private TrafficBlock waitingTrafficBlock;
 
     [Header("Stop State")]
     public bool isStoppedByFrontCar;
@@ -185,21 +182,6 @@ public class NPC_CarController : MonoBehaviour
 
     private void Update()
     {
-        if (frontRayIgnoreTimer > 0f)
-        {
-            frontRayIgnoreTimer -= Time.deltaTime;
-        }
-
-        if (backOutYieldTimer > 0f)
-        {
-            backOutYieldTimer -= Time.deltaTime;
-
-            if (backOutYieldTimer <= 0f)
-            {
-                yieldingToCar = null;
-            }
-        }
-
         switch (moveState)
         {
             case NPC_CarMoveState.Idle:
@@ -225,9 +207,6 @@ public class NPC_CarController : MonoBehaviour
                 BackOutFromParkingSlot();
                 break;
 
-            case NPC_CarMoveState.TurningAfterBackOut:
-                TurnAfterBackOut();
-                break;
 
             case NPC_CarMoveState.Leaving:
                 FollowExitRoute();
@@ -334,7 +313,7 @@ public class NPC_CarController : MonoBehaviour
 
         // 大きく曲がる必要がある場合は、Waypoint上で停止してその場回転する。
         // その場回転中は前方検知を呼ばない。
-        if (TryHandleTurnInPlaceBeforeMove(targetPosition))
+        if (TryHandleTurnInPlaceBeforeMove(targetWaypoint, targetPosition))
         {
             return;
         }
@@ -346,8 +325,16 @@ public class NPC_CarController : MonoBehaviour
             return;
         }
 
+        // 前方レイに加えて、発進直前だけ広めのBoxで安全確認する。
+        // スロットから斜めに出てくる車や、レイから外れた車を拾いやすくするため。
+        if (ShouldStopForStartMoveSafety())
+        {
+            StopCarCompletely();
+            return;
+        }
+
         MoveToTarget(targetPosition, moveSpeed);
-        RotateToTarget(targetPosition);
+        RotateToMoveDirection(targetWaypoint, targetPosition);
 
         float distance = Vector3.Distance(transform.position, targetPosition);
 
@@ -509,21 +496,17 @@ public class NPC_CarController : MonoBehaviour
 
         Waypoint accessWaypoint = targetParkingSlot.accessWaypoint;
 
-        // 出庫前にAccessWaypointを予約する。
+        // 出庫前にAccessWaypoint / TrafficBlock / RoadSectionを予約する。
         // 予約できない場合は、スロット内で待機する。
-        if (!TryReserveWaypoint(accessWaypoint))
+        if (!TryReserveMoveToWaypoint(accessWaypoint))
         {
-            SetReservationWait(accessWaypoint, null);
-
             if (logBackOutSafetyDebug)
             {
-                Debug.Log($"{name}: AccessWaypointを予約できないため、出庫待機します。Waypoint={accessWaypoint.name}", this);
+                Debug.Log($"{name}: AccessWaypoint、TrafficBlock、またはRoadSectionを予約できないため、出庫待機します。Waypoint={accessWaypoint.name}", this);
             }
 
             return;
         }
-
-        ClearReservationWait();
 
         // 予約できた後、物理的にバックできるか確認する。
         if (CanBackOutSafely())
@@ -562,8 +545,6 @@ public class NPC_CarController : MonoBehaviour
         if (checkWhileBackingOut && TryGetBackOutBlockingCar(out NPC_CarController blockingCar))
         {
             StopCarCompletely();
-
-            RegisterBackOutYield(blockingCar);
 
             backOutRetryTimer = backOutRetryInterval;
 
@@ -628,56 +609,11 @@ public class NPC_CarController : MonoBehaviour
             }
             else
             {
-                moveState = NPC_CarMoveState.TurningAfterBackOut;
+                moveState = NPC_CarMoveState.Leaving;
             }
         }
     }
 
-    private void RegisterBackOutYield(NPC_CarController blockingCar)
-    {
-        if (!useBackOutYieldToPassingCar)
-        {
-            return;
-        }
-
-        if (blockingCar == null)
-        {
-            return;
-        }
-
-        if (blockingCar == this)
-        {
-            return;
-        }
-
-        yieldingToCar = blockingCar;
-        backOutYieldTimer = backOutYieldMemoryTime;
-
-        if (logBackOutSafetyDebug)
-        {
-            Debug.Log($"{name}: バック中断。{blockingCar.name} に道を譲ります。", this);
-        }
-    }
-
-    public bool IsYieldingBackOutTo(NPC_CarController otherCar)
-    {
-        if (!useBackOutYieldToPassingCar)
-        {
-            return false;
-        }
-
-        if (otherCar == null)
-        {
-            return false;
-        }
-
-        if (moveState != NPC_CarMoveState.WaitingToBackOut)
-        {
-            return false;
-        }
-
-        return yieldingToCar == otherCar && backOutYieldTimer > 0f;
-    }
 
     private bool TryGetBackOutBlockingCar(out NPC_CarController blockingCar)
     {
@@ -754,67 +690,6 @@ public class NPC_CarController : MonoBehaviour
         return false;
     }
 
-    private void TurnAfterBackOut()
-    {
-        if (exitRoute == null || exitRoute.Count == 0)
-        {
-            FinishDriving();
-            return;
-        }
-
-        SkipReachedExitWaypoints();
-
-        if (currentExitWaypointIndex >= exitRoute.Count)
-        {
-            FinishDriving();
-            return;
-        }
-
-        Waypoint nextWaypoint = exitRoute[currentExitWaypointIndex];
-
-        if (nextWaypoint == null)
-        {
-            currentExitWaypointIndex++;
-            return;
-        }
-
-        // 旋回前に、次の出口Waypointを予約する。
-        if (!TryReserveMoveToWaypoint(nextWaypoint))
-        {
-            StopCarCompletely();
-            return;
-        }
-
-        Vector3 targetPosition = nextWaypoint.transform.position;
-        targetPosition.y = transform.position.y;
-
-        Vector3 direction = targetPosition - transform.position;
-
-        if (direction.sqrMagnitude <= 0.001f)
-        {
-            currentExitWaypointIndex++;
-            return;
-        }
-
-        Quaternion targetRotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
-
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRotation,
-            rotateSpeed * Time.deltaTime
-        );
-
-        StopCarCompletely();
-
-        float angle = Quaternion.Angle(transform.rotation, targetRotation);
-
-        if (angle <= turnCompleteAngle)
-        {
-            transform.rotation = targetRotation;
-            moveState = NPC_CarMoveState.Leaving;
-        }
-    }
-
     private void FollowExitRoute()
     {
         if (exitRoute == null || exitRoute.Count == 0)
@@ -847,7 +722,7 @@ public class NPC_CarController : MonoBehaviour
         Vector3 targetPosition = targetWaypoint.transform.position;
         targetPosition.y = transform.position.y;
 
-        if (TryHandleTurnInPlaceBeforeMove(targetPosition))
+        if (TryHandleTurnInPlaceBeforeMove(targetWaypoint, targetPosition))
         {
             return;
         }
@@ -858,8 +733,16 @@ public class NPC_CarController : MonoBehaviour
             return;
         }
 
+        // 前方レイに加えて、発進直前だけ広めのBoxで安全確認する。
+        // スロットから斜めに出てくる車や、レイから外れた車を拾いやすくするため。
+        if (ShouldStopForStartMoveSafety())
+        {
+            StopCarCompletely();
+            return;
+        }
+
         MoveToTarget(targetPosition, moveSpeed);
-        RotateToTarget(targetPosition);
+        RotateToMoveDirection(targetWaypoint, targetPosition);
 
         float distance = Vector3.Distance(transform.position, targetPosition);
 
@@ -949,6 +832,71 @@ public class NPC_CarController : MonoBehaviour
         return true;
     }
 
+    private TrafficBlock GetTrafficBlockForWaypoint(Waypoint waypoint)
+    {
+        if (waypoint == null)
+        {
+            return null;
+        }
+
+        return waypoint.trafficBlock;
+    }
+
+    private bool TryReserveTrafficBlock(TrafficBlock trafficBlock)
+    {
+        if (!useWaypointReservation)
+        {
+            return true;
+        }
+
+        if (trafficBlock == null)
+        {
+            return true;
+        }
+
+        if (reservedTrafficBlock == trafficBlock || occupiedTrafficBlock == trafficBlock)
+        {
+            return true;
+        }
+
+        bool reserved = trafficBlock.TryReserve(this);
+
+        if (!reserved)
+        {
+            if (logWaypointReservationDebug)
+            {
+                Debug.Log($"{name}: TrafficBlockを予約できないため待機します。TrafficBlock={trafficBlock.name}", this);
+            }
+
+            return false;
+        }
+
+        if (reservedTrafficBlock != null &&
+            reservedTrafficBlock != trafficBlock &&
+            reservedTrafficBlock != occupiedTrafficBlock)
+        {
+            reservedTrafficBlock.Release(this);
+        }
+
+        reservedTrafficBlock = trafficBlock;
+
+        if (logWaypointReservationDebug)
+        {
+            Debug.Log($"{name}: TrafficBlockを予約しました。TrafficBlock={trafficBlock.name}", this);
+        }
+
+        return true;
+    }
+
+    private void ReleaseTrafficBlockReservation()
+    {
+        if (reservedTrafficBlock != null)
+        {
+            reservedTrafficBlock.Release(this);
+            reservedTrafficBlock = null;
+        }
+    }
+
     private RoadSection GetRoadSectionToWaypoint(Waypoint targetWaypoint)
     {
         if (occupiedWaypoint == null)
@@ -1022,26 +970,53 @@ public class NPC_CarController : MonoBehaviour
 
         if (targetWaypoint == null)
         {
-            SetReservationWait(null, null);
+            SetReservationWait(null, null, null);
             return false;
         }
 
+        TrafficBlock trafficBlock = GetTrafficBlockForWaypoint(targetWaypoint);
         RoadSection roadSection = GetRoadSectionToWaypoint(targetWaypoint);
 
-        if (!TryReserveRoadSection(roadSection))
+        // 1. 場所・危険エリアの予約
+        if (!TryReserveTrafficBlock(trafficBlock))
         {
-            SetReservationWait(targetWaypoint, roadSection);
+            SetReservationWait(targetWaypoint, roadSection, trafficBlock);
             return false;
         }
 
+        // 2. 道・区間の予約
+        if (!TryReserveRoadSection(roadSection))
+        {
+            SetReservationWait(targetWaypoint, roadSection, trafficBlock);
+
+            if (trafficBlock != null &&
+                reservedTrafficBlock == trafficBlock &&
+                occupiedTrafficBlock != trafficBlock)
+            {
+                trafficBlock.Release(this);
+                reservedTrafficBlock = null;
+            }
+
+            return false;
+        }
+
+        // 3. 次Waypointそのものの予約
         if (!TryReserveWaypoint(targetWaypoint))
         {
-            SetReservationWait(targetWaypoint, roadSection);
+            SetReservationWait(targetWaypoint, roadSection, trafficBlock);
 
             if (roadSection != null && reservedRoadSection == roadSection)
             {
                 roadSection.Release(this);
                 reservedRoadSection = null;
+            }
+
+            if (trafficBlock != null &&
+                reservedTrafficBlock == trafficBlock &&
+                occupiedTrafficBlock != trafficBlock)
+            {
+                trafficBlock.Release(this);
+                reservedTrafficBlock = null;
             }
 
             return false;
@@ -1078,18 +1053,20 @@ public class NPC_CarController : MonoBehaviour
         return nextRoadSection == reservedRoadSection;
     }
 
-    private void SetReservationWait(Waypoint waypoint, RoadSection roadSection)
+    private void SetReservationWait(Waypoint waypoint, RoadSection roadSection, TrafficBlock trafficBlock)
     {
         isStoppedByReservation = true;
         waitingWaypoint = waypoint;
         waitingRoadSection = roadSection;
+        waitingTrafficBlock = trafficBlock;
 
         if (logWaypointReservationDebug)
         {
             string waypointName = waypoint != null ? waypoint.name : "null";
             string roadSectionName = roadSection != null ? roadSection.name : "null";
+            string trafficBlockName = trafficBlock != null ? trafficBlock.name : "null";
 
-            Debug.Log($"{name}: 予約待機中。Waypoint={waypointName}, RoadSection={roadSectionName}", this);
+            Debug.Log($"{name}: 予約待機中。Waypoint={waypointName}, RoadSection={roadSectionName}, TrafficBlock={trafficBlockName}", this);
         }
     }
 
@@ -1098,6 +1075,7 @@ public class NPC_CarController : MonoBehaviour
         isStoppedByReservation = false;
         waitingWaypoint = null;
         waitingRoadSection = null;
+        waitingTrafficBlock = null;
     }
 
     public bool IsWaitingForRoadSection(RoadSection roadSection)
@@ -1108,6 +1086,26 @@ public class NPC_CarController : MonoBehaviour
         }
 
         return isStoppedByReservation && waitingRoadSection == roadSection;
+    }
+
+    public bool IsWaitingForTrafficBlock(TrafficBlock trafficBlock)
+    {
+        if (trafficBlock == null)
+        {
+            return false;
+        }
+
+        return isStoppedByReservation && waitingTrafficBlock == trafficBlock;
+    }
+
+    public bool IsWaitingForWaypoint(Waypoint waypoint)
+    {
+        if (waypoint == null)
+        {
+            return false;
+        }
+
+        return isStoppedByReservation && waitingWaypoint == waypoint;
     }
 
     public bool IsStoppedByReservation()
@@ -1122,6 +1120,8 @@ public class NPC_CarController : MonoBehaviour
             occupiedWaypoint = waypoint;
             reservedWaypoint = null;
             reservedRoadSection = null;
+            reservedTrafficBlock = null;
+            occupiedTrafficBlock = GetTrafficBlockForWaypoint(waypoint);
             return;
         }
 
@@ -1129,6 +1129,9 @@ public class NPC_CarController : MonoBehaviour
         {
             return;
         }
+
+        TrafficBlock previousTrafficBlock = occupiedTrafficBlock;
+        TrafficBlock newTrafficBlock = GetTrafficBlockForWaypoint(waypoint);
 
         if (occupiedWaypoint != null && occupiedWaypoint != waypoint)
         {
@@ -1143,6 +1146,23 @@ public class NPC_CarController : MonoBehaviour
             reservedWaypoint = null;
         }
 
+        if (newTrafficBlock != null)
+        {
+            newTrafficBlock.Enter(this);
+
+            if (reservedTrafficBlock == newTrafficBlock)
+            {
+                reservedTrafficBlock = null;
+            }
+        }
+
+        occupiedTrafficBlock = newTrafficBlock;
+
+        if (previousTrafficBlock != null && previousTrafficBlock != newTrafficBlock)
+        {
+            previousTrafficBlock.Release(this);
+        }
+
         // 次の区間も同じRoadSectionなら、まだ解放しない。
         if (!ShouldKeepCurrentRoadSection(waypoint, nextWaypoint))
         {
@@ -1151,13 +1171,15 @@ public class NPC_CarController : MonoBehaviour
 
         if (logWaypointReservationDebug)
         {
-            Debug.Log($"{name}: Waypointに到着しました。Waypoint={waypoint.name}", this);
+            string blockName = newTrafficBlock != null ? newTrafficBlock.name : "null";
+            Debug.Log($"{name}: Waypointに到着しました。Waypoint={waypoint.name}, TrafficBlock={blockName}", this);
         }
     }
 
     private void ReleaseWaypointReservation()
     {
         ReleaseRoadSectionReservation();
+        ReleaseTrafficBlockReservation();
 
         if (reservedWaypoint != null)
         {
@@ -1171,10 +1193,54 @@ public class NPC_CarController : MonoBehaviour
             occupiedWaypoint = null;
         }
 
+        if (occupiedTrafficBlock != null)
+        {
+            occupiedTrafficBlock.Release(this);
+            occupiedTrafficBlock = null;
+        }
+
         ClearReservationWait();
     }
 
-    private bool TryHandleTurnInPlaceBeforeMove(Vector3 targetPosition)
+    private bool TryGetStableMoveDirection(Waypoint targetWaypoint, Vector3 targetPosition, out Vector3 direction)
+    {
+        direction = Vector3.zero;
+
+        // まず「現在占有中のWaypoint → 次のWaypoint」の方向を使う。
+        // 車の現在位置から次Waypointを見るよりも、道路の線分方向に揃いやすい。
+        if (occupiedWaypoint != null && targetWaypoint != null && occupiedWaypoint != targetWaypoint)
+        {
+            direction = targetWaypoint.transform.position - occupiedWaypoint.transform.position;
+            direction.y = 0f;
+
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                direction.Normalize();
+                return true;
+            }
+        }
+
+        // occupiedWaypoint が使えない場合の保険。
+        direction = targetPosition - transform.position;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude <= 0.001f)
+        {
+            return false;
+        }
+
+        direction.Normalize();
+        return true;
+    }
+
+    private float GetHorizontalDistanceToTarget(Vector3 targetPosition)
+    {
+        Vector3 diff = targetPosition - transform.position;
+        diff.y = 0f;
+        return diff.magnitude;
+    }
+
+    private bool TryHandleTurnInPlaceBeforeMove(Waypoint targetWaypoint, Vector3 targetPosition)
     {
         if (!useTurnInPlaceAtWaypoint)
         {
@@ -1188,10 +1254,17 @@ public class NPC_CarController : MonoBehaviour
             return false;
         }
 
-        Vector3 directionToTarget = targetPosition - transform.position;
-        directionToTarget.y = 0f;
+        float targetDistance = GetHorizontalDistanceToTarget(targetPosition);
 
-        if (directionToTarget.sqrMagnitude <= 0.001f)
+        // 近すぎるWaypointを向こうとすると、背後や真横を目標にして余計に回りやすい。
+        // ただし、ここではWaypoint到着扱いにはしない。RS状態を壊さないため。
+        if (targetDistance <= turnInPlaceMinTargetDistance)
+        {
+            EndTurnInPlaceAtWaypoint();
+            return false;
+        }
+
+        if (!TryGetStableMoveDirection(targetWaypoint, targetPosition, out Vector3 directionToTarget))
         {
             EndTurnInPlaceAtWaypoint();
             return false;
@@ -1208,7 +1281,7 @@ public class NPC_CarController : MonoBehaviour
 
         float currentAngle = Vector3.Angle(
             forward.normalized,
-            directionToTarget.normalized
+            directionToTarget
         );
 
         // まだその場回転を始めていない場合、
@@ -1227,6 +1300,15 @@ public class NPC_CarController : MonoBehaviour
             isTurningInPlaceAtWaypoint = true;
             turnInPlacePauseTimer = turnInPlacePauseTime;
 
+            // 回転開始時に目標回転を1回だけ固定する。
+            // 毎フレーム作り直すと、Waypoint付近で目標方向がブレて余計に回る。
+            turnInPlaceTargetRotation = Quaternion.LookRotation(
+                directionToTarget,
+                Vector3.up
+            );
+
+            hasTurnInPlaceTargetRotation = true;
+
             if (logTurnInPlaceDebug)
             {
                 Debug.Log($"{name}: Waypointでその場回転を開始します。Angle={currentAngle:F1}", this);
@@ -1240,22 +1322,26 @@ public class NPC_CarController : MonoBehaviour
             return true;
         }
 
-        Quaternion targetRotation = Quaternion.LookRotation(
-            directionToTarget.normalized,
-            Vector3.up
-        );
+        if (!hasTurnInPlaceTargetRotation)
+        {
+            EndTurnInPlaceAtWaypoint();
+            return false;
+        }
 
-        transform.rotation = Quaternion.Slerp(
+        transform.rotation = Quaternion.RotateTowards(
             transform.rotation,
-            targetRotation,
-            rotateSpeed * Time.deltaTime
+            turnInPlaceTargetRotation,
+            turnInPlaceRotateSpeed * Time.deltaTime
         );
 
-        float remainingAngle = Quaternion.Angle(transform.rotation, targetRotation);
+        float remainingAngle = Quaternion.Angle(
+            transform.rotation,
+            turnInPlaceTargetRotation
+        );
 
         if (remainingAngle <= turnInPlaceCompleteAngle)
         {
-            transform.rotation = targetRotation;
+            transform.rotation = turnInPlaceTargetRotation;
             EndTurnInPlaceAtWaypoint();
 
             if (logTurnInPlaceDebug)
@@ -1275,6 +1361,8 @@ public class NPC_CarController : MonoBehaviour
     {
         isTurningInPlaceAtWaypoint = false;
         turnInPlacePauseTimer = 0f;
+        hasTurnInPlaceTargetRotation = false;
+        turnInPlaceTargetRotation = Quaternion.identity;
     }
 
     private bool ShouldHoldStopForFrontCar()
@@ -1298,24 +1386,15 @@ public class NPC_CarController : MonoBehaviour
 
     private bool ShouldStopForFrontCar()
     {
-        if (frontRayIgnoreTimer > 0f)
-        {
-            isStoppedByFrontCar = false;
-            lastDetectedFrontCarController = null;
-            return false;
-        }
-
         if (!useFrontVehicleDetection)
         {
             isStoppedByFrontCar = false;
-            lastDetectedFrontCarController = null;
             return false;
         }
 
         if (frontSensor == null)
         {
             isStoppedByFrontCar = false;
-            lastDetectedFrontCarController = null;
             return false;
         }
 
@@ -1357,19 +1436,11 @@ public class NPC_CarController : MonoBehaviour
                 {
                     continue;
                 }
-
-                lastDetectedFrontCarController = hitCarController;
-
-                if (TryResolveFrontConflict(hitCarController))
-                {
-                    isStoppedByFrontCar = false;
-                    return false;
-                }
             }
 
             if (logFrontVehicleDetection)
             {
-                Debug.Log($"{name}: 前方車両を検知しました → {hitCar.carId}");
+                Debug.Log($"{name}: 前方車両を検知しました → {hitCar.carId}", this);
             }
 
             isStoppedByFrontCar = true;
@@ -1377,7 +1448,58 @@ public class NPC_CarController : MonoBehaviour
         }
 
         isStoppedByFrontCar = false;
-        lastDetectedFrontCarController = null;
+        return false;
+    }
+
+    private bool ShouldStopForStartMoveSafety()
+    {
+        if (!useStartMoveSafetyCheck)
+        {
+            return false;
+        }
+
+        Vector3 checkCenter = transform.TransformPoint(startMoveCheckCenterOffset);
+
+        Collider[] hits = Physics.OverlapBox(
+            checkCenter,
+            startMoveCheckBoxSize * 0.5f,
+            transform.rotation,
+            carLayerMask
+        );
+
+        foreach (Collider hit in hits)
+        {
+            Car hitCar = hit.GetComponentInParent<Car>();
+
+            if (hitCar == null)
+            {
+                continue;
+            }
+
+            if (hitCar == car)
+            {
+                continue;
+            }
+
+            NPC_CarController hitController = hit.GetComponentInParent<NPC_CarController>();
+
+            if (hitController != null)
+            {
+                if (ShouldIgnoreCarForFrontDetection(hitController))
+                {
+                    continue;
+                }
+            }
+
+            if (logStartMoveSafetyCheck)
+            {
+                Debug.Log($"{name}: 発進前確認で車を検知したため停止します。Other={hitCar.carId}", this);
+            }
+
+            isStoppedByFrontCar = true;
+            return true;
+        }
+
         return false;
     }
 
@@ -1394,9 +1516,49 @@ public class NPC_CarController : MonoBehaviour
             return true;
         }
 
-        if (otherCarController.IsYieldingBackOutTo(this))
+
+        // 自分が予約済みのWaypointに入れず待っている車は前方検知から外す。
+        // RoadSection未設定の通路では、この判定が特に重要。
+        // 例: 自分が●2を予約済み、相手が●2を予約できず待機している場合。
+        if (reservedWaypoint != null)
         {
-            return true;
+            if (otherCarController.IsWaitingForWaypoint(reservedWaypoint))
+            {
+                if (logFrontVehicleDetection)
+                {
+                    Debug.Log($"{name}: 同じWaypoint待機中の車を前方検知から除外します。Other={otherCarController.name}, Waypoint={reservedWaypoint.name}", this);
+                }
+
+                return true;
+            }
+        }
+
+        // 自分がTrafficBlockを予約・占有している場合、
+        // そのTrafficBlockに入れず待っている車は前方検知から外す。
+        if (reservedTrafficBlock != null)
+        {
+            if (otherCarController.IsWaitingForTrafficBlock(reservedTrafficBlock))
+            {
+                if (logFrontVehicleDetection)
+                {
+                    Debug.Log($"{name}: 同じTrafficBlock待機中の車を前方検知から除外します。Other={otherCarController.name}, TrafficBlock={reservedTrafficBlock.name}", this);
+                }
+
+                return true;
+            }
+        }
+
+        if (occupiedTrafficBlock != null)
+        {
+            if (otherCarController.IsWaitingForTrafficBlock(occupiedTrafficBlock))
+            {
+                if (logFrontVehicleDetection)
+                {
+                    Debug.Log($"{name}: 自分が占有中のTrafficBlock待機車を前方検知から除外します。Other={otherCarController.name}, TrafficBlock={occupiedTrafficBlock.name}", this);
+                }
+
+                return true;
+            }
         }
 
         // 自分がRoadSectionを予約して通過中の場合、
@@ -1429,6 +1591,7 @@ public class NPC_CarController : MonoBehaviour
     private void RotateToTarget(Vector3 targetPosition)
     {
         Vector3 direction = targetPosition - transform.position;
+        direction.y = 0f;
 
         if (direction.sqrMagnitude <= 0.001f)
         {
@@ -1441,6 +1604,27 @@ public class NPC_CarController : MonoBehaviour
             transform.rotation,
             targetRotation,
             rotateSpeed * Time.deltaTime
+        );
+    }
+
+    private void RotateToMoveDirection(Waypoint targetWaypoint, Vector3 targetPosition)
+    {
+        // 通常走行中も、現在位置からWaypointを見るのではなく、
+        // occupiedWaypoint → targetWaypoint の道路方向に合わせる。
+        if (!TryGetStableMoveDirection(targetWaypoint, targetPosition, out Vector3 direction))
+        {
+            return;
+        }
+
+        Quaternion targetRotation = Quaternion.LookRotation(
+            direction,
+            Vector3.up
+        );
+
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
+            targetRotation,
+            turnInPlaceRotateSpeed * Time.deltaTime
         );
     }
 
@@ -1499,137 +1683,50 @@ public class NPC_CarController : MonoBehaviour
         }
     }
 
-    private bool TryResolveFrontConflict(NPC_CarController otherCar)
-    {
-        if (!useTemporaryFrontRayIgnore)
-        {
-            return false;
-        }
-
-        if (otherCar == null)
-        {
-            return false;
-        }
-
-        if (otherCar == this)
-        {
-            return false;
-        }
-
-        if (!allowCrossDirectionDeadlockResolve)
-        {
-            return false;
-        }
-
-        if (!IsCloseEnoughForDeadlock(otherCar))
-        {
-            return false;
-        }
-
-        if (!IsValidDeadlockTarget(otherCar))
-        {
-            return false;
-        }
-
-        bool otherIsAlsoStopped =
-            otherCar.isStoppedByFrontCar ||
-            otherCar.lastDetectedFrontCarController == this ||
-            otherCar.IsStoppedByReservation();
-
-        if (!otherIsAlsoStopped)
-        {
-            return false;
-        }
-
-        // 両方が同時に無効化すると危険なので、
-        // InstanceIDで必ず片方だけがレイを一時無効化する。
-        if (!ShouldThisCarIgnoreFrontRay(otherCar))
-        {
-            return false;
-        }
-
-        frontRayIgnoreTimer = frontRayIgnoreDuration;
-        isStoppedByFrontCar = false;
-
-        if (logDeadlockResolve)
-        {
-            Debug.Log(
-                $"{name}: 鉢合わせ停止を解消するため、一時的に前方レイを無効化します。Opponent={otherCar.name}",
-                this
-            );
-        }
-
-        return true;
-    }
-
-    private bool IsCloseEnoughForDeadlock(NPC_CarController otherCar)
-    {
-        if (otherCar == null)
-        {
-            return false;
-        }
-
-        float distance = Vector3.Distance(transform.position, otherCar.transform.position);
-
-        return distance <= deadlockCheckDistance;
-    }
-
-    private bool IsValidDeadlockTarget(NPC_CarController otherCar)
-    {
-        if (otherCar == null)
-        {
-            return false;
-        }
-
-        if (otherCar.moveState == NPC_CarMoveState.Parked ||
-            otherCar.moveState == NPC_CarMoveState.Finished)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    private bool ShouldThisCarIgnoreFrontRay(NPC_CarController otherCar)
-    {
-        if (otherCar == null)
-        {
-            return false;
-        }
-
-        // InstanceIDが小さい方だけが一時的に進む。
-        // これにより、両方が同時にレイ無効化して突っ込むのを防ぐ。
-        return GetInstanceID() < otherCar.GetInstanceID();
-    }
 
     private void OnDrawGizmosSelected()
     {
-        if (!drawBackOutCheckGizmo)
+        if (drawBackOutCheckGizmo &&
+            targetParkingSlot != null &&
+            targetParkingSlot.accessWaypoint != null)
         {
-            return;
+            Transform checkTransform = targetParkingSlot.accessWaypoint.transform;
+
+            Gizmos.color = Color.magenta;
+
+            Matrix4x4 oldMatrix = Gizmos.matrix;
+
+            Vector3 checkCenter = checkTransform.TransformPoint(backOutCheckCenterOffset);
+
+            Gizmos.matrix = Matrix4x4.TRS(
+                checkCenter,
+                checkTransform.rotation,
+                backOutCheckBoxSize
+            );
+
+            Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+
+            Gizmos.matrix = oldMatrix;
         }
 
-        if (targetParkingSlot == null || targetParkingSlot.accessWaypoint == null)
+        if (drawStartMoveCheckGizmo)
         {
-            return;
+            Gizmos.color = Color.yellow;
+
+            Matrix4x4 oldMatrix = Gizmos.matrix;
+
+            Vector3 checkCenter = transform.TransformPoint(startMoveCheckCenterOffset);
+
+            Gizmos.matrix = Matrix4x4.TRS(
+                checkCenter,
+                transform.rotation,
+                startMoveCheckBoxSize
+            );
+
+            Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+
+            Gizmos.matrix = oldMatrix;
         }
-
-        Transform checkTransform = targetParkingSlot.accessWaypoint.transform;
-
-        Gizmos.color = Color.magenta;
-
-        Matrix4x4 oldMatrix = Gizmos.matrix;
-
-        Vector3 checkCenter = checkTransform.TransformPoint(backOutCheckCenterOffset);
-
-        Gizmos.matrix = Matrix4x4.TRS(
-            checkCenter,
-            checkTransform.rotation,
-            backOutCheckBoxSize
-        );
-
-        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
-
-        Gizmos.matrix = oldMatrix;
     }
 }
+

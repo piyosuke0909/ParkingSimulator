@@ -125,21 +125,18 @@ MonoBehaviour:
   arriveDistance: 0.8
   parkingArriveDistance: 0.15
   backOutArriveDistance: 0.25
-  turnCompleteAngle: 3
   parkWaitTime: 5
   useBackOutSafetyCheck: 1
   backOutCheckLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  backOutCheckBoxSize: {x: 10, y: 4, z: 5}
+  backOutCheckBoxSize: {x: 8, y: 4, z: 5}
   backOutRetryInterval: 0.5
   checkWhileBackingOut: 1
   drawBackOutCheckGizmo: 1
   logBackOutSafetyDebug: 0
   ignoreParkedCarsInBackOutCheck: 1
   backOutCheckCenterOffset: {x: 0, y: 0, z: 0}
-  useBackOutYieldToPassingCar: 1
-  backOutYieldMemoryTime: 2
   useFrontVehicleDetection: 1
   frontSensor: {fileID: 5533501637451711514}
   carLayerMask:
@@ -150,16 +147,18 @@ MonoBehaviour:
   frontStopHoldTime: 0.5
   drawFrontCheckDebug: 1
   logFrontVehicleDetection: 0
+  useStartMoveSafetyCheck: 1
+  startMoveCheckBoxSize: {x: 7, y: 4, z: 9}
+  startMoveCheckCenterOffset: {x: 0, y: 1, z: 4}
+  drawStartMoveCheckGizmo: 1
+  logStartMoveSafetyCheck: 0
   useTurnInPlaceAtWaypoint: 1
-  turnInPlaceStartAngle: 30
-  turnInPlaceCompleteAngle: 3
+  turnInPlaceStartAngle: 45
+  turnInPlaceCompleteAngle: 5
   turnInPlacePauseTime: 0.15
+  turnInPlaceRotateSpeed: 360
+  turnInPlaceMinTargetDistance: 1
   logTurnInPlaceDebug: 0
-  useTemporaryFrontRayIgnore: 1
-  frontRayIgnoreDuration: 0.8
-  deadlockCheckDistance: 5
-  allowCrossDirectionDeadlockResolve: 1
-  logDeadlockResolve: 1
   useWaypointReservation: 1
   logWaypointReservationDebug: 0
   occupyFirstWaypointOnRouteStart: 1
