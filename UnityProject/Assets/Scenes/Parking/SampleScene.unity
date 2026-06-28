@@ -22276,7 +22276,12 @@ MonoBehaviour:
   checkInterval: 0.2
   requiredDetectionTime: 1.5
   lostDetectionTime: 1
+  useRaycastDetection: 1
+  rayOriginOffset: {x: 0, y: 0, z: 0}
+  useOverlapBoxDetection: 1
+  overlapBoxSize: {x: 4.5, y: 3, z: 7}
   drawDebugRay: 1
+  drawDebugBox: 1
   logStateChange: 0
 --- !u!1001 &669040949
 PrefabInstance:
@@ -26704,7 +26709,12 @@ MonoBehaviour:
   checkInterval: 0.2
   requiredDetectionTime: 1.5
   lostDetectionTime: 1
+  useRaycastDetection: 1
+  rayOriginOffset: {x: 0, y: 0, z: 0}
+  useOverlapBoxDetection: 1
+  overlapBoxSize: {x: 4.5, y: 3, z: 7}
   drawDebugRay: 1
+  drawDebugBox: 1
   logStateChange: 0
 --- !u!21 &816394106
 Material:
@@ -49557,7 +49567,12 @@ MonoBehaviour:
   checkInterval: 0.2
   requiredDetectionTime: 1.5
   lostDetectionTime: 1
+  useRaycastDetection: 1
+  rayOriginOffset: {x: 0, y: 0, z: 0}
+  useOverlapBoxDetection: 1
+  overlapBoxSize: {x: 4.5, y: 3, z: 7}
   drawDebugRay: 1
+  drawDebugBox: 1
   logStateChange: 0
 --- !u!21 &1573364030
 Material:
@@ -53063,7 +53078,12 @@ MonoBehaviour:
   checkInterval: 0.2
   requiredDetectionTime: 1.5
   lostDetectionTime: 1
+  useRaycastDetection: 1
+  rayOriginOffset: {x: 0, y: 0, z: 0}
+  useOverlapBoxDetection: 1
+  overlapBoxSize: {x: 4.5, y: 3, z: 7}
   drawDebugRay: 1
+  drawDebugBox: 1
   logStateChange: 0
 --- !u!21 &1682389311
 Material:
@@ -61726,7 +61746,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 14edae0b635137143b810fe038b03036, type: 2}
+  - {fileID: 2100000, guid: 1a3b69ddacdaf4742b089459a1f75803, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -62749,7 +62769,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 14edae0b635137143b810fe038b03036, type: 2}
+  - {fileID: 2100000, guid: 1a3b69ddacdaf4742b089459a1f75803, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

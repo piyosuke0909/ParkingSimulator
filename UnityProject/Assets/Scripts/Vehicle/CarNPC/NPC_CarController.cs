@@ -404,6 +404,7 @@ public class NPC_CarController : MonoBehaviour
     {
         if (targetParkingSlot != null)
         {
+            // TryOccupyは予約・所有者情報だけを更新する。Occupied/Emptyの物理判定はCameraParkingSensorが行う。
             bool occupied = targetParkingSlot.TryOccupy(this);
 
             if (!occupied)
@@ -453,6 +454,13 @@ public class NPC_CarController : MonoBehaviour
     private void StartLeaving()
     {
         EndTurnInPlaceAtWaypoint();
+
+        if (targetParkingSlot != null)
+        {
+            // 空き判定はCameraParkingSensorに任せる。
+            // ここでは「この車が出庫中で、まだ他の車は予約できない」ことだけを記録する。
+            targetParkingSlot.SetLeaving(this);
+        }
 
         if (car != null)
         {
@@ -584,6 +592,8 @@ public class NPC_CarController : MonoBehaviour
             ArriveAtWaypoint(backOutWaypoint, nextWaypoint);
 
             ParkingSlot releasedSlot = targetParkingSlot;
+            // TryReleaseAfterExitは予約・所有者情報だけを解放する。Empty判定はCameraParkingSensorが行う。
+            // TryReleaseAfterExitは予約・所有者情報だけを解放する。Empty判定はCameraParkingSensorが行う。
             bool released = releasedSlot.TryReleaseAfterExit(this);
 
             if (!released)

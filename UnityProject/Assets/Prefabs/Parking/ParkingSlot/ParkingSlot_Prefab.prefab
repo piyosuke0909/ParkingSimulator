@@ -567,8 +567,18 @@ MonoBehaviour:
   slotId: A-01
   areaId: A
   state: 0
+  sensorOccupied: 0
+  isLeaving: 0
   reservedBy: {fileID: 0}
   occupiedBy: {fileID: 0}
   parkingPoint: {fileID: 2763021575079234024}
   detectionPoint: {fileID: 4707466597966865710}
   accessWaypoint: {fileID: 0}
+  slotBaseRenderer: {fileID: 5062238131687248652}
+  hideSlotBaseWhenEmpty: 0
+  emptyColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+  occupiedColor: {r: 0.64705884, g: 0, b: 0, a: 1}
+  reservedColor: {r: 0.81886786, g: 0.75283015, b: 0, a: 1}
+  leavingColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+  disabledColor: {r: 0, g: 0, b: 0.64705884, a: 1}
+  logStateChange: 0

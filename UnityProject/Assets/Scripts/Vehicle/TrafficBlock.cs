@@ -130,6 +130,7 @@ public class TrafficBlock : MonoBehaviour
         }
         else if (reservedBy != null)
         {
+            // —\–ñ’†B‰©F‚Í‘¼‚ÌGizmo‚Æ”í‚è‚â‚·‚¢‚½‚ßÂ‚É‚µ‚Ä‚¢‚Ü‚·B
             Gizmos.color = new Color(1f, 0.5f, 0f);
         }
         else

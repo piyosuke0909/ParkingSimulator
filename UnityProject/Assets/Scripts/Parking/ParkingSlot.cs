@@ -5,6 +5,7 @@ public enum ParkingSlotState
     Empty,
     Occupied,
     Reserved,
+    Leaving,
     Disabled
 }
 
@@ -17,6 +18,12 @@ public class ParkingSlot : MonoBehaviour
     [Header("State")]
     public ParkingSlotState state = ParkingSlotState.Empty;
 
+    [Tooltip("CameraParkingSensorが判定した、物理的に車がいるかどうかです。")]
+    public bool sensorOccupied;
+
+    [Tooltip("出庫中かどうかです。出庫中はセンサー上Emptyでも予約不可にします。")]
+    public bool isLeaving;
+
     [Header("Runtime Owner")]
     public NPC_CarController reservedBy;
     public NPC_CarController occupiedBy;
@@ -28,9 +35,32 @@ public class ParkingSlot : MonoBehaviour
     [Header("Waypoint")]
     public Waypoint accessWaypoint;
 
+    [Header("Visual")]
+    public Renderer slotBaseRenderer;
+    public bool hideSlotBaseWhenEmpty = false;
+
+    public Color emptyColor = Color.white;
+    public Color occupiedColor = Color.red;
+    public Color reservedColor = Color.yellow;
+
+    [Tooltip("出庫中の見た目です。空きに見せたい場合は Empty Color と同じ白にしてください。")]
+    public Color leavingColor = Color.white;
+
+    public Color disabledColor = Color.blue;
+
+    [Header("Debug")]
+    public bool logStateChange = false;
+
+    private MaterialPropertyBlock propertyBlock;
+
+    private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+    private static readonly int ColorId = Shader.PropertyToID("_Color");
+
     private void Awake()
     {
         FindReferences();
+        RefreshStateFromSensorAndReservation();
+        UpdateVisual();
     }
 
 #if UNITY_EDITOR
@@ -42,6 +72,16 @@ public class ParkingSlot : MonoBehaviour
 
     private void FindReferences()
     {
+        if (slotBaseRenderer == null)
+        {
+            Transform slotBase = transform.Find("Slot_Base");
+
+            if (slotBase != null)
+            {
+                slotBaseRenderer = slotBase.GetComponent<Renderer>();
+            }
+        }
+
         if (parkingPoint == null)
         {
             Transform point = transform.Find("ParkingPoint");
@@ -61,13 +101,30 @@ public class ParkingSlot : MonoBehaviour
                 detectionPoint = point;
             }
         }
+
+        if (propertyBlock == null)
+        {
+            propertyBlock = new MaterialPropertyBlock();
+        }
     }
 
     public bool IsAvailable()
     {
-        return state == ParkingSlotState.Empty &&
+        return state != ParkingSlotState.Disabled &&
+               !sensorOccupied &&
+               !isLeaving &&
                reservedBy == null &&
                occupiedBy == null;
+    }
+
+    public bool IsPhysicallyOccupied()
+    {
+        return sensorOccupied;
+    }
+
+    public bool HasReservationOrOwner()
+    {
+        return reservedBy != null || occupiedBy != null || isLeaving;
     }
 
     public bool IsReservedBy(NPC_CarController carController)
@@ -104,7 +161,9 @@ public class ParkingSlot : MonoBehaviour
 
         reservedBy = carController;
         occupiedBy = null;
-        state = ParkingSlotState.Reserved;
+        isLeaving = false;
+
+        RefreshStateFromSensorAndReservation();
 
         return true;
     }
@@ -116,7 +175,7 @@ public class ParkingSlot : MonoBehaviour
             return false;
         }
 
-        if (state != ParkingSlotState.Reserved)
+        if (state == ParkingSlotState.Disabled)
         {
             return false;
         }
@@ -126,8 +185,16 @@ public class ParkingSlot : MonoBehaviour
             return false;
         }
 
+        if (occupiedBy != null && occupiedBy != carController)
+        {
+            return false;
+        }
+
         reservedBy = carController;
         occupiedBy = null;
+        isLeaving = false;
+
+        RefreshStateFromSensorAndReservation();
 
         return true;
     }
@@ -139,41 +206,55 @@ public class ParkingSlot : MonoBehaviour
             return false;
         }
 
-        if (state == ParkingSlotState.Occupied)
-        {
-            if (occupiedBy == carController)
-            {
-                return true;
-            }
-
-            // CameraParkingSensorなどが先にOccupiedへ変えた場合でも、
-            // 予約者がこの車なら駐車完了を許可する。
-            if (occupiedBy == null && reservedBy == carController)
-            {
-                reservedBy = null;
-                occupiedBy = carController;
-                state = ParkingSlotState.Occupied;
-                return true;
-            }
-
-            return false;
-        }
-
-        if (state != ParkingSlotState.Reserved)
+        if (state == ParkingSlotState.Disabled)
         {
             return false;
         }
 
-        if (reservedBy != carController)
+        if (occupiedBy != null && occupiedBy != carController)
         {
             return false;
+        }
+
+        if (reservedBy != null && reservedBy != carController)
+        {
+            return false;
+        }
+
+        // CameraParkingSensorに空き判定を統一するため、
+        // ここではOccupied/Emptyを直接決めない。
+        // このスロットの使用者だけを登録する。
+        reservedBy = null;
+        occupiedBy = carController;
+        isLeaving = false;
+
+        RefreshStateFromSensorAndReservation();
+
+        return true;
+    }
+
+    public void SetLeaving(NPC_CarController carController)
+    {
+        if (carController == null)
+        {
+            return;
+        }
+
+        if (occupiedBy != null && occupiedBy != carController)
+        {
+            return;
+        }
+
+        if (reservedBy != null && reservedBy != carController)
+        {
+            return;
         }
 
         reservedBy = null;
         occupiedBy = carController;
-        state = ParkingSlotState.Occupied;
+        isLeaving = true;
 
-        return true;
+        RefreshStateFromSensorAndReservation();
     }
 
     public bool TryRelease(NPC_CarController carController)
@@ -195,7 +276,9 @@ public class ParkingSlot : MonoBehaviour
 
         reservedBy = null;
         occupiedBy = null;
-        state = ParkingSlotState.Empty;
+        isLeaving = false;
+
+        RefreshStateFromSensorAndReservation();
 
         return true;
     }
@@ -211,16 +294,17 @@ public class ParkingSlot : MonoBehaviour
         {
             reservedBy = null;
             occupiedBy = null;
-            state = ParkingSlotState.Empty;
+            isLeaving = false;
+
+            // Empty/OccupiedはCameraParkingSensorのsensorOccupiedに従う。
+            RefreshStateFromSensorAndReservation();
             return true;
         }
 
-        // 所有者情報がすでに消えているが、状態だけがOccupiedに残っている場合の保険。
-        if (reservedBy == null &&
-            occupiedBy == null &&
-            state == ParkingSlotState.Occupied)
+        if (reservedBy == null && occupiedBy == null)
         {
-            state = ParkingSlotState.Empty;
+            isLeaving = false;
+            RefreshStateFromSensorAndReservation();
             return true;
         }
 
@@ -231,41 +315,109 @@ public class ParkingSlot : MonoBehaviour
     {
         reservedBy = null;
         occupiedBy = null;
-        state = ParkingSlotState.Empty;
+        isLeaving = false;
+
+        RefreshStateFromSensorAndReservation();
     }
 
-    public void SetEmpty()
+    // CameraParkingSensorから呼ぶ想定です。
+    public void SetSensorOccupied(bool occupied)
     {
-        // 予約中・使用中のSlotは、外部センサーなどから勝手にEmptyへ戻さない。
-        if (reservedBy != null || occupiedBy != null)
+        if (sensorOccupied == occupied)
         {
             return;
         }
 
-        state = ParkingSlotState.Empty;
+        sensorOccupied = occupied;
+        RefreshStateFromSensorAndReservation();
+
+        if (logStateChange)
+        {
+            Debug.Log($"{name}: sensorOccupied = {sensorOccupied}, state = {state}", this);
+        }
     }
 
+    // 互換用。CameraParkingSensorなど外部センサーからのOccupied判定。
     public void SetOccupied()
     {
-        // 予約者・使用者情報は消さない。
-        state = ParkingSlotState.Occupied;
+        SetSensorOccupied(true);
+    }
+
+    // 互換用。CameraParkingSensorなど外部センサーからのEmpty判定。
+    public void SetEmpty()
+    {
+        SetSensorOccupied(false);
     }
 
     public void SetReserved()
     {
-        if (occupiedBy != null)
+        if (state == ParkingSlotState.Disabled)
         {
             return;
         }
 
-        state = ParkingSlotState.Reserved;
+        RefreshStateFromSensorAndReservation();
     }
 
     public void SetDisabled()
     {
         reservedBy = null;
         occupiedBy = null;
-        state = ParkingSlotState.Disabled;
+        isLeaving = false;
+        sensorOccupied = false;
+
+        SetState(ParkingSlotState.Disabled);
+    }
+
+    public void SetEnabledAsEmpty()
+    {
+        reservedBy = null;
+        occupiedBy = null;
+        isLeaving = false;
+        sensorOccupied = false;
+
+        SetState(ParkingSlotState.Empty);
+    }
+
+    public void RefreshStateFromSensorAndReservation()
+    {
+        if (state == ParkingSlotState.Disabled)
+        {
+            UpdateVisual();
+            return;
+        }
+
+        if (sensorOccupied)
+        {
+            SetState(ParkingSlotState.Occupied);
+            return;
+        }
+
+        if (isLeaving)
+        {
+            SetState(ParkingSlotState.Leaving);
+            return;
+        }
+
+        if (reservedBy != null || occupiedBy != null)
+        {
+            SetState(ParkingSlotState.Reserved);
+            return;
+        }
+
+        SetState(ParkingSlotState.Empty);
+    }
+
+    public void SetState(ParkingSlotState newState)
+    {
+        ParkingSlotState oldState = state;
+        state = newState;
+        UpdateVisual();
+
+        if (logStateChange && oldState != newState)
+        {
+            Debug.Log($"{name}: state {oldState} -> {newState}", this);
+        }
     }
 
     public bool HasCarInSlot(LayerMask carLayerMask, Vector3 checkBoxSize)
@@ -297,5 +449,67 @@ public class ParkingSlot : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void UpdateVisual()
+    {
+        FindReferences();
+
+        if (slotBaseRenderer == null)
+        {
+            return;
+        }
+
+        if (hideSlotBaseWhenEmpty && state == ParkingSlotState.Empty)
+        {
+            slotBaseRenderer.enabled = false;
+            return;
+        }
+
+        slotBaseRenderer.enabled = true;
+
+        Color targetColor = GetStateColor();
+
+        slotBaseRenderer.GetPropertyBlock(propertyBlock);
+        propertyBlock.SetColor(BaseColorId, targetColor);
+        propertyBlock.SetColor(ColorId, targetColor);
+        slotBaseRenderer.SetPropertyBlock(propertyBlock);
+    }
+
+    private Color GetStateColor()
+    {
+        switch (state)
+        {
+            case ParkingSlotState.Empty:
+                return emptyColor;
+
+            case ParkingSlotState.Occupied:
+                return occupiedColor;
+
+            case ParkingSlotState.Reserved:
+                return reservedColor;
+
+            case ParkingSlotState.Leaving:
+                return leavingColor;
+
+            case ParkingSlotState.Disabled:
+                return disabledColor;
+
+            default:
+                return emptyColor;
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Transform checkTransform = detectionPoint != null ? detectionPoint : parkingPoint;
+
+        if (checkTransform == null)
+        {
+            return;
+        }
+
+        Gizmos.color = new Color(1f, 0.5f, 0f, 0.75f);
+        Gizmos.DrawWireCube(checkTransform.position, new Vector3(10f, 4f, 8f));
     }
 }
