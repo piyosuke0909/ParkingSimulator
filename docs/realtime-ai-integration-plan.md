@@ -668,21 +668,32 @@ Unity WebGL -> Backend -> WebSocket/SSE -> admin frontend
 
 最短で動く順番:
 
-1. backend を作る。
-2. `POST /api/unity/snapshot` の最小受信を作る。
-3. Unity WebGL から最小 snapshot exporter で疎通確認する。
-4. snapshot に `sourceId`, `scene`, `sequenceNumber`, `timestamp` を入れる。
-5. backend は古い `sequenceNumber` の snapshot を破棄する。
-6. 管理者画面へ backend の固定 JSON を表示する。
-7. Unity WebGL iframe を管理者画面に埋め込む。
-8. Unity exporter で実データを送る。
-9. backend に area master を持たせる。
-10. Unity slot 座標から area polygon と center を自動生成する。
-11. 管理者画面の駐車場マップを実データ化する。
-12. ユーザー画面の推薦エリアを実データ化する。
-13. エリア予約、5分 TTL、再案内 cooldown 30秒を入れる。
-14. Gemini は管理者の手動ボタンから開始する。
-15. 自動生成は最後に入れる。
+- [x] backend を作る。
+- [x] `POST /api/unity/snapshot` の最小受信を作る。
+- [x] Unity WebGL から最小 snapshot exporter で疎通確認する。
+- [x] snapshot に `sourceId`, `scene`, `sequenceNumber`, `timestamp` を入れる。
+- [x] backend は古い `sequenceNumber` の snapshot を破棄する。
+- [x] 管理者画面へ backend の固定 JSON を表示する。
+- [x] Unity WebGL iframe を管理者画面に埋め込む。
+- [x] Unity exporter で実データを送る。
+- [x] backend に area master を持たせる。
+- [x] Unity slot 座標から area polygon と center を自動生成する。
+- [x] 管理者画面の駐車場マップを実データ化する。
+- [x] ユーザー画面の推薦エリアを実データ化する。
+- [x] エリア予約、5分 TTL、再案内 cooldown 30秒を入れる。
+- [x] Gemini は管理者の手動ボタンから開始する。
+- [ ] 自動生成は最後に入れる。
+
+### 実装メモ 2026-06-29
+
+- backend / frontend / Unity exporter のコード追加まで完了。
+- backend への手動 `POST /api/unity/snapshot` は疎通確認済み。
+- Unity WebGL からの実疎通は、Unity Editor 再コンパイル後に `UnityStateExporter` をシーンへ追加して確認する。
+- Unity WebGL build 成果物は `WebApp/frontend/public/unity-build/` に置く。Git には生成物を含めない。
+- 2026-06-29 追記: Unity `2022.3.62f2` に WebGL Build Support が入っていることを確認し、`C:\tmp\SmartParkingUnity2022Build_20260629144443` にコピーした project から正式 WebGL build を実行した。出力先は `WebApp/frontend/public/unity-build/`。元の `UnityProject` は Unity Editor で開かれていたため、同一 project の batchmode 起動は避けた。
+- 2026-06-29 追記: 管理者画面で `Unity接続中` を確認済み。backend は `snapshotVersion=173`, `stale=false`, `source=unity-webgl-admin-01` の状態を返しており、Unity WebGL から backend への snapshot 送信は成立している。
+- 2026-06-29 追記: 管理者画面とユーザー画面に `snapshotVersion`, 最終受信時刻、総台数、空き合計、全体混雑率を表示し、Unity実データが UI 判断に使われていることを確認しやすくした。
+- 2026-06-29 追記: エリア polygon は MVP では画面上の見た目を優先し、A=左上、B=左下、C=右上、D=右下の固定象限配置に補正した。slot 数や混雑率は Unity snapshot 由来のまま使う。
 
 ## 追加 MVP 決定
 
