@@ -48,10 +48,40 @@ Desktop.ini
 
 # 個人設定ファイル
 .codex/
+.agents/
 *.tmp
 *.bak
 *.swp
+*.log
+.logs/
+.dev-*.pid
+__pycache__/
 *~.nib
+.env
+.env.*
+!.env.example
+node_modules/
+.next/
+WebApp/frontend/node_modules/
+WebApp/frontend/.next/
+WebApp/frontend/out/
+WebApp/backend/__pycache__/
+WebApp/backend/*.log
+WebApp/frontend/*.log
+
+# Local environment files
+WebApp/backend/.env
+WebApp/frontend/.env
+
+# Unity / IDE generated files
+UnityProject/*.csproj
+UnityProject/*.sln
+UnityProject/.vs/
+UnityProject/WebGLBuild.log
+UnityProject/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
+
+# MVP/team demo: commit the Unity WebGL build so teammates can run the admin page after clone.
+# If the build grows too large, move these files to Git LFS or GitHub Releases.
 
 # Asset Store/サードパーティ大容量アセットは各自ダウンロード
 # （必要に応じてコメントアウトを解除）

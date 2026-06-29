@@ -1341,18 +1341,27 @@ timeout したら fallback report を返す。
 
 ## 実装順の更新
 
-1. backend に状態保存 API を作る。
-2. 管理者画面へ固定 JSON を返して表示する。
-3. Unity WebGL build を管理者画面 iframe に表示する。
-4. Unity から backend へ snapshot を送る。
-5. backend で A/B/C/D の混雑率を計算する。
-6. ユーザー画面でエリア案内を表示する。
-7. 案内開始ボタンでエリア予約を作る。
-8. Unity の slot 座標から座標変換 JSON と area polygon を自動生成する。
-9. 管理者画面で通常マップ / ヒートマップを切り替える。
-10. 管理者 AI ボタンから Gemini を呼ぶ。
-11. AI提案を表示し、ログに残す。
-12. fallback を入れる。
+- [x] backend に状態保存 API を作る。
+- [x] 管理者画面へ固定 JSON を返して表示する。
+- [x] Unity WebGL build を管理者画面 iframe に表示する。
+- [x] Unity から backend へ snapshot を送る。
+- [x] backend で A/B/C/D の混雑率を計算する。
+- [x] ユーザー画面でエリア案内を表示する。
+- [x] 案内開始ボタンでエリア予約を作る。
+- [x] Unity の slot 座標から座標変換 JSON と area polygon を自動生成する。
+- [x] 管理者画面で通常マップ / ヒートマップを切り替える。
+- [x] 管理者 AI ボタンから Gemini を呼ぶ。
+- [x] AI提案を表示し、ログに残す。
+- [x] fallback を入れる。
+
+### 実装メモ 2026-06-29
+
+- FastAPI backend を `WebApp/backend` に追加した。
+- `POST /api/unity/snapshot`、`GET /api/parking/status`、`GET /api/parking/recommendation`、`GET /api/admin/state`、`POST /api/guidance/start`、`POST /api/guidance/cancel`、`POST /api/admin/ai/recommendations` を実装した。
+- backend は in-memory で snapshot version、stale 判定、area master、risk score、5分 TTL 予約、30秒 cooldown、AI cache、fallback report、管理者ログを扱う。
+- Next.js App Router frontend を `WebApp/frontend` に追加し、ユーザー画面、管理者画面、backend proxy、Unity WebGL iframe、通常/ヒートマップ切替、AI生成 UI を実装した。
+- Unity exporter として `UnityProject/Assets/Scripts/Network/UnityStateExporter.cs` を追加した。Unity Editor が再コンパイル後に `BackendBridge` へ `UnityStateExporter` を追加する必要がある。
+- 2026-06-29 追記: Unity `2022.3.62f2` の `WebGLSupport` 導入を確認し、`C:\tmp\SmartParkingUnity2022Build_20260629144443` のコピー project から正式 WebGL build を実行した。出力先は `WebApp/frontend/public/unity-build/`。Next.js 経由で `/unity-build/index.html` が HTTP 200 を返すことと、`npm run build` 成功を確認した。
 
 ## 結論
 
