@@ -11,7 +11,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 from uuid import uuid4
 
-from models.schemas import UnitySnapshot
+from models.schemas import ParkingSlotSnapshot, UnitySnapshot, WaypointSnapshot
 
 
 IMAGE_WIDTH = 637
@@ -22,6 +22,8 @@ WORLD_MIN_Z = -150
 WORLD_MAX_Z = 150
 FLIP_X = True
 FLIP_Z = False
+MAP_X_SCALE = 1.273
+MAP_Y_SCALE = 1.364
 RESERVATION_TTL = timedelta(minutes=5)
 REPLAN_COOLDOWN = timedelta(seconds=30)
 STALE_AFTER = timedelta(seconds=5)
@@ -56,6 +58,7 @@ class Reservation:
     reservation_id: str
     user_session_id: str
     target_area_id: str
+    target_slot_id: str | None
     status: str
     created_at: datetime
     expires_at: datetime
@@ -144,6 +147,7 @@ class StateStore:
             "displayTimeZone": "Asia/Tokyo",
             "source": self.latest_snapshot.sourceId if self.latest_snapshot else None,
             "areas": areas,
+            "slots": self._map_slot_responses(now),
             "areaLayout": self._area_layout_response(),
             "summary": self._summary_from_areas(areas),
         }
@@ -174,7 +178,9 @@ class StateStore:
                     new_area = self._select_area(areas, exclude_area_id=active.target_area_id)
                     if new_area and new_area["areaId"] != active.target_area_id:
                         old_label = self._area_label(active.target_area_id)
+                        new_slot = self._select_recommended_slot(new_area["areaId"], now, active.reservation_id)
                         active.target_area_id = new_area["areaId"]
+                        active.target_slot_id = new_slot.slotId if new_slot else None
                         active.last_replanned_at = now
                         active.expires_at = now + RESERVATION_TTL
                         self._log(
@@ -204,10 +210,12 @@ class StateStore:
             raise ValueError("案内可能なエリアがありません。")
 
         now = self.now()
+        selected_slot = self._select_recommended_slot(selected["areaId"], now)
         reservation = Reservation(
             reservation_id=f"res_{uuid4().hex[:12]}",
             user_session_id=user_session_id,
             target_area_id=selected["areaId"],
+            target_slot_id=selected_slot.slotId if selected_slot else None,
             status="active",
             created_at=now,
             expires_at=now + RESERVATION_TTL,
@@ -216,7 +224,12 @@ class StateStore:
         self._log(
             "guidance_started",
             f"{selected['label']}への案内予約を開始しました。",
-            {"reservationId": reservation.reservation_id, "userSessionId": user_session_id, "targetAreaId": selected["areaId"]},
+            {
+                "reservationId": reservation.reservation_id,
+                "userSessionId": user_session_id,
+                "targetAreaId": selected["areaId"],
+                "targetSlotId": reservation.target_slot_id,
+            },
         )
         return self._guidance_response(selected, reservation, None)
 
@@ -529,15 +542,232 @@ class StateStore:
             norm_x = 1 - norm_x
         if FLIP_Z:
             norm_z = 1 - norm_z
-        return {"x": max(0, min(IMAGE_WIDTH, norm_x * IMAGE_WIDTH)), "y": max(0, min(IMAGE_HEIGHT, norm_z * IMAGE_HEIGHT))}
+        map_x = norm_x * IMAGE_WIDTH
+        map_y = norm_z * IMAGE_HEIGHT
+        map_x = IMAGE_WIDTH / 2 + (map_x - IMAGE_WIDTH / 2) * MAP_X_SCALE
+        map_y = IMAGE_HEIGHT / 2 + (map_y - IMAGE_HEIGHT / 2) * MAP_Y_SCALE
+        return {"x": max(0, min(IMAGE_WIDTH, map_x)), "y": max(0, min(IMAGE_HEIGHT, map_y))}
+
+    def _slot_by_id(self, slot_id: str | None) -> ParkingSlotSnapshot | None:
+        if not slot_id or not self.latest_snapshot:
+            return None
+        return next((slot for slot in self.latest_snapshot.slots if slot.slotId == slot_id), None)
+
+    def _is_slot_available(self, slot: ParkingSlotSnapshot) -> bool:
+        state = slot.state.lower()
+        if "disabled" in state or "closed" in state:
+            return False
+        if slot.sensorOccupied or slot.isLeaving:
+            return False
+        if slot.reservedByCarId or slot.occupiedByCarId:
+            return False
+        if "occupied" in state or "reserved" in state or "leaving" in state or "parking" in state:
+            return False
+        return True
+
+    def _active_reserved_slot_ids(self, now: datetime, exclude_reservation_id: str | None = None) -> set[str]:
+        reserved: set[str] = set()
+        for reservation in self.reservations.values():
+            if reservation.reservation_id == exclude_reservation_id:
+                continue
+            if reservation.status == "active" and reservation.expires_at > now and reservation.target_slot_id:
+                reserved.add(reservation.target_slot_id)
+        return reserved
+
+    def _available_slots_for_area(
+        self,
+        area_id: str,
+        now: datetime,
+        exclude_reservation_id: str | None = None,
+    ) -> list[ParkingSlotSnapshot]:
+        if not self.latest_snapshot or not self.latest_snapshot.slots:
+            return []
+        reserved_slot_ids = self._active_reserved_slot_ids(now, exclude_reservation_id)
+        normalized_area_id = self._normalize_area_id(area_id)
+        return [
+            slot
+            for slot in self.latest_snapshot.slots
+            if self._normalize_area_id(slot.areaId) == normalized_area_id
+            and slot.slotId not in reserved_slot_ids
+            and self._is_slot_available(slot)
+        ]
+
+    def _slot_sort_key(self, slot: ParkingSlotSnapshot) -> tuple[int, str]:
+        match = re.search(r"(\d+)$", slot.slotId)
+        return (int(match.group(1)) if match else 9999, slot.slotId)
+
+    def _select_recommended_slot(
+        self,
+        area_id: str,
+        now: datetime,
+        exclude_reservation_id: str | None = None,
+    ) -> ParkingSlotSnapshot | None:
+        slots = self._available_slots_for_area(area_id, now, exclude_reservation_id)
+        if not slots:
+            return None
+        with_waypoint = [slot for slot in slots if slot.accessWaypointId]
+        return sorted(with_waypoint or slots, key=self._slot_sort_key)[0]
+
+    def _slot_response(self, slot: ParkingSlotSnapshot | None) -> dict[str, Any] | None:
+        if not slot:
+            return None
+        position = slot.parkingPoint or slot.position
+        map_position = self._world_to_map(position.x, position.z) if position else None
+        return {
+            "slotId": slot.slotId,
+            "areaId": self._normalize_area_id(slot.areaId),
+            "label": slot.slotId,
+            "state": slot.state,
+            "position": None if not position else {"x": position.x, "y": position.y, "z": position.z},
+            "mapPosition": map_position,
+            "accessWaypointId": slot.accessWaypointId,
+        }
+
+    def _map_slot_responses(self, now: datetime) -> list[dict[str, Any]]:
+        if not self.latest_snapshot or not self.latest_snapshot.slots:
+            return []
+
+        active_reserved_slot_ids = self._active_reserved_slot_ids(now)
+        responses = []
+        for slot in self.latest_snapshot.slots:
+            position = slot.parkingPoint or slot.position
+            if not position:
+                continue
+
+            state = slot.state
+            if slot.slotId in active_reserved_slot_ids and self._is_slot_available(slot):
+                state = "Reserved"
+
+            responses.append(
+                {
+                    "slotId": slot.slotId,
+                    "areaId": self._normalize_area_id(slot.areaId),
+                    "state": state,
+                    "sensorOccupied": slot.sensorOccupied,
+                    "isLeaving": slot.isLeaving,
+                    "mapPosition": self._world_to_map(position.x, position.z),
+                    "accessWaypointId": slot.accessWaypointId,
+                }
+            )
+
+        return sorted(responses, key=lambda item: (item["areaId"], item["slotId"]))
+
+    def _waypoint_map(self) -> dict[str, WaypointSnapshot]:
+        if not self.latest_snapshot:
+            return {}
+        return {waypoint.waypointId: waypoint for waypoint in self.latest_snapshot.waypoints if waypoint.waypointId}
+
+    def _find_waypoint_route(self, start_id: str, goal_id: str, waypoints: dict[str, WaypointSnapshot]) -> list[str]:
+        if start_id not in waypoints or goal_id not in waypoints:
+            return []
+        queue = [start_id]
+        previous: dict[str, str | None] = {start_id: None}
+
+        while queue:
+            current_id = queue.pop(0)
+            if current_id == goal_id:
+                break
+
+            for next_id in waypoints[current_id].nextWaypointIds:
+                if next_id not in waypoints or next_id in previous:
+                    continue
+                previous[next_id] = current_id
+                queue.append(next_id)
+
+        if goal_id not in previous:
+            return []
+
+        route = []
+        current: str | None = goal_id
+        while current is not None:
+            route.append(current)
+            current = previous[current]
+        route.reverse()
+        return route
+
+    def _best_waypoint_route_to_slot(self, slot: ParkingSlotSnapshot | None) -> list[str]:
+        if not slot or not slot.accessWaypointId:
+            return []
+        waypoints = self._waypoint_map()
+        if not waypoints:
+            return []
+
+        entrances = sorted(
+            [waypoint.waypointId for waypoint in waypoints.values() if waypoint.isEntrance],
+            key=str,
+        )
+        if not entrances:
+            entrances = sorted(waypoints.keys())[:1]
+
+        routes = [
+            route
+            for route in (self._find_waypoint_route(entrance_id, slot.accessWaypointId, waypoints) for entrance_id in entrances)
+            if route
+        ]
+        if not routes:
+            return []
+        return sorted(routes, key=len)[0]
+
+    def _route_response(self, area: dict[str, Any], slot: ParkingSlotSnapshot | None, target_label: str) -> dict[str, Any]:
+        waypoint_ids = self._best_waypoint_route_to_slot(slot)
+        waypoints = self._waypoint_map()
+        points: list[dict[str, float]] = []
+
+        for waypoint_id in waypoint_ids:
+            waypoint = waypoints.get(waypoint_id)
+            if not waypoint:
+                continue
+            points.append(self._world_to_map(waypoint.position.x, waypoint.position.z))
+
+        slot_position = slot.parkingPoint or slot.position if slot else None
+        if slot_position:
+            points.append(self._world_to_map(slot_position.x, slot_position.z))
+
+        if len(points) >= 2:
+            svg_path = " ".join(
+                f"{'M' if index == 0 else 'L'}{round(point['x'])} {round(point['y'])}"
+                for index, point in enumerate(points)
+            )
+            return {
+                "svgPath": svg_path,
+                "source": "unity-waypoints",
+                "waypointIds": waypoint_ids,
+                "steps": [
+                    "Unity の入口 waypoint から通路に沿って進む",
+                    f"{area['label']}方面の access waypoint へ向かう",
+                    f"{target_label}付近では徐行し、案内先を確認する",
+                ],
+            }
+
+        return {
+            "svgPath": ROUTE_PATHS.get(area["areaId"], "M28 246 H330 246"),
+            "source": "area-fallback",
+            "waypointIds": [],
+            "steps": [
+                "入口から中央通路へ進む",
+                f"{area['label']}方面へ向かう",
+                f"{target_label}付近では徐行し、案内先を確認する",
+            ],
+        }
 
     def _guidance_response(self, area: dict[str, Any] | None, reservation: Reservation | None, replan_reason: str | None) -> dict[str, Any]:
         if not area:
             return {"guidanceLevel": "area", "status": "unavailable", "message": "案内可能なエリアがありません。"}
+        now = self.now()
+        slot = self._slot_by_id(reservation.target_slot_id) if reservation and reservation.target_slot_id else None
+        if slot and not self._is_slot_available(slot):
+            slot = None
+        if not slot:
+            slot = self._select_recommended_slot(area["areaId"], now, reservation.reservation_id if reservation else None)
+            if reservation and slot:
+                reservation.target_slot_id = slot.slotId
+        slot_data = self._slot_response(slot)
         empty = area.get("effectiveAvailable", area.get("emptyCount", 0))
-        message = f"{area['label']}へ進み、空いている枠へ駐車してください。"
+        target_label = slot_data["label"] if slot_data else area["label"]
+        message = f"{target_label}へ進み、案内に沿って駐車してください。"
+        route = self._route_response(area, slot, target_label)
         return {
-            "guidanceLevel": "area",
+            "guidanceLevel": "slot" if slot_data else "area",
             "status": "active" if reservation else "not_started",
             "updatedAt": self.now().isoformat(),
             "targetArea": {
@@ -545,7 +775,8 @@ class StateStore:
                 "label": area["label"],
                 "reason": area.get("reason") or f"{area['label']}は有効空き {empty} 台で、現在の推薦先です。",
             },
-            "recommendedSlotId": None,
+            "recommendedSlotId": slot_data["slotId"] if slot_data else None,
+            "recommendedSlot": slot_data,
             "message": message,
             "replanReason": replan_reason,
             "reservation": None
@@ -554,12 +785,10 @@ class StateStore:
                 "reservationId": reservation.reservation_id,
                 "status": reservation.status,
                 "targetAreaId": reservation.target_area_id,
+                "targetSlotId": reservation.target_slot_id,
                 "expiresAt": reservation.expires_at.isoformat(),
             },
-            "route": {
-                "svgPath": ROUTE_PATHS.get(area["areaId"], "M28 246 H330 246"),
-                "steps": ["入口から中央通路へ進む", f"{area['label']}方面へ向かう", "空いている枠を確認しながら徐行する"],
-            },
+            "route": route,
             "summary": {
                 "emptyCount": area["emptyCount"],
                 "effectiveAvailable": area["effectiveAvailable"],

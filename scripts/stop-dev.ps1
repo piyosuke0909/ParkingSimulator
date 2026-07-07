@@ -2,9 +2,26 @@ $ErrorActionPreference = "Continue"
 
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 $PidFiles = @(
-    Join-Path $Root ".dev-backend.pid",
-    Join-Path $Root ".dev-frontend.pid"
+    (Join-Path $Root ".dev-backend.pid"),
+    (Join-Path $Root ".dev-frontend.pid")
 )
+
+function Stop-ProcessTree {
+    param(
+        [int]$ProcessId
+    )
+
+    $Children = Get-CimInstance Win32_Process -Filter "ParentProcessId = $ProcessId" -ErrorAction SilentlyContinue
+    foreach ($Child in $Children) {
+        Stop-ProcessTree -ProcessId $Child.ProcessId
+    }
+
+    $Process = Get-Process -Id $ProcessId -ErrorAction SilentlyContinue
+    if ($Process) {
+        Stop-Process -Id $ProcessId -Force
+        Write-Host "Stopped PID=$ProcessId"
+    }
+}
 
 foreach ($PidFile in $PidFiles) {
     if (!(Test-Path $PidFile)) {
@@ -13,11 +30,7 @@ foreach ($PidFile in $PidFiles) {
 
     $ProcessId = Get-Content $PidFile | Select-Object -First 1
     if ($ProcessId) {
-        $Process = Get-Process -Id $ProcessId -ErrorAction SilentlyContinue
-        if ($Process) {
-            Stop-Process -Id $ProcessId
-            Write-Host "Stopped PID=$ProcessId"
-        }
+        Stop-ProcessTree -ProcessId ([int]$ProcessId)
     }
 
     Remove-Item $PidFile -Force

@@ -45,6 +45,17 @@ class CarSnapshot(BaseModel):
     isStoppedByFrontCar: bool = False
 
 
+class WaypointSnapshot(BaseModel):
+    waypointId: str
+    name: str | None = None
+    position: Vector3
+    nextWaypointIds: list[str] = Field(default_factory=list)
+    isEntrance: bool = False
+    isExit: bool = False
+    isIntersection: bool = False
+    isStopPoint: bool = False
+
+
 class UnitySnapshot(BaseModel):
     sourceId: str = "unity-webgl-admin-01"
     scene: str = "Unknown"
@@ -53,6 +64,7 @@ class UnitySnapshot(BaseModel):
     summary: SnapshotSummary = Field(default_factory=SnapshotSummary)
     slots: list[ParkingSlotSnapshot] = Field(default_factory=list)
     cars: list[CarSnapshot] = Field(default_factory=list)
+    waypoints: list[WaypointSnapshot] = Field(default_factory=list)
 
 
 class GuidanceStartRequest(BaseModel):

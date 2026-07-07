@@ -18,6 +18,7 @@ public class UnityStateExporter : MonoBehaviour
     [SerializeField] private bool autoFindParkingLotManager = true;
     [SerializeField] private bool includeSlots = true;
     [SerializeField] private bool includeCars = true;
+    [SerializeField] private bool includeWaypoints = true;
 
     [Header("Debug")]
     [SerializeField] private bool logSuccess = false;
@@ -104,7 +105,8 @@ public class UnityStateExporter : MonoBehaviour
             timestamp = DateTimeOffset.UtcNow.ToString("o"),
             summary = BuildSummary(),
             slots = includeSlots ? BuildSlots() : new List<ParkingSlotPayload>(),
-            cars = includeCars ? BuildCars() : new List<CarPayload>()
+            cars = includeCars ? BuildCars() : new List<CarPayload>(),
+            waypoints = includeWaypoints ? BuildWaypoints() : new List<WaypointPayload>()
         };
 
         return payload;
@@ -153,7 +155,7 @@ public class UnityStateExporter : MonoBehaviour
                 isLeaving = slot.isLeaving,
                 position = ToVectorPayload(slot.transform.position),
                 parkingPoint = ToVectorPayload(positionSource.position),
-                accessWaypointId = slot.accessWaypoint != null ? slot.accessWaypoint.name : null,
+                accessWaypointId = GetWaypointId(slot.accessWaypoint),
                 reservedByCarId = GetOwnerCarId(slot.reservedBy),
                 occupiedByCarId = GetOwnerCarId(slot.occupiedBy)
             };
@@ -200,6 +202,53 @@ public class UnityStateExporter : MonoBehaviour
         return cars;
     }
 
+    private List<WaypointPayload> BuildWaypoints()
+    {
+        List<WaypointPayload> waypoints = new List<WaypointPayload>();
+
+#if UNITY_2023_1_OR_NEWER
+        Waypoint[] waypointObjects = FindObjectsByType<Waypoint>(FindObjectsSortMode.None);
+#else
+        Waypoint[] waypointObjects = FindObjectsOfType<Waypoint>();
+#endif
+
+        foreach (Waypoint waypoint in waypointObjects)
+        {
+            if (waypoint == null)
+            {
+                continue;
+            }
+
+            WaypointPayload item = new WaypointPayload
+            {
+                waypointId = GetWaypointId(waypoint),
+                name = waypoint.name,
+                position = ToVectorPayload(waypoint.transform.position),
+                nextWaypointIds = new List<string>(),
+                isEntrance = waypoint.isEntrance,
+                isExit = waypoint.isExit,
+                isIntersection = waypoint.isIntersection,
+                isStopPoint = waypoint.isStopPoint
+            };
+
+            if (waypoint.nextWaypoints != null)
+            {
+                foreach (Waypoint next in waypoint.nextWaypoints)
+                {
+                    string nextId = GetWaypointId(next);
+                    if (!string.IsNullOrEmpty(nextId))
+                    {
+                        item.nextWaypointIds.Add(nextId);
+                    }
+                }
+            }
+
+            waypoints.Add(item);
+        }
+
+        return waypoints;
+    }
+
     private string GetOwnerCarId(NPC_CarController owner)
     {
         if (owner == null)
@@ -209,6 +258,16 @@ public class UnityStateExporter : MonoBehaviour
 
         Car car = owner.GetComponent<Car>();
         return car != null ? car.carId : owner.name;
+    }
+
+    private string GetWaypointId(Waypoint waypoint)
+    {
+        if (waypoint == null)
+        {
+            return null;
+        }
+
+        return string.IsNullOrWhiteSpace(waypoint.waypointId) ? waypoint.name : waypoint.waypointId;
     }
 
     private Vector3Payload ToVectorPayload(Vector3 value)
@@ -227,6 +286,7 @@ public class UnitySnapshotPayload
     public SnapshotSummaryPayload summary;
     public List<ParkingSlotPayload> slots;
     public List<CarPayload> cars;
+    public List<WaypointPayload> waypoints;
 }
 
 [Serializable]
@@ -263,6 +323,19 @@ public class CarPayload
     public string targetSlotId;
     public string targetAreaId;
     public bool isStoppedByFrontCar;
+}
+
+[Serializable]
+public class WaypointPayload
+{
+    public string waypointId;
+    public string name;
+    public Vector3Payload position;
+    public List<string> nextWaypointIds;
+    public bool isEntrance;
+    public bool isExit;
+    public bool isIntersection;
+    public bool isStopPoint;
 }
 
 [Serializable]
