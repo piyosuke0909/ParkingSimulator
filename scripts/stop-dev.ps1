@@ -3,7 +3,8 @@ $ErrorActionPreference = "Continue"
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 $PidFiles = @(
     (Join-Path $Root ".dev-backend.pid"),
-    (Join-Path $Root ".dev-frontend.pid")
+    (Join-Path $Root ".dev-frontend.pid"),
+    (Join-Path $Root ".dev-unity-runner.pid")
 )
 
 function Stop-ProcessTree {

@@ -94,6 +94,37 @@ Admin Browser
 - frontend は画面表示と FastAPI への proxy を担当
 - backend は Unity snapshot、状態集計、予約、Gemini、fallback を担当
 - Unity 映像は backend から配信していない。WebGL build を frontend で直接表示している
+- MVP では backend から Unity へ予約・案内・車両制御を送り返していない
+- Unity から backend への一方向連携を前提にしている
+
+## Unity WebGL と backend のデータ境界
+
+Unity WebGL から backend が受け取る実データ:
+
+- `sourceId`, `scene`, `sequenceNumber`, `timestamp`
+- 駐車枠: `slotId`, `areaId`, `state`, `sensorOccupied`, `isLeaving`, `position`, `parkingPoint`, `accessWaypointId`, `reservedByCarId`, `occupiedByCarId`
+- 車両: `carId`, `state`, `position`, `targetSlotId`, `targetAreaId`, `isStoppedByFrontCar`
+- waypoint: `waypointId`, `name`, `position`, `nextWaypointIds`, `isEntrance`, `isExit`, `isIntersection`, `isStopPoint`
+- summary: Unity 側の `empty`, `reserved`, `occupied`, `leaving`, `disabled`
+
+backend が Unity 実データから作る値:
+
+- A/B/C/D ごとの `capacity`, `emptyCount`, `occupiedCount`, `reservedCount`, `leavingCars`, `waitingCars`
+- `occupancyRate`, `riskScore`, `riskLevel`
+- 枠ごとの地図座標 `mapPosition`
+- 推奨エリア、推奨スロット
+- waypoint が取れている場合の案内ルート `route.source = unity-waypoints`
+- 最終 snapshot から 5 秒以上更新がない場合の `stale = true`
+
+MVP の仮データ / 固定データ:
+
+- backend の予約は in-memory の 5 分 TTL。Unity 側の予約状態には反映しない
+- 警備員 `G01/G02` は固定デモデータ
+- エリア polygon は固定値。slot 数だけ Unity から反映する
+- 地図画像 `/assets/parking.png` と heatmap 画像は静的画像
+- ユーザー画面の距離、ETA、出口案内は固定デモ値
+- Gemini API key 未設定時の AI 提案は fallback ルールベース
+- Unity snapshot が 1 件も無い場合は backend の固定 fallback 混雑値を表示する
 
 ## 必要環境
 
@@ -150,6 +181,8 @@ backend と frontend をまとめて起動する場合:
 powershell -ExecutionPolicy Bypass -File .\scripts\start-dev.ps1
 ```
 
+このスクリプトは backend / frontend に加えて、Edge または Chrome の headless プロセスで Unity WebGL runner も起動します。runner は `http://127.0.0.1:3000/unity-build/index.html?runner=dev` を開き、画面操作とは独立して Unity から backend へ snapshot を送り続けるためのものです。
+
 起動後:
 
 ```text
@@ -169,6 +202,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\stop-dev.ps1
 ```text
 .logs/backend.log
 .logs/frontend.log
+.logs/unity-runner.log
 ```
 
 初回起動時に `.env` がない場合は `.env.example` からコピーします。`WebApp/frontend/node_modules/` がない場合は `npm install` も実行します。
@@ -177,6 +211,12 @@ powershell -ExecutionPolicy Bypass -File .\scripts\stop-dev.ps1
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\start-dev.ps1 -NoInstall
+```
+
+Unity WebGL runner を起動しない場合:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start-dev.ps1 -NoUnityRunner
 ```
 
 ### 個別起動

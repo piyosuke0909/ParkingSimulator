@@ -96,11 +96,6 @@ class StateStore:
                     },
                 )
             else:
-                self._log(
-                    "unity_snapshot_rejected",
-                    "古い Unity snapshot を破棄しました。",
-                    {"sourceId": snapshot.sourceId, "scene": snapshot.scene, "sequenceNumber": snapshot.sequenceNumber},
-                )
                 return {
                     "accepted": False,
                     "reason": "stale_sequence",
@@ -130,8 +125,6 @@ class StateStore:
         if snapshot.sourceId != self.latest_snapshot.sourceId or snapshot.scene != self.latest_snapshot.scene:
             return False
         if not self._is_stale(self.now()):
-            return False
-        if snapshot.sequenceNumber > 10:
             return False
         return snapshot.timestamp > self.latest_snapshot.timestamp
 
