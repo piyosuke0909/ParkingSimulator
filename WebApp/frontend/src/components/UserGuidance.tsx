@@ -468,13 +468,6 @@ export function UserGuidance() {
           </div>
         </section>
       </section>
-      <iframe
-        aria-hidden="true"
-        className="unity-background-runner"
-        src="/unity-build/index.html"
-        tabIndex={-1}
-        title="Unity background state runner"
-      />
     </main>
   );
 }

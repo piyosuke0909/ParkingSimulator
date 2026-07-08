@@ -479,17 +479,6 @@ h2 {
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 18px 46px rgba(18, 31, 48, 0.2);
 }
 
-.unity-background-runner {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  width: 1px;
-  height: 1px;
-  border: 0;
-  opacity: 0.001;
-  pointer-events: none;
-}
-
 .guide-card {
   position: absolute;
   z-index: 70;
@@ -1253,5 +1242,983 @@ h2 {
     height: 100svh;
     min-height: 100svh;
     box-shadow: none;
+  }
+}
+
+.adminConsole {
+  --admin-bg: #f4f6f8;
+  --admin-panel: #ffffff;
+  --admin-text: #17202a;
+  --admin-muted: #647282;
+  --admin-line: #d9e0e7;
+  --admin-sidebar: #101820;
+  --admin-accent: #0f766e;
+  --admin-accent-dark: #0b5f59;
+  --admin-ok: #15803d;
+  --admin-warn: #b45309;
+  --admin-danger: #b91c1c;
+  --admin-info: #2563eb;
+  --admin-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  min-height: 100vh;
+  background: var(--admin-bg);
+  color: var(--admin-text);
+}
+
+.adminConsole button,
+.adminConsole textarea {
+  font: inherit;
+}
+
+.adminSidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px 18px;
+  background: var(--admin-sidebar);
+  color: #eef4f7;
+}
+
+.adminBrand {
+  display: grid;
+  gap: 6px;
+}
+
+.adminBrand strong {
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.adminBrand span,
+.sideNote {
+  color: #aab7c4;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.adminNav {
+  display: grid;
+  gap: 8px;
+}
+
+.adminNav button {
+  min-height: 42px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: #d9e4ea;
+  cursor: pointer;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 800;
+}
+
+.adminNav button.active,
+.adminNav button:hover {
+  border-color: #36505d;
+  background: #1f303b;
+}
+
+.sideNote {
+  margin-top: auto;
+  display: grid;
+  gap: 6px;
+}
+
+.sideNote p {
+  margin: 0;
+}
+
+.adminMain {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 20px;
+  padding: 24px;
+}
+
+.adminTopbar,
+.adminPanelHeader,
+.adminTopActions,
+.aiTitle,
+.aiResultTopline,
+.guardMain {
+  display: flex;
+  align-items: center;
+}
+
+.adminTopbar {
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.adminTopbar h1 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.3;
+}
+
+.adminTopbar p,
+.adminPanelHeader p {
+  margin: 4px 0 0;
+  color: var(--admin-muted);
+  font-size: 14px;
+}
+
+.adminTopActions {
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.adminButton,
+.adminLinkButton {
+  min-height: 40px;
+  border: 1px solid var(--admin-accent);
+  border-radius: 8px;
+  background: var(--admin-accent);
+  color: #fff;
+  cursor: pointer;
+  padding: 9px 14px;
+  text-decoration: none;
+  font-weight: 900;
+}
+
+.adminButton.primary {
+  min-width: 130px;
+}
+
+.adminButton:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.adminLinkButton {
+  border-color: var(--admin-line);
+  background: #fff;
+  color: var(--admin-accent-dark);
+}
+
+.statusPill,
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 28px;
+  border-radius: 999px;
+  padding: 5px 10px;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.statusPill {
+  background: #e9f7f4;
+  color: var(--admin-accent-dark);
+}
+
+.statusPill.live,
+.badge.ok,
+.badge.low {
+  background: #dcfce7;
+  color: var(--admin-ok);
+}
+
+.statusPill.stale,
+.badge.high {
+  background: #fee2e2;
+  color: var(--admin-danger);
+}
+
+.badge,
+.badge.medium,
+.badge.warn {
+  background: #ffedd5;
+  color: var(--admin-warn);
+}
+
+.adminNotice {
+  margin: 0;
+  border-left: 4px solid var(--admin-danger);
+  border-radius: 8px;
+  background: #fff0ee;
+  color: var(--admin-danger);
+  padding: 10px 12px;
+  font-weight: 800;
+}
+
+.adminStats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.adminStat,
+.adminPanel {
+  border: 1px solid var(--admin-line);
+  border-radius: 8px;
+  background: var(--admin-panel);
+  box-shadow: var(--admin-shadow);
+}
+
+.adminStat {
+  padding: 16px;
+}
+
+.adminStat span {
+  color: var(--admin-muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.adminStat strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.adminPanel {
+  overflow: hidden;
+}
+
+.adminPanelHeader {
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--admin-line);
+  padding: 16px 18px;
+}
+
+.adminPanelHeader h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.adminOverviewGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.9fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.overviewMapPanel,
+.overviewMapPanel .adminMapViewer {
+  min-height: 460px;
+}
+
+.adminMapViewer {
+  position: relative;
+  min-height: 360px;
+  aspect-ratio: 637 / 492;
+  overflow: hidden;
+  border: 1px solid var(--admin-line);
+  border-radius: 8px;
+  background: #f8fafc;
+  margin: 18px auto;
+}
+
+.overviewMapPanel .adminMapViewer {
+  height: calc(100% - 36px);
+}
+
+.adminParkingImage,
+.adminMapOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.adminParkingImage {
+  object-fit: contain;
+  background: #fff;
+}
+
+.adminAreaPolygon {
+  fill: rgba(15, 118, 110, 0.1);
+  stroke: rgba(15, 118, 110, 0.75);
+  stroke-width: 2;
+}
+
+.adminAreaPolygon.medium {
+  fill: rgba(250, 204, 21, 0.18);
+  stroke: rgba(180, 83, 9, 0.78);
+}
+
+.adminAreaPolygon.high,
+.adminAreaPolygon.priority {
+  fill: rgba(239, 68, 68, 0.2);
+  stroke: rgba(185, 28, 28, 0.86);
+}
+
+.adminAreaPolygon.selected {
+  stroke: var(--admin-info);
+  stroke-width: 4;
+}
+
+.adminAreaText {
+  fill: #0f172a;
+  font-size: 18px;
+  font-weight: 900;
+  paint-order: stroke;
+  stroke: rgba(255, 255, 255, 0.86);
+  stroke-width: 5px;
+}
+
+.adminSlotDot {
+  rx: 1.5;
+  opacity: 0.42;
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 0.6;
+}
+
+.adminSlotDot.empty {
+  fill: var(--admin-ok);
+}
+
+.adminSlotDot.used {
+  fill: #64748b;
+}
+
+.adminSlotDot.reserved {
+  fill: var(--admin-warn);
+}
+
+.adminSlotDot.alert {
+  fill: var(--admin-danger);
+}
+
+.adminSlotDot.selected {
+  opacity: 0.86;
+}
+
+.guardSvgMarker circle {
+  fill: var(--admin-info);
+  stroke: #fff;
+  stroke-width: 4;
+  filter: drop-shadow(0 8px 12px rgba(15, 23, 42, 0.24));
+}
+
+.guardSvgMarker text {
+  fill: #fff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.areaOverview {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 18px;
+}
+
+.areaCard,
+.areaTab {
+  border: 1px solid var(--admin-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--admin-text);
+  cursor: pointer;
+  padding: 14px;
+  text-align: left;
+}
+
+.areaCard {
+  display: grid;
+  gap: 8px;
+}
+
+.areaCard.usage-low,
+.areaTab.usage-low {
+  border-color: #86efac;
+  background: #dcfce7;
+}
+
+.areaCard.usage-medium,
+.areaTab.usage-medium {
+  border-color: #facc15;
+  background: #fef3c7;
+}
+
+.areaCard.usage-high,
+.areaTab.usage-high {
+  border-color: #fca5a5;
+  background: #fee2e2;
+}
+
+.areaCard:hover,
+.areaTab.active {
+  border-color: var(--admin-accent);
+  box-shadow: inset 0 0 0 2px rgba(15, 118, 110, 0.22);
+}
+
+.areaCard strong,
+.areaCard b {
+  font-size: 18px;
+}
+
+.areaCard span,
+.areaCard small,
+.areaTab span {
+  color: var(--admin-muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.aiGeneratorPanel {
+  border-color: #c7d8d5;
+}
+
+.aiGeneratorPanel .adminPanelHeader {
+  background: linear-gradient(110deg, #f0fdfa 0%, #fff 58%);
+}
+
+.aiTitle {
+  gap: 12px;
+}
+
+.aiTitle > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--admin-accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.aiInlineForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+  padding: 18px;
+}
+
+.aiInlineForm textarea {
+  width: 100%;
+  min-height: 96px;
+  max-height: 320px;
+  border: 1px solid var(--admin-line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.aiResultBox {
+  display: grid;
+  gap: 14px;
+  margin: 0 18px 18px;
+  border: 1px solid #cbdad8;
+  border-radius: 8px;
+  background: #f8fbfb;
+  padding: 18px;
+}
+
+.aiResultBox.empty {
+  color: var(--admin-muted);
+}
+
+.aiResultBox.empty p,
+.aiSummary {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.aiResultTopline {
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.aiResultTopline h3 {
+  margin: 6px 0 0;
+}
+
+.aiResultLabel {
+  display: inline-flex;
+  border-radius: 999px;
+  background: #ccfbf1;
+  color: var(--admin-accent-dark);
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.aiMetrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.aiMetrics div,
+.aiGuardPlanList article {
+  border: 1px solid #dce7e5;
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px 12px;
+}
+
+.aiMetrics span,
+.slotDetail span {
+  display: block;
+  color: var(--admin-muted);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.aiMetrics strong,
+.slotDetail strong {
+  display: block;
+  margin-top: 4px;
+}
+
+.aiActions {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aiActions li {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 8px 10px;
+  border-left: 3px solid var(--admin-accent);
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.aiActions small {
+  grid-column: 2;
+  color: var(--admin-muted);
+}
+
+.aiGuardPlan {
+  display: grid;
+  gap: 10px;
+  border-top: 1px solid #dce7e5;
+  padding-top: 14px;
+}
+
+.aiGuardPlan h4 {
+  margin: 0;
+}
+
+.aiGuardPlanList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.aiGuardPlanList article {
+  border-left: 3px solid var(--admin-accent);
+}
+
+.aiGuardPlanList span {
+  display: block;
+  margin-top: 3px;
+  color: var(--admin-accent-dark);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.aiGuardPlanList p {
+  margin: 7px 0 0;
+  color: var(--admin-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.parkingLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.85fr) minmax(280px, 0.6fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.parkingHeader {
+  align-items: flex-start;
+}
+
+.viewToggle {
+  display: inline-flex;
+  border: 1px solid var(--admin-line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.viewToggle button {
+  min-height: 36px;
+  border: 0;
+  border-right: 1px solid var(--admin-line);
+  background: #fff;
+  color: var(--admin-muted);
+  cursor: pointer;
+  padding: 7px 12px;
+  font-weight: 900;
+}
+
+.viewToggle button:last-child {
+  border-right: 0;
+}
+
+.viewToggle button.active {
+  background: var(--admin-sidebar);
+  color: #fff;
+}
+
+.areaTabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(110px, 1fr));
+  gap: 8px;
+  padding: 18px 18px 0;
+}
+
+.areaTab {
+  display: grid;
+  gap: 4px;
+  min-height: 64px;
+  font-weight: 900;
+}
+
+.selectedPanel {
+  display: grid;
+  gap: 14px;
+  padding-bottom: 18px;
+}
+
+.slotDetail,
+.areaSummary {
+  margin: 0 18px;
+}
+
+.slotDetail {
+  display: grid;
+  gap: 10px;
+}
+
+.slotDetail > div,
+.slotDetail.empty,
+.areaSummary {
+  border: 1px solid var(--admin-line);
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 12px 14px;
+}
+
+.areaSummary {
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.spaceList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 4px;
+  max-height: 560px;
+  overflow: auto;
+  padding: 0 18px;
+}
+
+.space {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  gap: 2px;
+  min-height: 42px;
+  border: 1px solid var(--admin-line);
+  border-left-width: 4px;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  padding: 4px;
+  text-align: left;
+}
+
+.space.empty {
+  border-left-color: var(--admin-ok);
+  background: #dcfce7;
+}
+
+.space.used,
+.space.reserved {
+  border-left-color: var(--admin-danger);
+  background: #fee2e2;
+}
+
+.space.alert {
+  border-left-color: var(--admin-danger);
+  background: #fecaca;
+}
+
+.space.selected {
+  border-color: var(--admin-accent);
+  outline: 3px solid rgba(15, 118, 110, 0.18);
+}
+
+.space.priorityAi {
+  border-left-color: var(--admin-info);
+}
+
+.space.priorityAi::after {
+  content: "AI";
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  border-radius: 999px;
+  background: var(--admin-info);
+  color: #fff;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.spaceId {
+  width: fit-content;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 2px 4px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.spaceState {
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.guardsLayout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.guardLocationPanel,
+.shiftPanel {
+  grid-column: 1 / -1;
+}
+
+.guardLocationBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.55fr);
+  gap: 14px;
+  padding: 18px;
+}
+
+.guardLocationBody .adminMapViewer {
+  margin: 0;
+}
+
+.guardLocationList,
+.guardCards,
+.taskList {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 18px;
+}
+
+.guardLocationList {
+  padding: 0;
+}
+
+.guardLocationItem,
+.guardCard {
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--admin-line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 12px;
+}
+
+.guardLocationItem span,
+.guardLocationItem p,
+.guardCard p,
+.guardMain span {
+  margin: 0;
+  color: var(--admin-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.guardMain {
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.guardMain strong {
+  display: block;
+}
+
+.taskList {
+  margin: 0;
+  list-style: none;
+}
+
+.taskList li {
+  border-left: 3px solid var(--admin-warn);
+  border-radius: 8px;
+  background: #fffbeb;
+  padding: 10px 12px;
+  font-weight: 800;
+}
+
+.shiftTable {
+  display: grid;
+  margin: 18px;
+  overflow-x: auto;
+  border: 1px solid #6f7f8f;
+  border-radius: 8px;
+}
+
+.shiftHeader,
+.shiftRow {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.8fr) repeat(10, minmax(34px, 1fr));
+  min-width: 720px;
+}
+
+.shiftHeader span,
+.shiftRow strong,
+.shiftRow span {
+  min-height: 32px;
+  border-right: 1px solid #8a99a8;
+  border-bottom: 1px solid #8a99a8;
+  padding: 7px 8px;
+}
+
+.shiftHeader span {
+  background: #f8fafc;
+  color: var(--admin-muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.shiftRow strong {
+  background: #fff;
+  font-size: 13px;
+}
+
+.shiftRow span.work {
+  background: #c7f0e8;
+}
+
+.shiftRow span.off {
+  background: #eef6fb;
+}
+
+.adminUnityFrame {
+  display: block;
+  width: min(calc(100% - 36px), 1180px, calc((100vh - 180px) * 1.6));
+  aspect-ratio: 16 / 10;
+  height: auto;
+  margin: 18px auto;
+  border: 1px solid var(--admin-line);
+  border-radius: 8px;
+  background: #111827;
+}
+
+.adminEmpty {
+  margin: 18px;
+  border: 1px dashed var(--admin-line);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: var(--admin-muted);
+  padding: 40px;
+  text-align: center;
+  font-weight: 900;
+}
+
+.adminLogList {
+  display: grid;
+  gap: 8px;
+  max-height: 680px;
+  overflow: auto;
+  padding: 18px;
+}
+
+.adminLogList p {
+  display: grid;
+  grid-template-columns: 90px 210px 1fr;
+  gap: 10px;
+  margin: 0;
+  border-bottom: 1px solid #edf1f5;
+  color: var(--admin-muted);
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+.adminLogList span,
+.adminLogList b {
+  color: var(--admin-text);
+}
+
+@media (max-width: 1100px) {
+  .adminConsole {
+    grid-template-columns: 1fr;
+  }
+
+  .adminSidebar {
+    position: static;
+    height: auto;
+  }
+
+  .adminNav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .adminOverviewGrid,
+  .parkingLayout,
+  .guardLocationBody,
+  .guardsLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .guardLocationPanel,
+  .shiftPanel {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  .adminMain {
+    padding: 16px;
+  }
+
+  .adminTopbar,
+  .adminPanelHeader,
+  .aiResultTopline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .adminStats,
+  .areaOverview,
+  .aiMetrics,
+  .aiGuardPlanList,
+  .areaTabs {
+    grid-template-columns: 1fr;
+  }
+
+  .aiInlineForm {
+    grid-template-columns: 1fr;
+  }
+
+  .adminLogList p {
+    grid-template-columns: 1fr;
   }
 }
