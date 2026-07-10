@@ -11,7 +11,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 from uuid import uuid4
 
-from models.schemas import ParkingSlotSnapshot, UnitySnapshot, WaypointSnapshot
+from models.schemas import CarSnapshot, ParkingSlotSnapshot, UnitySnapshot, WaypointSnapshot
 
 
 IMAGE_WIDTH = 637
@@ -59,6 +59,7 @@ class Reservation:
     user_session_id: str
     target_area_id: str
     target_slot_id: str | None
+    assigned_car_id: str | None
     status: str
     created_at: datetime
     expires_at: datetime
@@ -163,6 +164,9 @@ class StateStore:
         active = self._active_reservation_for_user(user_session_id, now)
 
         if active:
+            if not active.assigned_car_id:
+                assigned_car = self._assign_car_to_guidance(active.target_area_id, active.target_slot_id, now)
+                active.assigned_car_id = assigned_car.carId if assigned_car else None
             current = next((area for area in areas if area["areaId"] == active.target_area_id), None)
             if current and current["occupancyRate"] >= 0.85:
                 forced = current["occupancyRate"] >= 0.95 or current["effectiveAvailable"] <= 0
@@ -204,11 +208,13 @@ class StateStore:
 
         now = self.now()
         selected_slot = self._select_recommended_slot(selected["areaId"], now)
+        assigned_car = self._assign_car_to_guidance(selected["areaId"], selected_slot.slotId if selected_slot else None, now)
         reservation = Reservation(
             reservation_id=f"res_{uuid4().hex[:12]}",
             user_session_id=user_session_id,
             target_area_id=selected["areaId"],
             target_slot_id=selected_slot.slotId if selected_slot else None,
+            assigned_car_id=assigned_car.carId if assigned_car else None,
             status="active",
             created_at=now,
             expires_at=now + RESERVATION_TTL,
@@ -222,6 +228,7 @@ class StateStore:
                 "userSessionId": user_session_id,
                 "targetAreaId": selected["areaId"],
                 "targetSlotId": reservation.target_slot_id,
+                "assignedCarId": reservation.assigned_car_id,
             },
         )
         return self._guidance_response(selected, reservation, None)
@@ -616,6 +623,84 @@ class StateStore:
             "accessWaypointId": slot.accessWaypointId,
         }
 
+    def _car_by_id(self, car_id: str | None) -> CarSnapshot | None:
+        if not car_id or not self.latest_snapshot:
+            return None
+        return next((car for car in self.latest_snapshot.cars if car.carId == car_id), None)
+
+    def _active_assigned_car_ids(self, now: datetime) -> set[str]:
+        assigned = set()
+        for reservation in self.reservations.values():
+            if reservation.status == "active" and reservation.expires_at > now and reservation.assigned_car_id:
+                assigned.add(reservation.assigned_car_id)
+        return assigned
+
+    def _is_assignable_car(self, car: CarSnapshot) -> bool:
+        if not car.carId or not car.position:
+            return False
+        state = car.state.lower()
+        blocked = ("parked", "parking", "leaving", "backing", "backout", "finished", "exited", "disabled")
+        return not any(token in state for token in blocked)
+
+    def _target_area_for_car(self, car: CarSnapshot) -> str:
+        area_id = self._normalize_area_id(car.targetAreaId or "")
+        if area_id:
+            return area_id
+        slot = self._slot_by_id(car.targetSlotId)
+        return self._normalize_area_id(slot.areaId) if slot else ""
+
+    def _distance_to_nearest_entrance(self, car: CarSnapshot) -> float:
+        if not car.position or not self.latest_snapshot:
+            return 0
+        entrances = [waypoint for waypoint in self.latest_snapshot.waypoints if waypoint.isEntrance]
+        if not entrances:
+            return 0
+        return min(
+            (car.position.x - waypoint.position.x) ** 2 + (car.position.z - waypoint.position.z) ** 2
+            for waypoint in entrances
+        )
+
+    def _car_assignment_score(self, car: CarSnapshot, target_area_id: str, target_slot_id: str | None) -> tuple[int, float, str]:
+        car_area_id = self._target_area_for_car(car)
+        if target_slot_id and car.targetSlotId == target_slot_id:
+            match_score = 0
+        elif car_area_id == target_area_id:
+            match_score = 10
+        elif not car.targetSlotId and not car.targetAreaId:
+            match_score = 20
+        else:
+            match_score = 80
+        return (match_score, self._distance_to_nearest_entrance(car), car.carId)
+
+    def _assign_car_to_guidance(self, target_area_id: str, target_slot_id: str | None, now: datetime) -> CarSnapshot | None:
+        if not self.latest_snapshot or not self.latest_snapshot.cars:
+            return None
+        assigned_car_ids = self._active_assigned_car_ids(now)
+        normalized_area_id = self._normalize_area_id(target_area_id)
+        candidates = [
+            car
+            for car in self.latest_snapshot.cars
+            if car.carId not in assigned_car_ids and self._is_assignable_car(car)
+            and self._target_area_for_car(car) in {"", normalized_area_id}
+        ]
+        if not candidates:
+            return None
+        return sorted(candidates, key=lambda car: self._car_assignment_score(car, normalized_area_id, target_slot_id))[0]
+
+    def _car_response(self, car_id: str | None) -> dict[str, Any] | None:
+        car = self._car_by_id(car_id)
+        if not car or not car.position:
+            return None
+        return {
+            "carId": car.carId,
+            "state": car.state,
+            "position": {"x": car.position.x, "y": car.position.y, "z": car.position.z},
+            "mapPosition": self._world_to_map(car.position.x, car.position.z),
+            "targetSlotId": car.targetSlotId,
+            "targetAreaId": self._target_area_for_car(car) or None,
+            "isStoppedByFrontCar": car.isStoppedByFrontCar,
+        }
+
     def _map_slot_responses(self, now: datetime) -> list[dict[str, Any]]:
         if not self.latest_snapshot or not self.latest_snapshot.slots:
             return []
@@ -759,6 +844,7 @@ class StateStore:
         target_label = slot_data["label"] if slot_data else area["label"]
         message = f"{target_label}へ進み、案内に沿って駐車してください。"
         route = self._route_response(area, slot, target_label)
+        assigned_car = self._car_response(reservation.assigned_car_id) if reservation else None
         return {
             "guidanceLevel": "slot" if slot_data else "area",
             "status": "active" if reservation else "not_started",
@@ -779,8 +865,10 @@ class StateStore:
                 "status": reservation.status,
                 "targetAreaId": reservation.target_area_id,
                 "targetSlotId": reservation.target_slot_id,
+                "assignedCarId": reservation.assigned_car_id,
                 "expiresAt": reservation.expires_at.isoformat(),
             },
+            "assignedCar": assigned_car,
             "route": route,
             "summary": {
                 "emptyCount": area["emptyCount"],

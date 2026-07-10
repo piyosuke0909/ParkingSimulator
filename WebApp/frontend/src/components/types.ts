@@ -71,7 +71,16 @@ export type GuidanceResponse = {
   } | null;
   message?: string;
   replanReason?: string | null;
-  reservation?: { reservationId: string; status: string; targetAreaId: string; targetSlotId?: string | null; expiresAt: string } | null;
+  reservation?: { reservationId: string; status: string; targetAreaId: string; targetSlotId?: string | null; assignedCarId?: string | null; expiresAt: string } | null;
+  assignedCar?: {
+    carId: string;
+    state: string;
+    position?: { x: number; y: number; z: number } | null;
+    mapPosition?: { x: number; y: number } | null;
+    targetSlotId?: string | null;
+    targetAreaId?: string | null;
+    isStoppedByFrontCar?: boolean;
+  } | null;
   route?: { svgPath: string; steps: string[]; source?: "unity-waypoints" | "area-fallback"; waypointIds?: string[] };
   summary?: { emptyCount: number; effectiveAvailable: number; congestionLevel: RiskLevel };
 };
