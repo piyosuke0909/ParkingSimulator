@@ -76,6 +76,22 @@ function getRouteStartPoint(routePath: string) {
   return { x: Number(match[1]), y: Number(match[2]) };
 }
 
+function guidanceTargetKey(guidance: GuidanceResponse | null) {
+  if (!guidance) {
+    return "";
+  }
+  return [
+    guidance.status,
+    guidance.targetArea?.areaId ?? "",
+    guidance.recommendedSlotId ?? guidance.recommendedSlot?.slotId ?? "",
+    guidance.route?.svgPath ?? ""
+  ].join("|");
+}
+
+function guidanceLabel(guidance: GuidanceResponse | null) {
+  return guidance?.recommendedSlot?.label || guidance?.targetArea?.label || "案内先";
+}
+
 function areaSlots(area: AreaStatus) {
   const origin = slotGridOrigin[area.areaId] ?? { x: 128, y: 122 };
   const usedCount = clamp(Math.round(area.occupancyRate * 20), 0, 20);
@@ -173,6 +189,7 @@ function shouldSkipMapDrag(event: PointerEvent<HTMLElement>) {
 export function UserGuidance() {
   const [state, setState] = useState<AdminState | null>(null);
   const [guidance, setGuidance] = useState<GuidanceResponse | null>(null);
+  const [pendingGuidance, setPendingGuidance] = useState<GuidanceResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [displayMode, setDisplayMode] = useState<DisplayMode>("map");
@@ -181,6 +198,7 @@ export function UserGuidance() {
   const [isMapDragging, setIsMapDragging] = useState(false);
   const [mapView, setMapView] = useState<MapView>({ tilt: 54, rotate: -5, panX: 0, panY: 12, preset: "" });
   const dragRef = useRef<MapDragState | null>(null);
+  const guidanceRef = useRef<GuidanceResponse | null>(null);
 
   const userSessionId = useMemo(() => {
     if (typeof window === "undefined") {
@@ -198,18 +216,33 @@ export function UserGuidance() {
 
   const targetArea = getArea(state, guidance?.targetArea?.areaId);
   const guide = getGuide(guidance?.targetArea?.areaId);
-  const destinationLabel = guidance?.recommendedSlot?.label || guidance?.targetArea?.label || "案内先取得中";
+  const destinationLabel = guidanceLabel(guidance) || "案内先取得中";
+  const isGuidanceActive = routeMode === "parking" && guidance?.status === "active" && Boolean(guidance?.reservation);
   const routePath = routeMode === "parking" ? buildRoutePath(guidance) : exitView.route;
-  const currentPosition = getRouteStartPoint(routePath);
+  const routeStartPosition = getRouteStartPoint(routePath);
+  const assignedCarPosition = guidance?.assignedCar?.mapPosition ?? null;
+  const currentPosition = isGuidanceActive ? assignedCarPosition : routeStartPosition;
   const currentGuide = routeMode === "parking" ? guide : exitView;
   const freeCount = guidance?.summary?.effectiveAvailable ?? state?.summary.emptyCount ?? 0;
   const crowd = guidance?.summary?.congestionLevel ?? targetArea?.riskLevel ?? "low";
-  const routeFocusPan = routeMode === "parking" && mapView.preset !== "vehicle" ? focusPan(guidance) : { x: 0, y: 0 };
-  const topText = routeMode === "parking" ? `${currentGuide.action}して${destinationLabel}へ` : "西出口方面へ退出";
+  const showRoutePreview = routeMode === "parking" && !isGuidanceActive;
+  const showRouteLine = routeMode === "exit" || isGuidanceActive || showRoutePreview;
+  const showCurrentMarker = routeMode === "exit" || (isGuidanceActive && Boolean(assignedCarPosition));
+  const candidateChanged = routeMode === "parking" && !isGuidanceActive && Boolean(pendingGuidance);
+  const pendingLabel = guidanceLabel(pendingGuidance);
+  const routeFocusPan = isGuidanceActive && mapView.preset !== "vehicle" ? focusPan(guidance) : { x: 0, y: 0 };
+  const topText =
+    routeMode === "parking"
+      ? isGuidanceActive
+        ? `${currentGuide.action}して${destinationLabel}へ`
+        : `${destinationLabel}がおすすめ候補`
+      : "西出口方面へ退出";
   const locationText =
     routeMode === "parking"
-      ? `現在地: 西入口 / ${destinationLabel}へ案内中`
-      : `現在地: ${destinationLabel}付近 / 出口案内中`;
+      ? isGuidanceActive
+        ? `${destinationLabel}へ案内中`
+        : `ルートプレビュー: ${destinationLabel}`
+      : `${destinationLabel}付近から出口案内中`;
 
   async function refresh() {
     try {
@@ -219,23 +252,39 @@ export function UserGuidance() {
         fetchJson<GuidanceResponse>(`/api/backend/parking/recommendation?userSessionId=${encodeURIComponent(userSessionId)}`)
       ]);
       setState(nextState);
-      setGuidance(nextGuidance);
+      const currentGuidance = guidanceRef.current;
+      const shouldReplaceGuidance =
+        !currentGuidance ||
+        currentGuidance.status === "active" ||
+        nextGuidance.status === "active" ||
+        guidanceTargetKey(currentGuidance) === guidanceTargetKey(nextGuidance);
+
+      if (shouldReplaceGuidance) {
+        guidanceRef.current = nextGuidance;
+        setGuidance(nextGuidance);
+        setPendingGuidance(null);
+      } else {
+        setPendingGuidance(nextGuidance);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "データ取得に失敗しました。");
     }
   }
 
   async function startGuidance() {
-    if (!guidance?.targetArea || routeMode !== "parking") {
+    const guidanceToStart = pendingGuidance ?? guidance;
+    if (!guidanceToStart?.targetArea || routeMode !== "parking") {
       return;
     }
     setLoading(true);
     try {
       const response = await fetchJson<GuidanceResponse>("/api/backend/guidance/start", {
         method: "POST",
-        body: JSON.stringify({ userSessionId, targetAreaId: guidance.targetArea.areaId })
+        body: JSON.stringify({ userSessionId, targetAreaId: guidanceToStart.targetArea.areaId })
       });
+      guidanceRef.current = response;
       setGuidance(response);
+      setPendingGuidance(null);
       await refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "案内開始に失敗しました。");
@@ -244,9 +293,41 @@ export function UserGuidance() {
     }
   }
 
+  async function cancelGuidance() {
+    if (!guidance?.reservation || routeMode !== "parking") {
+      return;
+    }
+    setLoading(true);
+    try {
+      await fetchJson<{ cancelledReservationIds: string[] }>("/api/backend/guidance/cancel", {
+        method: "POST",
+        body: JSON.stringify({ userSessionId, reservationId: guidance.reservation.reservationId })
+      });
+      guidanceRef.current = null;
+      setGuidance(null);
+      setPendingGuidance(null);
+      setMapView((current) => ({ ...current, preset: "" }));
+      await refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "案内中止に失敗しました。");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handlePrimaryAction() {
+    if (isGuidanceActive) {
+      cancelGuidance();
+    } else {
+      startGuidance();
+    }
+  }
+
   function focusVehiclePosition() {
-    const startPoint = getRouteStartPoint(routePath);
-    const pan = startPoint ? pointPan(startPoint) : { x: 0, y: 12 };
+    if (!showCurrentMarker || !currentPosition) {
+      return;
+    }
+    const pan = pointPan(currentPosition);
     setMapView((current) => ({
       tilt: 54,
       rotate: current.rotate,
@@ -298,7 +379,7 @@ export function UserGuidance() {
 
   useEffect(() => {
     refresh();
-    const timer = window.setInterval(refresh, 3000);
+    const timer = window.setInterval(refresh, 1000);
     return () => window.clearInterval(timer);
   }, [userSessionId]);
 
@@ -372,10 +453,14 @@ export function UserGuidance() {
             <img className="unity-parking-image" src="/assets/parking.png" alt="Unity駐車場マップ" />
             <svg className="map-route-overlay" viewBox="0 0 637 492" preserveAspectRatio="none" aria-hidden="true">
               <g>{mapSlots(state, guidance)}</g>
-              <path className="route-main" d={routePath} />
-              <path className="route-dash" d={routePath} />
-              {currentPosition ? (
-                <g className="current-car-marker" transform={`translate(${currentPosition.x} ${currentPosition.y})`}>
+              {showRouteLine ? (
+                <>
+                  <path className={`route-main ${showRoutePreview ? "preview" : ""}`} d={routePath} />
+                  <path className={`route-dash ${showRoutePreview ? "preview" : ""}`} d={routePath} />
+                </>
+              ) : null}
+              {showCurrentMarker && currentPosition ? (
+                <g className="current-car-marker" style={{ transform: `translate(${currentPosition.x}px, ${currentPosition.y}px)` }}>
                   <circle r="16" />
                   <path d="M0 -18 L8 6 L0 2 L-8 6 Z" />
                 </g>
@@ -392,8 +477,15 @@ export function UserGuidance() {
           </div>
 
           <div className="map-controls" aria-label="地図表示調整">
-            <button className={`map-control primary ${mapView.preset === "vehicle" ? "active" : ""}`} type="button" onClick={focusVehiclePosition} aria-label="現在地に合わせる">
+            <button
+              className={`map-control primary current-location ${mapView.preset === "vehicle" ? "active" : ""}`}
+              type="button"
+              onClick={focusVehiclePosition}
+              disabled={!showCurrentMarker}
+              aria-label="現在地に合わせる"
+            >
               <span className="heading-icon" aria-hidden="true">⌖</span>
+              <span>現在地</span>
             </button>
             <button className={`map-control ${mapView.preset === "north" ? "active" : ""}`} type="button" onClick={setNorthPreset} aria-label="北を上">
               N
@@ -414,8 +506,12 @@ export function UserGuidance() {
             </div>
             <img className="aerial-image" src="/assets/parking.png" alt="" />
             <svg className="aerial-map" viewBox="0 0 637 492" preserveAspectRatio="none" aria-hidden="true">
-              <path className="mr-route-main" d={routePath} />
-              <path className="mr-route-core" d={routePath} />
+              {showRouteLine ? (
+                <>
+                  <path className={`mr-route-main ${showRoutePreview ? "preview" : ""}`} d={routePath} />
+                  <path className={`mr-route-core ${showRoutePreview ? "preview" : ""}`} d={routePath} />
+                </>
+              ) : null}
             </svg>
             <div className="route-progress" aria-hidden="true"><span /></div>
             <div className="mr-target">{routeMode === "parking" ? destinationLabel : "西出口"}</div>
@@ -438,10 +534,12 @@ export function UserGuidance() {
             <article className="route-panel">
               <div className="summary">
                 <div>
-                  <h2>{routeMode === "parking" ? `${destinationLabel}へ案内` : "西出口へ案内"}</h2>
+                  <h2>{routeMode === "parking" ? (isGuidanceActive ? `${destinationLabel}へ案内` : `${destinationLabel}の候補`) : "西出口へ案内"}</h2>
                   <p>
                     {routeMode === "parking"
-                      ? `${guidance?.targetArea?.label ?? "推奨エリア"}の空き状況をもとに、Unity snapshot 由来の案内先を表示しています。`
+                      ? isGuidanceActive
+                        ? `${guidance?.targetArea?.label ?? "推奨エリア"}の空き状況をもとに、Unity snapshot 由来の案内先を表示しています。`
+                        : `${guidance?.targetArea?.label ?? "推奨エリア"}の空き状況をもとにした候補です。ルートはプレビューとして表示しています。`
                       : "出口案内は現在デモ表示です。駐車案内データとは分けて表示しています。"}
                   </p>
                 </div>
@@ -452,11 +550,13 @@ export function UserGuidance() {
                 <div className="map-stat"><small>混雑</small><b>{riskLabel[crowd]}</b></div>
                 <div className="map-stat"><small>案内先</small><b>{routeMode === "parking" ? destinationLabel : "西出口"}</b></div>
               </div>
+              {candidateChanged ? <p className="demo-notice">より良い候補として {pendingLabel} が見つかりました。案内開始時に最新候補へ更新します。</p> : null}
+              {isGuidanceActive && !assignedCarPosition ? <p className="demo-notice warning">自車位置を確認中です。Unity snapshot の車両位置を待っています。</p> : null}
               {guidance?.replanReason ? <p className="demo-notice">{guidance.replanReason}</p> : null}
               {state?.stale ? <p className="demo-notice warning">Unity snapshot が止まっています。管理者画面の Unity 表示を確認してください。</p> : null}
               {error ? <p className="demo-notice warning">{error}</p> : null}
-              <button className="primary-action" type="button" onClick={startGuidance} disabled={loading || routeMode !== "parking" || !guidance?.targetArea}>
-                {routeMode === "exit" ? "出口案内を表示中" : guidance?.reservation ? "案内中" : loading ? "予約中..." : "案内を開始"}
+              <button className="primary-action" type="button" onClick={handlePrimaryAction} disabled={loading || routeMode !== "parking" || (!isGuidanceActive && !guidance?.targetArea)}>
+                {routeMode === "exit" ? "出口案内を表示中" : loading ? (isGuidanceActive ? "中止中..." : "予約中...") : isGuidanceActive ? "案内を中止" : "案内を開始"}
               </button>
               {guidance?.reservation ? (
                 <p className="route-detail">予約期限: {new Date(guidance.reservation.expiresAt).toLocaleTimeString("ja-JP")}</p>
