@@ -1,5 +1,7 @@
 ﻿# SmartParking ParkingSimulator
 
+MVP
+
 Unity WebGL の駐車場シミュレーションから 1 秒ごとに snapshot を受け取り、FastAPI backend で混雑状況、空き台数、ユーザー案内、Gemini AI 提案を処理し、Next.js frontend でユーザー画面と管理者画面を表示する MVP です。
 
 ## 現在できていること
