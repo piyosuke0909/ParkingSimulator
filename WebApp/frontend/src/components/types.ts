@@ -33,6 +33,7 @@ export type AdminState = {
     occupancyRate: number;
   };
   areas: AreaStatus[];
+  slots?: ParkingMapSlot[];
   areaLayout: {
     generatedFrom: string;
     image: { width: number; height: number };
@@ -43,15 +44,35 @@ export type AdminState = {
   lastAiRecommendation?: AiRecommendation | null;
 };
 
+export type ParkingMapSlot = {
+  slotId: string;
+  areaId: string;
+  state: string;
+  sensorOccupied?: boolean;
+  isLeaving?: boolean;
+  mapPosition?: { x: number; y: number } | null;
+  accessWaypointId?: string | null;
+};
+
 export type GuidanceResponse = {
-  guidanceLevel: "area";
+  guidanceLevel: "area" | "slot";
   status: "active" | "not_started" | "unavailable";
   updatedAt?: string;
   targetArea?: { areaId: string; label: string; reason: string };
+  recommendedSlotId?: string | null;
+  recommendedSlot?: {
+    slotId: string;
+    areaId: string;
+    label: string;
+    state: string;
+    position?: { x: number; y: number; z: number } | null;
+    mapPosition?: { x: number; y: number } | null;
+    accessWaypointId?: string | null;
+  } | null;
   message?: string;
   replanReason?: string | null;
-  reservation?: { reservationId: string; status: string; targetAreaId: string; expiresAt: string } | null;
-  route?: { svgPath: string; steps: string[] };
+  reservation?: { reservationId: string; status: string; targetAreaId: string; targetSlotId?: string | null; expiresAt: string } | null;
+  route?: { svgPath: string; steps: string[]; source?: "unity-waypoints" | "area-fallback"; waypointIds?: string[] };
   summary?: { emptyCount: number; effectiveAvailable: number; congestionLevel: RiskLevel };
 };
 
