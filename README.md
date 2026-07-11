@@ -130,12 +130,18 @@ MVP の仮データ / 固定データ:
 
 | 種類 | バージョン / 条件 |
 | --- | --- |
-| OS | Windows |
+| OS | Windows または macOS |
 | Python | 3.13 系 |
 | Node.js | npm が使える Node.js 環境 |
 | Frontend | Next.js 16 / React 19 |
 | Unity | 2022.3.62f2 |
 | Unity module | WebGL Build Support |
+
+macOSでは、バックエンドの起動にPython 3.11以上が必要です。Homebrewを使う場合は、事前に次を実行してください。
+
+```bash
+brew install python@3.13
+```
 
 ## 初回セットアップ
 
@@ -177,6 +183,14 @@ BACKEND_URL=http://localhost:8000
 
 backend と frontend をまとめて起動する場合:
 
+macOS:
+
+```bash
+./scripts/start-dev.sh
+```
+
+Windows:
+
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\start-dev.ps1
 ```
@@ -192,6 +206,14 @@ API:          http://127.0.0.1:8000/api/health
 ```
 
 停止:
+
+macOS:
+
+```bash
+./scripts/stop-dev.sh
+```
+
+Windows:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\stop-dev.ps1
@@ -209,11 +231,27 @@ powershell -ExecutionPolicy Bypass -File .\scripts\stop-dev.ps1
 
 依存関係のインストールをスキップしたい場合:
 
+macOS:
+
+```bash
+./scripts/start-dev.sh --no-install
+```
+
+Windows:
+
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\start-dev.ps1 -NoInstall
 ```
 
 Unity WebGL runner を起動しない場合:
+
+macOS:
+
+```bash
+./scripts/start-dev.sh --no-unity-runner
+```
+
+Windows:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\start-dev.ps1 -NoUnityRunner

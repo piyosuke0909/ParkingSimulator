@@ -1,6 +1,6 @@
 import type { AdminState, AiRecommendation, AiStatus } from "../types";
-import { AreaMap } from "./AreaMap";
 import { AiPanel } from "./AiPanel";
+import { UnityView } from "./UnityView";
 import { riskLabel } from "./constants";
 import { percent, riskClass } from "./utils";
 
@@ -10,7 +10,7 @@ type Props = {
   aiStatus: AiStatus | null;
   instruction: string;
   generating: boolean;
-  priorityAreas: Set<string>;
+  unityBuildAvailable: boolean | null;
   onInstructionChange: (value: string) => void;
   onGenerateAi: () => void;
   onOpenArea: (areaId: string) => void;
@@ -22,7 +22,7 @@ export function OverviewView({
   aiStatus,
   instruction,
   generating,
-  priorityAreas,
+  unityBuildAvailable,
   onInstructionChange,
   onGenerateAi,
   onOpenArea
@@ -49,18 +49,7 @@ export function OverviewView({
       </section>
 
       <section className="adminOverviewGrid">
-        <article className="adminPanel overviewMapPanel">
-          <div className="adminPanelHeader">
-            <div>
-              <h2>駐車場マップ</h2>
-              <p>Unity snapshot から生成した区画・スロット状況を表示します。</p>
-            </div>
-            <span className={`statusPill ${state?.stale ? "stale" : "live"}`}>
-              {state?.stale ? "Unity未受信" : "Unity受信中"}
-            </span>
-          </div>
-          <AreaMap state={state} mode="normal" priorityAreas={priorityAreas} showGuards />
-        </article>
+        <UnityView unityBuildAvailable={unityBuildAvailable} />
 
         <article className="adminPanel">
           <div className="adminPanelHeader">

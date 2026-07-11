@@ -118,7 +118,7 @@ export function AdminDashboard() {
             aiStatus={aiStatus}
             instruction={instruction}
             generating={generating}
-            priorityAreas={priorityAreas}
+            unityBuildAvailable={unityBuildAvailable}
             onInstructionChange={setInstruction}
             onGenerateAi={generateAi}
             onOpenArea={openArea}
