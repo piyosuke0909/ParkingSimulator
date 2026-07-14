@@ -9,15 +9,17 @@ import { GuardsView } from "./admin/GuardsView";
 import { LogsView } from "./admin/LogsView";
 import { OverviewView } from "./admin/OverviewView";
 import { ParkingView } from "./admin/ParkingView";
-import type { AdminView, MapMode } from "./admin/types";
+import { PolicyView } from "./admin/PolicyView";
+import type { AdminPolicy, AdminView, MapMode } from "./admin/types";
 import { selectedPriorityAreas } from "./admin/utils";
-import { UnityView } from "./admin/UnityView";
 import type { AdminState, AiRecommendation, AiStatus } from "./types";
 
 export function AdminDashboard() {
   const [view, setView] = useState<AdminView>("overview");
+  const [menuOpen, setMenuOpen] = useState(false);
   const [state, setState] = useState<AdminState | null>(null);
   const [mapMode, setMapMode] = useState<MapMode>("normal");
+  const [policy, setPolicy] = useState<AdminPolicy>({ priorityAreaIds: [], closedAreaIds: [], restrictedAreaIds: [] });
   const [selectedAreaId, setSelectedAreaId] = useState("A");
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
   const [instruction, setInstruction] = useState(defaultInstruction);
@@ -42,7 +44,11 @@ export function AdminDashboard() {
     [selectedAreaSlots, selectedSlotId]
   );
 
-  const priorityAreas = useMemo(() => selectedPriorityAreas(ai, state?.areas ?? []), [ai, state]);
+  const priorityAreas = useMemo(() => {
+    const areas = selectedPriorityAreas(ai, state?.areas ?? []);
+    policy.priorityAreaIds.forEach((areaId) => areas.add(areaId));
+    return areas;
+  }, [ai, policy.priorityAreaIds, state]);
 
   const busiestArea = useMemo(
     () => [...(state?.areas ?? [])].sort((a, b) => b.riskScore - a.riskScore)[0] ?? null,
@@ -86,6 +92,7 @@ export function AdminDashboard() {
     setSelectedAreaId(areaId);
     setSelectedSlotId(null);
     setView("parking");
+    setMenuOpen(false);
   }
 
   useEffect(() => {
@@ -105,10 +112,20 @@ export function AdminDashboard() {
 
   return (
     <main className="adminConsole">
-      <AdminSidebar view={view} state={state} onViewChange={setView} />
+      <AdminSidebar
+        view={view}
+        state={state}
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        onViewChange={(nextView) => {
+          setView(nextView);
+          setMenuOpen(false);
+        }}
+      />
+      <button className={`adminMenuBackdrop ${menuOpen ? "open" : ""}`} type="button" aria-label="メニューを閉じる" onClick={() => setMenuOpen(false)} />
 
       <section className="adminMain">
-        <AdminTopbar view={view} onRefresh={refresh} />
+        <AdminTopbar view={view} onRefresh={refresh} onMenuToggle={() => setMenuOpen((current) => !current)} />
         {error ? <p className="adminNotice danger">{error}</p> : null}
 
         {view === "overview" ? (
@@ -119,8 +136,10 @@ export function AdminDashboard() {
             instruction={instruction}
             generating={generating}
             unityBuildAvailable={unityBuildAvailable}
+            policy={policy}
             onInstructionChange={setInstruction}
             onGenerateAi={generateAi}
+            onPolicyChange={setPolicy}
             onOpenArea={openArea}
           />
         ) : null}
@@ -143,6 +162,8 @@ export function AdminDashboard() {
           />
         ) : null}
 
+        {view === "policy" ? <PolicyView state={state} ai={ai} policy={policy} onPolicyChange={setPolicy} onOpenArea={openArea} /> : null}
+
         {view === "guards" ? <GuardsView state={state} ai={ai} busiestArea={busiestArea} priorityAreas={priorityAreas} /> : null}
 
         {view === "ai" ? (
@@ -156,8 +177,6 @@ export function AdminDashboard() {
             onGenerate={generateAi}
           />
         ) : null}
-
-        {view === "unity" ? <UnityView unityBuildAvailable={unityBuildAvailable} /> : null}
 
         {view === "logs" ? <LogsView state={state} /> : null}
       </section>

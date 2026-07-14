@@ -24,6 +24,9 @@
       </div>
     </div>
     <script>
+      if (new URLSearchParams(window.location.search).get("embed") === "admin") {
+        document.body.classList.add("admin-embed");
+      }
 
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");

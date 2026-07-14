@@ -6,18 +6,25 @@ import { formatTime } from "./utils";
 type SidebarProps = {
   view: AdminView;
   state: AdminState | null;
+  open: boolean;
+  onClose: () => void;
   onViewChange: (view: AdminView) => void;
 };
 
-export function AdminSidebar({ view, state, onViewChange }: SidebarProps) {
+export function AdminSidebar({ view, state, open, onClose, onViewChange }: SidebarProps) {
   const connectionLabel = !state ? "確認中" : state.stale ? "Unity未受信" : "Unity接続中";
   const connectionClass = !state ? "" : state.stale ? "stale" : "live";
 
   return (
-    <aside className="adminSidebar">
-      <div className="adminBrand">
-        <strong>SmartParking</strong>
-        <span>Operations Console</span>
+    <aside className={`adminSidebar ${open ? "open" : ""}`}>
+      <div className="adminSidebarHead">
+        <div className="adminBrand">
+          <strong>SmartParking</strong>
+          <span>Operations Console</span>
+        </div>
+        <button className="adminIconButton" type="button" aria-label="メニューを閉じる" onClick={onClose}>
+          ×
+        </button>
       </div>
       <nav className="adminNav" aria-label="管理メニュー">
         {navItems.map((item) => (
@@ -38,21 +45,17 @@ export function AdminSidebar({ view, state, onViewChange }: SidebarProps) {
 type TopbarProps = {
   view: AdminView;
   onRefresh: () => void;
+  onMenuToggle: () => void;
 };
 
-export function AdminTopbar({ view, onRefresh }: TopbarProps) {
+export function AdminTopbar({ view, onRefresh, onMenuToggle }: TopbarProps) {
   return (
     <header className="adminTopbar">
-      <div>
-        <h1>{navItems.find((item) => item.id === view)?.label}</h1>
-        <p>Unity snapshot を基準に、駐車案内と警備員配置を管理します。</p>
-      </div>
-      <div className="adminTopActions">
-        <a className="adminLinkButton" href="/">
-          ユーザー画面
-        </a>
-        <button className="adminButton" type="button" onClick={onRefresh}>
-          更新
+      <div className="adminTitleGroup">
+        <button className="adminMenuButton" type="button" aria-label="管理メニューを開く" onClick={onMenuToggle}>
+          <span />
+          <span />
+          <span />
         </button>
       </div>
     </header>
