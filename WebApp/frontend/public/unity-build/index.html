@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | UnityProject</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="stylesheet" href="TemplateData/style.css?v=fit-16x10">
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
@@ -24,6 +24,9 @@
       </div>
     </div>
     <script>
+      if (new URLSearchParams(window.location.search).get("embed") === "admin") {
+        document.body.classList.add("admin-embed");
+      }
 
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
@@ -101,9 +104,10 @@
 
 
       } else {
-        // Desktop style: fill the iframe supplied by the admin screen.
-        canvas.style.width = "100vw";
-        canvas.style.height = "100vh";
+        // Desktop style: keep the Unity build's native 960x600 aspect ratio.
+        // Stretching to arbitrary iframe ratios clips the parking-lot edge lines.
+        canvas.style.width = "min(100vw, calc(100vh * 1.6))";
+        canvas.style.height = "min(100vh, calc(100vw / 1.6))";
       }
 
       loadingBar.style.display = "block";

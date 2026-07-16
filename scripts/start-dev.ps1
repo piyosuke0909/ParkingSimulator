@@ -5,6 +5,15 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+$ProcessPath = [Environment]::GetEnvironmentVariable("Path", "Process")
+if (!$ProcessPath) {
+    $ProcessPath = [Environment]::GetEnvironmentVariable("PATH", "Process")
+}
+if ($ProcessPath) {
+    [Environment]::SetEnvironmentVariable("Path", $ProcessPath, "Process")
+    [Environment]::SetEnvironmentVariable("PATH", $null, "Process")
+}
+
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 $BackendDir = Join-Path $Root "WebApp\backend"
 $FrontendDir = Join-Path $Root "WebApp\frontend"
@@ -35,26 +44,76 @@ if (!$NoInstall -and !(Test-Path (Join-Path $FrontendDir "node_modules"))) {
 }
 
 $BackendLog = Join-Path $LogDir "backend.log"
+$BackendErrorLog = Join-Path $LogDir "backend.err.log"
 $FrontendLog = Join-Path $LogDir "frontend.log"
+$FrontendErrorLog = Join-Path $LogDir "frontend.err.log"
 $UnityRunnerLog = Join-Path $LogDir "unity-runner.log"
 $BackendPidFile = Join-Path $Root ".dev-backend.pid"
 $FrontendPidFile = Join-Path $Root ".dev-frontend.pid"
 $UnityRunnerPidFile = Join-Path $Root ".dev-unity-runner.pid"
 $UnityRunnerProfile = Join-Path $Root ".unity-runner-profile"
 
+function Resolve-ExecutablePath {
+    param(
+        [string]$CommandName,
+        [string[]]$FallbackPaths
+    )
+
+    $Command = Get-Command $CommandName -ErrorAction SilentlyContinue
+    if ($Command) {
+        return $Command.Source
+    }
+
+    foreach ($FallbackPath in $FallbackPaths) {
+        if ($FallbackPath -and (Test-Path $FallbackPath)) {
+            return $FallbackPath
+        }
+    }
+
+    throw "Required command was not found: $CommandName"
+}
+
+$PythonFallbacks = @()
+if ($env:LOCALAPPDATA) {
+    $PythonFallbacks += Join-Path $env:LOCALAPPDATA "Programs\Python\Python313\python.exe"
+    $PythonRoot = Join-Path $env:LOCALAPPDATA "Programs\Python"
+    if (Test-Path $PythonRoot) {
+        $PythonFallbacks += Get-ChildItem -Path $PythonRoot -Recurse -Filter python.exe -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName }
+    }
+}
+
+$NpmFallbacks = @(
+    (Join-Path $env:ProgramFiles "nodejs\npm.cmd"),
+    (Join-Path ${env:ProgramFiles(x86)} "nodejs\npm.cmd")
+)
+$NodeFallbacks = @(
+    (Join-Path $env:ProgramFiles "nodejs\node.exe"),
+    (Join-Path ${env:ProgramFiles(x86)} "nodejs\node.exe")
+)
+
+$PythonPath = Resolve-ExecutablePath -CommandName "python" -FallbackPaths $PythonFallbacks
+$NpmPath = Resolve-ExecutablePath -CommandName "npm.cmd" -FallbackPaths $NpmFallbacks
+$NodePath = Resolve-ExecutablePath -CommandName "node" -FallbackPaths $NodeFallbacks
+$NextBin = Join-Path $FrontendDir "node_modules\next\dist\bin\next"
+
 function Start-DevProcess {
     param(
         [string]$Name,
         [string]$WorkingDirectory,
-        [string]$Command,
+        [string]$FilePath,
+        [string[]]$ArgumentList,
+        [string]$StandardOutput,
+        [string]$StandardError,
         [string]$PidFile
     )
 
     $Process = Start-Process `
-        -FilePath "powershell.exe" `
-        -ArgumentList @("-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", $Command) `
+        -FilePath $FilePath `
+        -ArgumentList $ArgumentList `
         -WorkingDirectory $WorkingDirectory `
         -WindowStyle Hidden `
+        -RedirectStandardOutput $StandardOutput `
+        -RedirectStandardError $StandardError `
         -PassThru
 
     Set-Content -Path $PidFile -Value $Process.Id -Encoding ASCII
@@ -115,7 +174,7 @@ function Start-UnityWebGLRunner {
     New-Item -ItemType Directory -Force -Path $UnityRunnerProfile | Out-Null
 
     $UnityUrl = "http://127.0.0.1:3000/unity-build/index.html?runner=dev"
-    if (!(Wait-ForUrl -Url $UnityUrl -TimeoutSeconds 30)) {
+    if (!(Wait-ForUrl -Url $UnityUrl -TimeoutSeconds 90)) {
         Write-Warning "Unity WebGL runner was not started because frontend did not serve $UnityUrl in time."
         return
     }
@@ -145,11 +204,23 @@ function Start-UnityWebGLRunner {
     Write-Host "Unity WebGL runner started. PID=$($Process.Id)"
 }
 
-$BackendCommand = "Set-Location -LiteralPath '$BackendDir'; python -m uvicorn main:app --host 127.0.0.1 --port 8000 *> '$BackendLog'"
-$FrontendCommand = "Set-Location -LiteralPath '$FrontendDir'; npm.cmd run dev -- --hostname 127.0.0.1 --port 3000 *> '$FrontendLog'"
+Start-DevProcess `
+    -Name "backend" `
+    -WorkingDirectory $BackendDir `
+    -FilePath $PythonPath `
+    -ArgumentList @("-m", "uvicorn", "main:app", "--host", "127.0.0.1", "--port", "8000") `
+    -StandardOutput $BackendLog `
+    -StandardError $BackendErrorLog `
+    -PidFile $BackendPidFile
 
-Start-DevProcess -Name "backend" -WorkingDirectory $BackendDir -Command $BackendCommand -PidFile $BackendPidFile
-Start-DevProcess -Name "frontend" -WorkingDirectory $FrontendDir -Command $FrontendCommand -PidFile $FrontendPidFile
+Start-DevProcess `
+    -Name "frontend" `
+    -WorkingDirectory $FrontendDir `
+    -FilePath $NodePath `
+    -ArgumentList @($NextBin, "dev", "--hostname", "127.0.0.1", "--port", "3000") `
+    -StandardOutput $FrontendLog `
+    -StandardError $FrontendErrorLog `
+    -PidFile $FrontendPidFile
 Start-UnityWebGLRunner
 
 Start-Sleep -Seconds 3
@@ -162,7 +233,9 @@ Write-Host "API:   http://127.0.0.1:8000/api/health"
 Write-Host ""
 Write-Host "Logs:"
 Write-Host "  $BackendLog"
+Write-Host "  $BackendErrorLog"
 Write-Host "  $FrontendLog"
+Write-Host "  $FrontendErrorLog"
 Write-Host "  $UnityRunnerLog"
 Write-Host ""
 Write-Host "Stop:"
