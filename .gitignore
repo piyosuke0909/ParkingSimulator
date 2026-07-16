@@ -67,6 +67,7 @@ WebApp/frontend/node_modules/
 WebApp/frontend/.next/
 WebApp/frontend/out/
 WebApp/backend/__pycache__/
+WebApp/backend/.venv/
 WebApp/backend/*.log
 WebApp/frontend/*.log
 

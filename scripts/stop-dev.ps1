@@ -36,3 +36,12 @@ foreach ($PidFile in $PidFiles) {
 
     Remove-Item $PidFile -Force
 }
+
+foreach ($Port in @(3000, 8000)) {
+    $Connections = netstat -ano | Select-String "127\.0\.0\.1:$Port\s+.*LISTENING"
+    foreach ($Connection in $Connections) {
+        $Parts = ($Connection.Line -split "\s+") | Where-Object { $_ }
+        $ProcessId = [int]$Parts[-1]
+        Stop-ProcessTree -ProcessId $ProcessId
+    }
+}
