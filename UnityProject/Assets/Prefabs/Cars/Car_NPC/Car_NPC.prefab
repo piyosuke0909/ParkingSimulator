@@ -130,9 +130,10 @@ MonoBehaviour:
   backOutCheckLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  backOutCheckBoxSize: {x: 8, y: 4, z: 5}
+  backOutCheckBoxSize: {x: 8, y: 4, z: 6}
   backOutRetryInterval: 0.5
   checkWhileBackingOut: 1
+  ignoreWaitingToBackOutCarsInFrontDetection: 1
   drawBackOutCheckGizmo: 1
   logBackOutSafetyDebug: 0
   ignoreParkedCarsInBackOutCheck: 1
@@ -142,16 +143,32 @@ MonoBehaviour:
   carLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  frontCheckDistance: 5
+  frontCheckDistance: 8
   frontCheckRadius: 1.5
-  frontStopHoldTime: 0.5
+  frontStopHoldTime: 0.1
+  frontSameLaneHalfWidth: 2.75
+  sameDirectionDotThreshold: 0.5
+  useSameLaneDirectionFilter: 1
+  applyLaneFilterToPhysicalFrontDetection: 1
   drawFrontCheckDebug: 1
   logFrontVehicleDetection: 0
+  ignoreFullyParkedCarsInFrontDetection: 1
+  logIgnoredParkedCars: 0
+  usePhysicsQueryThrottling: 1
+  movingFrontCheckInterval: 0.05
+  stoppedFrontCheckInterval: 0.12
+  startMoveSafetyCheckInterval: 0.12
+  physicsQueryBufferSize: 32
+  disableDebugDrawingAtRuntime: 1
+  networkReservationRetryInterval: 0.08
+  networkWaitReasonRefreshInterval: 0.25
   useStartMoveSafetyCheck: 1
   startMoveCheckBoxSize: {x: 7, y: 4, z: 9}
   startMoveCheckCenterOffset: {x: 0, y: 1, z: 4}
   drawStartMoveCheckGizmo: 1
   logStartMoveSafetyCheck: 0
+  startMoveSameLaneHalfWidth: 3
+  startMoveIgnoreBehindDistance: 0.5
   useTurnInPlaceAtWaypoint: 1
   turnInPlaceStartAngle: 45
   turnInPlaceCompleteAngle: 5
@@ -160,9 +177,11 @@ MonoBehaviour:
   turnInPlaceMinTargetDistance: 1
   logTurnInPlaceDebug: 0
   useWaypointReservation: 1
+  trafficNetworkManager: {fileID: 0}
   logWaypointReservationDebug: 0
   occupyFirstWaypointOnRouteStart: 1
   firstWaypointOccupyDistance: 6
+  currentStopReason: 
   isStoppedByFrontCar: 0
   moveState: 0
   destroyOnFinished: 1
@@ -191,7 +210,7 @@ Transform:
   m_GameObject: {fileID: 7112739337148362609}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 6}
+  m_LocalPosition: {x: 0, y: 1, z: 4.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -224,11 +224,7 @@ public class UnityStateExporter : MonoBehaviour
                 waypointId = GetWaypointId(waypoint),
                 name = waypoint.name,
                 position = ToVectorPayload(waypoint.transform.position),
-                nextWaypointIds = new List<string>(),
-                isEntrance = waypoint.isEntrance,
-                isExit = waypoint.isExit,
-                isIntersection = waypoint.isIntersection,
-                isStopPoint = waypoint.isStopPoint
+                nextWaypointIds = new List<string>()
             };
 
             if (waypoint.nextWaypoints != null)
@@ -332,10 +328,6 @@ public class WaypointPayload
     public string name;
     public Vector3Payload position;
     public List<string> nextWaypointIds;
-    public bool isEntrance;
-    public bool isExit;
-    public bool isIntersection;
-    public bool isStopPoint;
 }
 
 [Serializable]
