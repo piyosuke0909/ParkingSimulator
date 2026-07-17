@@ -184,86 +184,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 568269594544830780, guid: 6bdbd9c36d652aa47a4f8168c3553300, type: 3}
   m_PrefabInstance: {fileID: 4448298}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6220347
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6220348}
-  - component: {fileID: 6220350}
-  - component: {fileID: 6220349}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_10
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6220348
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6220347}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -95, y: 1, z: 105}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6220349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6220347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_10
-  memberWaypoints:
-  - {fileID: 1993258461}
-  - {fileID: 58750162}
-  - {fileID: 1488135120}
-  - {fileID: 1059136864}
-  reservedEmptyWaypoints: 2
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 2
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &6220350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6220347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 472757395}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!21 &6260871
 Material:
   serializedVersion: 8
@@ -420,30 +340,27 @@ MonoBehaviour:
   - {fileID: 0}
   autoCollectMergePoints: 1
   deadlockZones:
-  - {fileID: 1440580714}
-  - {fileID: 87598744}
-  - {fileID: 1366705448}
-  - {fileID: 1748071846}
-  - {fileID: 235895193}
-  - {fileID: 1321427672}
-  - {fileID: 763318623}
-  - {fileID: 1317051653}
-  - {fileID: 993433223}
-  - {fileID: 1849071337}
-  - {fileID: 957663175}
-  - {fileID: 1932930403}
-  - {fileID: 2084249406}
-  - {fileID: 652226548}
-  - {fileID: 961936902}
-  - {fileID: 2076868972}
-  - {fileID: 1596761042}
-  - {fileID: 2014615674}
-  - {fileID: 1848110242}
-  - {fileID: 1095360993}
-  - {fileID: 2076309511}
-  - {fileID: 103645000}
-  - {fileID: 6220349}
-  - {fileID: 253311262}
+  - {fileID: 1019629845}
+  - {fileID: 1629113349}
+  - {fileID: 139624644}
+  - {fileID: 101844500}
+  - {fileID: 1327817239}
+  - {fileID: 2087572904}
+  - {fileID: 1621429883}
+  - {fileID: 1980872427}
+  - {fileID: 516806262}
+  - {fileID: 211808496}
+  - {fileID: 1140978116}
+  - {fileID: 1071427927}
+  - {fileID: 1339207342}
+  - {fileID: 1018769210}
+  - {fileID: 2013091470}
+  - {fileID: 770774849}
+  - {fileID: 1997306853}
+  - {fileID: 45701847}
+  - {fileID: 527246650}
+  - {fileID: 981504263}
+  - {fileID: 776414935}
   autoCollectDeadlockZones: 1
   rebuildLookupOnStart: 1
   logDebug: 0
@@ -2265,6 +2182,86 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &45701845
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 45701846}
+  - component: {fileID: 45701848}
+  - component: {fileID: 45701847}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_04
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &45701846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45701845}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 85, y: 1, z: -95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &45701847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45701845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_04
+  memberWaypoints:
+  - {fileID: 1489505138}
+  - {fileID: 1899703014}
+  - {fileID: 1129571627}
+  - {fileID: 161945926}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &45701848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45701845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1001 &46450028
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4338,86 +4335,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 86235386}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &87598742
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 87598743}
-  - component: {fileID: 87598745}
-  - component: {fileID: 87598744}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_20
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &87598743
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 87598742}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 130, y: 1, z: 5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &87598744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 87598742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_20
-  memberWaypoints:
-  - {fileID: 1673191486}
-  - {fileID: 360456576}
-  - {fileID: 584082363}
-  - {fileID: 2109757111}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &87598745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 87598742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1 &89007052
 GameObject:
   m_ObjectHideFlags: 0
@@ -4520,7 +4437,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 217104690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &103644998
+--- !u!1 &101844498
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4528,55 +4445,55 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 103644999}
-  - component: {fileID: 103645001}
-  - component: {fileID: 103645000}
+  - component: {fileID: 101844499}
+  - component: {fileID: 101844501}
+  - component: {fileID: 101844500}
   m_Layer: 0
-  m_Name: AutoDeadlockZone_19
+  m_Name: AutoDeadlockZone_18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &103644999
+--- !u!4 &101844499
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 103644998}
+  m_GameObject: {fileID: 101844498}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -140, y: 1, z: 5}
+  m_LocalPosition: {x: -5, y: 1, z: -95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1932473153}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &103645000
+--- !u!114 &101844500
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 103644998}
+  m_GameObject: {fileID: 101844498}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_19
+  zoneId: AutoDeadlockZone_18
   memberWaypoints:
-  - {fileID: 333806342}
-  - {fileID: 165615055}
-  - {fileID: 1790831340}
-  - {fileID: 2049884733}
-  reservedEmptyWaypoints: 2
+  - {fileID: 1200069390}
+  - {fileID: 1523160212}
+  - {fileID: 192758768}
+  - {fileID: 144416005}
+  reservedEmptyWaypoints: 1
   manualMaxVehicles: 1
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 2
+  currentCapacity: 0
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -4587,16 +4504,16 @@ MonoBehaviour:
   lineWidth: 5
   gizmoHeight: 0.9
   markerRadius: 0.8
---- !u!114 &103645001
+--- !u!114 &101844501
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 103644998}
+  m_GameObject: {fileID: 101844498}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 472757395}
+  m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
   memberCount: 4
@@ -6776,6 +6693,86 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &139624642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 139624643}
+  - component: {fileID: 139624645}
+  - component: {fileID: 139624644}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_19
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &139624643
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139624642}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -140, y: 1, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &139624644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139624642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_19
+  memberWaypoints:
+  - {fileID: 333806342}
+  - {fileID: 165615055}
+  - {fileID: 1790831340}
+  - {fileID: 2049884733}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &139624645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139624642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!21 &140727150
 Material:
   serializedVersion: 8
@@ -9682,6 +9679,86 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &211808494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 211808495}
+  - component: {fileID: 211808497}
+  - component: {fileID: 211808496}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_12
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &211808495
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 211808494}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -50, y: 1, z: -95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &211808496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 211808494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_12
+  memberWaypoints:
+  - {fileID: 858796713}
+  - {fileID: 1937589798}
+  - {fileID: 1505156517}
+  - {fileID: 1169552514}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &211808497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 211808494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1 &212522017
 GameObject:
   m_ObjectHideFlags: 0
@@ -10468,86 +10545,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 235074043}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &235895191
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 235895192}
-  - component: {fileID: 235895194}
-  - component: {fileID: 235895193}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_17
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &235895192
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235895191}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -130, y: 1, z: -105}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &235895193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235895191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_17
-  memberWaypoints:
-  - {fileID: 1556202379}
-  - {fileID: 551464739}
-  - {fileID: 674171747}
-  - {fileID: 1478970363}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &235895194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235895191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1 &236097740
 GameObject:
   m_ObjectHideFlags: 0
@@ -11198,86 +11195,6 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
---- !u!1 &253311260
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 253311261}
-  - component: {fileID: 253311263}
-  - component: {fileID: 253311262}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_05
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &253311261
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 253311260}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40, y: 1, z: -95}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &253311262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 253311260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_05
-  memberWaypoints:
-  - {fileID: 1160690387}
-  - {fileID: 1662656749}
-  - {fileID: 1972724859}
-  - {fileID: 1784180756}
-  reservedEmptyWaypoints: 2
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 2
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &253311263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 253311260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 472757395}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1001 &253746033
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20020,21 +19937,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7933490096161251693, guid: 6aeb18d6098a5644ebae4629d93c7afa, type: 3}
   m_PrefabInstance: {fileID: 472315642}
   m_PrefabAsset: {fileID: 0}
---- !u!115 &472757395
-MonoScript:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 7
-  m_DefaultReferences: {}
-  m_Icon: {fileID: 0}
-  m_Type: 0
-  m_ExecutionOrder: 0
-  m_ClassName: AutoGeneratedDeadlockZone
-  m_Namespace: 
-  m_AssemblyName: Assembly-CSharp
 --- !u!1001 &472908708
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22353,6 +22255,86 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &516806260
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 516806261}
+  - component: {fileID: 516806263}
+  - component: {fileID: 516806262}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_13
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &516806261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516806260}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -95, y: 1, z: -95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &516806262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516806260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_13
+  memberWaypoints:
+  - {fileID: 178135074}
+  - {fileID: 1683302370}
+  - {fileID: 1682012962}
+  - {fileID: 628233842}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &516806263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516806260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1 &517461395
 GameObject:
   m_ObjectHideFlags: 0
@@ -22627,6 +22609,86 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &527246648
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 527246649}
+  - component: {fileID: 527246651}
+  - component: {fileID: 527246650}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &527246649
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527246648}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 130, y: 1, z: 105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &527246650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527246648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_03
+  memberWaypoints:
+  - {fileID: 665023807}
+  - {fileID: 720541521}
+  - {fileID: 902208953}
+  - {fileID: 1778675231}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &527246651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527246648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!21 &533920254
 Material:
   serializedVersion: 8
@@ -26971,86 +27033,6 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
---- !u!1 &652226546
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 652226547}
-  - component: {fileID: 652226549}
-  - component: {fileID: 652226548}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_08
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &652226547
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 652226546}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 140, y: 1, z: -105}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &652226548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 652226546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_08
-  memberWaypoints:
-  - {fileID: 1366351001}
-  - {fileID: 1414407563}
-  - {fileID: 689923474}
-  - {fileID: 2059181678}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &652226549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 652226546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1 &653234407
 GameObject:
   m_ObjectHideFlags: 0
@@ -32590,86 +32572,6 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
---- !u!1 &763318621
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 763318622}
-  - component: {fileID: 763318624}
-  - component: {fileID: 763318623}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_15
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &763318622
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 763318621}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -95, y: 1, z: -5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &763318623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 763318621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_15
-  memberWaypoints:
-  - {fileID: 250871535}
-  - {fileID: 127847721}
-  - {fileID: 752511095}
-  - {fileID: 236934758}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &763318624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 763318621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1 &770072767
 GameObject:
   m_ObjectHideFlags: 0
@@ -32736,6 +32638,86 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+--- !u!1 &770774847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 770774848}
+  - component: {fileID: 770774850}
+  - component: {fileID: 770774849}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_06
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &770774848
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770774847}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 85, y: 1, z: -5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &770774849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770774847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_06
+  memberWaypoints:
+  - {fileID: 1958302755}
+  - {fileID: 392482568}
+  - {fileID: 1425262097}
+  - {fileID: 97400220}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &770774850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770774847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1001 &770784097
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33135,6 +33117,86 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 774703647}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &776414933
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 776414934}
+  - component: {fileID: 776414936}
+  - component: {fileID: 776414935}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &776414934
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 776414933}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5, y: 1, z: 105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &776414935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 776414933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_01
+  memberWaypoints:
+  - {fileID: 1059834088}
+  - {fileID: 1375914356}
+  - {fileID: 719832952}
+  - {fileID: 707128556}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &776414936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 776414933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1 &781692491
 GameObject:
   m_ObjectHideFlags: 0
@@ -40294,86 +40356,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1415742884102235563, guid: 684cd7fa899920a4c991bb1f09aaa600, type: 3}
   m_PrefabInstance: {fileID: 953609849}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &957663173
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 957663174}
-  - component: {fileID: 957663176}
-  - component: {fileID: 957663175}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_11
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &957663174
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 957663173}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -140, y: 1, z: 105}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &957663175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 957663173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_11
-  memberWaypoints:
-  - {fileID: 2090401007}
-  - {fileID: 1674734292}
-  - {fileID: 8809859}
-  - {fileID: 423930274}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &957663176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 957663173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!21 &958189763
 Material:
   serializedVersion: 8
@@ -40649,86 +40631,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1415742884102235563, guid: 684cd7fa899920a4c991bb1f09aaa600, type: 3}
   m_PrefabInstance: {fileID: 961615105}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &961936900
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 961936901}
-  - component: {fileID: 961936903}
-  - component: {fileID: 961936902}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_07
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &961936901
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 961936900}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40, y: 1, z: -5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &961936902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 961936900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_07
-  memberWaypoints:
-  - {fileID: 1255511315}
-  - {fileID: 1922741792}
-  - {fileID: 2004805608}
-  - {fileID: 626553234}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &961936903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 961936900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -41979,6 +41881,86 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1466064998150317956, guid: 3afa3cf59769d424185d30b5b4e6c242, type: 3}
   m_PrefabInstance: {fileID: 980354205}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &981504261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 981504262}
+  - component: {fileID: 981504264}
+  - component: {fileID: 981504263}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &981504262
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981504261}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 40, y: 1, z: 105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &981504263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981504261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_02
+  memberWaypoints:
+  - {fileID: 1288166629}
+  - {fileID: 1635723142}
+  - {fileID: 1467413585}
+  - {fileID: 316733303}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &981504264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981504261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1 &982207011
 GameObject:
   m_ObjectHideFlags: 0
@@ -42622,86 +42604,6 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
---- !u!1 &993433221
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 993433222}
-  - component: {fileID: 993433224}
-  - component: {fileID: 993433223}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_13
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &993433222
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 993433221}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -95, y: 1, z: -95}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &993433223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 993433221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_13
-  memberWaypoints:
-  - {fileID: 178135074}
-  - {fileID: 1683302370}
-  - {fileID: 1682012962}
-  - {fileID: 628233842}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &993433224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 993433221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1001 &995094736
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43545,6 +43447,166 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &1018769208
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1018769209}
+  - component: {fileID: 1018769211}
+  - component: {fileID: 1018769210}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_08
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1018769209
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018769208}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 140, y: 1, z: -105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1018769210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018769208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_08
+  memberWaypoints:
+  - {fileID: 1366351001}
+  - {fileID: 1414407563}
+  - {fileID: 689923474}
+  - {fileID: 2059181678}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &1018769211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018769208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
+--- !u!1 &1019629843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1019629844}
+  - component: {fileID: 1019629846}
+  - component: {fileID: 1019629845}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_21
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1019629844
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019629843}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5, y: 1, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1019629845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019629843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_21
+  memberWaypoints:
+  - {fileID: 2046820787}
+  - {fileID: 55141633}
+  - {fileID: 1440355626}
+  - {fileID: 1614550577}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &1019629846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019629843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1001 &1020684993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45492,6 +45554,86 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+--- !u!1 &1071427925
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1071427926}
+  - component: {fileID: 1071427928}
+  - component: {fileID: 1071427927}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_10
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1071427926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071427925}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -95, y: 1, z: 105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1071427927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071427925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_10
+  memberWaypoints:
+  - {fileID: 1993258461}
+  - {fileID: 58750162}
+  - {fileID: 1488135120}
+  - {fileID: 1059136864}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &1071427928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071427925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!21 &1075601184
 Material:
   serializedVersion: 8
@@ -46262,86 +46404,6 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
---- !u!1 &1095360991
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1095360992}
-  - component: {fileID: 1095360994}
-  - component: {fileID: 1095360993}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_02
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1095360992
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1095360991}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40, y: 1, z: 105}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1095360993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1095360991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_02
-  memberWaypoints:
-  - {fileID: 1288166629}
-  - {fileID: 1635723142}
-  - {fileID: 1467413585}
-  - {fileID: 316733303}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &1095360994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1095360991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1 &1095622663
 GameObject:
   m_ObjectHideFlags: 0
@@ -47671,6 +47733,86 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 1138089636}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1140978114
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1140978115}
+  - component: {fileID: 1140978117}
+  - component: {fileID: 1140978116}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_11
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1140978115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140978114}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -140, y: 1, z: 105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1140978116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140978114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_11
+  memberWaypoints:
+  - {fileID: 2090401007}
+  - {fileID: 1674734292}
+  - {fileID: 8809859}
+  - {fileID: 423930274}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &1140978117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140978114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1 &1142322557
 GameObject:
   m_ObjectHideFlags: 0
@@ -49605,6 +49747,21 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+--- !u!115 &1185016798
+MonoScript:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 7
+  m_DefaultReferences: {}
+  m_Icon: {fileID: 0}
+  m_Type: 0
+  m_ExecutionOrder: 0
+  m_ClassName: AutoGeneratedDeadlockZone
+  m_Namespace: 
+  m_AssemblyName: Assembly-CSharp
 --- !u!1001 &1185773319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54501,86 +54658,6 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
---- !u!1 &1317051651
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1317051652}
-  - component: {fileID: 1317051654}
-  - component: {fileID: 1317051653}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_14
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1317051652
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1317051651}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -50, y: 1, z: -5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1317051653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1317051651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_14
-  memberWaypoints:
-  - {fileID: 455408923}
-  - {fileID: 720182734}
-  - {fileID: 2099225567}
-  - {fileID: 1925186491}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &1317051654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1317051651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1 &1317709219
 GameObject:
   m_ObjectHideFlags: 0
@@ -54686,86 +54763,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1317709219}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1321427670
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1321427671}
-  - component: {fileID: 1321427673}
-  - component: {fileID: 1321427672}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_16
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1321427671
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1321427670}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 85, y: 1, z: 105}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1321427672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1321427670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_16
-  memberWaypoints:
-  - {fileID: 1679012735}
-  - {fileID: 1512704438}
-  - {fileID: 1724642172}
-  - {fileID: 1097378237}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &1321427673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1321427670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1 &1324213476
 GameObject:
   m_ObjectHideFlags: 0
@@ -55238,6 +55235,86 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 1326263835}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1327817237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1327817238}
+  - component: {fileID: 1327817240}
+  - component: {fileID: 1327817239}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_17
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1327817238
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327817237}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -130, y: 1, z: -105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1327817239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327817237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_17
+  memberWaypoints:
+  - {fileID: 1556202379}
+  - {fileID: 551464739}
+  - {fileID: 674171747}
+  - {fileID: 1478970363}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &1327817240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327817237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1 &1330544892
 GameObject:
   m_ObjectHideFlags: 0
@@ -55616,6 +55693,86 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1415742884102235563, guid: 684cd7fa899920a4c991bb1f09aaa600, type: 3}
   m_PrefabInstance: {fileID: 1338634666}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1339207340
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1339207341}
+  - component: {fileID: 1339207343}
+  - component: {fileID: 1339207342}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_09
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1339207341
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339207340}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -50, y: 1, z: 105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1339207342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339207340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_09
+  memberWaypoints:
+  - {fileID: 2029714025}
+  - {fileID: 1057227396}
+  - {fileID: 1882500593}
+  - {fileID: 1505564864}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &1339207343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339207340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1 &1340634509
 GameObject:
   m_ObjectHideFlags: 0
@@ -56526,86 +56683,6 @@ Transform:
   - {fileID: 167441482}
   m_Father: {fileID: 89007053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1366705446
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1366705447}
-  - component: {fileID: 1366705449}
-  - component: {fileID: 1366705448}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_19
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1366705447
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1366705446}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -140, y: 1, z: 5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1366705448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1366705446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_19
-  memberWaypoints:
-  - {fileID: 333806342}
-  - {fileID: 165615055}
-  - {fileID: 1790831340}
-  - {fileID: 2049884733}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &1366705449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1366705446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1 &1368533098
 GameObject:
   m_ObjectHideFlags: 0
@@ -59197,86 +59274,6 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
---- !u!1 &1440580712
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1440580713}
-  - component: {fileID: 1440580715}
-  - component: {fileID: 1440580714}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_21
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1440580713
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1440580712}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 1, z: 5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1440580714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1440580712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_21
-  memberWaypoints:
-  - {fileID: 2046820787}
-  - {fileID: 55141633}
-  - {fileID: 1440355626}
-  - {fileID: 1614550577}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &1440580715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1440580712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1 &1441338423
 GameObject:
   m_ObjectHideFlags: 0
@@ -65214,86 +65211,6 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
---- !u!1 &1596761040
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1596761041}
-  - component: {fileID: 1596761043}
-  - component: {fileID: 1596761042}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_05
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1596761041
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1596761040}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40, y: 1, z: -95}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1596761042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1596761040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_05
-  memberWaypoints:
-  - {fileID: 1160690387}
-  - {fileID: 1662656749}
-  - {fileID: 1972724859}
-  - {fileID: 1784180756}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &1596761043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1596761040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1 &1597838666
 GameObject:
   m_ObjectHideFlags: 0
@@ -65484,21 +65401,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1466064998150317956, guid: 3afa3cf59769d424185d30b5b4e6c242, type: 3}
   m_PrefabInstance: {fileID: 1600076427}
   m_PrefabAsset: {fileID: 0}
---- !u!115 &1603742204
-MonoScript:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 7
-  m_DefaultReferences: {}
-  m_Icon: {fileID: 0}
-  m_Type: 0
-  m_ExecutionOrder: 0
-  m_ClassName: AutoGeneratedDeadlockZone
-  m_Namespace: 
-  m_AssemblyName: Assembly-CSharp
 --- !u!1001 &1608984522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66131,6 +66033,86 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &1621429881
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1621429882}
+  - component: {fileID: 1621429884}
+  - component: {fileID: 1621429883}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_15
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1621429882
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621429881}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -95, y: 1, z: -5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1621429883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621429881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_15
+  memberWaypoints:
+  - {fileID: 250871535}
+  - {fileID: 127847721}
+  - {fileID: 752511095}
+  - {fileID: 236934758}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &1621429884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621429881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1001 &1621543325
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66303,6 +66285,86 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+--- !u!1 &1629113347
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1629113348}
+  - component: {fileID: 1629113350}
+  - component: {fileID: 1629113349}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_20
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1629113348
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629113347}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 130, y: 1, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1629113349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629113347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_20
+  memberWaypoints:
+  - {fileID: 1673191486}
+  - {fileID: 360456576}
+  - {fileID: 584082363}
+  - {fileID: 2109757111}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &1629113350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629113347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1 &1629917179
 GameObject:
   m_ObjectHideFlags: 0
@@ -71733,86 +71795,6 @@ Transform:
   - {fileID: 212522018}
   m_Father: {fileID: 976853909}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1748071844
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1748071845}
-  - component: {fileID: 1748071847}
-  - component: {fileID: 1748071846}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_18
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1748071845
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1748071844}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 1, z: -95}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1748071846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1748071844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_18
-  memberWaypoints:
-  - {fileID: 1200069390}
-  - {fileID: 1523160212}
-  - {fileID: 192758768}
-  - {fileID: 144416005}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &1748071847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1748071844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!21 &1748995790
 Material:
   serializedVersion: 8
@@ -76768,166 +76750,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 1847451704}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1848110240
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1848110241}
-  - component: {fileID: 1848110243}
-  - component: {fileID: 1848110242}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_03
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1848110241
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1848110240}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 130, y: 1, z: 105}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1848110242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1848110240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_03
-  memberWaypoints:
-  - {fileID: 665023807}
-  - {fileID: 720541521}
-  - {fileID: 902208953}
-  - {fileID: 1778675231}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &1848110243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1848110240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
---- !u!1 &1849071335
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1849071336}
-  - component: {fileID: 1849071338}
-  - component: {fileID: 1849071337}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_12
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1849071336
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1849071335}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -50, y: 1, z: -95}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1849071337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1849071335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_12
-  memberWaypoints:
-  - {fileID: 858796713}
-  - {fileID: 1937589798}
-  - {fileID: 1505156517}
-  - {fileID: 1169552514}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &1849071338
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1849071335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!21 &1849973315
 Material:
   serializedVersion: 8
@@ -79793,30 +79615,27 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 253311261}
-  - {fileID: 6220348}
-  - {fileID: 103644999}
-  - {fileID: 2076309510}
-  - {fileID: 1095360992}
-  - {fileID: 1848110241}
-  - {fileID: 2014615673}
-  - {fileID: 1596761041}
-  - {fileID: 2076868971}
-  - {fileID: 961936901}
-  - {fileID: 652226547}
-  - {fileID: 2084249405}
-  - {fileID: 1932930402}
-  - {fileID: 957663174}
-  - {fileID: 1849071336}
-  - {fileID: 993433222}
-  - {fileID: 1317051652}
-  - {fileID: 763318622}
-  - {fileID: 1321427671}
-  - {fileID: 235895192}
-  - {fileID: 1748071845}
-  - {fileID: 1366705447}
-  - {fileID: 87598743}
-  - {fileID: 1440580713}
+  - {fileID: 776414934}
+  - {fileID: 981504262}
+  - {fileID: 527246649}
+  - {fileID: 45701846}
+  - {fileID: 1997306852}
+  - {fileID: 770774848}
+  - {fileID: 2013091469}
+  - {fileID: 1018769209}
+  - {fileID: 1339207341}
+  - {fileID: 1071427926}
+  - {fileID: 1140978115}
+  - {fileID: 211808495}
+  - {fileID: 516806261}
+  - {fileID: 1980872426}
+  - {fileID: 1621429882}
+  - {fileID: 2087572903}
+  - {fileID: 1327817238}
+  - {fileID: 101844499}
+  - {fileID: 139624643}
+  - {fileID: 1629113348}
+  - {fileID: 1019629844}
   m_Father: {fileID: 1843295931}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1932473154
@@ -79844,86 +79663,6 @@ MonoBehaviour:
   replacePreviouslyGenerated: 1
   generatedNamePrefix: AutoDeadlockZone_
   lastResult: Generated=21, Mode=SimpleCycles, Waypoints=440, Min=3, Max=15
---- !u!1 &1932930401
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1932930402}
-  - component: {fileID: 1932930404}
-  - component: {fileID: 1932930403}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_10
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1932930402
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1932930401}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -95, y: 1, z: 105}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1932930403
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1932930401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_10
-  memberWaypoints:
-  - {fileID: 1993258461}
-  - {fileID: 58750162}
-  - {fileID: 1488135120}
-  - {fileID: 1059136864}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &1932930404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1932930401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1001 &1933726242
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -82096,6 +81835,86 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1980531960}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1980872425
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1980872426}
+  - component: {fileID: 1980872428}
+  - component: {fileID: 1980872427}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_14
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1980872426
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980872425}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -50, y: 1, z: -5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1980872427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980872425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_14
+  memberWaypoints:
+  - {fileID: 455408923}
+  - {fileID: 720182734}
+  - {fileID: 2099225567}
+  - {fileID: 1925186491}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &1980872428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980872425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1 &1984578263
 GameObject:
   m_ObjectHideFlags: 0
@@ -82964,6 +82783,86 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 1996001794}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1997306851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1997306852}
+  - component: {fileID: 1997306854}
+  - component: {fileID: 1997306853}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_05
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1997306852
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997306851}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 40, y: 1, z: -95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1997306853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997306851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_05
+  memberWaypoints:
+  - {fileID: 1160690387}
+  - {fileID: 1662656749}
+  - {fileID: 1972724859}
+  - {fileID: 1784180756}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &1997306854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997306851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1 &2001617553
 GameObject:
   m_ObjectHideFlags: 0
@@ -83526,6 +83425,86 @@ Transform:
   - {fileID: 669385568}
   m_Father: {fileID: 1666499763}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2013091468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2013091469}
+  - component: {fileID: 2013091471}
+  - component: {fileID: 2013091470}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_07
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2013091469
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013091468}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 40, y: 1, z: -5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2013091470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013091468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_07
+  memberWaypoints:
+  - {fileID: 1255511315}
+  - {fileID: 1922741792}
+  - {fileID: 2004805608}
+  - {fileID: 626553234}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &2013091471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013091468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1 &2013345955
 GameObject:
   m_ObjectHideFlags: 0
@@ -83698,86 +83677,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 2014432929}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2014615672
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2014615673}
-  - component: {fileID: 2014615675}
-  - component: {fileID: 2014615674}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_04
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2014615673
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2014615672}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 85, y: 1, z: -95}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2014615674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2014615672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_04
-  memberWaypoints:
-  - {fileID: 1489505138}
-  - {fileID: 1899703014}
-  - {fileID: 1129571627}
-  - {fileID: 161945926}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &2014615675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2014615672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!1001 &2015535502
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -85836,166 +85735,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520782455731608270, guid: ea48dc4bd08fb1f4089782e4055acfb1, type: 3}
   m_PrefabInstance: {fileID: 2076161186}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2076309509
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2076309510}
-  - component: {fileID: 2076309512}
-  - component: {fileID: 2076309511}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_01
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2076309510
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076309509}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 1, z: 105}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2076309511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076309509}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_01
-  memberWaypoints:
-  - {fileID: 1059834088}
-  - {fileID: 1375914356}
-  - {fileID: 719832952}
-  - {fileID: 707128556}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &2076309512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076309509}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
---- !u!1 &2076868970
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2076868971}
-  - component: {fileID: 2076868973}
-  - component: {fileID: 2076868972}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_06
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2076868971
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076868970}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 85, y: 1, z: -5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2076868972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076868970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_06
-  memberWaypoints:
-  - {fileID: 1958302755}
-  - {fileID: 392482568}
-  - {fileID: 1425262097}
-  - {fileID: 97400220}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &2076868973
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076868970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!21 &2078020834
 Material:
   serializedVersion: 8
@@ -86286,86 +86025,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1466064998150317956, guid: 3afa3cf59769d424185d30b5b4e6c242, type: 3}
   m_PrefabInstance: {fileID: 2083249863}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2084249404
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2084249405}
-  - component: {fileID: 2084249407}
-  - component: {fileID: 2084249406}
-  m_Layer: 0
-  m_Name: AutoDeadlockZone_09
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2084249405
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2084249404}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -50, y: 1, z: 105}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1932473153}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2084249406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2084249404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zoneId: AutoDeadlockZone_09
-  memberWaypoints:
-  - {fileID: 2029714025}
-  - {fileID: 1057227396}
-  - {fileID: 1882500593}
-  - {fileID: 1505564864}
-  reservedEmptyWaypoints: 1
-  manualMaxVehicles: 1
-  calculateCapacityFromMembers: 1
-  activeCars: []
-  queue: []
-  currentCapacity: 3
-  currentActiveCount: 0
-  logDebug: 0
-  drawGizmo: 1
-  drawOnlyWhenSelected: 1
-  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
-  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
-  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
-  lineWidth: 5
-  gizmoHeight: 0.9
-  markerRadius: 0.8
---- !u!114 &2084249407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2084249404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1603742204}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  memberCount: 4
 --- !u!21 &2085000855
 Material:
   serializedVersion: 8
@@ -86447,6 +86106,86 @@ Material:
     - _Color: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &2087572902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2087572903}
+  - component: {fileID: 2087572905}
+  - component: {fileID: 2087572904}
+  m_Layer: 0
+  m_Name: AutoDeadlockZone_16
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2087572903
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087572902}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 85, y: 1, z: 105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1932473153}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2087572904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087572902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777fbb104a45c054eb53d488edef586c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneId: AutoDeadlockZone_16
+  memberWaypoints:
+  - {fileID: 1679012735}
+  - {fileID: 1512704438}
+  - {fileID: 1724642172}
+  - {fileID: 1097378237}
+  reservedEmptyWaypoints: 1
+  manualMaxVehicles: 1
+  calculateCapacityFromMembers: 1
+  activeCars: []
+  queue: []
+  currentCapacity: 0
+  currentActiveCount: 0
+  logDebug: 0
+  drawGizmo: 1
+  drawOnlyWhenSelected: 1
+  availableColor: {r: 0.2, g: 0.9, b: 0.35, a: 1}
+  waitingColor: {r: 1, g: 0.75, b: 0.05, a: 1}
+  fullColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+  lineWidth: 5
+  gizmoHeight: 0.9
+  markerRadius: 0.8
+--- !u!114 &2087572905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087572902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1185016798}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memberCount: 4
 --- !u!1001 &2088744290
 PrefabInstance:
   m_ObjectHideFlags: 0
