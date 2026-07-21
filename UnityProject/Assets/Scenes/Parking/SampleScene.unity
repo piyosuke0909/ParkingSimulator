@@ -2238,7 +2238,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -2261,7 +2261,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!1001 &46450028
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4493,7 +4493,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -4516,7 +4516,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!21 &103690960
 Material:
   serializedVersion: 8
@@ -6749,7 +6749,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -6772,7 +6772,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!21 &140727150
 Material:
   serializedVersion: 8
@@ -9735,7 +9735,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -9758,7 +9758,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!1 &212522017
 GameObject:
   m_ObjectHideFlags: 0
@@ -22311,7 +22311,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -22334,7 +22334,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!1 &517461395
 GameObject:
   m_ObjectHideFlags: 0
@@ -22665,7 +22665,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -22688,7 +22688,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!21 &533920254
 Material:
   serializedVersion: 8
@@ -32694,7 +32694,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -32717,7 +32717,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!1001 &770784097
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33173,7 +33173,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -33196,7 +33196,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!1 &781692491
 GameObject:
   m_ObjectHideFlags: 0
@@ -37649,6 +37649,145 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+--- !u!1 &885648324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 885648330}
+  - component: {fileID: 885648329}
+  - component: {fileID: 885648328}
+  - component: {fileID: 885648327}
+  - component: {fileID: 885648326}
+  - component: {fileID: 885648325}
+  m_Layer: 0
+  m_Name: P1ScenarioSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &885648325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885648324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d3cb7fb02c55842baa987523a1454a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scenarioDefinition: {fileID: 11400000, guid: a5aff451c21a18445b2bffeb14f65d95, type: 2}
+  simulationClock: {fileID: 885648329}
+  randomService: {fileID: 885648328}
+  targetBinding: {fileID: 885648327}
+  runLogger: {fileID: 885648326}
+  autoFindReferences: 1
+  logUnresolvedAccessPointEffects: 1
+--- !u!114 &885648326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885648324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd906dfdd952ac543b516f64d1d3408a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logToConsole: 1
+  logToFile: 1
+  fileNamePrefix: p1-scenario
+  currentLogFilePath: 
+--- !u!114 &885648327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885648324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73db4a157ef4dda45b59f0109f9f0092, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  accessPointBindings:
+  - canonicalAccessPointId: entrance-west
+    scenePairName: west_gate
+    primaryForLogging: 1
+  - canonicalAccessPointId: entrance-south
+    scenePairName: south_gate
+    primaryForLogging: 1
+  - canonicalAccessPointId: entrance-event
+    scenePairName: west_gate
+    primaryForLogging: 0
+  - canonicalAccessPointId: entrance-covered
+    scenePairName: south_gate
+    primaryForLogging: 0
+  - canonicalAccessPointId: entrance-main
+    scenePairName: south_gate
+    primaryForLogging: 0
+  areaBindings: []
+--- !u!114 &885648328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885648324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cd443719dc5bc2438440bed181adbde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scenarioDefinition: {fileID: 11400000, guid: a5aff451c21a18445b2bffeb14f65d95, type: 2}
+  useSeedOverride: 0
+  seedOverride: 12345
+  initializeOnAwake: 1
+  currentSeed: 0
+  drawCount: 0
+--- !u!114 &885648329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885648324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a59239e511eb1742b4fe36ea5fde284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scenarioDefinition: {fileID: 11400000, guid: a5aff451c21a18445b2bffeb14f65d95, type: 2}
+  autoStart: 1
+  useUnscaledDeltaTime: 0
+  simulationTimeScale: 1
+  startSimulationTimeSeconds: 0
+  loopAtScenarioEnd: 0
+  debugSetTimeSeconds: 1795
+  simulationTimeSeconds: 0
+  isRunning: 0
+--- !u!4 &885648330
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885648324}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &886057188
 GameObject:
   m_ObjectHideFlags: 0
@@ -41937,7 +42076,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -41960,7 +42099,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!1 &982207011
 GameObject:
   m_ObjectHideFlags: 0
@@ -43503,7 +43642,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -43526,7 +43665,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!1 &1019629843
 GameObject:
   m_ObjectHideFlags: 0
@@ -43583,7 +43722,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -43606,7 +43745,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!1001 &1020684993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45610,7 +45749,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -45633,7 +45772,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!21 &1075601184
 Material:
   serializedVersion: 8
@@ -47789,7 +47928,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -47812,7 +47951,7 @@ MonoBehaviour:
   m_Script: {fileID: 1185016798}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberCount: 4
+  memberCount: 0
 --- !u!1 &1142322557
 GameObject:
   m_ObjectHideFlags: 0
@@ -55291,7 +55430,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -55749,7 +55888,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -59386,6 +59525,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parkingLotManager: {fileID: 542516997}
   routeManager: {fileID: 707882158}
+  useScenarioSystem: 1
+  scenarioRuntime: {fileID: 885648325}
+  scenarioRandomService: {fileID: 885648328}
+  scenarioRunLogger: {fileID: 885648326}
   npcCarPrefab: {fileID: 100000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
   vehicleParent: {fileID: 1277895586}
   entranceExitPairs:
@@ -66089,7 +66232,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -66341,7 +66484,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -81891,7 +82034,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -82839,7 +82982,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -83481,7 +83624,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -86162,7 +86305,7 @@ MonoBehaviour:
   calculateCapacityFromMembers: 1
   activeCars: []
   queue: []
-  currentCapacity: 0
+  currentCapacity: 3
   currentActiveCount: 0
   logDebug: 0
   drawGizmo: 1
@@ -89114,3 +89257,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 1591024421}
   - {fileID: 1613677099}
+  - {fileID: 885648330}

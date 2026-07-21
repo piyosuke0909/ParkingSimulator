@@ -258,6 +258,31 @@ public class ParkingLotManager : MonoBehaviour
         return slot.TryReserve(owner);
     }
 
+    public ParkingSlot GetRandomAvailableSlotWithAccessWaypoint(
+        ScenarioRandomService randomService)
+    {
+        List<ParkingSlot> availableSlots = GetAvailableSlotsWithAccessWaypoint();
+
+        if (availableSlots.Count == 0)
+        {
+            return null;
+        }
+
+        // FindObjects‚Ì•Ô‹p‡‚ÉˆË‘¶‚¹‚¸A“¯ˆêseed‚Å“¯‚¶Œó•â‡‚É‚È‚é‚æ‚¤ŒÅ’è‚µ‚Ü‚·B
+        availableSlots.Sort((left, right) =>
+            string.CompareOrdinal(
+                left != null ? left.slotId : string.Empty,
+                right != null ? right.slotId : string.Empty
+            )
+        );
+
+        int index = randomService != null
+            ? randomService.Range(0, availableSlots.Count)
+            : Random.Range(0, availableSlots.Count);
+
+        return availableSlots[index];
+    }
+
     public ParkingSlot ReserveFirstAvailableSlot()
     {
         ParkingSlot slot = GetFirstAvailableSlotWithAccessWaypoint();
@@ -274,6 +299,20 @@ public class ParkingLotManager : MonoBehaviour
     public ParkingSlot ReserveRandomAvailableSlot()
     {
         ParkingSlot slot = GetRandomAvailableSlotWithAccessWaypoint();
+
+        if (slot == null)
+        {
+            return null;
+        }
+
+        slot.SetReserved();
+        return slot;
+    }
+
+    public ParkingSlot ReserveRandomAvailableSlot(
+        ScenarioRandomService randomService)
+    {
+        ParkingSlot slot = GetRandomAvailableSlotWithAccessWaypoint(randomService);
 
         if (slot == null)
         {

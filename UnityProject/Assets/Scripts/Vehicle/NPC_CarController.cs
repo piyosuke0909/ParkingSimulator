@@ -35,6 +35,10 @@ public class NPC_CarController : MonoBehaviour
     public float parkingArriveDistance = 0.15f;
     public float backOutArriveDistance = 0.25f;
 
+    [Header("P1 Scenario Speed (Optional)")]
+    public bool useScenarioSpeedEffect = true;
+    public ScenarioFactorRuntime scenarioFactorRuntime;
+
 
     [Header("Parking Wait")]
     public float parkWaitTime = 5f;
@@ -260,6 +264,11 @@ public class NPC_CarController : MonoBehaviour
     {
         car = GetComponent<Car>();
         carRigidbody = GetComponent<Rigidbody>();
+
+        if (useScenarioSpeedEffect && scenarioFactorRuntime == null)
+        {
+            scenarioFactorRuntime = ScenarioFactorRuntime.Instance;
+        }
 
         InitializePhysicsQueryBuffers();
 
@@ -492,7 +501,7 @@ public class NPC_CarController : MonoBehaviour
         needsStartMoveSafetyCheck = false;
         currentStopReason = "";
 
-        MoveToTarget(targetPosition, moveSpeed);
+        MoveToTarget(targetPosition, GetEffectiveMoveSpeed());
         RotateToMoveDirection(targetWaypoint, targetPosition);
 
         float distance = Vector3.Distance(transform.position, targetPosition);
@@ -1019,7 +1028,7 @@ public class NPC_CarController : MonoBehaviour
         needsStartMoveSafetyCheck = false;
         currentStopReason = "";
 
-        MoveToTarget(targetPosition, moveSpeed);
+        MoveToTarget(targetPosition, GetEffectiveMoveSpeed());
         RotateToMoveDirection(targetWaypoint, targetPosition);
 
         float distance = Vector3.Distance(transform.position, targetPosition);
@@ -2311,6 +2320,23 @@ public class NPC_CarController : MonoBehaviour
         return otherCar != null &&
                otherCar.isParked &&
                otherCar.currentParkingSlot != null;
+    }
+
+    private float GetEffectiveMoveSpeed()
+    {
+        if (!useScenarioSpeedEffect)
+        {
+            return moveSpeed;
+        }
+
+        if (scenarioFactorRuntime == null)
+        {
+            scenarioFactorRuntime = ScenarioFactorRuntime.Instance;
+        }
+
+        return scenarioFactorRuntime != null
+            ? scenarioFactorRuntime.GetEffectiveVehicleSpeed(moveSpeed)
+            : moveSpeed;
     }
 
     private void MoveToTarget(Vector3 targetPosition, float speed)
