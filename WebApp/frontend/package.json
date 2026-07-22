@@ -2,11 +2,14 @@
   "name": "smartparking-frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit --incremental false",
+    "test": "node --experimental-strip-types --test src/components/*.test.mjs"
   },
   "dependencies": {
     "next": "^16.0.0",
