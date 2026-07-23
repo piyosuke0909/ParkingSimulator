@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 [DefaultExecutionOrder(-900)]
@@ -17,7 +16,12 @@ public class ScenarioFactorRuntime : MonoBehaviour
 
     [Header("Behavior")]
     public bool autoFindReferences = true;
+
+    [Tooltip("ONの場合はArrivalRateSegment区間外で停止します。OFFの場合はVehicleSpawnManager.spawnIntervalを既定流入として使用します。")]
+    public bool requireActiveArrivalRateSegment = false;
+
     public bool logUnresolvedAccessPointEffects = true;
+    public bool logUnresolvedAreaEffects = true;
 
     private readonly HashSet<string> activeFactorIds = new HashSet<string>();
     private readonly HashSet<string> unresolvedEffectWarnings = new HashSet<string>();
@@ -32,6 +36,10 @@ public class ScenarioFactorRuntime : MonoBehaviour
     public float SimulationTimeSeconds => simulationClock != null
         ? simulationClock.SimulationTimeSeconds
         : Time.time;
+
+    public bool IsScenarioCompleted =>
+        scenarioDefinition != null &&
+        SimulationTimeSeconds >= scenarioDefinition.durationSeconds;
 
     private void Awake()
     {
@@ -71,9 +79,7 @@ public class ScenarioFactorRuntime : MonoBehaviour
     {
         EvaluateFactorTransitions(false);
 
-        if (!scenarioCompletedLogged &&
-            scenarioDefinition != null &&
-            SimulationTimeSeconds >= scenarioDefinition.durationSeconds)
+        if (!scenarioCompletedLogged && IsScenarioCompleted)
         {
             runLogger?.LogScenarioCompleted(SimulationTimeSeconds, "duration_reached");
             scenarioCompletedLogged = true;
@@ -132,7 +138,7 @@ public class ScenarioFactorRuntime : MonoBehaviour
         return Mathf.Max(0f, baseSpeed * GetVehicleSpeedMultiplier());
     }
 
-    public float GetArrivalRateMultiplier(string scenePairName)
+    public float GetArrivalRateMultiplier(string scenePairName = null)
     {
         float value = 1f;
 
@@ -175,40 +181,166 @@ public class ScenarioFactorRuntime : MonoBehaviour
         return Mathf.Max(0f, value);
     }
 
-    public float GetNextSpawnDelay(float fallbackSpawnInterval, string scenePairName)
+    public float GetAreaPreferenceWeight(string sceneAreaId)
     {
-        float time = SimulationTimeSeconds;
-        ArrivalRateSegment segment = FindArrivalRateSegment(time, scenePairName);
-        float baseInterval = Mathf.Max(0.01f, fallbackSpawnInterval);
-        ArrivalDistribution distribution = ArrivalDistribution.Fixed;
+        float value = 1f;
+
+        foreach (ScenarioFactorEffect effect in EnumerateActiveEffects(ScenarioMetrics.ParkingPreferenceWeight))
+        {
+            if (effect.targetType != FactorEffectTargetType.Area)
+            {
+                continue;
+            }
+
+            if (MatchesArea(effect.targetId, sceneAreaId))
+            {
+                value = Apply(value, effect);
+            }
+        }
+
+        return Mathf.Max(0f, value);
+    }
+
+    public ArrivalRateSegment GetActiveArrivalRateSegment(string scenePairName = null)
+    {
+        return FindArrivalRateSegment(SimulationTimeSeconds, scenePairName);
+    }
+
+    public bool HasActiveArrivalRateSegment(string scenePairName = null)
+    {
+        if (scenarioDefinition == null ||
+            scenarioDefinition.arrivalRateSegments == null ||
+            scenarioDefinition.arrivalRateSegments.Count == 0)
+        {
+            return !requireActiveArrivalRateSegment;
+        }
+
+        return GetActiveArrivalRateSegment(scenePairName) != null;
+    }
+
+    public float GetBaseVehiclesPerMinute(float fallbackSpawnInterval, string scenePairName = null)
+    {
+        ArrivalRateSegment segment = GetActiveArrivalRateSegment(scenePairName);
 
         if (segment != null)
         {
-            if (segment.vehiclesPerMinute <= 0f)
-            {
-                return float.PositiveInfinity;
-            }
-
-            baseInterval = 60f / segment.vehiclesPerMinute;
-            distribution = segment.distribution;
+            return Mathf.Max(0f, segment.vehiclesPerMinute);
         }
 
-        float multiplier = GetArrivalRateMultiplier(scenePairName);
+        bool hasConfiguredSegments = scenarioDefinition != null &&
+                                     scenarioDefinition.arrivalRateSegments != null &&
+                                     scenarioDefinition.arrivalRateSegments.Count > 0;
 
-        if (multiplier <= 0f)
+        if (requireActiveArrivalRateSegment && hasConfiguredSegments)
+        {
+            return 0f;
+        }
+
+        float safeFallbackInterval = Mathf.Max(0.01f, fallbackSpawnInterval);
+        return 60f / safeFallbackInterval;
+    }
+
+    public ArrivalDistribution GetArrivalDistribution(string scenePairName = null)
+    {
+        ArrivalRateSegment segment = GetActiveArrivalRateSegment(scenePairName);
+        return segment != null ? segment.distribution : ArrivalDistribution.Fixed;
+    }
+
+    public string GetArrivalRateSourceId(string scenePairName = null)
+    {
+        ArrivalRateSegment segment = GetActiveArrivalRateSegment(scenePairName);
+        return segment != null && !string.IsNullOrEmpty(segment.arrivalRateSegmentId)
+            ? segment.arrivalRateSegmentId
+            : "default";
+    }
+
+    public float GetEffectiveVehiclesPerMinute(float fallbackSpawnInterval, string scenePairName = null)
+    {
+        float baseVehiclesPerMinute = GetBaseVehiclesPerMinute(fallbackSpawnInterval, scenePairName);
+        return Mathf.Max(0f, baseVehiclesPerMinute * GetArrivalRateMultiplier(scenePairName));
+    }
+
+    // 既存コード互換用。Segment不在時の既定値を取得する場合は、
+    // fallbackSpawnIntervalを受け取るオーバーロードを使用してください。
+    public float GetEffectiveVehiclesPerMinute(string scenePairName = null)
+    {
+        ArrivalRateSegment segment = GetActiveArrivalRateSegment(scenePairName);
+
+        if (segment == null || segment.vehiclesPerMinute <= 0f)
+        {
+            return 0f;
+        }
+
+        return Mathf.Max(0f, segment.vehiclesPerMinute * GetArrivalRateMultiplier(scenePairName));
+    }
+
+    public float GetNextSpawnDelay(float fallbackSpawnInterval, string scenePairName = null)
+    {
+        float effectiveVehiclesPerMinute = GetEffectiveVehiclesPerMinute(
+            fallbackSpawnInterval,
+            scenePairName
+        );
+
+        if (effectiveVehiclesPerMinute <= 0f)
         {
             return float.PositiveInfinity;
         }
 
-        float meanInterval = baseInterval / multiplier;
+        float meanInterval = 60f / effectiveVehiclesPerMinute;
+        ArrivalDistribution distribution = GetArrivalDistribution(scenePairName);
 
         if (distribution == ArrivalDistribution.Poisson && randomService != null)
         {
-            float unit = Mathf.Clamp(randomService.NextUnitFloat(), 0.000001f, 0.999999f);
-            return Mathf.Max(0.01f, -Mathf.Log(1f - unit) * meanInterval);
+            return Mathf.Max(0.01f, randomService.SampleExponential(meanInterval));
         }
 
         return Mathf.Max(0.01f, meanInterval);
+    }
+
+    public float GetSecondsUntilNextArrivalSegmentOrScenarioEnd(string scenePairName = null)
+    {
+        if (IsScenarioCompleted)
+        {
+            return 0f;
+        }
+
+        float currentTime = SimulationTimeSeconds;
+        float nextStart = float.PositiveInfinity;
+
+        if (scenarioDefinition != null && scenarioDefinition.arrivalRateSegments != null)
+        {
+            foreach (ArrivalRateSegment segment in scenarioDefinition.arrivalRateSegments)
+            {
+                if (segment == null || !segment.enabled || segment.endSimulationTimeSeconds <= currentTime)
+                {
+                    continue;
+                }
+
+                if (!string.IsNullOrEmpty(segment.accessPointId) &&
+                    !MatchesAccessPoint(segment.accessPointId, scenePairName))
+                {
+                    continue;
+                }
+
+                if (segment.startSimulationTimeSeconds > currentTime)
+                {
+                    nextStart = Mathf.Min(nextStart, segment.startSimulationTimeSeconds);
+                }
+            }
+        }
+
+        float scenarioEnd = scenarioDefinition != null
+            ? scenarioDefinition.durationSeconds
+            : float.PositiveInfinity;
+
+        float nextTime = Mathf.Min(nextStart, scenarioEnd);
+
+        if (float.IsInfinity(nextTime))
+        {
+            return float.PositiveInfinity;
+        }
+
+        return Mathf.Max(0f, nextTime - currentTime);
     }
 
     public string GetCanonicalAccessPointId(string scenePairName)
@@ -401,6 +533,11 @@ public class ScenarioFactorRuntime : MonoBehaviour
 
     private bool MatchesAccessPoint(string canonicalTargetId, string scenePairName)
     {
+        if (string.IsNullOrEmpty(scenePairName))
+        {
+            return false;
+        }
+
         if (targetBinding != null)
         {
             bool matches = targetBinding.MatchesAccessPointTarget(canonicalTargetId, scenePairName);
@@ -409,7 +546,7 @@ public class ScenarioFactorRuntime : MonoBehaviour
                 logUnresolvedAccessPointEffects &&
                 !string.IsNullOrEmpty(canonicalTargetId) &&
                 !targetBinding.HasResolvedAccessPoint(canonicalTargetId) &&
-                unresolvedEffectWarnings.Add(canonicalTargetId))
+                unresolvedEffectWarnings.Add("access:" + canonicalTargetId))
             {
                 runLogger?.LogWarning(
                     $"unresolvedAccessPointId={canonicalTargetId} " +
@@ -421,6 +558,30 @@ public class ScenarioFactorRuntime : MonoBehaviour
         }
 
         return string.Equals(canonicalTargetId, scenePairName, StringComparison.Ordinal);
+    }
+
+    private bool MatchesArea(string canonicalTargetId, string sceneAreaId)
+    {
+        if (targetBinding != null)
+        {
+            bool matches = targetBinding.MatchesAreaTarget(canonicalTargetId, sceneAreaId);
+
+            if (!matches &&
+                logUnresolvedAreaEffects &&
+                !string.IsNullOrEmpty(canonicalTargetId) &&
+                !targetBinding.HasResolvedArea(canonicalTargetId) &&
+                unresolvedEffectWarnings.Add("area:" + canonicalTargetId))
+            {
+                runLogger?.LogWarning(
+                    $"unresolvedAreaId={canonicalTargetId} " +
+                    "ScenarioTargetBindingでsceneAreaIdを設定してください。"
+                );
+            }
+
+            return matches;
+        }
+
+        return string.Equals(canonicalTargetId, sceneAreaId, StringComparison.Ordinal);
     }
 
     private static float Apply(float currentValue, ScenarioFactorEffect effect)

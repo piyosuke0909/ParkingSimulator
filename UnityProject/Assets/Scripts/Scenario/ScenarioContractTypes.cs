@@ -55,19 +55,19 @@ public class ArrivalRateSegment
     public bool enabled = true;
     public string arrivalRateSegmentId = "arrival-base";
 
-    [Tooltip("空欄の場合は施設全体に適用します。")]
+    [Tooltip("空欄の場合は駐車場全体に適用します。P1正式設定では空欄です。")]
     public string accessPointId;
 
     [Min(0f)]
-    public float startSimulationTimeSeconds;
+    public float startSimulationTimeSeconds = 1800f;
 
     [Min(0f)]
-    public float endSimulationTimeSeconds = 14400f;
+    public float endSimulationTimeSeconds = 5400f;
 
     [Min(0f)]
-    public float vehiclesPerMinute = 12f;
+    public float vehiclesPerMinute = 3f;
 
-    public ArrivalDistribution distribution = ArrivalDistribution.Fixed;
+    public ArrivalDistribution distribution = ArrivalDistribution.Poisson;
 
     public bool IsActiveAt(float simulationTimeSeconds)
     {
@@ -84,7 +84,7 @@ public class ScenarioFactorEffect
     public string scenarioFactorEffectId;
     public FactorEffectTargetType targetType = FactorEffectTargetType.Facility;
 
-    [Tooltip("施設全体・車両母集団など対象IDが不要な場合は空欄にします。")]
+    [Tooltip("Areaの場合はarea-a等、AccessPointの場合はentrance-event等を指定します。")]
     public string targetId;
 
     [Tooltip("arrival_rate / speed / parking_preference_weight など契約上のmetric名です。")]

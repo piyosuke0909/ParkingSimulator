@@ -69,6 +69,31 @@ public class ScenarioRunLogger : MonoBehaviour
         );
     }
 
+    public void LogArrivalScheduled(
+        float simulationTime,
+        string arrivalRateSourceId,
+        ArrivalDistribution distribution,
+        float baseVehiclesPerMinute,
+        float arrivalRateMultiplier,
+        float effectiveVehiclesPerMinute,
+        float nextDelaySeconds)
+    {
+        string sourceId = string.IsNullOrEmpty(arrivalRateSourceId)
+            ? "default"
+            : arrivalRateSourceId;
+
+        Write(
+            "arrival.scheduled",
+            $"simulationTimeSeconds={simulationTime:F3} arrivalRateSourceId={sourceId} " +
+            $"arrivalRateSegmentId={sourceId} " +
+            $"distribution={distribution.ToString().ToLowerInvariant()} " +
+            $"baseVehiclesPerMinute={baseVehiclesPerMinute:F4} " +
+            $"arrivalRateMultiplier={arrivalRateMultiplier:F4} " +
+            $"effectiveVehiclesPerMinute={effectiveVehiclesPerMinute:F4} " +
+            $"nextDelaySeconds={nextDelaySeconds:F4}"
+        );
+    }
+
     public void LogEntranceSelected(
         float simulationTime,
         List<string> availableScenePairNames,
@@ -76,26 +101,32 @@ public class ScenarioRunLogger : MonoBehaviour
         string selectedScenePairName,
         string selectedCanonicalAccessPointId)
     {
-        string availablePairsText = availableScenePairNames != null
-            ? string.Join(",", availableScenePairNames)
-            : string.Empty;
-
-        List<string> formattedWeights = new List<string>();
-
-        if (weights != null)
-        {
-            foreach (float weight in weights)
-            {
-                formattedWeights.Add(weight.ToString("F4"));
-            }
-        }
-
         Write(
             "entrance.selected",
             $"simulationTimeSeconds={simulationTime:F3} " +
-            $"availableScenePairs=[{availablePairsText}] weights=[{string.Join(",", formattedWeights)}] " +
+            $"availableScenePairs=[{JoinStrings(availableScenePairNames)}] " +
+            $"weights=[{JoinWeights(weights)}] " +
             $"selectedScenePairName={selectedScenePairName} " +
             $"selectedAccessPointId={selectedCanonicalAccessPointId}"
+        );
+    }
+
+    public void LogParkingAreaSelected(
+        float simulationTime,
+        List<string> availableCanonicalAreaIds,
+        List<int> availableSlotCounts,
+        List<float> weights,
+        string selectedCanonicalAreaId,
+        string selectedSceneAreaId)
+    {
+        Write(
+            "parking_area.selected",
+            $"simulationTimeSeconds={simulationTime:F3} " +
+            $"availableAreaIds=[{JoinStrings(availableCanonicalAreaIds)}] " +
+            $"availableSlotCounts=[{JoinIntegers(availableSlotCounts)}] " +
+            $"weights=[{JoinWeights(weights)}] " +
+            $"selectedAreaId={selectedCanonicalAreaId} " +
+            $"selectedSceneAreaId={selectedSceneAreaId}"
         );
     }
 
@@ -106,17 +137,35 @@ public class ScenarioRunLogger : MonoBehaviour
         string activeFactorIds,
         float arrivalRateMultiplier,
         float speedMultiplier,
+        float effectiveVehiclesPerMinute,
         string canonicalAccessPointId,
         string scenePairName,
         string slotId,
-        string areaId)
+        string areaId,
+        int activeVehicleCount,
+        int maxConcurrentVehicles)
     {
         Write(
             "vehicle.spawned",
             $"sequenceNumber={sequenceNumber} simulationTimeSeconds={simulationTime:F3} seed={seed} " +
             $"activeScenarioFactorIds=[{activeFactorIds}] arrivalRateMultiplier={arrivalRateMultiplier:F4} " +
+            $"effectiveVehiclesPerMinute={effectiveVehiclesPerMinute:F4} " +
             $"speedMultiplier={speedMultiplier:F4} accessPointId={canonicalAccessPointId} " +
-            $"scenePairName={scenePairName} slotId={slotId} areaId={areaId}"
+            $"scenePairName={scenePairName} slotId={slotId} areaId={areaId} " +
+            $"activeVehicleCount={activeVehicleCount} maxConcurrentVehicles={maxConcurrentVehicles}"
+        );
+    }
+
+    public void LogVehicleRemoved(
+        float simulationTime,
+        string vehicleName,
+        int activeVehicleCount,
+        int maxConcurrentVehicles)
+    {
+        Write(
+            "vehicle.removed",
+            $"simulationTimeSeconds={simulationTime:F3} vehicleName={vehicleName} " +
+            $"activeVehicleCount={activeVehicleCount} maxConcurrentVehicles={maxConcurrentVehicles}"
         );
     }
 
@@ -131,6 +180,43 @@ public class ScenarioRunLogger : MonoBehaviour
     public void LogWarning(string message)
     {
         Write("warning", message);
+    }
+
+    private static string JoinStrings(List<string> values)
+    {
+        return values != null ? string.Join(",", values) : string.Empty;
+    }
+
+    private static string JoinWeights(List<float> weights)
+    {
+        List<string> formatted = new List<string>();
+
+        if (weights != null)
+        {
+            foreach (float weight in weights)
+            {
+                formatted.Add(weight.ToString("F4"));
+            }
+        }
+
+        return string.Join(",", formatted);
+    }
+
+    private static string JoinIntegers(List<int> values)
+    {
+        if (values == null)
+        {
+            return string.Empty;
+        }
+
+        List<string> formatted = new List<string>(values.Count);
+
+        foreach (int value in values)
+        {
+            formatted.Add(value.ToString());
+        }
+
+        return string.Join(",", formatted);
     }
 
     private void Write(string eventType, string body)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -102,6 +101,13 @@ public class ScenarioRandomService : MonoBehaviour
         return (float)random.NextDouble();
     }
 
+    public float SampleExponential(float mean)
+    {
+        mean = Mathf.Max(0.0001f, mean);
+        float unit = Mathf.Clamp(NextUnitFloat(), 0.000001f, 0.999999f);
+        return -Mathf.Log(1f - unit) * mean;
+    }
+
     public int ChooseWeightedIndex(IList<float> weights)
     {
         if (weights == null || weights.Count == 0)
@@ -128,7 +134,7 @@ public class ScenarioRandomService : MonoBehaviour
         {
             cumulative += Mathf.Max(0f, weights[i]);
 
-            if (value <= cumulative)
+            if (value < cumulative)
             {
                 return i;
             }

@@ -18,8 +18,14 @@ public class ScenarioAccessPointBinding
 [Serializable]
 public class ScenarioAreaBinding
 {
+    [Tooltip("契約上のID。例: area-a / area-event")]
     public string canonicalAreaId;
+
+    [Tooltip("ParkingSlot.areaId。例: A")]
     public string sceneAreaId;
+
+    [Tooltip("ログに出す代表IDとして使用します。")]
+    public bool primaryForLogging = true;
 }
 
 public class ScenarioTargetBinding : MonoBehaviour
@@ -52,8 +58,35 @@ public class ScenarioTargetBinding : MonoBehaviour
             }
         }
 
-        // P0確定前でもpairNameを直接targetIdとして使用可能にするフォールバック。
         return string.Equals(canonicalTargetId, scenePairName, StringComparison.Ordinal);
+    }
+
+    public bool MatchesAreaTarget(string canonicalTargetId, string sceneAreaId)
+    {
+        if (string.IsNullOrEmpty(canonicalTargetId) || string.IsNullOrEmpty(sceneAreaId))
+        {
+            return false;
+        }
+
+        foreach (ScenarioAreaBinding binding in areaBindings)
+        {
+            if (binding == null)
+            {
+                continue;
+            }
+
+            if (!string.Equals(binding.canonicalAreaId, canonicalTargetId, StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            if (string.Equals(binding.sceneAreaId, sceneAreaId, StringComparison.Ordinal))
+            {
+                return true;
+            }
+        }
+
+        return string.Equals(canonicalTargetId, sceneAreaId, StringComparison.Ordinal);
     }
 
     public string GetPrimaryCanonicalAccessPointId(string scenePairName)
@@ -89,17 +122,30 @@ public class ScenarioTargetBinding : MonoBehaviour
 
     public string GetCanonicalAreaId(string sceneAreaId)
     {
+        ScenarioAreaBinding firstMatch = null;
+
         foreach (ScenarioAreaBinding binding in areaBindings)
         {
-            if (binding == null)
+            if (binding == null ||
+                !string.Equals(binding.sceneAreaId, sceneAreaId, StringComparison.Ordinal))
             {
                 continue;
             }
 
-            if (string.Equals(binding.sceneAreaId, sceneAreaId, StringComparison.Ordinal))
+            if (firstMatch == null)
+            {
+                firstMatch = binding;
+            }
+
+            if (binding.primaryForLogging && !string.IsNullOrEmpty(binding.canonicalAreaId))
             {
                 return binding.canonicalAreaId;
             }
+        }
+
+        if (firstMatch != null && !string.IsNullOrEmpty(firstMatch.canonicalAreaId))
+        {
+            return firstMatch.canonicalAreaId;
         }
 
         return NormalizeFallbackId(sceneAreaId, "area");
@@ -116,6 +162,25 @@ public class ScenarioTargetBinding : MonoBehaviour
 
             if (string.Equals(binding.canonicalAccessPointId, canonicalAccessPointId, StringComparison.Ordinal) &&
                 !string.IsNullOrEmpty(binding.scenePairName))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool HasResolvedArea(string canonicalAreaId)
+    {
+        foreach (ScenarioAreaBinding binding in areaBindings)
+        {
+            if (binding == null)
+            {
+                continue;
+            }
+
+            if (string.Equals(binding.canonicalAreaId, canonicalAreaId, StringComparison.Ordinal) &&
+                !string.IsNullOrEmpty(binding.sceneAreaId))
             {
                 return true;
             }

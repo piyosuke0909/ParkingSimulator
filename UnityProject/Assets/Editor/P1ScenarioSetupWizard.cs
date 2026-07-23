@@ -23,10 +23,11 @@ public static class P1ScenarioSetupWizard
         if (definition == null)
         {
             definition = ScriptableObject.CreateInstance<LocalScenarioDefinition>();
-            PopulateReferenceScenario(definition);
             AssetDatabase.CreateAsset(definition, ScenarioAssetPath);
             createdDefinition = true;
         }
+
+        ApplyFormalExtendedP1Settings(definition);
 
         GameObject systemObject = GameObject.Find(SystemObjectName);
 
@@ -49,21 +50,36 @@ public static class P1ScenarioSetupWizard
         runtime.randomService = randomService;
         runtime.targetBinding = targetBinding;
         runtime.runLogger = logger;
+        runtime.requireActiveArrivalRateSegment = false;
 
         VehicleSpawnManager spawnManager = UnityEngine.Object.FindObjectOfType<VehicleSpawnManager>();
+        ParkingLotManager parkingLotManager = UnityEngine.Object.FindObjectOfType<ParkingLotManager>();
 
         if (spawnManager != null)
         {
             spawnManager.useScenarioSystem = true;
+            spawnManager.useScenarioAreaPreference = true;
             spawnManager.scenarioRuntime = runtime;
             spawnManager.scenarioRandomService = randomService;
             spawnManager.scenarioRunLogger = logger;
-            PopulateSceneBindings(targetBinding, spawnManager);
+            spawnManager.maxConcurrentVehicles = 60;
+            PopulateAccessPointBindings(targetBinding, spawnManager);
             EditorUtility.SetDirty(spawnManager);
         }
         else
         {
-            Debug.LogWarning("P1 Setup: Scene内にVehicleSpawnManagerが見つかりませんでした。後から参照を設定してください。");
+            Debug.LogWarning("P1 Setup: Scene内にVehicleSpawnManagerが見つかりませんでした。");
+        }
+
+        if (parkingLotManager != null)
+        {
+            parkingLotManager.RegisterAllSlots();
+            PopulateAreaBindings(targetBinding, parkingLotManager);
+            EditorUtility.SetDirty(parkingLotManager);
+        }
+        else
+        {
+            Debug.LogWarning("P1 Setup: Scene内にParkingLotManagerが見つかりませんでした。");
         }
 
         EditorUtility.SetDirty(systemObject);
@@ -79,11 +95,38 @@ public static class P1ScenarioSetupWizard
         Selection.activeGameObject = systemObject;
 
         string message = createdDefinition
-            ? "P1 Scenario Systemと基準シナリオAssetを作成しました。"
-            : "P1 Scenario Systemを既存シナリオAssetへ接続しました。";
+            ? "P1 Scenario Systemと正式設定のScenario Assetを作成しました。"
+            : "既存P1 Scenarioを拡張仕様へ更新しました。";
 
-        message += "\n\nScenarioTargetBindingの entrance-event / entrance-covered / entrance-main を実際のpairNameへ割り当ててください。";
+        message +=
+            "\n\n時間帯流入設定: 1800～5400秒 / 3台毎分 / Poisson / 施設全体" +
+            "\n区間外: VehicleSpawnManager.spawnIntervalへフォールバック" +
+            "\n同時存在台数上限: 60台" +
+            "\n\nArea効果の対象と倍率は資料で未指定です。" +
+            "P1_LocalScenarioのEffectへ targetType=Area、targetId=area-a等を追加してください。";
+
         EditorUtility.DisplayDialog("P1 Scenario Setup", message, "OK");
+    }
+
+    [MenuItem("Tools/Smart Parking/P1/Apply Formal Extended Settings")]
+    public static void ApplyFormalExtendedSettingsOnly()
+    {
+        LocalScenarioDefinition definition = AssetDatabase.LoadAssetAtPath<LocalScenarioDefinition>(ScenarioAssetPath);
+
+        if (definition == null)
+        {
+            EditorUtility.DisplayDialog(
+                "P1 Formal Settings",
+                "P1_LocalScenario.assetがありません。先にCreate or Update Scenario Setupを実行してください。",
+                "OK"
+            );
+            return;
+        }
+
+        ApplyFormalExtendedP1Settings(definition);
+        EditorUtility.SetDirty(definition);
+        AssetDatabase.SaveAssets();
+        EditorUtility.DisplayDialog("P1 Formal Settings", "正式設定を適用しました。", "OK");
     }
 
     [MenuItem("Tools/Smart Parking/P1/Validate Scenario Setup")]
@@ -93,6 +136,7 @@ public static class P1ScenarioSetupWizard
 
         ScenarioFactorRuntime runtime = UnityEngine.Object.FindObjectOfType<ScenarioFactorRuntime>();
         VehicleSpawnManager spawnManager = UnityEngine.Object.FindObjectOfType<VehicleSpawnManager>();
+        ParkingLotManager parkingLotManager = UnityEngine.Object.FindObjectOfType<ParkingLotManager>();
 
         if (runtime == null)
         {
@@ -103,6 +147,12 @@ public static class P1ScenarioSetupWizard
             if (runtime.scenarioDefinition == null)
             {
                 problems.Add("ScenarioFactorRuntime.scenarioDefinitionが未設定です。");
+            }
+            else
+            {
+                ValidateFormalArrivalSegment(runtime.scenarioDefinition, problems);
+                ValidateFactorIds(runtime.scenarioDefinition, problems);
+                ValidateTargetEffects(runtime, problems);
             }
 
             if (runtime.simulationClock == null)
@@ -115,34 +165,58 @@ public static class P1ScenarioSetupWizard
                 problems.Add("ScenarioRandomServiceが未設定です。");
             }
 
+            if (runtime.requireActiveArrivalRateSegment)
+            {
+                problems.Add("requireActiveArrivalRateSegmentがONです。区間外フォールバック仕様ではOFFにしてください。");
+            }
+
             if (runtime.targetBinding == null)
             {
                 problems.Add("ScenarioTargetBindingが未設定です。");
             }
-
-            ValidateFactorIds(runtime.scenarioDefinition, problems);
-            ValidateAccessPointEffects(runtime, spawnManager, problems);
         }
 
         if (spawnManager == null)
         {
             problems.Add("VehicleSpawnManagerがSceneにありません。");
         }
-        else if (!spawnManager.useScenarioSystem)
+        else
         {
-            problems.Add("VehicleSpawnManager.useScenarioSystemがOFFです。");
+            if (!spawnManager.useScenarioSystem)
+            {
+                problems.Add("VehicleSpawnManager.useScenarioSystemがOFFです。");
+            }
+
+            if (!spawnManager.useScenarioAreaPreference)
+            {
+                problems.Add("VehicleSpawnManager.useScenarioAreaPreferenceがOFFです。");
+            }
+
+            if (spawnManager.maxConcurrentVehicles != 60)
+            {
+                problems.Add($"maxConcurrentVehiclesが正式値60ではありません: {spawnManager.maxConcurrentVehicles}");
+            }
+        }
+
+        if (parkingLotManager == null)
+        {
+            problems.Add("ParkingLotManagerがSceneにありません。");
+        }
+        else if (parkingLotManager.GetAvailableAreaIdsWithAccessWaypoint().Count == 0)
+        {
+            problems.Add("選択可能な駐車エリアがありません。");
         }
 
         if (problems.Count == 0)
         {
-            EditorUtility.DisplayDialog("P1 Validation", "P1の必須参照に問題はありません。", "OK");
-            Debug.Log("P1 Validation: OK");
+            EditorUtility.DisplayDialog("P1 Validation", "拡張P1の必須設定に問題はありません。", "OK");
+            Debug.Log("P1 Extended Validation: OK");
             return;
         }
 
         foreach (string problem in problems)
         {
-            Debug.LogWarning("P1 Validation: " + problem);
+            Debug.LogWarning("P1 Extended Validation: " + problem);
         }
 
         EditorUtility.DisplayDialog(
@@ -152,156 +226,201 @@ public static class P1ScenarioSetupWizard
         );
     }
 
-    private static void PopulateReferenceScenario(LocalScenarioDefinition definition)
+    private static void ApplyFormalExtendedP1Settings(LocalScenarioDefinition definition)
     {
         definition.schemaVersion = "1.0";
         definition.scenarioId = "scenario-concert-rain";
-        definition.scenarioVersion = "p1-local-1";
+        definition.scenarioVersion = "p1-local-2";
         definition.facilityId = "facility-main";
         definition.mapVersion = "2026-07-16";
         definition.scenarioName = "P1 Local External Factors";
-        definition.description = "資料v4の雨・猛暑・コンサート・時間帯をUnityローカルで再現する。Backend Commandは使用しない。";
+        definition.description =
+            "雨・猛暑・コンサート、エリア需要、Poisson流入をUnityローカルで再現する。" +
+            "Backend Commandは使用しない。";
         definition.timeOfDay = "daytime";
         definition.durationSeconds = 14400f;
         definition.randomSeedPolicy = "fixed_per_repetition";
-        definition.randomSeed = 12345;
+
+        if (definition.randomSeed == 0)
+        {
+            definition.randomSeed = 12345;
+        }
 
         definition.arrivalRateSegments = new List<ArrivalRateSegment>
         {
             new ArrivalRateSegment
             {
                 enabled = true,
-                arrivalRateSegmentId = "arrival-base-daytime",
+                arrivalRateSegmentId = "arrival-global-1800-5400",
                 accessPointId = string.Empty,
-                startSimulationTimeSeconds = 0f,
-                endSimulationTimeSeconds = 14400f,
-                vehiclesPerMinute = 12f,
-                distribution = ArrivalDistribution.Fixed
+                startSimulationTimeSeconds = 1800f,
+                endSimulationTimeSeconds = 5400f,
+                vehiclesPerMinute = 3f,
+                distribution = ArrivalDistribution.Poisson
             }
         };
 
-        definition.scenarioFactors = new List<ScenarioFactorDefinition>
+        if (definition.scenarioFactors == null)
         {
-            CreateConcertFactor(),
-            CreateHeavyRainFactor(),
-            CreateExtremeHeatFactor()
-        };
+            definition.scenarioFactors = new List<ScenarioFactorDefinition>();
+        }
+
+        ScenarioFactorDefinition concert = EnsureFactor(
+            definition,
+            "factor-concert",
+            ScenarioFactorCategory.ScheduledEvent,
+            "concert",
+            "コンサート",
+            1800f,
+            10800f,
+            1f,
+            InformationAvailability.Scheduled
+        );
+
+        EnsureEffect(
+            concert,
+            "effect-concert-arrival-rate",
+            FactorEffectTargetType.Facility,
+            string.Empty,
+            ScenarioMetrics.ArrivalRate,
+            FactorEffectOperation.Multiply,
+            1.8f
+        );
+
+        EnsureEffect(
+            concert,
+            "effect-concert-event-entrance",
+            FactorEffectTargetType.AccessPoint,
+            "entrance-event",
+            ScenarioMetrics.ParkingPreferenceWeight,
+            FactorEffectOperation.Multiply,
+            2f
+        );
+
+        ScenarioFactorDefinition rain = EnsureFactor(
+            definition,
+            "factor-heavy-rain",
+            ScenarioFactorCategory.Weather,
+            "heavy_rain",
+            "強い雨",
+            3600f,
+            9000f,
+            0.8f,
+            InformationAvailability.Forecasted
+        );
+
+        EnsureEffect(
+            rain,
+            "effect-heavy-rain-speed",
+            FactorEffectTargetType.VehiclePopulation,
+            string.Empty,
+            ScenarioMetrics.Speed,
+            FactorEffectOperation.Multiply,
+            0.85f
+        );
+
+        EnsureEffect(
+            rain,
+            "effect-heavy-rain-covered-entrance",
+            FactorEffectTargetType.AccessPoint,
+            "entrance-covered",
+            ScenarioMetrics.ParkingPreferenceWeight,
+            FactorEffectOperation.Multiply,
+            1.4f
+        );
+
+        ScenarioFactorDefinition heat = EnsureFactor(
+            definition,
+            "factor-extreme-heat",
+            ScenarioFactorCategory.Temperature,
+            "extreme_heat",
+            "猛暑",
+            0f,
+            14400f,
+            1f,
+            InformationAvailability.Forecasted
+        );
+
+        EnsureEffect(
+            heat,
+            "effect-extreme-heat-main-entrance",
+            FactorEffectTargetType.AccessPoint,
+            "entrance-main",
+            ScenarioMetrics.ParkingPreferenceWeight,
+            FactorEffectOperation.Multiply,
+            1.6f
+        );
     }
 
-    private static ScenarioFactorDefinition CreateConcertFactor()
+    private static ScenarioFactorDefinition EnsureFactor(
+        LocalScenarioDefinition definition,
+        string id,
+        ScenarioFactorCategory category,
+        string code,
+        string label,
+        float start,
+        float end,
+        float intensity,
+        InformationAvailability availability)
     {
-        return new ScenarioFactorDefinition
+        ScenarioFactorDefinition factor = definition.scenarioFactors.Find(item =>
+            item != null && string.Equals(item.scenarioFactorId, id, StringComparison.Ordinal));
+
+        if (factor == null)
         {
-            enabled = true,
-            scenarioFactorId = "factor-concert",
-            category = ScenarioFactorCategory.ScheduledEvent,
-            factorCode = "concert",
-            label = "コンサート",
-            startSimulationTimeSeconds = 1800f,
-            endSimulationTimeSeconds = 10800f,
-            intensity = 1f,
-            informationAvailability = InformationAvailability.Scheduled,
-            hasKnownFromSimulationTimeSeconds = true,
-            knownFromSimulationTimeSeconds = 0f,
-            effects = new List<ScenarioFactorEffect>
-            {
-                new ScenarioFactorEffect
-                {
-                    scenarioFactorEffectId = "effect-concert-arrival-rate",
-                    targetType = FactorEffectTargetType.Facility,
-                    targetId = string.Empty,
-                    metric = ScenarioMetrics.ArrivalRate,
-                    operation = FactorEffectOperation.Multiply,
-                    value = 1.8f,
-                    unit = "ratio"
-                },
-                new ScenarioFactorEffect
-                {
-                    scenarioFactorEffectId = "effect-concert-event-entrance",
-                    targetType = FactorEffectTargetType.AccessPoint,
-                    targetId = "entrance-event",
-                    metric = ScenarioMetrics.ParkingPreferenceWeight,
-                    operation = FactorEffectOperation.Multiply,
-                    value = 2f,
-                    unit = "ratio"
-                }
-            }
-        };
+            factor = new ScenarioFactorDefinition();
+            definition.scenarioFactors.Add(factor);
+        }
+
+        factor.enabled = true;
+        factor.scenarioFactorId = id;
+        factor.category = category;
+        factor.factorCode = code;
+        factor.label = label;
+        factor.startSimulationTimeSeconds = start;
+        factor.endSimulationTimeSeconds = end;
+        factor.intensity = intensity;
+        factor.informationAvailability = availability;
+        factor.hasKnownFromSimulationTimeSeconds = true;
+        factor.knownFromSimulationTimeSeconds = 0f;
+
+        if (factor.effects == null)
+        {
+            factor.effects = new List<ScenarioFactorEffect>();
+        }
+
+        return factor;
     }
 
-    private static ScenarioFactorDefinition CreateHeavyRainFactor()
+    private static void EnsureEffect(
+        ScenarioFactorDefinition factor,
+        string id,
+        FactorEffectTargetType targetType,
+        string targetId,
+        string metric,
+        FactorEffectOperation operation,
+        float value)
     {
-        return new ScenarioFactorDefinition
+        ScenarioFactorEffect effect = factor.effects.Find(item =>
+            item != null && string.Equals(item.scenarioFactorEffectId, id, StringComparison.Ordinal));
+
+        if (effect == null)
         {
-            enabled = true,
-            scenarioFactorId = "factor-heavy-rain",
-            category = ScenarioFactorCategory.Weather,
-            factorCode = "heavy_rain",
-            label = "強い雨",
-            startSimulationTimeSeconds = 3600f,
-            endSimulationTimeSeconds = 9000f,
-            intensity = 0.8f,
-            informationAvailability = InformationAvailability.Forecasted,
-            hasKnownFromSimulationTimeSeconds = true,
-            knownFromSimulationTimeSeconds = 0f,
-            effects = new List<ScenarioFactorEffect>
-            {
-                new ScenarioFactorEffect
-                {
-                    scenarioFactorEffectId = "effect-heavy-rain-speed",
-                    targetType = FactorEffectTargetType.VehiclePopulation,
-                    targetId = string.Empty,
-                    metric = ScenarioMetrics.Speed,
-                    operation = FactorEffectOperation.Multiply,
-                    value = 0.85f,
-                    unit = "ratio"
-                },
-                new ScenarioFactorEffect
-                {
-                    scenarioFactorEffectId = "effect-heavy-rain-covered-entrance",
-                    targetType = FactorEffectTargetType.AccessPoint,
-                    targetId = "entrance-covered",
-                    metric = ScenarioMetrics.ParkingPreferenceWeight,
-                    operation = FactorEffectOperation.Multiply,
-                    value = 1.4f,
-                    unit = "ratio"
-                }
-            }
-        };
+            effect = new ScenarioFactorEffect();
+            factor.effects.Add(effect);
+        }
+
+        effect.enabled = true;
+        effect.scenarioFactorEffectId = id;
+        effect.targetType = targetType;
+        effect.targetId = targetId;
+        effect.metric = metric;
+        effect.operation = operation;
+        effect.value = value;
+        effect.unit = "ratio";
     }
 
-    private static ScenarioFactorDefinition CreateExtremeHeatFactor()
-    {
-        return new ScenarioFactorDefinition
-        {
-            enabled = true,
-            scenarioFactorId = "factor-extreme-heat",
-            category = ScenarioFactorCategory.Temperature,
-            factorCode = "extreme_heat",
-            label = "猛暑",
-            startSimulationTimeSeconds = 0f,
-            endSimulationTimeSeconds = 14400f,
-            intensity = 1f,
-            informationAvailability = InformationAvailability.Forecasted,
-            hasKnownFromSimulationTimeSeconds = true,
-            knownFromSimulationTimeSeconds = 0f,
-            effects = new List<ScenarioFactorEffect>
-            {
-                new ScenarioFactorEffect
-                {
-                    scenarioFactorEffectId = "effect-extreme-heat-main-entrance",
-                    targetType = FactorEffectTargetType.AccessPoint,
-                    targetId = "entrance-main",
-                    metric = ScenarioMetrics.ParkingPreferenceWeight,
-                    operation = FactorEffectOperation.Multiply,
-                    value = 1.6f,
-                    unit = "ratio"
-                }
-            }
-        };
-    }
-
-    private static void PopulateSceneBindings(
+    private static void PopulateAccessPointBindings(
         ScenarioTargetBinding targetBinding,
         VehicleSpawnManager spawnManager)
     {
@@ -321,7 +440,7 @@ public static class P1ScenarioSetupWizard
 
                 string canonicalId = DeriveCanonicalAccessPointId(pair.pairName);
 
-                if (!ContainsCanonicalBinding(targetBinding, canonicalId))
+                if (!ContainsAccessBinding(targetBinding, canonicalId))
                 {
                     targetBinding.accessPointBindings.Add(new ScenarioAccessPointBinding
                     {
@@ -333,16 +452,48 @@ public static class P1ScenarioSetupWizard
             }
         }
 
-        AddPlaceholderBinding(targetBinding, "entrance-event");
-        AddPlaceholderBinding(targetBinding, "entrance-covered");
-        AddPlaceholderBinding(targetBinding, "entrance-main");
+        AddAccessPlaceholder(targetBinding, "entrance-event");
+        AddAccessPlaceholder(targetBinding, "entrance-covered");
+        AddAccessPlaceholder(targetBinding, "entrance-main");
     }
 
-    private static void AddPlaceholderBinding(
+    private static void PopulateAreaBindings(
         ScenarioTargetBinding targetBinding,
-        string canonicalId)
+        ParkingLotManager parkingLotManager)
     {
-        if (ContainsCanonicalBinding(targetBinding, canonicalId))
+        if (targetBinding.areaBindings == null)
+        {
+            targetBinding.areaBindings = new List<ScenarioAreaBinding>();
+        }
+
+        HashSet<string> areaIds = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (ParkingSlot slot in parkingLotManager.allSlots)
+        {
+            if (slot == null || string.IsNullOrEmpty(slot.areaId) || !areaIds.Add(slot.areaId))
+            {
+                continue;
+            }
+
+            string canonicalId = NormalizeAreaId(slot.areaId);
+
+            if (ContainsAreaBinding(targetBinding, canonicalId))
+            {
+                continue;
+            }
+
+            targetBinding.areaBindings.Add(new ScenarioAreaBinding
+            {
+                canonicalAreaId = canonicalId,
+                sceneAreaId = slot.areaId,
+                primaryForLogging = true
+            });
+        }
+    }
+
+    private static void AddAccessPlaceholder(ScenarioTargetBinding targetBinding, string canonicalId)
+    {
+        if (ContainsAccessBinding(targetBinding, canonicalId))
         {
             return;
         }
@@ -355,47 +506,64 @@ public static class P1ScenarioSetupWizard
         });
     }
 
-    private static bool ContainsCanonicalBinding(
-        ScenarioTargetBinding targetBinding,
-        string canonicalId)
+    private static bool ContainsAccessBinding(ScenarioTargetBinding targetBinding, string canonicalId)
     {
-        foreach (ScenarioAccessPointBinding binding in targetBinding.accessPointBindings)
-        {
-            if (binding != null &&
-                string.Equals(binding.canonicalAccessPointId, canonicalId, StringComparison.Ordinal))
-            {
-                return true;
-            }
-        }
+        return targetBinding.accessPointBindings.Exists(binding =>
+            binding != null &&
+            string.Equals(binding.canonicalAccessPointId, canonicalId, StringComparison.Ordinal));
+    }
 
-        return false;
+    private static bool ContainsAreaBinding(ScenarioTargetBinding targetBinding, string canonicalId)
+    {
+        return targetBinding.areaBindings.Exists(binding =>
+            binding != null &&
+            string.Equals(binding.canonicalAreaId, canonicalId, StringComparison.Ordinal));
     }
 
     private static string DeriveCanonicalAccessPointId(string pairName)
     {
         string lower = pairName.ToLowerInvariant();
 
-        if (lower.Contains("west"))
-        {
-            return "entrance-west";
-        }
-
-        if (lower.Contains("east"))
-        {
-            return "entrance-east";
-        }
-
-        if (lower.Contains("north"))
-        {
-            return "entrance-north";
-        }
-
-        if (lower.Contains("south"))
-        {
-            return "entrance-south";
-        }
+        if (lower.Contains("west")) return "entrance-west";
+        if (lower.Contains("east")) return "entrance-east";
+        if (lower.Contains("north")) return "entrance-north";
+        if (lower.Contains("south")) return "entrance-south";
 
         return "entrance-" + lower.Replace('_', '-').Replace(' ', '-');
+    }
+
+    private static string NormalizeAreaId(string areaId)
+    {
+        string normalized = areaId.Trim().ToLowerInvariant()
+            .Replace('_', '-')
+            .Replace(' ', '-');
+
+        return normalized.StartsWith("area-", StringComparison.Ordinal)
+            ? normalized
+            : "area-" + normalized;
+    }
+
+    private static void ValidateFormalArrivalSegment(
+        LocalScenarioDefinition definition,
+        List<string> problems)
+    {
+        if (definition.arrivalRateSegments == null || definition.arrivalRateSegments.Count != 1)
+        {
+            problems.Add("正式設定ではArrivalRateSegmentを1件にしてください。");
+            return;
+        }
+
+        ArrivalRateSegment segment = definition.arrivalRateSegments[0];
+
+        if (segment == null ||
+            !Mathf.Approximately(segment.startSimulationTimeSeconds, 1800f) ||
+            !Mathf.Approximately(segment.endSimulationTimeSeconds, 5400f) ||
+            !Mathf.Approximately(segment.vehiclesPerMinute, 3f) ||
+            segment.distribution != ArrivalDistribution.Poisson ||
+            !string.IsNullOrEmpty(segment.accessPointId))
+        {
+            problems.Add("ArrivalRateSegmentが正式値（1800～5400秒、3台/分、Poisson、施設全体）ではありません。");
+        }
     }
 
     private static void ValidateFactorIds(
@@ -455,13 +623,11 @@ public static class P1ScenarioSetupWizard
         }
     }
 
-    private static void ValidateAccessPointEffects(
+    private static void ValidateTargetEffects(
         ScenarioFactorRuntime runtime,
-        VehicleSpawnManager spawnManager,
         List<string> problems)
     {
-        if (runtime == null ||
-            runtime.scenarioDefinition == null ||
+        if (runtime.scenarioDefinition == null ||
             runtime.targetBinding == null ||
             runtime.scenarioDefinition.scenarioFactors == null)
         {
@@ -477,17 +643,21 @@ public static class P1ScenarioSetupWizard
 
             foreach (ScenarioFactorEffect effect in factor.effects)
             {
-                if (effect == null || effect.targetType != FactorEffectTargetType.AccessPoint)
+                if (effect == null || !effect.enabled)
                 {
                     continue;
                 }
 
-                if (!runtime.targetBinding.HasResolvedAccessPoint(effect.targetId))
+                if (effect.targetType == FactorEffectTargetType.AccessPoint &&
+                    !runtime.targetBinding.HasResolvedAccessPoint(effect.targetId))
                 {
-                    problems.Add(
-                        $"AccessPoint効果の割当が未確定です: {effect.targetId} " +
-                        "→ ScenarioTargetBinding.scenePairNameを設定してください。"
-                    );
+                    problems.Add($"AccessPoint効果の割当が未確定です: {effect.targetId}");
+                }
+
+                if (effect.targetType == FactorEffectTargetType.Area &&
+                    !runtime.targetBinding.HasResolvedArea(effect.targetId))
+                {
+                    problems.Add($"Area効果の割当が未確定です: {effect.targetId}");
                 }
             }
         }
