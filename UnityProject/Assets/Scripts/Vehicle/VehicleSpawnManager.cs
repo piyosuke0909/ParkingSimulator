@@ -82,14 +82,7 @@ public class VehicleSpawnManager : MonoBehaviour
     private int nextPairIndex;
     private int spawnSequenceNumber;
 
-    public int ActiveVehicleCount
-    {
-        get
-        {
-            CleanupDestroyedVehicles();
-            return activeVehicleCount;
-        }
-    }
+    public int ActiveVehicleCount => activeVehicleCount;
 
     public int TotalSpawnedCount => totalSpawnedCount;
 
@@ -767,11 +760,16 @@ public class VehicleSpawnManager : MonoBehaviour
             scenarioRuntime = ScenarioFactorRuntime.Instance;
         }
 
+        if (scenarioRandomService == null &&
+            scenarioRuntime != null &&
+            scenarioRuntime.RandomService != null)
+        {
+            scenarioRandomService = scenarioRuntime.RandomService;
+        }
+
         if (scenarioRandomService == null)
         {
-            scenarioRandomService = scenarioRuntime != null
-                ? scenarioRuntime.RandomService
-                : ScenarioRandomService.Instance;
+            scenarioRandomService = ScenarioRandomService.Instance;
         }
 
         if (scenarioRunLogger == null && scenarioRuntime != null)
@@ -800,8 +798,8 @@ public class VehicleSpawnManager : MonoBehaviour
             yield break;
         }
 
-        double elapsedSimulationSeconds = 0d;
-        double previousAdvancedSeconds = clock.TotalAdvancedSimulationSeconds;
+        float elapsedSimulationSeconds = 0f;
+        float previousSimulationTime = clock.SimulationTimeSeconds;
 
         while (elapsedSimulationSeconds < seconds)
         {
@@ -817,20 +815,20 @@ public class VehicleSpawnManager : MonoBehaviour
                 yield break;
             }
 
-            double currentAdvancedSeconds = clock.TotalAdvancedSimulationSeconds;
-            double frameIncrement = currentAdvancedSeconds - previousAdvancedSeconds;
+            float currentSimulationTime = clock.SimulationTimeSeconds;
+            float frameIncrement = currentSimulationTime - previousSimulationTime;
 
-            // Clockが自然に前進させた秒数だけを積算します。
-            // SetSimulationTimeによる巻き戻し・早送りや、表示時刻のループは
-            // 待機秒数そのものを増減させません。
-            if (frameIncrement > 0d &&
-                !double.IsNaN(frameIncrement) &&
-                !double.IsInfinity(frameIncrement))
+            // SetSimulationTime、ResetClock、シナリオループなどで時刻が
+            // 巻き戻ったフレームは待機時間を減らさず、負の増分だけ無視します。
+            // 巻き戻し後の次フレームからは、新しい時刻を基準に再び加算します。
+            if (frameIncrement > 0f &&
+                !float.IsNaN(frameIncrement) &&
+                !float.IsInfinity(frameIncrement))
             {
                 elapsedSimulationSeconds += frameIncrement;
             }
 
-            previousAdvancedSeconds = currentAdvancedSeconds;
+            previousSimulationTime = currentSimulationTime;
         }
     }
 
