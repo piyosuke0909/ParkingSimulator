@@ -795,9 +795,15 @@ public class VehicleSpawnManager : MonoBehaviour
             yield break;
         }
 
-        float startTime = clock.SimulationTimeSeconds;
+        if (seconds <= 0f)
+        {
+            yield break;
+        }
 
-        while (clock.SimulationTimeSeconds - startTime < seconds)
+        float elapsedSimulationSeconds = 0f;
+        float previousSimulationTime = clock.SimulationTimeSeconds;
+
+        while (elapsedSimulationSeconds < seconds)
         {
             if (!clock.IsRunning && scenarioRuntime != null && scenarioRuntime.IsScenarioCompleted)
             {
@@ -805,6 +811,26 @@ public class VehicleSpawnManager : MonoBehaviour
             }
 
             yield return null;
+
+            if (clock == null)
+            {
+                yield break;
+            }
+
+            float currentSimulationTime = clock.SimulationTimeSeconds;
+            float frameIncrement = currentSimulationTime - previousSimulationTime;
+
+            // SetSimulationTime、ResetClock、シナリオループなどで時刻が
+            // 巻き戻ったフレームは待機時間を減らさず、負の増分だけ無視します。
+            // 巻き戻し後の次フレームからは、新しい時刻を基準に再び加算します。
+            if (frameIncrement > 0f &&
+                !float.IsNaN(frameIncrement) &&
+                !float.IsInfinity(frameIncrement))
+            {
+                elapsedSimulationSeconds += frameIncrement;
+            }
+
+            previousSimulationTime = currentSimulationTime;
         }
     }
 
