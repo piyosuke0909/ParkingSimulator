@@ -29,9 +29,14 @@ public class SimulationClock : MonoBehaviour
     [SerializeField]
     private bool isRunning;
 
+    // 表示時刻とは別に、Clockが実際に前進させたシミュレーション秒数を保持します。
+    // SetSimulationTimeによる手動ジャンプや時刻の巻き戻しは加算しません。
+    private double totalAdvancedSimulationSeconds;
+
     public float SimulationTimeSeconds => simulationTimeSeconds;
     public float SimulationTimeScale => simulationTimeScale;
     public bool IsRunning => isRunning;
+    public double TotalAdvancedSimulationSeconds => totalAdvancedSimulationSeconds;
 
     private void Awake()
     {
@@ -54,22 +59,45 @@ public class SimulationClock : MonoBehaviour
             ? Time.unscaledDeltaTime
             : Time.deltaTime;
 
-        simulationTimeSeconds += delta * simulationTimeScale;
+        float requestedAdvance = delta * simulationTimeScale;
+
+        if (requestedAdvance <= 0f ||
+            float.IsNaN(requestedAdvance) ||
+            float.IsInfinity(requestedAdvance))
+        {
+            return;
+        }
 
         float duration = scenarioDefinition != null
             ? scenarioDefinition.durationSeconds
             : 0f;
 
-        if (duration <= 0f || simulationTimeSeconds < duration)
+        if (duration <= 0f)
         {
+            simulationTimeSeconds += requestedAdvance;
+            totalAdvancedSimulationSeconds += requestedAdvance;
             return;
         }
 
         if (loopAtScenarioEnd)
         {
-            simulationTimeSeconds %= duration;
+            simulationTimeSeconds = Mathf.Repeat(
+                simulationTimeSeconds + requestedAdvance,
+                duration
+            );
+
+            // 表示時刻が0秒へ戻っても、実際に進んだ秒数は失わないようにします。
+            totalAdvancedSimulationSeconds += requestedAdvance;
+            return;
         }
-        else
+
+        float remaining = Mathf.Max(0f, duration - simulationTimeSeconds);
+        float appliedAdvance = Mathf.Min(requestedAdvance, remaining);
+
+        simulationTimeSeconds += appliedAdvance;
+        totalAdvancedSimulationSeconds += appliedAdvance;
+
+        if (simulationTimeSeconds >= duration)
         {
             simulationTimeSeconds = duration;
             isRunning = false;
@@ -92,6 +120,7 @@ public class SimulationClock : MonoBehaviour
     public void ResetClock()
     {
         simulationTimeSeconds = Mathf.Max(0f, startSimulationTimeSeconds);
+        totalAdvancedSimulationSeconds = 0d;
         isRunning = false;
     }
 
