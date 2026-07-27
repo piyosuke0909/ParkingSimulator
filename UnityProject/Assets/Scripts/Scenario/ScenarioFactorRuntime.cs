@@ -99,6 +99,7 @@ public class ScenarioFactorRuntime : MonoBehaviour
     {
         activeFactorIds.Clear();
         unresolvedEffectWarnings.Clear();
+        scenarioStartedLogged = false;
         scenarioCompletedLogged = false;
 
         if (simulationClock != null)
@@ -112,6 +113,16 @@ public class ScenarioFactorRuntime : MonoBehaviour
         }
 
         randomService?.InitializeFromDefinition();
+
+        if (runLogger != null && !scenarioStartedLogged)
+        {
+            runLogger.LogScenarioStarted(
+                scenarioDefinition,
+                randomService != null ? randomService.CurrentSeed : 0
+            );
+            scenarioStartedLogged = true;
+        }
+
         EvaluateFactorTransitions(true);
     }
 

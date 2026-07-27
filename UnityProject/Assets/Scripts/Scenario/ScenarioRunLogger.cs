@@ -16,9 +16,13 @@ public class ScenarioRunLogger : MonoBehaviour
     [SerializeField]
     private string currentLogFilePath;
 
+    [SerializeField]
+    private bool fileLoggingDisabledAfterFailure;
+
     private StreamWriter writer;
 
     public string CurrentLogFilePath => currentLogFilePath;
+    public bool FileLoggingDisabledAfterFailure => fileLoggingDisabledAfterFailure;
 
     private void Awake()
     {
@@ -246,7 +250,7 @@ public class ScenarioRunLogger : MonoBehaviour
 
     private void OpenWriterIfNeeded()
     {
-        if (!logToFile || writer != null)
+        if (!logToFile || writer != null || fileLoggingDisabledAfterFailure)
         {
             return;
         }
@@ -264,12 +268,26 @@ public class ScenarioRunLogger : MonoBehaviour
             string timestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
             currentLogFilePath = Path.Combine(directory, $"{fileNamePrefix}-{timestamp}.log");
             writer = new StreamWriter(currentLogFilePath, false, new UTF8Encoding(false));
+            fileLoggingDisabledAfterFailure = false;
         }
         catch (Exception exception)
         {
-            Debug.LogWarning($"{name}: P1ログファイルを開けませんでした。{exception.Message}");
+            fileLoggingDisabledAfterFailure = true;
             writer = null;
+            Debug.LogWarning(
+                $"{name}: P1ログファイルを開けなかったため、この実行中のファイル出力を停止します。" +
+                $"再試行するには Retry File Logging を実行してください。{exception.Message}"
+            );
         }
+    }
+
+    [ContextMenu("Retry File Logging")]
+    public void RetryFileLogging()
+    {
+        CloseWriter();
+        fileLoggingDisabledAfterFailure = false;
+        currentLogFilePath = string.Empty;
+        OpenWriterIfNeeded();
     }
 
     private void CloseWriter()

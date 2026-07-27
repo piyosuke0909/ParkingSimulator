@@ -115,24 +115,35 @@ public class ScenarioRandomService : MonoBehaviour
             return -1;
         }
 
-        float total = 0f;
+        double total = 0d;
 
         for (int i = 0; i < weights.Count; i++)
         {
-            total += Mathf.Max(0f, weights[i]);
+            total += GetFiniteNonNegativeWeight(weights[i]);
         }
 
-        if (total <= 0f)
+        if (total <= 0d || double.IsNaN(total) || double.IsInfinity(total))
         {
             return Range(0, weights.Count);
         }
 
-        float value = Range(0f, total);
-        float cumulative = 0f;
+        EnsureInitialized();
+        drawCount++;
+        double value = random.NextDouble() * total;
+        double cumulative = 0d;
+        int lastSelectableIndex = -1;
 
         for (int i = 0; i < weights.Count; i++)
         {
-            cumulative += Mathf.Max(0f, weights[i]);
+            double weight = GetFiniteNonNegativeWeight(weights[i]);
+
+            if (weight <= 0d)
+            {
+                continue;
+            }
+
+            lastSelectableIndex = i;
+            cumulative += weight;
 
             if (value < cumulative)
             {
@@ -140,7 +151,21 @@ public class ScenarioRandomService : MonoBehaviour
             }
         }
 
-        return weights.Count - 1;
+        // 浮動小数点の丸め誤差で境界を越えた場合も、
+        // 無効な末尾要素ではなく最後の有効要素を返します。
+        return lastSelectableIndex >= 0
+            ? lastSelectableIndex
+            : Range(0, weights.Count);
+    }
+
+    private static double GetFiniteNonNegativeWeight(float weight)
+    {
+        if (float.IsNaN(weight) || float.IsInfinity(weight) || weight <= 0f)
+        {
+            return 0d;
+        }
+
+        return weight;
     }
 
     private void EnsureInitialized()
