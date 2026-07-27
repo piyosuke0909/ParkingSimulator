@@ -10,3 +10,14 @@ test("FastAPI detail is shown without raw JSON", () => {
 test("server failures get a user-facing fallback", () => {
   assert.equal(apiErrorMessage("", 500), "サーバーに接続できません。しばらくしてから再試行してください。");
 });
+
+test("server failures never expose raw response bodies", () => {
+  assert.equal(
+    apiErrorMessage("Traceback: internal database connection details", 500),
+    "サーバーに接続できません。しばらくしてから再試行してください。"
+  );
+  assert.equal(
+    apiErrorMessage('{"detail":"internal stack trace"}', 503),
+    "サーバーに接続できません。しばらくしてから再試行してください。"
+  );
+});

@@ -9,6 +9,10 @@ export class ApiError extends Error {
 }
 
 export function apiErrorMessage(body: string, status: number): string {
+  if (status >= 500) {
+    return "サーバーに接続できません。しばらくしてから再試行してください。";
+  }
+
   if (body) {
     try {
       const parsed = JSON.parse(body) as { detail?: unknown; message?: unknown };
@@ -19,15 +23,13 @@ export function apiErrorMessage(body: string, status: number): string {
         return parsed.message;
       }
     } catch {
-      return body;
+      // Non-JSON response bodies may contain internal server details.
+      // Fall through to a status-based user-facing message.
     }
   }
 
   if (status === 409) {
     return "案内状態が更新されています。最新情報を再読み込みしてください。";
-  }
-  if (status >= 500) {
-    return "サーバーに接続できません。しばらくしてから再試行してください。";
   }
   return `データ取得に失敗しました（${status}）。`;
 }

@@ -126,12 +126,18 @@ export function deriveUserScreenState(input: {
     };
   }
 
-  if (!hasDestination || input.guidance?.status === "unavailable") {
-    return { phase: "empty", canStartGuidance: false, hasDestination: false, showRoute: false, retryable: true };
+  if (input.parkingStatus?.stale) {
+    return {
+      phase: "stale",
+      canStartGuidance: false,
+      hasDestination,
+      showRoute: hasUsableData,
+      retryable: true
+    };
   }
 
-  if (input.parkingStatus?.stale) {
-    return { phase: "stale", canStartGuidance: false, hasDestination: true, showRoute: true, retryable: true };
+  if (!hasDestination || input.guidance?.status === "unavailable") {
+    return { phase: "empty", canStartGuidance: false, hasDestination: false, showRoute: false, retryable: true };
   }
 
   return { phase: "ready", canStartGuidance: true, hasDestination: true, showRoute: true, retryable: false };

@@ -48,3 +48,18 @@ test("new guidance cannot start from error, empty or stale data", () => {
   assert.equal(deriveUserScreenState({ hasLoaded: true, parkingStatus: staleParkingStatus, guidance: readyGuidance, dataError: null }).canStartGuidance, false);
   assert.equal(deriveUserScreenState({ hasLoaded: true, parkingStatus: null, guidance: null, dataError: "error" }).canStartGuidance, false);
 });
+
+test("stale takes precedence over empty without inventing destination data", () => {
+  const emptyGuidance = adaptMvpGuidance(emptyGuidanceResponse);
+  const state = deriveUserScreenState({
+    hasLoaded: true,
+    parkingStatus: staleParkingStatus,
+    guidance: emptyGuidance,
+    dataError: null
+  });
+
+  assert.equal(state.phase, "stale");
+  assert.equal(state.hasDestination, false);
+  assert.equal(state.showRoute, false);
+  assert.equal(state.canStartGuidance, false);
+});
