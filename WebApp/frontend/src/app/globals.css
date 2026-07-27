@@ -1242,6 +1242,16 @@ h2 {
   background: #fff0ee;
 }
 
+.guidance-live-region:empty {
+  display: none;
+}
+
+.userDemoShell[data-state="loading"] .map-stat,
+.userDemoShell[data-state="error"] .map-stat,
+.userDemoShell[data-state="empty"] .map-stat {
+  color: var(--demo-muted);
+}
+
 .primary-action {
   width: 100%;
   min-height: 48px;

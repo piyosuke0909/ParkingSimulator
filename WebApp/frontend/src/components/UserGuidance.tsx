@@ -3,7 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent } from "react";
 import { fetchJson } from "./api";
-import type { AdminState, AreaStatus, GuidanceResponse, ParkingMapSlot, RiskLevel } from "./types";
+import { adaptMvpGuidance, deriveUserScreenState, guidanceLabel, guidanceTargetKey } from "./userGuidanceModel";
+import type { UserGuidanceModel } from "./userGuidanceModel";
+import type { AreaStatus, MvpGuidanceResponse, ParkingMapSlot, ParkingStatus, RiskLevel } from "./types";
 
 type DisplayMode = "map" | "aerial";
 type RouteMode = "parking" | "exit";
@@ -39,6 +41,15 @@ const exitView = {
   route: "M342 178 H264 V246 H28"
 };
 
+const waitingView = {
+  distance: "--",
+  eta: "--",
+  action: "待機",
+  place: "案内情報を確認中",
+  lane: "確認中",
+  route: ""
+};
+
 const riskLabel: Record<RiskLevel, string> = {
   low: "空きあり",
   medium: "やや混雑",
@@ -56,40 +67,31 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-function getArea(state: AdminState | null, areaId?: string) {
+function getArea(state: ParkingStatus | null, areaId?: string | null) {
   return state?.areas.find((area) => area.areaId === areaId) ?? null;
 }
 
-function getGuide(areaId?: string) {
-  return areaGuidance[areaId || ""] ?? areaGuidance.B;
+function getGuide(areaId?: string | null) {
+  const key = areaId?.replace(/^area-/i, "").toUpperCase() ?? "";
+  return areaGuidance[key] ?? areaGuidance.B;
 }
 
-function buildRoutePath(guidance: GuidanceResponse | null) {
-  return guidance?.route?.svgPath || getGuide(guidance?.targetArea?.areaId).route;
+function buildRoutePath(guidance: UserGuidanceModel | null) {
+  if (!guidance?.targetAreaId) {
+    return null;
+  }
+  return guidance.route?.svgPath || getGuide(guidance.targetAreaId).route;
 }
 
-function getRouteStartPoint(routePath: string) {
+function getRouteStartPoint(routePath: string | null) {
+  if (!routePath) {
+    return null;
+  }
   const match = routePath.match(/M\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/);
   if (!match) {
     return null;
   }
   return { x: Number(match[1]), y: Number(match[2]) };
-}
-
-function guidanceTargetKey(guidance: GuidanceResponse | null) {
-  if (!guidance) {
-    return "";
-  }
-  return [
-    guidance.status,
-    guidance.targetArea?.areaId ?? "",
-    guidance.recommendedSlotId ?? guidance.recommendedSlot?.slotId ?? "",
-    guidance.route?.svgPath ?? ""
-  ].join("|");
-}
-
-function guidanceLabel(guidance: GuidanceResponse | null) {
-  return guidance?.recommendedSlot?.label || guidance?.targetArea?.label || "案内先";
 }
 
 function areaSlots(area: AreaStatus) {
@@ -131,13 +133,13 @@ function slotStateClass(slot: ParkingMapSlot) {
   return "";
 }
 
-function mapSlots(state: AdminState | null, guidance: GuidanceResponse | null) {
+function mapSlots(state: ParkingStatus | null, guidance: UserGuidanceModel | null) {
   const slots = state?.slots?.filter((slot) => slot.mapPosition) ?? [];
   if (!slots.length) {
     return (state?.areas ?? []).flatMap(areaSlots);
   }
 
-  const targetSlotId = guidance?.recommendedSlotId ?? guidance?.recommendedSlot?.slotId;
+  const targetSlotId = guidance?.targetSlotId;
   return slots.map((slot) => {
     const point = slot.mapPosition!;
     const cls = slotStateClass(slot);
@@ -154,8 +156,8 @@ function mapSlots(state: AdminState | null, guidance: GuidanceResponse | null) {
   });
 }
 
-function focusPan(guidance: GuidanceResponse | null) {
-  const point = guidance?.recommendedSlot?.mapPosition;
+function focusPan(guidance: UserGuidanceModel | null) {
+  const point = guidance?.targetSlot?.mapPosition;
   if (!point) {
     return { x: 0, y: 0 };
   }
@@ -187,18 +189,23 @@ function shouldSkipMapDrag(event: PointerEvent<HTMLElement>) {
 }
 
 export function UserGuidance() {
-  const [state, setState] = useState<AdminState | null>(null);
-  const [guidance, setGuidance] = useState<GuidanceResponse | null>(null);
-  const [pendingGuidance, setPendingGuidance] = useState<GuidanceResponse | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [parkingStatus, setParkingStatus] = useState<ParkingStatus | null>(null);
+  const [guidance, setGuidance] = useState<UserGuidanceModel | null>(null);
+  const [pendingGuidance, setPendingGuidance] = useState<UserGuidanceModel | null>(null);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [actionPending, setActionPending] = useState(false);
+  const [dataError, setDataError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [displayMode, setDisplayMode] = useState<DisplayMode>("map");
   const [routeMode, setRouteMode] = useState<RouteMode>("parking");
   const [sheetCollapsed, setSheetCollapsed] = useState(false);
   const [isMapDragging, setIsMapDragging] = useState(false);
   const [mapView, setMapView] = useState<MapView>({ tilt: 54, rotate: -5, panX: 0, panY: 12, preset: "" });
   const dragRef = useRef<MapDragState | null>(null);
-  const guidanceRef = useRef<GuidanceResponse | null>(null);
+  const guidanceRef = useRef<UserGuidanceModel | null>(null);
+  const refreshInFlightRef = useRef(false);
+  const actionInFlightRef = useRef(false);
 
   const userSessionId = useMemo(() => {
     if (typeof window === "undefined") {
@@ -214,44 +221,63 @@ export function UserGuidance() {
     return value;
   }, []);
 
-  const targetArea = getArea(state, guidance?.targetArea?.areaId);
-  const guide = getGuide(guidance?.targetArea?.areaId);
-  const destinationLabel = guidanceLabel(guidance) || "案内先取得中";
-  const isGuidanceActive = routeMode === "parking" && guidance?.status === "active" && Boolean(guidance?.reservation);
+  const screenState = deriveUserScreenState({ hasLoaded, parkingStatus, guidance, dataError });
+  const targetArea = getArea(parkingStatus, guidance?.targetAreaId);
+  const guide = screenState.hasDestination ? getGuide(guidance?.targetAreaId) : waitingView;
+  const destinationLabel = guidanceLabel(guidance) ?? (screenState.phase === "empty" ? "案内先なし" : "案内先を確認中");
+  const isGuidanceActive = routeMode === "parking" && guidance?.status === "active" && Boolean(guidance?.guidanceSession);
   const routePath = routeMode === "parking" ? buildRoutePath(guidance) : exitView.route;
   const routeStartPosition = getRouteStartPoint(routePath);
-  const assignedCarPosition = guidance?.assignedCar?.mapPosition ?? null;
-  const currentPosition = isGuidanceActive ? assignedCarPosition : routeStartPosition;
+  const assignedVehiclePosition = guidance?.assignedVehicle?.mapPosition ?? null;
+  const currentPosition = isGuidanceActive ? assignedVehiclePosition : routeStartPosition;
   const currentGuide = routeMode === "parking" ? guide : exitView;
-  const freeCount = guidance?.summary?.effectiveAvailable ?? state?.summary.emptyCount ?? 0;
+  const freeCount = guidance?.summary?.effectiveAvailable ?? parkingStatus?.summary.emptyCount ?? 0;
   const crowd = guidance?.summary?.congestionLevel ?? targetArea?.riskLevel ?? "low";
-  const showRoutePreview = routeMode === "parking" && !isGuidanceActive;
-  const showRouteLine = routeMode === "exit" || isGuidanceActive || showRoutePreview;
-  const showCurrentMarker = routeMode === "exit" || (isGuidanceActive && Boolean(assignedCarPosition));
+  const showRoutePreview = routeMode === "parking" && !isGuidanceActive && screenState.showRoute;
+  const showRouteLine = routeMode === "exit" || (screenState.showRoute && (isGuidanceActive || showRoutePreview));
+  const showCurrentMarker = routeMode === "exit" || (isGuidanceActive && Boolean(assignedVehiclePosition));
   const candidateChanged = routeMode === "parking" && !isGuidanceActive && Boolean(pendingGuidance);
-  const pendingLabel = guidanceLabel(pendingGuidance);
+  const pendingLabel = guidanceLabel(pendingGuidance) ?? "新しい案内先";
   const routeFocusPan = isGuidanceActive && mapView.preset !== "vehicle" ? focusPan(guidance) : { x: 0, y: 0 };
   const topText =
     routeMode === "parking"
       ? isGuidanceActive
         ? `${currentGuide.action}して${destinationLabel}へ`
-        : `${destinationLabel}がおすすめ候補`
+        : screenState.phase === "ready" || screenState.phase === "stale"
+          ? `${destinationLabel}がおすすめ候補`
+          : destinationLabel
       : "西出口方面へ退出";
   const locationText =
     routeMode === "parking"
       ? isGuidanceActive
         ? `${destinationLabel}へ案内中`
-        : `ルートプレビュー: ${destinationLabel}`
+        : screenState.showRoute
+          ? `ルートプレビュー: ${destinationLabel}`
+          : destinationLabel
       : `${destinationLabel}付近から出口案内中`;
+  const isRetryAction = routeMode === "parking" && !isGuidanceActive && screenState.retryable;
+  const primaryDisabled =
+    actionPending ||
+    refreshing ||
+    routeMode !== "parking" ||
+    (!isGuidanceActive && !isRetryAction && !screenState.canStartGuidance);
 
-  async function refresh() {
+  async function refresh(options: { showProgress?: boolean } = {}) {
+    if (refreshInFlightRef.current) {
+      return;
+    }
+    refreshInFlightRef.current = true;
+    if (options.showProgress) {
+      setRefreshing(true);
+    }
     try {
-      setError(null);
-      const [nextState, nextGuidance] = await Promise.all([
-        fetchJson<AdminState>("/api/backend/admin/state"),
-        fetchJson<GuidanceResponse>(`/api/backend/parking/recommendation?userSessionId=${encodeURIComponent(userSessionId)}`)
+      const [nextParkingStatus, nextMvpGuidanceResponse] = await Promise.all([
+        fetchJson<ParkingStatus>("/api/backend/parking/status"),
+        fetchJson<MvpGuidanceResponse>(`/api/backend/parking/recommendation?userSessionId=${encodeURIComponent(userSessionId)}`)
       ]);
-      setState(nextState);
+      const nextGuidance = adaptMvpGuidance(nextMvpGuidanceResponse);
+      setParkingStatus(nextParkingStatus);
+      setDataError(null);
       const currentGuidance = guidanceRef.current;
       const shouldReplaceGuidance =
         !currentGuidance ||
@@ -267,41 +293,51 @@ export function UserGuidance() {
         setPendingGuidance(nextGuidance);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "データ取得に失敗しました。");
+      setDataError(err instanceof Error ? err.message : "データ取得に失敗しました。");
+    } finally {
+      setHasLoaded(true);
+      setRefreshing(false);
+      refreshInFlightRef.current = false;
     }
   }
 
   async function startGuidance() {
     const guidanceToStart = pendingGuidance ?? guidance;
-    if (!guidanceToStart?.targetArea || routeMode !== "parking") {
+    if (actionInFlightRef.current || !guidanceToStart?.targetAreaId || routeMode !== "parking" || !screenState.canStartGuidance) {
       return;
     }
-    setLoading(true);
+    actionInFlightRef.current = true;
+    setActionPending(true);
+    setActionError(null);
     try {
-      const response = await fetchJson<GuidanceResponse>("/api/backend/guidance/start", {
+      const mvpResponse = await fetchJson<MvpGuidanceResponse>("/api/backend/guidance/start", {
         method: "POST",
-        body: JSON.stringify({ userSessionId, targetAreaId: guidanceToStart.targetArea.areaId })
+        body: JSON.stringify({ userSessionId, targetAreaId: guidanceToStart.targetAreaId })
       });
-      guidanceRef.current = response;
-      setGuidance(response);
+      const nextGuidance = adaptMvpGuidance(mvpResponse);
+      guidanceRef.current = nextGuidance;
+      setGuidance(nextGuidance);
       setPendingGuidance(null);
       await refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "案内開始に失敗しました。");
+      setActionError(err instanceof Error ? err.message : "案内開始に失敗しました。");
     } finally {
-      setLoading(false);
+      actionInFlightRef.current = false;
+      setActionPending(false);
     }
   }
 
   async function cancelGuidance() {
-    if (!guidance?.reservation || routeMode !== "parking") {
+    if (actionInFlightRef.current || !guidance?.guidanceSession || routeMode !== "parking") {
       return;
     }
-    setLoading(true);
+    actionInFlightRef.current = true;
+    setActionPending(true);
+    setActionError(null);
     try {
       await fetchJson<{ cancelledReservationIds: string[] }>("/api/backend/guidance/cancel", {
         method: "POST",
-        body: JSON.stringify({ userSessionId, reservationId: guidance.reservation.reservationId })
+        body: JSON.stringify({ userSessionId, reservationId: guidance.guidanceSession.mvpReservationId })
       });
       guidanceRef.current = null;
       setGuidance(null);
@@ -309,15 +345,18 @@ export function UserGuidance() {
       setMapView((current) => ({ ...current, preset: "" }));
       await refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "案内中止に失敗しました。");
+      setActionError(err instanceof Error ? err.message : "案内中止に失敗しました。");
     } finally {
-      setLoading(false);
+      actionInFlightRef.current = false;
+      setActionPending(false);
     }
   }
 
   function handlePrimaryAction() {
     if (isGuidanceActive) {
       cancelGuidance();
+    } else if (isRetryAction) {
+      refresh({ showProgress: true });
     } else {
       startGuidance();
     }
@@ -378,13 +417,14 @@ export function UserGuidance() {
   }
 
   useEffect(() => {
-    refresh();
-    const timer = window.setInterval(refresh, 1000);
+    guidanceRef.current = guidance;
+    refresh({ showProgress: true });
+    const timer = window.setInterval(() => refresh(), 1000);
     return () => window.clearInterval(timer);
   }, [userSessionId]);
 
   return (
-    <main className="userDemoShell" aria-label="U22 SmartParking Navi">
+    <main className="userDemoShell" aria-label="U22 SmartParking Navi" data-state={screenState.phase}>
       <section className="phone">
         <header className="guide-card">
           <div className="turn" aria-hidden="true">
@@ -452,11 +492,11 @@ export function UserGuidance() {
             <div className="unity-label">Unity 上空マップ</div>
             <img className="unity-parking-image" src="/assets/parking.png" alt="Unity駐車場マップ" />
             <svg className="map-route-overlay" viewBox="0 0 637 492" preserveAspectRatio="none" aria-hidden="true">
-              <g>{mapSlots(state, guidance)}</g>
+              <g>{mapSlots(parkingStatus, guidance)}</g>
               {showRouteLine ? (
                 <>
-                  <path className={`route-main ${showRoutePreview ? "preview" : ""}`} d={routePath} />
-                  <path className={`route-dash ${showRoutePreview ? "preview" : ""}`} d={routePath} />
+                  <path className={`route-main ${showRoutePreview ? "preview" : ""}`} d={routePath ?? ""} />
+                  <path className={`route-dash ${showRoutePreview ? "preview" : ""}`} d={routePath ?? ""} />
                 </>
               ) : null}
               {showCurrentMarker && currentPosition ? (
@@ -465,11 +505,11 @@ export function UserGuidance() {
                   <path d="M0 -18 L8 6 L0 2 L-8 6 Z" />
                 </g>
               ) : null}
-              {guidance?.recommendedSlot?.mapPosition && routeMode === "parking" ? (
+              {guidance?.targetSlot?.mapPosition && routeMode === "parking" ? (
                 <g>
-                  <circle className="target-ring" cx={guidance.recommendedSlot.mapPosition.x} cy={guidance.recommendedSlot.mapPosition.y} r="15" />
-                  <text className="target-label" x={guidance.recommendedSlot.mapPosition.x} y={guidance.recommendedSlot.mapPosition.y - 20} textAnchor="middle">
-                    {guidance.recommendedSlot.label}
+                  <circle className="target-ring" cx={guidance.targetSlot.mapPosition.x} cy={guidance.targetSlot.mapPosition.y} r="15" />
+                  <text className="target-label" x={guidance.targetSlot.mapPosition.x} y={guidance.targetSlot.mapPosition.y - 20} textAnchor="middle">
+                    {guidance.targetSlot.label}
                   </text>
                 </g>
               ) : null}
@@ -497,19 +537,19 @@ export function UserGuidance() {
         <section className={`screen mr-screen ${displayMode === "aerial" ? "active" : ""}`} aria-label="上空映像案内">
           <div className="mr-status">
             <div className="mr-pill">上空カメラ: 西入口</div>
-            <div className="mr-pill">{state?.stale ? "Unity接続確認中" : "導線をリアルタイム更新"}</div>
+            <div className="mr-pill">{parkingStatus?.stale ? "Unity接続確認中" : "導線をリアルタイム更新"}</div>
           </div>
           <div className="aerial-feed" aria-label="上空映像">
             <div className="camera-header">
               <span className="live-badge"><span className="live-dot" />LIVE AERIAL</span>
-              <span className="camera-meta">snapshot v{state?.snapshotVersion ?? 0}</span>
+              <span className="camera-meta">snapshot v{parkingStatus?.snapshotVersion ?? 0}</span>
             </div>
             <img className="aerial-image" src="/assets/parking.png" alt="" />
             <svg className="aerial-map" viewBox="0 0 637 492" preserveAspectRatio="none" aria-hidden="true">
               {showRouteLine ? (
                 <>
-                  <path className={`mr-route-main ${showRoutePreview ? "preview" : ""}`} d={routePath} />
-                  <path className={`mr-route-core ${showRoutePreview ? "preview" : ""}`} d={routePath} />
+                  <path className={`mr-route-main ${showRoutePreview ? "preview" : ""}`} d={routePath ?? ""} />
+                  <path className={`mr-route-core ${showRoutePreview ? "preview" : ""}`} d={routePath ?? ""} />
                 </>
               ) : null}
             </svg>
@@ -538,8 +578,10 @@ export function UserGuidance() {
                   <p>
                     {routeMode === "parking"
                       ? isGuidanceActive
-                        ? `${guidance?.targetArea?.label ?? "推奨エリア"}の空き状況をもとに、Unity snapshot 由来の案内先を表示しています。`
-                        : `${guidance?.targetArea?.label ?? "推奨エリア"}の空き状況をもとにした候補です。ルートはプレビューとして表示しています。`
+                        ? `${guidance?.targetAreaLabel ?? "推奨エリア"}の空き状況をもとに、Unity snapshot 由来の案内先を表示しています。`
+                        : screenState.showRoute
+                          ? `${guidance?.targetAreaLabel ?? "推奨エリア"}の空き状況をもとにした候補です。ルートはプレビューとして表示しています。`
+                          : "案内可能な駐車エリアを確認しています。"
                       : "出口案内は現在デモ表示です。駐車案内データとは分けて表示しています。"}
                   </p>
                 </div>
@@ -550,19 +592,37 @@ export function UserGuidance() {
                 <div className="map-stat"><small>混雑</small><b>{riskLabel[crowd]}</b></div>
                 <div className="map-stat"><small>案内先</small><b>{routeMode === "parking" ? destinationLabel : "西出口"}</b></div>
               </div>
-              {candidateChanged ? <p className="demo-notice">より良い候補として {pendingLabel} が見つかりました。案内開始時に最新候補へ更新します。</p> : null}
-              {isGuidanceActive && !assignedCarPosition ? <p className="demo-notice warning">自車位置を確認中です。Unity snapshot の車両位置を待っています。</p> : null}
-              {guidance?.replanReason ? <p className="demo-notice">{guidance.replanReason}</p> : null}
-              {state?.stale ? <p className="demo-notice warning">Unity snapshot が止まっています。管理者画面の Unity 表示を確認してください。</p> : null}
-              {error ? <p className="demo-notice warning">{error}</p> : null}
-              <button className="primary-action" type="button" onClick={handlePrimaryAction} disabled={loading || routeMode !== "parking" || (!isGuidanceActive && !guidance?.targetArea)}>
-                {routeMode === "exit" ? "出口案内を表示中" : loading ? (isGuidanceActive ? "中止中..." : "予約中...") : isGuidanceActive ? "案内を中止" : "案内を開始"}
+              <div className="guidance-live-region" aria-live="polite">
+                {screenState.phase === "loading" ? <p className="demo-notice">駐車場情報とおすすめを読み込んでいます。</p> : null}
+                {screenState.phase === "empty" ? <p className="demo-notice warning">現在、案内可能な駐車エリアがありません。再読み込みしてください。</p> : null}
+                {candidateChanged ? <p className="demo-notice">より良い候補として {pendingLabel} が見つかりました。案内開始時に最新候補へ更新します。</p> : null}
+                {isGuidanceActive && !assignedVehiclePosition ? <p className="demo-notice warning">自車位置を確認中です。Unity snapshot の車両位置を待っています。</p> : null}
+                {guidance?.targetAreaReason ? <p className="demo-notice">おすすめ理由: {guidance.targetAreaReason}</p> : null}
+                {guidance?.replanReason ? <p className="demo-notice">{guidance.replanReason}</p> : null}
+                {screenState.phase === "stale" ? <p className="demo-notice warning">Unity snapshot が止まっています。最新状態を受信するまで新しい案内は開始できません。</p> : null}
+                {dataError ? <p className="demo-notice warning">{dataError}</p> : null}
+                {actionError ? <p className="demo-notice warning">{actionError}</p> : null}
+              </div>
+              <button className="primary-action" type="button" onClick={handlePrimaryAction} disabled={primaryDisabled}>
+                {routeMode === "exit"
+                  ? "出口案内を表示中"
+                  : actionPending
+                    ? isGuidanceActive ? "中止中..." : "予約中..."
+                    : refreshing
+                      ? "再読み込み中..."
+                      : isGuidanceActive
+                        ? "案内を中止"
+                        : isRetryAction
+                          ? "再読み込み"
+                          : screenState.phase === "loading"
+                            ? "読み込み中..."
+                            : "案内を開始"}
               </button>
-              {guidance?.reservation ? (
-                <p className="route-detail">予約期限: {new Date(guidance.reservation.expiresAt).toLocaleTimeString("ja-JP")}</p>
+              {guidance?.guidanceSession ? (
+                <p className="route-detail">予約期限: {new Date(guidance.guidanceSession.expiresAt).toLocaleTimeString("ja-JP")}</p>
               ) : null}
-              {state ? (
-                <p className="route-detail">Unity更新 v{state.snapshotVersion} / 最終受信 {new Date(state.updatedAt).toLocaleTimeString("ja-JP")}</p>
+              {parkingStatus ? (
+                <p className="route-detail">Unity更新 v{parkingStatus.snapshotVersion} / 最終受信 {new Date(parkingStatus.updatedAt).toLocaleTimeString("ja-JP")}</p>
               ) : null}
             </article>
           </div>

@@ -21,7 +21,7 @@ export type AreaStatus = {
   };
 };
 
-export type AdminState = {
+export type ParkingStatus = {
   snapshotVersion: number;
   updatedAt: string;
   stale: boolean;
@@ -38,6 +38,9 @@ export type AdminState = {
     generatedFrom: string;
     image: { width: number; height: number };
   };
+};
+
+export type AdminState = ParkingStatus & {
   alerts: { type: string; areaId: string | null; severity: RiskLevel; message: string }[];
   guards: { guardId: string; status: string; currentArea: string; shift: string; break: string; canMove: boolean }[];
   logs: { id: string; timestamp: string; type: string; message: string }[];
@@ -54,7 +57,7 @@ export type ParkingMapSlot = {
   accessWaypointId?: string | null;
 };
 
-export type GuidanceResponse = {
+export type MvpGuidanceResponse = {
   guidanceLevel: "area" | "slot";
   status: "active" | "not_started" | "unavailable";
   updatedAt?: string;
