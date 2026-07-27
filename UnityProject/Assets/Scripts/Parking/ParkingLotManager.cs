@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+Ôªøusing System.Collections.Generic;
 using UnityEngine;
 
 public class ParkingLotManager : MonoBehaviour
@@ -25,7 +25,7 @@ public class ParkingLotManager : MonoBehaviour
     {
         if (logOnStart)
         {
-            Debug.Log($"ParkingSlotìoò^äÆóπ: {allSlots.Count}åè");
+            Debug.Log($"ParkingSlotÁôªÈå≤ÂÆå‰∫Ü: {allSlots.Count}‰ª∂");
             Debug.Log($"Empty: {GetSlotCountByState(ParkingSlotState.Empty)} / " +
                       $"Reserved: {GetSlotCountByState(ParkingSlotState.Reserved)} / " +
                       $"Occupied: {GetSlotCountByState(ParkingSlotState.Occupied)} / " +
@@ -56,13 +56,13 @@ public class ParkingLotManager : MonoBehaviour
 
             if (string.IsNullOrEmpty(slot.slotId))
             {
-                Debug.LogWarning($"Slot IDÇ™ñ¢ê›íËÇ≈Ç∑: {slot.name}");
+                Debug.LogWarning($"Slot ID„ÅåÊú™Ë®≠ÂÆö„Åß„Åô: {slot.name}");
                 continue;
             }
 
             if (slotDictionary.ContainsKey(slot.slotId))
             {
-                Debug.LogWarning($"Slot IDÇ™èdï°ÇµÇƒÇ¢Ç‹Ç∑: {slot.slotId}");
+                Debug.LogWarning($"Slot ID„ÅåÈáçË§á„Åó„Å¶„ÅÑ„Åæ„Åô: {slot.slotId}");
                 continue;
             }
 
@@ -82,7 +82,7 @@ public class ParkingLotManager : MonoBehaviour
             return slot;
         }
 
-        Debug.LogWarning($"éwíËÇ≥ÇÍÇΩSlot IDÇ™å©Ç¬Ç©ÇËÇ‹ÇπÇÒ: {slotId}");
+        Debug.LogWarning($"ÊåáÂÆö„Åï„Çå„ÅüSlot ID„ÅåË¶ã„Å§„Åã„Çä„Åæ„Åõ„Çì: {slotId}");
         return null;
     }
 
@@ -209,7 +209,7 @@ public class ParkingLotManager : MonoBehaviour
         return availableSlots;
     }
 
-    public ParkingSlot GetRandomAvailableSlotInArea(string areaId)
+    public List<ParkingSlot> GetAvailableSlotsWithAccessWaypointInArea(string areaId)
     {
         List<ParkingSlot> candidates = new List<ParkingSlot>();
 
@@ -220,7 +220,7 @@ public class ParkingLotManager : MonoBehaviour
                 continue;
             }
 
-            if (slot.areaId != areaId)
+            if (!string.Equals(slot.areaId, areaId, System.StringComparison.Ordinal))
             {
                 continue;
             }
@@ -228,12 +228,68 @@ public class ParkingLotManager : MonoBehaviour
             candidates.Add(slot);
         }
 
+        candidates.Sort((left, right) =>
+            string.CompareOrdinal(
+                left != null ? left.slotId : string.Empty,
+                right != null ? right.slotId : string.Empty
+            )
+        );
+
+        return candidates;
+    }
+
+    public List<string> GetAvailableAreaIdsWithAccessWaypoint()
+    {
+        HashSet<string> areaIds = new HashSet<string>();
+
+        foreach (ParkingSlot slot in allSlots)
+        {
+            if (!IsSelectableSlot(slot) || string.IsNullOrEmpty(slot.areaId))
+            {
+                continue;
+            }
+
+            areaIds.Add(slot.areaId);
+        }
+
+        List<string> result = new List<string>(areaIds);
+        result.Sort(System.StringComparer.Ordinal);
+        return result;
+    }
+
+    public int GetAvailableSlotCountInArea(string areaId)
+    {
+        return GetAvailableSlotsWithAccessWaypointInArea(areaId).Count;
+    }
+
+    public ParkingSlot GetRandomAvailableSlotInArea(string areaId)
+    {
+        List<ParkingSlot> candidates = GetAvailableSlotsWithAccessWaypointInArea(areaId);
+
         if (candidates.Count == 0)
         {
             return null;
         }
 
         int index = Random.Range(0, candidates.Count);
+        return candidates[index];
+    }
+
+    public ParkingSlot GetRandomAvailableSlotInArea(
+        string areaId,
+        ScenarioRandomService randomService)
+    {
+        List<ParkingSlot> candidates = GetAvailableSlotsWithAccessWaypointInArea(areaId);
+
+        if (candidates.Count == 0)
+        {
+            return null;
+        }
+
+        int index = randomService != null
+            ? randomService.Range(0, candidates.Count)
+            : Random.Range(0, candidates.Count);
+
         return candidates[index];
     }
 
@@ -256,6 +312,31 @@ public class ParkingLotManager : MonoBehaviour
         }
 
         return slot.TryReserve(owner);
+    }
+
+    public ParkingSlot GetRandomAvailableSlotWithAccessWaypoint(
+        ScenarioRandomService randomService)
+    {
+        List<ParkingSlot> availableSlots = GetAvailableSlotsWithAccessWaypoint();
+
+        if (availableSlots.Count == 0)
+        {
+            return null;
+        }
+
+        // FindObjects„ÅÆËøîÂç¥È†Ü„Å´‰æùÂ≠ò„Åõ„Åö„ÄÅÂêå‰∏Äseed„ÅßÂêå„ÅòÂÄôË£úÈ†Ü„Å´„Å™„Çã„Çà„ÅÜÂõ∫ÂÆö„Åó„Åæ„Åô„ÄÇ
+        availableSlots.Sort((left, right) =>
+            string.CompareOrdinal(
+                left != null ? left.slotId : string.Empty,
+                right != null ? right.slotId : string.Empty
+            )
+        );
+
+        int index = randomService != null
+            ? randomService.Range(0, availableSlots.Count)
+            : Random.Range(0, availableSlots.Count);
+
+        return availableSlots[index];
     }
 
     public ParkingSlot ReserveFirstAvailableSlot()
@@ -284,9 +365,38 @@ public class ParkingLotManager : MonoBehaviour
         return slot;
     }
 
+    public ParkingSlot ReserveRandomAvailableSlot(
+        ScenarioRandomService randomService)
+    {
+        ParkingSlot slot = GetRandomAvailableSlotWithAccessWaypoint(randomService);
+
+        if (slot == null)
+        {
+            return null;
+        }
+
+        slot.SetReserved();
+        return slot;
+    }
+
     public ParkingSlot ReserveRandomAvailableSlotInArea(string areaId)
     {
         ParkingSlot slot = GetRandomAvailableSlotInArea(areaId);
+
+        if (slot == null)
+        {
+            return null;
+        }
+
+        slot.SetReserved();
+        return slot;
+    }
+
+    public ParkingSlot ReserveRandomAvailableSlotInArea(
+        string areaId,
+        ScenarioRandomService randomService)
+    {
+        ParkingSlot slot = GetRandomAvailableSlotInArea(areaId, randomService);
 
         if (slot == null)
         {

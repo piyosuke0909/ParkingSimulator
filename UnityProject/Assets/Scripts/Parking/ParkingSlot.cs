@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public enum ParkingSlotState
 {
@@ -18,10 +18,10 @@ public class ParkingSlot : MonoBehaviour
     [Header("State")]
     public ParkingSlotState state = ParkingSlotState.Empty;
 
-    [Tooltip("CameraParkingSensor‚ª”»’è‚µ‚½A•¨—“I‚ÉÔ‚ª‚¢‚é‚©‚Ç‚¤‚©‚Å‚·B")]
+    [Tooltip("CameraParkingSensorãŒåˆ¤å®šã—ãŸã€ç‰©ç†çš„ã«è»ŠãŒã„ã‚‹ã‹ã©ã†ã‹ã§ã™ã€‚")]
     public bool sensorOccupied;
 
-    [Tooltip("oŒÉ’†‚©‚Ç‚¤‚©‚Å‚·BoŒÉ’†‚ÍƒZƒ“ƒT[ãEmpty‚Å‚à—\–ñ•s‰Â‚É‚µ‚Ü‚·B")]
+    [Tooltip("å‡ºåº«ä¸­ã‹ã©ã†ã‹ã§ã™ã€‚å‡ºåº«ä¸­ã¯ã‚»ãƒ³ã‚µãƒ¼ä¸ŠEmptyã§ã‚‚äºˆç´„ä¸å¯ã«ã—ã¾ã™ã€‚")]
     public bool isLeaving;
 
     [Header("Runtime Owner")]
@@ -43,7 +43,7 @@ public class ParkingSlot : MonoBehaviour
     public Color occupiedColor = Color.red;
     public Color reservedColor = Color.yellow;
 
-    [Tooltip("oŒÉ’†‚ÌŒ©‚½–Ú‚Å‚·B‹ó‚«‚ÉŒ©‚¹‚½‚¢ê‡‚Í Empty Color ‚Æ“¯‚¶”’‚É‚µ‚Ä‚­‚¾‚³‚¢B")]
+    [Tooltip("å‡ºåº«ä¸­ã®è¦‹ãŸç›®ã§ã™ã€‚ç©ºãã«è¦‹ã›ãŸã„å ´åˆã¯ Empty Color ã¨åŒã˜ç™½ã«ã—ã¦ãã ã•ã„ã€‚")]
     public Color leavingColor = Color.white;
 
     public Color disabledColor = Color.blue;
@@ -221,9 +221,9 @@ public class ParkingSlot : MonoBehaviour
             return false;
         }
 
-        // CameraParkingSensor‚É‹ó‚«”»’è‚ğ“ˆê‚·‚é‚½‚ßA
-        // ‚±‚±‚Å‚ÍOccupied/Empty‚ğ’¼ÚŒˆ‚ß‚È‚¢B
-        // ‚±‚ÌƒXƒƒbƒg‚Ìg—pÒ‚¾‚¯‚ğ“o˜^‚·‚éB
+        // CameraParkingSensorã«ç©ºãåˆ¤å®šã‚’çµ±ä¸€ã™ã‚‹ãŸã‚ã€
+        // ã“ã“ã§ã¯Occupied/Emptyã‚’ç›´æ¥æ±ºã‚ãªã„ã€‚
+        // ã“ã®ã‚¹ãƒ­ãƒƒãƒˆã®ä½¿ç”¨è€…ã ã‘ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         reservedBy = null;
         occupiedBy = carController;
         isLeaving = false;
@@ -296,7 +296,7 @@ public class ParkingSlot : MonoBehaviour
             occupiedBy = null;
             isLeaving = false;
 
-            // Empty/Occupied‚ÍCameraParkingSensor‚ÌsensorOccupied‚É]‚¤B
+            // Empty/Occupiedã¯CameraParkingSensorã®sensorOccupiedã«å¾“ã†ã€‚
             RefreshStateFromSensorAndReservation();
             return true;
         }
@@ -320,7 +320,7 @@ public class ParkingSlot : MonoBehaviour
         RefreshStateFromSensorAndReservation();
     }
 
-    // CameraParkingSensor‚©‚çŒÄ‚Ô‘z’è‚Å‚·B
+    // CameraParkingSensorã‹ã‚‰å‘¼ã¶æƒ³å®šã§ã™ã€‚
     public void SetSensorOccupied(bool occupied)
     {
         if (sensorOccupied == occupied)
@@ -337,13 +337,13 @@ public class ParkingSlot : MonoBehaviour
         }
     }
 
-    // ŒİŠ·—pBCameraParkingSensor‚È‚ÇŠO•”ƒZƒ“ƒT[‚©‚ç‚ÌOccupied”»’èB
+    // äº’æ›ç”¨ã€‚CameraParkingSensorãªã©å¤–éƒ¨ã‚»ãƒ³ã‚µãƒ¼ã‹ã‚‰ã®Occupiedåˆ¤å®šã€‚
     public void SetOccupied()
     {
         SetSensorOccupied(true);
     }
 
-    // ŒİŠ·—pBCameraParkingSensor‚È‚ÇŠO•”ƒZƒ“ƒT[‚©‚ç‚ÌEmpty”»’èB
+    // äº’æ›ç”¨ã€‚CameraParkingSensorãªã©å¤–éƒ¨ã‚»ãƒ³ã‚µãƒ¼ã‹ã‚‰ã®Emptyåˆ¤å®šã€‚
     public void SetEmpty()
     {
         SetSensorOccupied(false);

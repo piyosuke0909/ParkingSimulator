@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public enum NPC_CarMoveState
@@ -35,6 +35,10 @@ public class NPC_CarController : MonoBehaviour
     public float parkingArriveDistance = 0.15f;
     public float backOutArriveDistance = 0.25f;
 
+    [Header("P1 Scenario Speed (Optional)")]
+    public bool useScenarioSpeedEffect = true;
+    public ScenarioFactorRuntime scenarioFactorRuntime;
+
 
     [Header("Parking Wait")]
     public float parkWaitTime = 5f;
@@ -47,22 +51,22 @@ public class NPC_CarController : MonoBehaviour
     public float backOutRetryInterval = 0.5f;
     public bool checkWhileBackingOut = true;
 
-    [Tooltip("ƒoƒbƒNŠJnŒã‚ÍoŒÉÔ‚ğ—Dæ‚µ‚Ü‚·B“¹˜H‘–sÔ‚ÍBackingOutÔ‚ğŒŸ’m‚µ‚Ä’â~‚·‚é‚½‚ßAoŒÉÔ‘¤‚Í’Êí‘–sÔ‚Ö÷‚è•Ô‚µ‚Ü‚¹‚ñB")]
+    [Tooltip("ãƒãƒƒã‚¯é–‹å§‹å¾Œã¯å‡ºåº«è»Šã‚’å„ªå…ˆã—ã¾ã™ã€‚é“è·¯èµ°è¡Œè»Šã¯BackingOutè»Šã‚’æ¤œçŸ¥ã—ã¦åœæ­¢ã™ã‚‹ãŸã‚ã€å‡ºåº«è»Šå´ã¯é€šå¸¸èµ°è¡Œè»Šã¸è­²ã‚Šè¿”ã—ã¾ã›ã‚“ã€‚")]
     public bool committedBackOutHasPriority = true;
 
-    [Tooltip("oŒÉ‘Ò‚¿Ô‚ª•¡”‚¢‚éê‡AInstance ID‚Å—Dæ‡ˆÊ‚ğŒÅ’è‚µ‚Ä‘ŠŒİ‘Ò‹@‚ğ–h‚¬‚Ü‚·B")]
+    [Tooltip("å‡ºåº«å¾…ã¡è»ŠãŒè¤‡æ•°ã„ã‚‹å ´åˆã€Instance IDã§å„ªå…ˆé †ä½ã‚’å›ºå®šã—ã¦ç›¸äº’å¾…æ©Ÿã‚’é˜²ãã¾ã™ã€‚")]
     public bool deterministicBackOutPriority = true;
 
-    [Tooltip("WaitingToBackOut‚Í‚Ü‚¾’“Ô˜g“à‚Å’â~‚µ‚Ä‚¢‚é‚½‚ßA“¹˜H‘–sÔ‚Ì‘O•ûŒŸ’m‚©‚çœŠO‚µ‚Ü‚·B")]
+    [Tooltip("WaitingToBackOutã¯ã¾ã é§è»Šæ å†…ã§åœæ­¢ã—ã¦ã„ã‚‹ãŸã‚ã€é“è·¯èµ°è¡Œè»Šã®å‰æ–¹æ¤œçŸ¥ã‹ã‚‰é™¤å¤–ã—ã¾ã™ã€‚")]
     public bool ignoreWaitingToBackOutCarsInFrontDetection = true;
 
     public bool drawBackOutCheckGizmo = true;
     public bool logBackOutSafetyDebug = false;
 
-    [Tooltip("ƒoƒbƒNŠm”FA‚·‚Å‚É’“Ô’†‚ÌÔ‚Í–³‹‚µ‚Ü‚·B")]
+    [Tooltip("ãƒãƒƒã‚¯ç¢ºèªæ™‚ã€ã™ã§ã«é§è»Šä¸­ã®è»Šã¯ç„¡è¦–ã—ã¾ã™ã€‚")]
     public bool ignoreParkedCarsInBackOutCheck = true;
 
-    [Tooltip("AccessWaypoint‚ğŠî€‚É‚µ‚½Šm”F”ÍˆÍ‚Ì’†SˆÊ’u•â³‚Å‚·BŒü‚©‚¢‘¤ƒXƒƒbƒg‚ğE‚¤ê‡‚Í’Ê˜H‘¤‚Ö‚¸‚ç‚µ‚Ü‚·B")]
+    [Tooltip("AccessWaypointã‚’åŸºæº–ã«ã—ãŸç¢ºèªç¯„å›²ã®ä¸­å¿ƒä½ç½®è£œæ­£ã§ã™ã€‚å‘ã‹ã„å´ã‚¹ãƒ­ãƒƒãƒˆã‚’æ‹¾ã†å ´åˆã¯é€šè·¯å´ã¸ãšã‚‰ã—ã¾ã™ã€‚")]
     public Vector3 backOutCheckCenterOffset = Vector3.zero;
 
     private float backOutRetryTimer;
@@ -76,50 +80,50 @@ public class NPC_CarController : MonoBehaviour
     public float frontCheckRadius = 1.8f;
     public float frontStopHoldTime = 0.5f;
 
-    [Tooltip("‘O•ûÔ—¼‚Æ‚µ‚Äˆµ‚¤“¯ˆêƒŒ[ƒ“‚Ì¶‰E•‚Å‚·B—×ÚƒŒ[ƒ“‚ÌÔ‚ğE‚¤ê‡‚Í¬‚³‚­‚µ‚Ä‚­‚¾‚³‚¢B")]
+    [Tooltip("å‰æ–¹è»Šä¸¡ã¨ã—ã¦æ‰±ã†åŒä¸€ãƒ¬ãƒ¼ãƒ³ã®å·¦å³å¹…ã§ã™ã€‚éš£æ¥ãƒ¬ãƒ¼ãƒ³ã®è»Šã‚’æ‹¾ã†å ´åˆã¯å°ã•ãã—ã¦ãã ã•ã„ã€‚")]
     [Min(0.1f)]
     public float frontSameLaneHalfWidth = 2.75f;
 
-    [Tooltip("is•ûŒü‚Ìˆê’v”»’è‚Å‚·B1‚ÅŠ®‘S‚É“¯•ûŒüA0‚Å’¼ŠpA-1‚Å‹t•ûŒü‚Å‚·B")]
+    [Tooltip("é€²è¡Œæ–¹å‘ã®ä¸€è‡´åˆ¤å®šã§ã™ã€‚1ã§å®Œå…¨ã«åŒæ–¹å‘ã€0ã§ç›´è§’ã€-1ã§é€†æ–¹å‘ã§ã™ã€‚")]
     [Range(-1f, 1f)]
     public float sameDirectionDotThreshold = 0.25f;
 
-    [Tooltip("‘O•ûE”­i‘OŠm”F‚ÅA—×ÚƒŒ[ƒ“‚â‹tŒü‚«ƒŒ[ƒ“‚ÌÔ‚ğœŠO‚µ‚Ü‚·B")]
+    [Tooltip("å‰æ–¹ãƒ»ç™ºé€²å‰ç¢ºèªã§ã€éš£æ¥ãƒ¬ãƒ¼ãƒ³ã‚„é€†å‘ããƒ¬ãƒ¼ãƒ³ã®è»Šã‚’é™¤å¤–ã—ã¾ã™ã€‚")]
     public bool useSameLaneDirectionFilter = true;
 
-    [Tooltip("’Êí‚ÌSphereCast‘O•ûŒŸ’m‚É‚à“¯ˆêƒŒ[ƒ“Eis•ûŒüƒtƒBƒ‹ƒ^[‚ğ“K—p‚µ‚Ü‚·B‹È‚ª‚èŠp‚Ì’¼ŒğÔ‚É‚æ‚ézŠÂ’â~‚ğ–h‚¬‚Ü‚·B")]
+    [Tooltip("é€šå¸¸ã®SphereCastå‰æ–¹æ¤œçŸ¥ã«ã‚‚åŒä¸€ãƒ¬ãƒ¼ãƒ³ãƒ»é€²è¡Œæ–¹å‘ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ã‚’é©ç”¨ã—ã¾ã™ã€‚æ›²ãŒã‚Šè§’ã®ç›´äº¤è»Šã«ã‚ˆã‚‹å¾ªç’°åœæ­¢ã‚’é˜²ãã¾ã™ã€‚")]
     public bool applyLaneFilterToPhysicalFrontDetection = true;
 
     public bool drawFrontCheckDebug = true;
     public bool logFrontVehicleDetection = false;
 
-    [Tooltip("Š®‘S‚É’“ÔÏ‚İiParkedj‚ÌÔ‚ğA’Êí‘–s‚Ì‘O•ûŒŸ’m‚Æ”­i‘OŠm”F‚©‚çœŠO‚µ‚Ü‚·B’“Ô“®ì’†EoŒÉ‘Ò‚¿EƒoƒbƒN’†‚ÌÔ‚ÍœŠO‚µ‚Ü‚¹‚ñB")]
+    [Tooltip("å®Œå…¨ã«é§è»Šæ¸ˆã¿ï¼ˆParkedï¼‰ã®è»Šã‚’ã€é€šå¸¸èµ°è¡Œã®å‰æ–¹æ¤œçŸ¥ã¨ç™ºé€²å‰ç¢ºèªã‹ã‚‰é™¤å¤–ã—ã¾ã™ã€‚é§è»Šå‹•ä½œä¸­ãƒ»å‡ºåº«å¾…ã¡ãƒ»ãƒãƒƒã‚¯ä¸­ã®è»Šã¯é™¤å¤–ã—ã¾ã›ã‚“ã€‚")]
     public bool ignoreFullyParkedCarsInFrontDetection = true;
 
-    [Tooltip("’“ÔÏ‚İÔ‚ğ‘O•ûŒŸ’m‚©‚çœŠO‚µ‚½‚Æ‚«‚ÉƒƒO‚ğo‚µ‚Ü‚·B")]
+    [Tooltip("é§è»Šæ¸ˆã¿è»Šã‚’å‰æ–¹æ¤œçŸ¥ã‹ã‚‰é™¤å¤–ã—ãŸã¨ãã«ãƒ­ã‚°ã‚’å‡ºã—ã¾ã™ã€‚")]
     public bool logIgnoredParkedCars = false;
 
     [Header("Performance")]
-    [Tooltip("‘O•û•¨—ŒŸ’m‚ğ–ˆƒtƒŒ[ƒ€‚Å‚Í‚È‚­ˆê’èŠÔŠu‚ÅÀs‚µ‚Ü‚·B‘½”Ô—¼‚Å‚ÍON‚ğ„§‚µ‚Ü‚·B")]
+    [Tooltip("å‰æ–¹ç‰©ç†æ¤œçŸ¥ã‚’æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã§ã¯ãªãä¸€å®šé–“éš”ã§å®Ÿè¡Œã—ã¾ã™ã€‚å¤šæ•°è»Šä¸¡ã§ã¯ONã‚’æ¨å¥¨ã—ã¾ã™ã€‚")]
     public bool usePhysicsQueryThrottling = true;
 
-    [Tooltip("‘–s‰Â”\‚Ì‘O•û•¨—ŒŸ’mŠÔŠu‚Å‚·B0.05•b‚È‚ç–ˆ•b20‰ñ‚Å‚·B")]
+    [Tooltip("èµ°è¡Œå¯èƒ½æ™‚ã®å‰æ–¹ç‰©ç†æ¤œçŸ¥é–“éš”ã§ã™ã€‚0.05ç§’ãªã‚‰æ¯ç§’20å›ã§ã™ã€‚")]
     [Min(0.02f)]
     public float movingFrontCheckInterval = 0.05f;
 
-    [Tooltip("‘O•ûÔ—¼‚Å’â~’†‚ÌÄŠm”FŠÔŠu‚Å‚·B")]
+    [Tooltip("å‰æ–¹è»Šä¸¡ã§åœæ­¢ä¸­ã®å†ç¢ºèªé–“éš”ã§ã™ã€‚")]
     [Min(0.02f)]
     public float stoppedFrontCheckInterval = 0.12f;
 
-    [Tooltip("”­i‘OˆÀ‘SŠm”F‚ÌÄŠm”FŠÔŠu‚Å‚·B")]
+    [Tooltip("ç™ºé€²å‰å®‰å…¨ç¢ºèªã®å†ç¢ºèªé–“éš”ã§ã™ã€‚")]
     [Min(0.02f)]
     public float startMoveSafetyCheckInterval = 0.12f;
 
-    [Tooltip("NonAlloc•¨—”»’è—p‚ÌŒÅ’èƒoƒbƒtƒ@”‚Å‚·B’Êí‚Í32‚Å\•ª‚Å‚·B")]
+    [Tooltip("NonAllocç‰©ç†åˆ¤å®šç”¨ã®å›ºå®šãƒãƒƒãƒ•ã‚¡æ•°ã§ã™ã€‚é€šå¸¸ã¯32ã§ååˆ†ã§ã™ã€‚")]
     [Range(8, 128)]
     public int physicsQueryBufferSize = 32;
 
-    [Tooltip("Play Mode’†‚ÌDebug.DrawRay‚ğ©“®“I‚É–³Œø‰»‚µ‚Ü‚·B")]
+    [Tooltip("Play Modeä¸­ã®Debug.DrawRayã‚’è‡ªå‹•çš„ã«ç„¡åŠ¹åŒ–ã—ã¾ã™ã€‚")]
     public bool disableDebugDrawingAtRuntime = true;
 
     private Collider[] physicsOverlapBuffer;
@@ -131,47 +135,47 @@ public class NPC_CarController : MonoBehaviour
     private bool physicsBufferOverflowWarned;
 
     [Header("Start Move Safety Check")]
-    [Tooltip("’â~ó‘Ô‚©‚ç”­i‚·‚é’¼‘O‚ÉA‘O•û‚ğL‚ß‚ÌBox‚ÅŠm”F‚µ‚Ü‚·B")]
+    [Tooltip("åœæ­¢çŠ¶æ…‹ã‹ã‚‰ç™ºé€²ã™ã‚‹ç›´å‰ã«ã€å‰æ–¹ã‚’åºƒã‚ã®Boxã§ç¢ºèªã—ã¾ã™ã€‚")]
     public bool useStartMoveSafetyCheck = true;
 
-    [Tooltip("”­i‘OŠm”FBox‚Ì‘å‚«‚³‚Å‚·BX‚Í‰¡•AY‚Í‚‚³AZ‚Í‘O•û‹——£‚Å‚·B")]
+    [Tooltip("ç™ºé€²å‰ç¢ºèªBoxã®å¤§ãã•ã§ã™ã€‚Xã¯æ¨ªå¹…ã€Yã¯é«˜ã•ã€Zã¯å‰æ–¹è·é›¢ã§ã™ã€‚")]
     public Vector3 startMoveCheckBoxSize = new Vector3(10f, 4f, 8f);
 
-    [Tooltip("”­i‘OŠm”FBox‚Ì’†SˆÊ’u•â³‚Å‚·BZ‚ğ‘O•û‚Ö‚¸‚ç‚µ‚Ü‚·B")]
+    [Tooltip("ç™ºé€²å‰ç¢ºèªBoxã®ä¸­å¿ƒä½ç½®è£œæ­£ã§ã™ã€‚Zã‚’å‰æ–¹ã¸ãšã‚‰ã—ã¾ã™ã€‚")]
     public Vector3 startMoveCheckCenterOffset = new Vector3(0f, 1f, 4f);
 
-    [Tooltip("”­i‘OŠm”FBox‚ÌGizmo‚ğ•\¦‚µ‚Ü‚·B")]
+    [Tooltip("ç™ºé€²å‰ç¢ºèªBoxã®Gizmoã‚’è¡¨ç¤ºã—ã¾ã™ã€‚")]
     public bool drawStartMoveCheckGizmo = true;
 
-    [Tooltip("”­i‘OŠm”F‚ÌƒƒO‚ğo‚µ‚Ü‚·B")]
+    [Tooltip("ç™ºé€²å‰ç¢ºèªã®ãƒ­ã‚°ã‚’å‡ºã—ã¾ã™ã€‚")]
     public bool logStartMoveSafetyCheck = false;
 
-    [Tooltip("”­i‘OBox‚Å“¯ˆêƒŒ[ƒ“‚ÆŒ©‚È‚·¶‰E•‚Å‚·B—×ÚƒŒ[ƒ“‚ÌÔ‚Å–³‘Ê‚É~‚Ü‚éê‡‚Í¬‚³‚­‚µ‚Ü‚·B")]
+    [Tooltip("ç™ºé€²å‰Boxã§åŒä¸€ãƒ¬ãƒ¼ãƒ³ã¨è¦‹ãªã™å·¦å³å¹…ã§ã™ã€‚éš£æ¥ãƒ¬ãƒ¼ãƒ³ã®è»Šã§ç„¡é§„ã«æ­¢ã¾ã‚‹å ´åˆã¯å°ã•ãã—ã¾ã™ã€‚")]
     public float startMoveSameLaneHalfWidth = 4.25f;
 
-    [Tooltip("‚±‚Ì‹——£‚æ‚èŒã•û‚É‚¢‚éÔ‚Í”­i‘OŠm”F‚Å–³‹‚µ‚Ü‚·B")]
+    [Tooltip("ã“ã®è·é›¢ã‚ˆã‚Šå¾Œæ–¹ã«ã„ã‚‹è»Šã¯ç™ºé€²å‰ç¢ºèªã§ç„¡è¦–ã—ã¾ã™ã€‚")]
     public float startMoveIgnoreBehindDistance = 1.0f;
 
     [Header("Turn In Place At Waypoint")]
-    [Tooltip("Waypoint‚Å‘å‚«‚­•ûŒü“]Š·‚·‚éê‡Aˆê“x’â~‚µ‚Ä‚©‚ç‚»‚Ìê‚Å‰ñ“]‚µ‚Ü‚·B")]
+    [Tooltip("Waypointã§å¤§ããæ–¹å‘è»¢æ›ã™ã‚‹å ´åˆã€ä¸€åº¦åœæ­¢ã—ã¦ã‹ã‚‰ãã®å ´ã§å›è»¢ã—ã¾ã™ã€‚")]
     public bool useTurnInPlaceAtWaypoint = true;
 
-    [Tooltip("‚±‚ÌŠp“xˆÈãŒü‚«‚ª‚¸‚ê‚Ä‚¢‚éê‡A‚»‚Ìê‰ñ“]‚ğs‚¢‚Ü‚·B")]
+    [Tooltip("ã“ã®è§’åº¦ä»¥ä¸Šå‘ããŒãšã‚Œã¦ã„ã‚‹å ´åˆã€ãã®å ´å›è»¢ã‚’è¡Œã„ã¾ã™ã€‚")]
     public float turnInPlaceStartAngle = 35f;
 
-    [Tooltip("‚±‚ÌŠp“xˆÈ‰º‚É‚È‚Á‚½‚çA‚»‚Ìê‰ñ“]Š®—¹‚Æ‚µ‚Ü‚·B")]
+    [Tooltip("ã“ã®è§’åº¦ä»¥ä¸‹ã«ãªã£ãŸã‚‰ã€ãã®å ´å›è»¢å®Œäº†ã¨ã—ã¾ã™ã€‚")]
     public float turnInPlaceCompleteAngle = 3f;
 
-    [Tooltip("Waypoint“’…ŒãA‰ñ“]‚ğn‚ß‚é‘O‚É’â~‚·‚éŠÔ‚Å‚·B")]
+    [Tooltip("Waypointåˆ°ç€å¾Œã€å›è»¢ã‚’å§‹ã‚ã‚‹å‰ã«åœæ­¢ã™ã‚‹æ™‚é–“ã§ã™ã€‚")]
     public float turnInPlacePauseTime = 0.15f;
 
-    [Tooltip("‚»‚Ìê‰ñ“]‚Ì‰ñ“]‘¬“x‚Å‚·B1•b‚ ‚½‚è‚ÌŠp“x‚Å‚·B")]
+    [Tooltip("ãã®å ´å›è»¢ã®å›è»¢é€Ÿåº¦ã§ã™ã€‚1ç§’ã‚ãŸã‚Šã®è§’åº¦ã§ã™ã€‚")]
     public float turnInPlaceRotateSpeed = 240f;
 
-    [Tooltip("‚±‚Ì‹——£ˆÈ“à‚ÌWaypoint‚ÍA‚»‚Ìê‰ñ“]‚Ì–Ú•W‚É‚µ‚Ü‚¹‚ñB‹ß‚·‚¬‚éWaypoint‚ğŒü‚±‚¤‚Æ‚µ‚Ä—]Œv‚É‰ñ‚é‚Ì‚ğ–h‚¬‚Ü‚·B")]
+    [Tooltip("ã“ã®è·é›¢ä»¥å†…ã®Waypointã¯ã€ãã®å ´å›è»¢ã®ç›®æ¨™ã«ã—ã¾ã›ã‚“ã€‚è¿‘ã™ãã‚‹Waypointã‚’å‘ã“ã†ã¨ã—ã¦ä½™è¨ˆã«å›ã‚‹ã®ã‚’é˜²ãã¾ã™ã€‚")]
     public float turnInPlaceMinTargetDistance = 1.0f;
 
-    [Tooltip("‚»‚Ìê‰ñ“]’†‚ÌƒƒO‚ğo‚µ‚Ü‚·B")]
+    [Tooltip("ãã®å ´å›è»¢ä¸­ã®ãƒ­ã‚°ã‚’å‡ºã—ã¾ã™ã€‚")]
     public bool logTurnInPlaceDebug = false;
 
     private bool isTurningInPlaceAtWaypoint;
@@ -181,23 +185,23 @@ public class NPC_CarController : MonoBehaviour
 
 
     [Header("Waypoint / Merge Traffic Control")]
-    [Tooltip("ON‚É‚·‚é‚ÆAŸWaypoint‚ğ—\–ñ‚µA’“ÔƒŒ[ƒ“‚©‚ç–{ü‚Ö‡—¬‚·‚é‚Æ‚«‚¾‚¯MergePoint‹–‰Â‚ğæ“¾‚µ‚Ü‚·B")]
+    [Tooltip("ONã«ã™ã‚‹ã¨ã€æ¬¡Waypointã‚’äºˆç´„ã—ã€é§è»Šãƒ¬ãƒ¼ãƒ³ã‹ã‚‰æœ¬ç·šã¸åˆæµã™ã‚‹ã¨ãã ã‘MergePointè¨±å¯ã‚’å–å¾—ã—ã¾ã™ã€‚")]
     public bool useWaypointReservation = true;
 
-    [Tooltip("–¢İ’è‚Ìê‡‚ÍƒV[ƒ““à‚ÌMergeTrafficCoordinator‚ğŒŸõ‚µ‚Ü‚·BWaypoint‚âMergePoint‚Í©“®¶¬‚µ‚Ü‚¹‚ñB")]
+    [Tooltip("æœªè¨­å®šã®å ´åˆã¯ã‚·ãƒ¼ãƒ³å†…ã®MergeTrafficCoordinatorã‚’æ¤œç´¢ã—ã¾ã™ã€‚Waypointã‚„MergePointã¯è‡ªå‹•ç”Ÿæˆã—ã¾ã›ã‚“ã€‚")]
     public MergeTrafficCoordinator mergeTrafficCoordinator;
 
-    [Tooltip("WaypointECapacity Area‘Ò‹@‚ÌƒƒO‚ğo‚µ‚Ü‚·B")]
+    [Tooltip("Waypointãƒ»Capacity Areaå¾…æ©Ÿã®ãƒ­ã‚°ã‚’å‡ºã—ã¾ã™ã€‚")]
     public bool logWaypointReservationDebug = false;
 
-    [Tooltip("SetRouteAÔ‚ªroute[0]•t‹ß‚É‚¢‚éê‡A‚»‚ÌWaypoint‚ğŒ»İ’n‚Æ‚µ‚Äè—L‚µ‚Ü‚·B")]
+    [Tooltip("SetRouteæ™‚ã€è»ŠãŒroute[0]ä»˜è¿‘ã«ã„ã‚‹å ´åˆã€ãã®Waypointã‚’ç¾åœ¨åœ°ã¨ã—ã¦å æœ‰ã—ã¾ã™ã€‚")]
     public bool occupyFirstWaypointOnRouteStart = true;
 
-    [Tooltip("route[0]‚ğŒ»İ’n‚Æ‚µ‚Äˆµ‚¤Å‘å‹——£‚Å‚·B")]
+    [Tooltip("route[0]ã‚’ç¾åœ¨åœ°ã¨ã—ã¦æ‰±ã†æœ€å¤§è·é›¢ã§ã™ã€‚")]
     public float firstWaypointOccupyDistance = 6f;
 
     [Header("Traffic Stop Debug")]
-    [Tooltip("Œ»İ’â~‚µ‚Ä‚¢‚é——R‚Å‚·B")]
+    [Tooltip("ç¾åœ¨åœæ­¢ã—ã¦ã„ã‚‹ç†ç”±ã§ã™ã€‚")]
     public string currentStopReason = "";
 
     private Waypoint reservedWaypoint;
@@ -209,8 +213,8 @@ public class NPC_CarController : MonoBehaviour
     public bool isStoppedByFrontCar;
     private float frontStopTimer;
 
-    // ”­i‘O‚ÌL‚¢BoxŠm”F‚ÍA‘–s’†‚Ì–ˆƒtƒŒ[ƒ€‚Å‚Í‚È‚­A
-    // ’â~Œã‚ÉÄ”­i‚·‚é‚Æ‚«‚¾‚¯1‰ñs‚¤B
+    // ç™ºé€²å‰ã®åºƒã„Boxç¢ºèªã¯ã€èµ°è¡Œä¸­ã®æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã§ã¯ãªãã€
+    // åœæ­¢å¾Œã«å†ç™ºé€²ã™ã‚‹ã¨ãã ã‘1å›è¡Œã†ã€‚
     private bool needsStartMoveSafetyCheck = true;
 
     [Header("State")]
@@ -261,10 +265,15 @@ public class NPC_CarController : MonoBehaviour
         car = GetComponent<Car>();
         carRigidbody = GetComponent<Rigidbody>();
 
+        if (useScenarioSpeedEffect && scenarioFactorRuntime == null)
+        {
+            scenarioFactorRuntime = ScenarioFactorRuntime.Instance;
+        }
+
         InitializePhysicsQueryBuffers();
 
-        // ‘SÔ‚ª“¯‚¶ƒtƒŒ[ƒ€‚Å•¨—”»’è‚µ‚È‚¢‚æ‚¤A
-        // Instance ID‚©‚ç‰‰ñ”»’è‚ğ­‚µ‚¸‚Â‚¸‚ç‚·B
+        // å…¨è»ŠãŒåŒã˜ãƒ•ãƒ¬ãƒ¼ãƒ ã§ç‰©ç†åˆ¤å®šã—ãªã„ã‚ˆã†ã€
+        // Instance IDã‹ã‚‰åˆå›åˆ¤å®šæ™‚åˆ»ã‚’å°‘ã—ãšã¤ãšã‚‰ã™ã€‚
         float phase =
             Mathf.Abs(GetInstanceID() % 1000) /
             1000f;
@@ -303,7 +312,7 @@ public class NPC_CarController : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"{name}: FrontSensor ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBNPC_Car’¼‰º‚É FrontSensor ‚ğì¬‚µ‚Ä‚­‚¾‚³‚¢B");
+                Debug.LogWarning($"{name}: FrontSensor ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚NPC_Carç›´ä¸‹ã« FrontSensor ã‚’ä½œæˆã—ã¦ãã ã•ã„ã€‚");
             }
         }
     }
@@ -368,8 +377,8 @@ public class NPC_CarController : MonoBehaviour
 
         if (route != null && route.Count > 0)
         {
-            // route[0] ‚ªŒ»İˆÊ’u‚É‹ß‚¢ê‡‚¾‚¯AŒ»İè—L’†‚ÌWaypoint‚Æ‚µ‚Ä“o˜^‚·‚éB
-            // ‚±‚ê‚É‚æ‚èAŸ‚Ì‹æŠÔ‚Öi‚Ş‚Æ‚«‚É Œğ’Êƒtƒ[ŠÇ— ‚ğ³‚µ‚­æ“¾‚Å‚«‚éB
+            // route[0] ãŒç¾åœ¨ä½ç½®ã«è¿‘ã„å ´åˆã ã‘ã€ç¾åœ¨å æœ‰ä¸­ã®Waypointã¨ã—ã¦ç™»éŒ²ã™ã‚‹ã€‚
+            // ã“ã‚Œã«ã‚ˆã‚Šã€æ¬¡ã®åŒºé–“ã¸é€²ã‚€ã¨ãã« äº¤é€šãƒ•ãƒ­ãƒ¼ç®¡ç† ã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã€‚
             if (useWaypointReservation && occupyFirstWaypointOnRouteStart)
             {
                 Waypoint firstWaypoint = route[0];
@@ -445,42 +454,42 @@ public class NPC_CarController : MonoBehaviour
         Vector3 targetPosition = targetWaypoint.transform.position;
         targetPosition.y = transform.position.y;
 
-        // Œ»İ‚ÌRoadCell“à‚Å•K—v‚È•ûŒü“]Š·‚ğæ‚ÉŠ®—¹‚·‚éB
-        // •ûŒü“]Š·‚¾‚¯‚ÅŸ‹æ‰æ‚Öi“ü‚µ‚È‚¢‚½‚ßA
-        // ‚±‚Ì“_‚Å‚ÍRoadCell/Junction‹–‰Â‚ğæ“¾‚µ‚È‚¢B
+        // ç¾åœ¨ã®RoadCellå†…ã§å¿…è¦ãªæ–¹å‘è»¢æ›ã‚’å…ˆã«å®Œäº†ã™ã‚‹ã€‚
+        // æ–¹å‘è»¢æ›ã ã‘ã§æ¬¡åŒºç”»ã¸é€²å…¥ã—ãªã„ãŸã‚ã€
+        // ã“ã®æ™‚ç‚¹ã§ã¯RoadCell/Junctionè¨±å¯ã‚’å–å¾—ã—ãªã„ã€‚
         if (TryHandleTurnInPlaceBeforeMove(targetWaypoint, targetPosition))
         {
             ReleaseUnstartedMovePermitForPhysicalWait();
-            currentStopReason = "Waypoint•ûŒü“]Š·";
+            currentStopReason = "Waypointæ–¹å‘è»¢æ›";
             needsStartMoveSafetyCheck = true;
             return;
         }
 
-        // d—vF
-        // RoadCell/Junction‹–‰Â‚æ‚è‘O‚É•¨—‘O•ûŠm”F‚ğs‚¤B
+        // é‡è¦ï¼š
+        // RoadCell/Junctionè¨±å¯ã‚ˆã‚Šå‰ã«ç‰©ç†å‰æ–¹ç¢ºèªã‚’è¡Œã†ã€‚
         //
-        // ‹Œ‡˜‚Å‚ÍA‘O•ûÔ—¼‚Å”­i‚Å‚«‚È‚¢Ô‚àæ‚ÉŸ‹æ‰æ‚ğÂ—\–ñ‚µA
-        // Junction Owner‚ğ•Û‚µ‚Ä‚¢‚½‚½‚ßAÔ{Â‚Å‘S‹æ‰æ‚ª–„‚Ü‚Á‚½B
+        // æ—§é †åºã§ã¯ã€å‰æ–¹è»Šä¸¡ã§ç™ºé€²ã§ããªã„è»Šã‚‚å…ˆã«æ¬¡åŒºç”»ã‚’é’äºˆç´„ã—ã€
+        // Junction Ownerã‚’ä¿æŒã—ã¦ã„ãŸãŸã‚ã€èµ¤ï¼‹é’ã§å…¨åŒºç”»ãŒåŸ‹ã¾ã£ãŸã€‚
         if (ShouldHoldStopForFrontCar())
         {
             ReleaseUnstartedMovePermitForPhysicalWait();
-            currentStopReason = "‘O•ûÔ—¼";
+            currentStopReason = "å‰æ–¹è»Šä¸¡";
             needsStartMoveSafetyCheck = true;
             StopCarCompletely();
             return;
         }
 
-        // L‚¢BoxŠm”F‚àV‚µ‚¢ˆÚ“®‹–‰Â‚Ìæ“¾‘O‚És‚¤B
+        // åºƒã„Boxç¢ºèªã‚‚æ–°ã—ã„ç§»å‹•è¨±å¯ã®å–å¾—å‰ã«è¡Œã†ã€‚
         if (needsStartMoveSafetyCheck &&
             ShouldStopForStartMoveSafety())
         {
             ReleaseUnstartedMovePermitForPhysicalWait();
-            currentStopReason = "”­i‘OˆÀ‘SŠm”F";
+            currentStopReason = "ç™ºé€²å‰å®‰å…¨ç¢ºèª";
             StopCarCompletely();
             return;
         }
 
-        // •¨—“I‚É”­i‰Â”\‚ÈÔ‚¾‚¯‚ªAŸ‹æ‰æEJunctionECycle‚ğ—\–ñ‚·‚éB
+        // ç‰©ç†çš„ã«ç™ºé€²å¯èƒ½ãªè»Šã ã‘ãŒã€æ¬¡åŒºç”»ãƒ»Junctionãƒ»Cycleã‚’äºˆç´„ã™ã‚‹ã€‚
         if (!TryReserveMoveToWaypoint(targetWaypoint))
         {
             RefreshNetworkWaitReason();
@@ -492,7 +501,7 @@ public class NPC_CarController : MonoBehaviour
         needsStartMoveSafetyCheck = false;
         currentStopReason = "";
 
-        MoveToTarget(targetPosition, moveSpeed);
+        MoveToTarget(targetPosition, GetEffectiveMoveSpeed());
         RotateToMoveDirection(targetWaypoint, targetPosition);
 
         float distance = Vector3.Distance(transform.position, targetPosition);
@@ -521,14 +530,14 @@ public class NPC_CarController : MonoBehaviour
 
         if (targetParkingSlot.reservedBy != null && targetParkingSlot.reservedBy != this)
         {
-            Debug.LogWarning($"{name}: –Ú“ISlot‚Í•Ê‚ÌÔ‚ª—\–ñ‚µ‚Ä‚¢‚Ü‚·BSlot={targetParkingSlot.slotId}");
+            Debug.LogWarning($"{name}: ç›®çš„Slotã¯åˆ¥ã®è»ŠãŒäºˆç´„ã—ã¦ã„ã¾ã™ã€‚Slot={targetParkingSlot.slotId}");
             FinishDriving();
             return;
         }
 
         if (targetParkingSlot.occupiedBy != null && targetParkingSlot.occupiedBy != this)
         {
-            Debug.LogWarning($"{name}: –Ú“ISlot‚Í•Ê‚ÌÔ‚ªg—p’†‚Å‚·BSlot={targetParkingSlot.slotId}");
+            Debug.LogWarning($"{name}: ç›®çš„Slotã¯åˆ¥ã®è»ŠãŒä½¿ç”¨ä¸­ã§ã™ã€‚Slot={targetParkingSlot.slotId}");
             FinishDriving();
             return;
         }
@@ -563,12 +572,12 @@ public class NPC_CarController : MonoBehaviour
     {
         if (targetParkingSlot != null)
         {
-            // TryOccupy‚Í—\–ñEŠ—LÒî•ñ‚¾‚¯‚ğXV‚·‚éBOccupied/Empty‚Ì•¨—”»’è‚ÍCameraParkingSensor‚ªs‚¤B
+            // TryOccupyã¯äºˆç´„ãƒ»æ‰€æœ‰è€…æƒ…å ±ã ã‘ã‚’æ›´æ–°ã™ã‚‹ã€‚Occupied/Emptyã®ç‰©ç†åˆ¤å®šã¯CameraParkingSensorãŒè¡Œã†ã€‚
             bool occupied = targetParkingSlot.TryOccupy(this);
 
             if (!occupied)
             {
-                Debug.LogWarning($"{name}: –Ú“IParkingSlot‚ğOccupied‚É‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½BSlot={targetParkingSlot.slotId}");
+                Debug.LogWarning($"{name}: ç›®çš„ParkingSlotã‚’Occupiedã«ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚Slot={targetParkingSlot.slotId}");
                 StopCarCompletely();
                 moveState = NPC_CarMoveState.Idle;
                 return;
@@ -584,7 +593,7 @@ public class NPC_CarController : MonoBehaviour
 
             if (car != null)
             {
-                // ’“ÔŠ®—¹ƒƒO‚Í Car.cs ‘¤‚Åo‚·‘O’ñB
+                // é§è»Šå®Œäº†ãƒ­ã‚°ã¯ Car.cs å´ã§å‡ºã™å‰æã€‚
                 car.SetParked(targetParkingSlot);
             }
         }
@@ -616,8 +625,8 @@ public class NPC_CarController : MonoBehaviour
 
         if (targetParkingSlot != null)
         {
-            // ‹ó‚«”»’è‚ÍCameraParkingSensor‚É”C‚¹‚éB
-            // ‚±‚±‚Å‚Íu‚±‚ÌÔ‚ªoŒÉ’†‚ÅA‚Ü‚¾‘¼‚ÌÔ‚Í—\–ñ‚Å‚«‚È‚¢v‚±‚Æ‚¾‚¯‚ğ‹L˜^‚·‚éB
+            // ç©ºãåˆ¤å®šã¯CameraParkingSensorã«ä»»ã›ã‚‹ã€‚
+            // ã“ã“ã§ã¯ã€Œã“ã®è»ŠãŒå‡ºåº«ä¸­ã§ã€ã¾ã ä»–ã®è»Šã¯äºˆç´„ã§ããªã„ã€ã“ã¨ã ã‘ã‚’è¨˜éŒ²ã™ã‚‹ã€‚
             targetParkingSlot.SetLeaving(this);
         }
 
@@ -663,16 +672,16 @@ public class NPC_CarController : MonoBehaviour
 
         Waypoint accessWaypoint = targetParkingSlot.accessWaypoint;
 
-        // ’Êí‘–s‚Æ“¯—l‚ÉA•¨—“I‚É”­i‚Å‚«‚é‚±‚Æ‚ğæ‚ÉŠm”F‚·‚éB
-        // ƒoƒbƒN‚Å‚«‚È‚¢Ô‚ªAccessWaypointEJunctionECycle‚ğ—\–ñ‚µA
-        // üˆÍ‚Ì’Ês‚ğ•s—v‚É~‚ß‚é‚±‚Æ‚ğ–h‚®B
+        // é€šå¸¸èµ°è¡Œã¨åŒæ§˜ã«ã€ç‰©ç†çš„ã«ç™ºé€²ã§ãã‚‹ã“ã¨ã‚’å…ˆã«ç¢ºèªã™ã‚‹ã€‚
+        // ãƒãƒƒã‚¯ã§ããªã„è»ŠãŒAccessWaypointãƒ»Junctionãƒ»Cycleã‚’äºˆç´„ã—ã€
+        // å‘¨å›²ã®é€šè¡Œã‚’ä¸è¦ã«æ­¢ã‚ã‚‹ã“ã¨ã‚’é˜²ãã€‚
         if (!CanBackOutSafely())
         {
             if (logBackOutSafetyDebug)
             {
                 Debug.Log(
-                    $"{name}: AccessWaypoint•t‹ß‚ÉÔ‚ª‚¢‚é‚½‚ßA " +
-                    "—\–ñ‚¹‚¸oŒÉ‘Ò‹@‚µ‚Ü‚·B",
+                    $"{name}: AccessWaypointä»˜è¿‘ã«è»ŠãŒã„ã‚‹ãŸã‚ã€ " +
+                    "äºˆç´„ã›ãšå‡ºåº«å¾…æ©Ÿã—ã¾ã™ã€‚",
                     this
                 );
             }
@@ -680,14 +689,14 @@ public class NPC_CarController : MonoBehaviour
             return;
         }
 
-        // •¨—“I‚ÉoŒÉ‰Â”\‚ÈÔ‚¾‚¯‚ª˜_—i“ü‹–‰Â‚ğæ“¾‚·‚éB
+        // ç‰©ç†çš„ã«å‡ºåº«å¯èƒ½ãªè»Šã ã‘ãŒè«–ç†é€²å…¥è¨±å¯ã‚’å–å¾—ã™ã‚‹ã€‚
         if (!TryReserveMoveToWaypoint(accessWaypoint, null))
         {
             if (logBackOutSafetyDebug)
             {
                 Debug.Log(
-                    $"{name}: AccessWaypoint‚Ö‚Ìi“ü‹–‰Â‚ğæ“¾‚Å‚«‚È‚¢‚½‚ßA " +
-                    $"oŒÉ‘Ò‹@‚µ‚Ü‚·BWaypoint={accessWaypoint.name}",
+                    $"{name}: AccessWaypointã¸ã®é€²å…¥è¨±å¯ã‚’å–å¾—ã§ããªã„ãŸã‚ã€ " +
+                    $"å‡ºåº«å¾…æ©Ÿã—ã¾ã™ã€‚Waypoint={accessWaypoint.name}",
                     this
                 );
             }
@@ -698,7 +707,7 @@ public class NPC_CarController : MonoBehaviour
         if (logBackOutSafetyDebug)
         {
             Debug.Log(
-                $"{name}: oŒÉŠm”FEi“ü‹–‰Â‚Æ‚à‚ÉOKBƒoƒbƒN‚ğŠJn‚µ‚Ü‚·B",
+                $"{name}: å‡ºåº«ç¢ºèªãƒ»é€²å…¥è¨±å¯ã¨ã‚‚ã«OKã€‚ãƒãƒƒã‚¯ã‚’é–‹å§‹ã—ã¾ã™ã€‚",
                 this
             );
         }
@@ -719,8 +728,8 @@ public class NPC_CarController : MonoBehaviour
             return;
         }
 
-        // ƒoƒbƒN’†‚É‚àAccessWaypoint•t‹ß‚ğŠm”F‚·‚éB
-        // •Ê‚ÌÔ‚ª—ˆ‚½ê‡‚ÍAƒoƒbƒN“®ì‚ğ’†’f‚µ‚ÄÄ‘Ò‹@‚·‚éB
+        // ãƒãƒƒã‚¯ä¸­ã«ã‚‚AccessWaypointä»˜è¿‘ã‚’ç¢ºèªã™ã‚‹ã€‚
+        // åˆ¥ã®è»ŠãŒæ¥ãŸå ´åˆã¯ã€ãƒãƒƒã‚¯å‹•ä½œã‚’ä¸­æ–­ã—ã¦å†å¾…æ©Ÿã™ã‚‹ã€‚
         if (checkWhileBackingOut &&
             TryGetBackOutBlockingCar(
                 out NPC_CarController blockingCar,
@@ -732,7 +741,7 @@ public class NPC_CarController : MonoBehaviour
 
             if (logBackOutSafetyDebug)
             {
-                Debug.Log($"{name}: ƒoƒbƒN’†‚É•Ê‚ÌÔ‚ğŒŸ’m‚µ‚½‚½‚ßAoŒÉ‚ğˆê’†’f‚µ‚Ü‚·BBlockingCar={blockingCar.name}", this);
+                Debug.Log($"{name}: ãƒãƒƒã‚¯ä¸­ã«åˆ¥ã®è»Šã‚’æ¤œçŸ¥ã—ãŸãŸã‚ã€å‡ºåº«ã‚’ä¸€æ™‚ä¸­æ–­ã—ã¾ã™ã€‚BlockingCar={blockingCar.name}", this);
             }
 
             moveState = NPC_CarMoveState.WaitingToBackOut;
@@ -766,14 +775,14 @@ public class NPC_CarController : MonoBehaviour
             ArriveAtWaypoint(backOutWaypoint, nextWaypoint);
 
             ParkingSlot releasedSlot = targetParkingSlot;
-            // TryReleaseAfterExit‚Í—\–ñEŠ—LÒî•ñ‚¾‚¯‚ğ‰ğ•ú‚·‚éBEmpty”»’è‚ÍCameraParkingSensor‚ªs‚¤B
-            // TryReleaseAfterExit‚Í—\–ñEŠ—LÒî•ñ‚¾‚¯‚ğ‰ğ•ú‚·‚éBEmpty”»’è‚ÍCameraParkingSensor‚ªs‚¤B
+            // TryReleaseAfterExitã¯äºˆç´„ãƒ»æ‰€æœ‰è€…æƒ…å ±ã ã‘ã‚’è§£æ”¾ã™ã‚‹ã€‚Emptyåˆ¤å®šã¯CameraParkingSensorãŒè¡Œã†ã€‚
+            // TryReleaseAfterExitã¯äºˆç´„ãƒ»æ‰€æœ‰è€…æƒ…å ±ã ã‘ã‚’è§£æ”¾ã™ã‚‹ã€‚Emptyåˆ¤å®šã¯CameraParkingSensorãŒè¡Œã†ã€‚
             bool released = releasedSlot.TryReleaseAfterExit(this);
 
             if (!released)
             {
                 Debug.LogWarning(
-                    $"{name}: ƒXƒƒbƒg‰ğ•ú‚É¸”s‚µ‚Ü‚µ‚½BSlot={releasedSlot.slotId}, " +
+                    $"{name}: ã‚¹ãƒ­ãƒƒãƒˆè§£æ”¾ã«å¤±æ•—ã—ã¾ã—ãŸã€‚Slot={releasedSlot.slotId}, " +
                     $"State={releasedSlot.state}, " +
                     $"ReservedBy={(releasedSlot.reservedBy != null ? releasedSlot.reservedBy.name : "null")}, " +
                     $"OccupiedBy={(releasedSlot.occupiedBy != null ? releasedSlot.occupiedBy.name : "null")}",
@@ -787,8 +796,8 @@ public class NPC_CarController : MonoBehaviour
 
             currentExitWaypointIndex = 0;
 
-            // exitRoute‚Ìæ“ª‚ÉAccessWaypoint©g‚ªŠÜ‚Ü‚ê‚Ä‚¢‚éê‡A
-            // AccessWaypoint ¨ “¯‚¶AccessWaypoint ‚ÌˆÚ“®\¿‚É‚È‚ç‚È‚¢‚æ‚¤“Ç‚İ”ò‚Î‚·B
+            // exitRouteã®å…ˆé ­ã«AccessWaypointè‡ªèº«ãŒå«ã¾ã‚Œã¦ã„ã‚‹å ´åˆã€
+            // AccessWaypoint â†’ åŒã˜AccessWaypoint ã®ç§»å‹•ç”³è«‹ã«ãªã‚‰ãªã„ã‚ˆã†èª­ã¿é£›ã°ã™ã€‚
             SkipAccessWaypointAtExitRouteStart(backOutWaypoint);
 
             if (exitRoute == null || exitRoute.Count == 0 ||
@@ -932,9 +941,9 @@ public class NPC_CarController : MonoBehaviour
                         return true;
                     }
 
-                    // oŒÉŠJnŒã‚ÍAccessWaypoint‚Ü‚Åi‚İØ‚éB
-                    // ’Êí‘–sÔE’“Ô“®ì’†Ô‚ÍBackingOutÔ‚ğ
-                    // ‘O•ûáŠQ•¨‚Æ‚µ‚ÄŒŸ’m‚µA‚»‚¿‚ç‚ª’â~‚·‚éB
+                    // å‡ºåº«é–‹å§‹å¾Œã¯AccessWaypointã¾ã§é€²ã¿åˆ‡ã‚‹ã€‚
+                    // é€šå¸¸èµ°è¡Œè»Šãƒ»é§è»Šå‹•ä½œä¸­è»Šã¯BackingOutè»Šã‚’
+                    // å‰æ–¹éšœå®³ç‰©ã¨ã—ã¦æ¤œçŸ¥ã—ã€ãã¡ã‚‰ãŒåœæ­¢ã™ã‚‹ã€‚
                     continue;
                 }
 
@@ -969,8 +978,8 @@ public class NPC_CarController : MonoBehaviour
             return;
         }
 
-        // oŒÉ’¼Œã‚È‚Ç‚ÉAŒ»İ‚¢‚éWaypoint‚ªexitRoute‘¤‚É‚àŠÜ‚Ü‚ê‚Ä‚¢‚éê‡‚Í
-        // “¯‚¶Waypoint‚Ö‚ÌˆÚ“®\¿‚ğ‚¹‚¸Ÿ‚Öi‚ß‚éB
+        // å‡ºåº«ç›´å¾Œãªã©ã«ã€ç¾åœ¨ã„ã‚‹WaypointãŒexitRouteå´ã«ã‚‚å«ã¾ã‚Œã¦ã„ã‚‹å ´åˆã¯
+        // åŒã˜Waypointã¸ã®ç§»å‹•ç”³è«‹ã‚’ã›ãšæ¬¡ã¸é€²ã‚ã‚‹ã€‚
         if (targetWaypoint == occupiedWaypoint)
         {
             currentExitWaypointIndex++;
@@ -983,17 +992,17 @@ public class NPC_CarController : MonoBehaviour
         if (TryHandleTurnInPlaceBeforeMove(targetWaypoint, targetPosition))
         {
             ReleaseUnstartedMovePermitForPhysicalWait();
-            currentStopReason = "Waypoint•ûŒü“]Š·";
+            currentStopReason = "Waypointæ–¹å‘è»¢æ›";
             needsStartMoveSafetyCheck = true;
             return;
         }
 
-        // oŒÉŒã‚Ì’Êí‘–s‚Å‚àA•¨—“I‚É”­i‚Å‚«‚é‚±‚Æ‚ğŠm”F‚µ‚Ä‚©‚ç
-        // RoadCell/Junction‹–‰Â‚ğæ“¾‚·‚éB
+        // å‡ºåº«å¾Œã®é€šå¸¸èµ°è¡Œã§ã‚‚ã€ç‰©ç†çš„ã«ç™ºé€²ã§ãã‚‹ã“ã¨ã‚’ç¢ºèªã—ã¦ã‹ã‚‰
+        // RoadCell/Junctionè¨±å¯ã‚’å–å¾—ã™ã‚‹ã€‚
         if (ShouldHoldStopForFrontCar())
         {
             ReleaseUnstartedMovePermitForPhysicalWait();
-            currentStopReason = "‘O•ûÔ—¼";
+            currentStopReason = "å‰æ–¹è»Šä¸¡";
             needsStartMoveSafetyCheck = true;
             StopCarCompletely();
             return;
@@ -1003,7 +1012,7 @@ public class NPC_CarController : MonoBehaviour
             ShouldStopForStartMoveSafety())
         {
             ReleaseUnstartedMovePermitForPhysicalWait();
-            currentStopReason = "”­i‘OˆÀ‘SŠm”F";
+            currentStopReason = "ç™ºé€²å‰å®‰å…¨ç¢ºèª";
             StopCarCompletely();
             return;
         }
@@ -1019,7 +1028,7 @@ public class NPC_CarController : MonoBehaviour
         needsStartMoveSafetyCheck = false;
         currentStopReason = "";
 
-        MoveToTarget(targetPosition, moveSpeed);
+        MoveToTarget(targetPosition, GetEffectiveMoveSpeed());
         RotateToMoveDirection(targetWaypoint, targetPosition);
 
         float distance = Vector3.Distance(transform.position, targetPosition);
@@ -1208,7 +1217,7 @@ public class NPC_CarController : MonoBehaviour
         if (logWaypointReservationDebug)
         {
             Debug.Log(
-                $"{name}: ˆÚ“®—\–ñ¬Œ÷B"
+                $"{name}: ç§»å‹•äºˆç´„æˆåŠŸã€‚"
                 + $" From="
                 + $"{(fromWaypoint != null ? fromWaypoint.name : "ParkingSlot/Spawn")},"
                 + $" Target={targetWaypoint.name}",
@@ -1247,7 +1256,7 @@ public class NPC_CarController : MonoBehaviour
                 : null;
 
         currentStopReason =
-            $"Waypoint—\–ñ‘Ò‹@:"
+            $"Waypointäºˆç´„å¾…æ©Ÿ:"
             + $" Target={waypointName},"
             + $" BlockingCar="
             + $"{(blocker != null ? blocker.name : "none")}";
@@ -1255,11 +1264,11 @@ public class NPC_CarController : MonoBehaviour
 
     private void ReleaseUnstartedMovePermitForPhysicalWait()
     {
-        // ‘O•ûÔ—¼‚â•ûŒü“]Š·‚É‚æ‚éˆê’â~‚Å‚ÍA
-        // æ“¾Ï‚İ‚ÌˆÚ“®‹–‰Â‚ÆWaypoint—\–ñ‚ğ•Û‚µ‚Ü‚·B
+        // å‰æ–¹è»Šä¸¡ã‚„æ–¹å‘è»¢æ›ã«ã‚ˆã‚‹ä¸€æ™‚åœæ­¢ã§ã¯ã€
+        // å–å¾—æ¸ˆã¿ã®ç§»å‹•è¨±å¯ã¨Waypointäºˆç´„ã‚’ä¿æŒã—ã¾ã™ã€‚
         //
-        // ‹–‰ÂŒã‚ÌÔ‚ª“üŒû‘Ò‹@Ô‚ÖŒ —˜‚ğ÷‚è•Ô‚µA
-        // “¯”­i‚·‚é‚±‚Æ‚ğ–h‚¬‚Ü‚·B
+        // è¨±å¯å¾Œã®è»ŠãŒå…¥å£å¾…æ©Ÿè»Šã¸æ¨©åˆ©ã‚’è­²ã‚Šè¿”ã—ã€
+        // åŒæ™‚ç™ºé€²ã™ã‚‹ã“ã¨ã‚’é˜²ãã¾ã™ã€‚
     }
 
     private void ReleasePendingNetworkMove()
@@ -1306,11 +1315,11 @@ public class NPC_CarController : MonoBehaviour
         waitingWaypoint = null;
 
         if (currentStopReason.StartsWith(
-                "Waypoint—\–ñ‘Ò‹@") ||
+                "Waypointäºˆç´„å¾…æ©Ÿ") ||
             currentStopReason.StartsWith(
-                "‡—¬‘Ò‹@") ||
+                "åˆæµå¾…æ©Ÿ") ||
             currentStopReason.StartsWith(
-                "‡—¬İ’è‘Ò‹@"))
+                "åˆæµè¨­å®šå¾…æ©Ÿ"))
         {
             currentStopReason = "";
         }
@@ -1346,11 +1355,11 @@ public class NPC_CarController : MonoBehaviour
             !waypoint.TryEnter(this))
         {
             currentStopReason =
-                $"Waypoint“’…Šm’è¸”s: "
+                $"Waypointåˆ°ç€ç¢ºå®šå¤±æ•—: "
                 + waypoint.name;
 
             Debug.LogError(
-                $"{name}: Waypoint“’…Šm’è¸”sB"
+                $"{name}: Waypointåˆ°ç€ç¢ºå®šå¤±æ•—ã€‚"
                 + $" Waypoint={waypoint.name},"
                 + $" ReservedBy="
                 + $"{(waypoint.reservedBy != null ? waypoint.reservedBy.name : "null")},"
@@ -1393,7 +1402,7 @@ public class NPC_CarController : MonoBehaviour
         if (logWaypointReservationDebug)
         {
             Debug.Log(
-                $"{name}: Waypoint“’…B"
+                $"{name}: Waypointåˆ°ç€ã€‚"
                 + $" Waypoint={waypoint.name}",
                 this
             );
@@ -1432,8 +1441,8 @@ public class NPC_CarController : MonoBehaviour
     {
         direction = Vector3.zero;
 
-        // ‚Ü‚¸uŒ»İè—L’†‚ÌWaypoint ¨ Ÿ‚ÌWaypointv‚Ì•ûŒü‚ğg‚¤B
-        // Ô‚ÌŒ»İˆÊ’u‚©‚çŸWaypoint‚ğŒ©‚é‚æ‚è‚àA“¹˜H‚Ìü•ª•ûŒü‚É‘µ‚¢‚â‚·‚¢B
+        // ã¾ãšã€Œç¾åœ¨å æœ‰ä¸­ã®Waypoint â†’ æ¬¡ã®Waypointã€ã®æ–¹å‘ã‚’ä½¿ã†ã€‚
+        // è»Šã®ç¾åœ¨ä½ç½®ã‹ã‚‰æ¬¡Waypointã‚’è¦‹ã‚‹ã‚ˆã‚Šã‚‚ã€é“è·¯ã®ç·šåˆ†æ–¹å‘ã«æƒã„ã‚„ã™ã„ã€‚
         if (occupiedWaypoint != null && targetWaypoint != null && occupiedWaypoint != targetWaypoint)
         {
             direction = targetWaypoint.transform.position - occupiedWaypoint.transform.position;
@@ -1446,7 +1455,7 @@ public class NPC_CarController : MonoBehaviour
             }
         }
 
-        // occupiedWaypoint ‚ªg‚¦‚È‚¢ê‡‚Ì•ÛŒ¯B
+        // occupiedWaypoint ãŒä½¿ãˆãªã„å ´åˆã®ä¿é™ºã€‚
         direction = targetPosition - transform.position;
         direction.y = 0f;
 
@@ -1482,8 +1491,8 @@ public class NPC_CarController : MonoBehaviour
 
         float targetDistance = GetHorizontalDistanceToTarget(targetPosition);
 
-        // ‹ß‚·‚¬‚éWaypoint‚ğŒü‚±‚¤‚Æ‚·‚é‚ÆA”wŒã‚â^‰¡‚ğ–Ú•W‚É‚µ‚Ä—]Œv‚É‰ñ‚è‚â‚·‚¢B
-        // ‚½‚¾‚µA‚±‚±‚Å‚ÍWaypoint“’…ˆµ‚¢‚É‚Í‚µ‚È‚¢BRSó‘Ô‚ğ‰ó‚³‚È‚¢‚½‚ßB
+        // è¿‘ã™ãã‚‹Waypointã‚’å‘ã“ã†ã¨ã™ã‚‹ã¨ã€èƒŒå¾Œã‚„çœŸæ¨ªã‚’ç›®æ¨™ã«ã—ã¦ä½™è¨ˆã«å›ã‚Šã‚„ã™ã„ã€‚
+        // ãŸã ã—ã€ã“ã“ã§ã¯Waypointåˆ°ç€æ‰±ã„ã«ã¯ã—ãªã„ã€‚RSçŠ¶æ…‹ã‚’å£Šã•ãªã„ãŸã‚ã€‚
         if (targetDistance <= turnInPlaceMinTargetDistance)
         {
             EndTurnInPlaceAtWaypoint();
@@ -1510,15 +1519,15 @@ public class NPC_CarController : MonoBehaviour
             directionToTarget
         );
 
-        // ‚Ü‚¾‚»‚Ìê‰ñ“]‚ğn‚ß‚Ä‚¢‚È‚¢ê‡A
-        // Šp“x‚ª¬‚³‚¯‚ê‚Î’Êí‘–s‚·‚éB
+        // ã¾ã ãã®å ´å›è»¢ã‚’å§‹ã‚ã¦ã„ãªã„å ´åˆã€
+        // è§’åº¦ãŒå°ã•ã‘ã‚Œã°é€šå¸¸èµ°è¡Œã™ã‚‹ã€‚
         if (!isTurningInPlaceAtWaypoint && currentAngle < turnInPlaceStartAngle)
         {
             return false;
         }
 
-        // ‚±‚±‚©‚ç‚Í‚»‚Ìê‰ñ“]’†B
-        // ‘O•ûŒŸ’m‚ÍŒÄ‚Î‚¸AŠ®‘S’â~‚µ‚Ä‰ñ“]‚¾‚¯s‚¤B
+        // ã“ã“ã‹ã‚‰ã¯ãã®å ´å›è»¢ä¸­ã€‚
+        // å‰æ–¹æ¤œçŸ¥ã¯å‘¼ã°ãšã€å®Œå…¨åœæ­¢ã—ã¦å›è»¢ã ã‘è¡Œã†ã€‚
         StopCarCompletely();
 
         if (!isTurningInPlaceAtWaypoint)
@@ -1526,8 +1535,8 @@ public class NPC_CarController : MonoBehaviour
             isTurningInPlaceAtWaypoint = true;
             turnInPlacePauseTimer = turnInPlacePauseTime;
 
-            // ‰ñ“]ŠJn‚É–Ú•W‰ñ“]‚ğ1‰ñ‚¾‚¯ŒÅ’è‚·‚éB
-            // –ˆƒtƒŒ[ƒ€ì‚è’¼‚·‚ÆAWaypoint•t‹ß‚Å–Ú•W•ûŒü‚ªƒuƒŒ‚Ä—]Œv‚É‰ñ‚éB
+            // å›è»¢é–‹å§‹æ™‚ã«ç›®æ¨™å›è»¢ã‚’1å›ã ã‘å›ºå®šã™ã‚‹ã€‚
+            // æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ä½œã‚Šç›´ã™ã¨ã€Waypointä»˜è¿‘ã§ç›®æ¨™æ–¹å‘ãŒãƒ–ãƒ¬ã¦ä½™è¨ˆã«å›ã‚‹ã€‚
             turnInPlaceTargetRotation = Quaternion.LookRotation(
                 directionToTarget,
                 Vector3.up
@@ -1537,11 +1546,11 @@ public class NPC_CarController : MonoBehaviour
 
             if (logTurnInPlaceDebug)
             {
-                Debug.Log($"{name}: Waypoint‚Å‚»‚Ìê‰ñ“]‚ğŠJn‚µ‚Ü‚·BAngle={currentAngle:F1}", this);
+                Debug.Log($"{name}: Waypointã§ãã®å ´å›è»¢ã‚’é–‹å§‹ã—ã¾ã™ã€‚Angle={currentAngle:F1}", this);
             }
         }
 
-        // ˆêu’â~‚µ‚Ä‚©‚ç‰ñ“]‚·‚éB
+        // ä¸€ç¬åœæ­¢ã—ã¦ã‹ã‚‰å›è»¢ã™ã‚‹ã€‚
         if (turnInPlacePauseTimer > 0f)
         {
             turnInPlacePauseTimer -= Time.deltaTime;
@@ -1572,11 +1581,11 @@ public class NPC_CarController : MonoBehaviour
 
             if (logTurnInPlaceDebug)
             {
-                Debug.Log($"{name}: Waypoint‚Å‚Ì‚»‚Ìê‰ñ“]‚ªŠ®—¹‚µ‚Ü‚µ‚½B", this);
+                Debug.Log($"{name}: Waypointã§ã®ãã®å ´å›è»¢ãŒå®Œäº†ã—ã¾ã—ãŸã€‚", this);
             }
 
-            // ‚±‚ÌƒtƒŒ[ƒ€‚Å‚Í‚Ü‚¾ˆÚ“®‚µ‚È‚¢B
-            // Ÿ‚ÌUpdate‚Å‘O•ûŒŸ’m‚ğ’Êí’Ê‚ès‚Á‚Ä‚©‚ç”­i‚·‚éB
+            // ã“ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã§ã¯ã¾ã ç§»å‹•ã—ãªã„ã€‚
+            // æ¬¡ã®Updateã§å‰æ–¹æ¤œçŸ¥ã‚’é€šå¸¸é€šã‚Šè¡Œã£ã¦ã‹ã‚‰ç™ºé€²ã™ã‚‹ã€‚
             return true;
         }
 
@@ -1629,8 +1638,8 @@ public class NPC_CarController : MonoBehaviour
         physicsBufferOverflowWarned = true;
 
         Debug.LogWarning(
-            $"{name}: {queryName}‚ÌNonAllocƒoƒbƒtƒ@‚ª–”t‚Å‚·B " +
-            $"Physics Query Buffer Size‚ğ‘‚â‚µ‚Ä‚­‚¾‚³‚¢B " +
+            $"{name}: {queryName}ã®NonAllocãƒãƒƒãƒ•ã‚¡ãŒæº€æ¯ã§ã™ã€‚ " +
+            $"Physics Query Buffer Sizeã‚’å¢—ã‚„ã—ã¦ãã ã•ã„ã€‚ " +
             $"Current={bufferLength}",
             this
         );
@@ -1649,8 +1658,8 @@ public class NPC_CarController : MonoBehaviour
             return;
         }
 
-        // Ô‘ÌCollider‚Í’ÊíRigidbody‚Ìq‚È‚Ì‚ÅA
-        // attachedRigidbody‚©‚çæ“¾‚·‚é‚ÆeŠK‘w’Tõ‚ğŒ¸‚ç‚¹‚éB
+        // è»Šä½“Colliderã¯é€šå¸¸Rigidbodyã®å­ãªã®ã§ã€
+        // attachedRigidbodyã‹ã‚‰å–å¾—ã™ã‚‹ã¨è¦ªéšå±¤æ¢ç´¢ã‚’æ¸›ã‚‰ã›ã‚‹ã€‚
         Rigidbody attached =
             candidate.attachedRigidbody;
 
@@ -1800,8 +1809,8 @@ public class NPC_CarController : MonoBehaviour
             if (logFrontVehicleDetection)
             {
                 Debug.Log(
-                    $"{name}: FrontSensorn“_‚Å‘O•ûÔ—¼‚ğŒŸ’m‚µ‚Ü‚µ‚½ " +
-                    $"¨ {hitCar.carId}",
+                    $"{name}: FrontSensorå§‹ç‚¹ã§å‰æ–¹è»Šä¸¡ã‚’æ¤œçŸ¥ã—ã¾ã—ãŸ " +
+                    $"â†’ {hitCar.carId}",
                     this
                 );
             }
@@ -1846,8 +1855,8 @@ public class NPC_CarController : MonoBehaviour
             if (logFrontVehicleDetection)
             {
                 Debug.Log(
-                    $"{name}: •¨—‘O•û”ÍˆÍ‚ÅÔ—¼‚ğŒŸ’m‚µ‚Ü‚µ‚½ " +
-                    $"¨ {hitCar.carId}, Distance={hit.distance:F2}",
+                    $"{name}: ç‰©ç†å‰æ–¹ç¯„å›²ã§è»Šä¸¡ã‚’æ¤œçŸ¥ã—ã¾ã—ãŸ " +
+                    $"â†’ {hitCar.carId}, Distance={hit.distance:F2}",
                     this
                 );
             }
@@ -1895,8 +1904,8 @@ public class NPC_CarController : MonoBehaviour
             return false;
         }
 
-        // NPC_CarController‚ğ‚½‚È‚¢Ô—¼‚Å‚àA
-        // Car‘¤‚ÅŠ®‘S’“Ôó‘Ô‚ªŠm”F‚Å‚«‚éê‡‚ÍœŠO‚·‚éB
+        // NPC_CarControllerã‚’æŒãŸãªã„è»Šä¸¡ã§ã‚‚ã€
+        // Carå´ã§å®Œå…¨é§è»ŠçŠ¶æ…‹ãŒç¢ºèªã§ãã‚‹å ´åˆã¯é™¤å¤–ã™ã‚‹ã€‚
         if (IsFullyParkedVehicle(
                 hitCar,
                 hitController))
@@ -1904,7 +1913,7 @@ public class NPC_CarController : MonoBehaviour
             if (logIgnoredParkedCars)
             {
                 Debug.Log(
-                    $"{name}: Š®‘S’“Ô’†‚ÌÔ‚ğ‘O•ûŒŸ’m‚©‚çœŠO‚µ‚Ü‚µ‚½B " +
+                    $"{name}: å®Œå…¨é§è»Šä¸­ã®è»Šã‚’å‰æ–¹æ¤œçŸ¥ã‹ã‚‰é™¤å¤–ã—ã¾ã—ãŸã€‚ " +
                     $"Other={hitCar.carId}",
                     this
                 );
@@ -1915,16 +1924,16 @@ public class NPC_CarController : MonoBehaviour
             return false;
         }
 
-        // SphereCast‚Ì”ÍˆÍ‚ÖCollider‚ª“ü‚Á‚½‚¾‚¯‚Å‚ÍA
-        // “¯ˆê˜Hü‚ÌæsÔ‚Æ‚ÍŒÀ‚ç‚È‚¢B
+        // SphereCastã®ç¯„å›²ã¸ColliderãŒå…¥ã£ãŸã ã‘ã§ã¯ã€
+        // åŒä¸€è·¯ç·šã®å…ˆè¡Œè»Šã¨ã¯é™ã‚‰ãªã„ã€‚
         //
-        // ‹È‚ª‚èŠp‚Å‚ÍA’¼Œğ•ûŒüE”½‘ÎŒü‚«ƒŒ[ƒ“‚ÌÔ‘Ì‘¤–Ê‚ª
-        // FrontSensor‚Ö“ü‚èA4‘ä‚ªŒİ‚¢‚ğu‘O•ûÔ—¼v‚Æ”»’è‚·‚é
-        // zŠÂ’â~‚ª”­¶‚·‚éB
+        // æ›²ãŒã‚Šè§’ã§ã¯ã€ç›´äº¤æ–¹å‘ãƒ»åå¯¾å‘ããƒ¬ãƒ¼ãƒ³ã®è»Šä½“å´é¢ãŒ
+        // FrontSensorã¸å…¥ã‚Šã€4å°ãŒäº’ã„ã‚’ã€Œå‰æ–¹è»Šä¸¡ã€ã¨åˆ¤å®šã™ã‚‹
+        // å¾ªç’°åœæ­¢ãŒç™ºç”Ÿã™ã‚‹ã€‚
         //
-        // NPCÔ‚É‚Â‚¢‚Ä‚ÍAÀÛ‚Ìis•ûŒü‚Æ‰¡•ûŒü‹——£‚ğŠm”F‚µA
-        // “¯ˆê˜Hü‚ÌæsÔ‚¾‚¯‚ğ’Êí‚Ì‘O•ûáŠQ•¨‚Æ‚µ‚Äˆµ‚¤B
-        // Œğ·•ûŒü‚Ì’Ês‡‚ÍRoadCell/Junction‚ª’S“–‚·‚éB
+        // NPCè»Šã«ã¤ã„ã¦ã¯ã€å®Ÿéš›ã®é€²è¡Œæ–¹å‘ã¨æ¨ªæ–¹å‘è·é›¢ã‚’ç¢ºèªã—ã€
+        // åŒä¸€è·¯ç·šã®å…ˆè¡Œè»Šã ã‘ã‚’é€šå¸¸ã®å‰æ–¹éšœå®³ç‰©ã¨ã—ã¦æ‰±ã†ã€‚
+        // äº¤å·®æ–¹å‘ã®é€šè¡Œé †ã¯RoadCell/JunctionãŒæ‹…å½“ã™ã‚‹ã€‚
         if (applyLaneFilterToPhysicalFrontDetection &&
             hitController != null &&
             !IsRelevantTrafficObstacle(
@@ -1968,7 +1977,7 @@ public class NPC_CarController : MonoBehaviour
                     );
 
                 Debug.Log(
-                    $"{name}: ’¼ŒğE•ÊƒŒ[ƒ“Ô‚ğ‘O•ûŒŸ’m‚©‚çœŠOB " +
+                    $"{name}: ç›´äº¤ãƒ»åˆ¥ãƒ¬ãƒ¼ãƒ³è»Šã‚’å‰æ–¹æ¤œçŸ¥ã‹ã‚‰é™¤å¤–ã€‚ " +
                     $"Other={hitController.name}#" +
                     $"{hitController.GetInstanceID()}, " +
                     $"DirectionDot={directionDot:F2}, " +
@@ -2091,8 +2100,8 @@ public class NPC_CarController : MonoBehaviour
             if (logStartMoveSafetyCheck)
             {
                 Debug.Log(
-                    $"{name}: ”­i‘OŠm”F‚Åi˜Hã‚ÌÔ‚ğŒŸ’m‚µ‚½‚½‚ß" +
-                    $"’â~‚µ‚Ü‚·BOther={hitCar.carId}",
+                    $"{name}: ç™ºé€²å‰ç¢ºèªã§é€²è·¯ä¸Šã®è»Šã‚’æ¤œçŸ¥ã—ãŸãŸã‚" +
+                    $"åœæ­¢ã—ã¾ã™ã€‚Other={hitCar.carId}",
                     this
                 );
             }
@@ -2192,7 +2201,7 @@ public class NPC_CarController : MonoBehaviour
             return false;
         }
 
-        // ’“ÔEoŒÉ’†‚ÌÔ‚ÍŒü‚«‚ÉŠÖŒW‚È‚­ÀáŠQ•¨‚Æ‚µ‚Äˆµ‚¤B
+        // é§è»Šãƒ»å‡ºåº«ä¸­ã®è»Šã¯å‘ãã«é–¢ä¿‚ãªãå®Ÿéšœå®³ç‰©ã¨ã—ã¦æ‰±ã†ã€‚
         if (other.moveState ==
                 NPC_CarMoveState.WaitingToBackOut &&
             ignoreWaitingToBackOutCarsInFrontDetection)
@@ -2217,8 +2226,8 @@ public class NPC_CarController : MonoBehaviour
         float directionDot =
             Vector3.Dot(myDirection, otherDirection);
 
-        // ‹tŒü‚«ƒŒ[ƒ“‚â’¼ŒğƒŒ[ƒ“ã‚ÌÔ‚ÍA
-        // Waypoint—\–ñ‘¤‚ÅŠÇ—‚·‚é‚½‚ß‘O•ûáŠQ•¨‚É‚µ‚È‚¢B
+        // é€†å‘ããƒ¬ãƒ¼ãƒ³ã‚„ç›´äº¤ãƒ¬ãƒ¼ãƒ³ä¸Šã®è»Šã¯ã€
+        // Waypointäºˆç´„å´ã§ç®¡ç†ã™ã‚‹ãŸã‚å‰æ–¹éšœå®³ç‰©ã«ã—ãªã„ã€‚
         return directionDot >= sameDirectionDotThreshold;
     }
 
@@ -2253,7 +2262,7 @@ public class NPC_CarController : MonoBehaviour
             if (logIgnoredParkedCars)
             {
                 Debug.Log(
-                    $"{name}: Š®‘S’“Ô’†‚ÌNPCÔ‚ğŒŸ’m‘ÎÛŠO‚É‚µ‚Ü‚µ‚½B " +
+                    $"{name}: å®Œå…¨é§è»Šä¸­ã®NPCè»Šã‚’æ¤œçŸ¥å¯¾è±¡å¤–ã«ã—ã¾ã—ãŸã€‚ " +
                     $"Other={otherCarController.name}#" +
                     $"{otherCarController.GetInstanceID()}, " +
                     $"Slot={(otherCar != null && otherCar.currentParkingSlot != null ? otherCar.currentParkingSlot.name : "none")}",
@@ -2289,13 +2298,13 @@ public class NPC_CarController : MonoBehaviour
 
         if (otherController != null)
         {
-            // Parked‚¾‚¯‚ğœŠO‚·‚éB
+            // Parkedã ã‘ã‚’é™¤å¤–ã™ã‚‹ã€‚
             //
             // Parking:
-            //   ’“ÔˆÊ’u‚ÖˆÚ“®’†‚È‚Ì‚ÅÀáŠQ•¨B
+            //   é§è»Šä½ç½®ã¸ç§»å‹•ä¸­ãªã®ã§å®Ÿéšœå®³ç‰©ã€‚
             //
             // WaitingToBackOut / BackingOut / Leaving:
-            //   ’Ê˜H‚Öi“ü‚·‚é‰Â”\«‚ª‚ ‚é‚½‚ßÀáŠQ•¨B
+            //   é€šè·¯ã¸é€²å…¥ã™ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ãŸã‚å®Ÿéšœå®³ç‰©ã€‚
             if (otherController.moveState ==
                     NPC_CarMoveState.Parked)
             {
@@ -2305,12 +2314,29 @@ public class NPC_CarController : MonoBehaviour
             return false;
         }
 
-        // Controller‚ğ‚½‚È‚¢Ô—¼‚ÍCar‚Ìó‘Ô‚ğg—p‚·‚éB
-        // currentParkingSlot‚¾‚¯‚Å‚ÍoŒÉ’†‚É‚àc‚é‰Â”\«‚ª‚ ‚é‚½‚ßA
-        // isParked‚Æ‚Ì—¼•û‚ª¬—§‚·‚éê‡‚¾‚¯Š®‘S’“Ô‚Æ‚İ‚È‚·B
+        // Controllerã‚’æŒãŸãªã„è»Šä¸¡ã¯Carã®çŠ¶æ…‹ã‚’ä½¿ç”¨ã™ã‚‹ã€‚
+        // currentParkingSlotã ã‘ã§ã¯å‡ºåº«ä¸­ã«ã‚‚æ®‹ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ãŸã‚ã€
+        // isParkedã¨ã®ä¸¡æ–¹ãŒæˆç«‹ã™ã‚‹å ´åˆã ã‘å®Œå…¨é§è»Šã¨ã¿ãªã™ã€‚
         return otherCar != null &&
                otherCar.isParked &&
                otherCar.currentParkingSlot != null;
+    }
+
+    private float GetEffectiveMoveSpeed()
+    {
+        if (!useScenarioSpeedEffect)
+        {
+            return moveSpeed;
+        }
+
+        if (scenarioFactorRuntime == null)
+        {
+            scenarioFactorRuntime = ScenarioFactorRuntime.Instance;
+        }
+
+        return scenarioFactorRuntime != null
+            ? scenarioFactorRuntime.GetEffectiveVehicleSpeed(moveSpeed)
+            : moveSpeed;
     }
 
     private void MoveToTarget(Vector3 targetPosition, float speed)
@@ -2343,8 +2369,8 @@ public class NPC_CarController : MonoBehaviour
 
     private void RotateToMoveDirection(Waypoint targetWaypoint, Vector3 targetPosition)
     {
-        // ’Êí‘–s’†‚àAŒ»İˆÊ’u‚©‚çWaypoint‚ğŒ©‚é‚Ì‚Å‚Í‚È‚­A
-        // occupiedWaypoint ¨ targetWaypoint ‚Ì“¹˜H•ûŒü‚É‡‚í‚¹‚éB
+        // é€šå¸¸èµ°è¡Œä¸­ã‚‚ã€ç¾åœ¨ä½ç½®ã‹ã‚‰Waypointã‚’è¦‹ã‚‹ã®ã§ã¯ãªãã€
+        // occupiedWaypoint â†’ targetWaypoint ã®é“è·¯æ–¹å‘ã«åˆã‚ã›ã‚‹ã€‚
         if (!TryGetStableMoveDirection(targetWaypoint, targetPosition, out Vector3 direction))
         {
             return;
@@ -2398,7 +2424,7 @@ public class NPC_CarController : MonoBehaviour
             if (!released)
             {
                 Debug.LogWarning(
-                    $"{name}: FinishDriving‚ÌSlot‰ğ•ú‚É¸”s‚µ‚Ü‚µ‚½BSlot={releasedSlot.slotId}, " +
+                    $"{name}: FinishDrivingæ™‚ã®Slotè§£æ”¾ã«å¤±æ•—ã—ã¾ã—ãŸã€‚Slot={releasedSlot.slotId}, " +
                     $"State={releasedSlot.state}, " +
                     $"ReservedBy={(releasedSlot.reservedBy != null ? releasedSlot.reservedBy.name : "null")}, " +
                     $"OccupiedBy={(releasedSlot.occupiedBy != null ? releasedSlot.occupiedBy.name : "null")}",

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public enum HeatmapDetectionMode
@@ -135,7 +135,7 @@ public class ImageBasedHeatmapManager : MonoBehaviour
     {
         if (heatmapRenderer == null)
         {
-            Debug.LogWarning($"{name}: heatmapRenderer ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: heatmapRenderer ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return;
         }
 
@@ -262,7 +262,7 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
         if (showDebugLog)
         {
-            Debug.Log($"ImageProcessingŒŸo: –¾‚é‚¢ƒsƒNƒZƒ‹” {brightPixelCount}, ŒŸo” {detectedCarCount}");
+            Debug.Log($"ImageProcessingæ¤œå‡º: æ˜ã‚‹ã„ãƒ”ã‚¯ã‚»ãƒ«æ•° {brightPixelCount}, æ¤œå‡ºæ•° {detectedCarCount}");
         }
     }
 
@@ -372,7 +372,7 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
         if (showDebugLog)
         {
-            Debug.Log($"CarTransformŒŸo: {detectedCarCount}‘ä");
+            Debug.Log($"CarTransformæ¤œå‡º: {detectedCarCount}å°");
         }
     }
 

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraParkingSensor : MonoBehaviour
@@ -18,11 +18,11 @@ public class CameraParkingSensor : MonoBehaviour
     [Header("Ray Detection")]
     public bool useRaycastDetection = true;
 
-    [Tooltip("Ray‚ğ­‚µã‚©‚ç”ò‚Î‚µ‚Ü‚·B’n–Ê‚â’á‚¢Collider‚É“–‚½‚è‚·‚¬‚éê‡‚É’²®‚µ‚Ü‚·B")]
+    [Tooltip("Rayã‚’å°‘ã—ä¸Šã‹ã‚‰é£›ã°ã—ã¾ã™ã€‚åœ°é¢ã‚„ä½ã„Colliderã«å½“ãŸã‚Šã™ãã‚‹å ´åˆã«èª¿æ•´ã—ã¾ã™ã€‚")]
     public Vector3 rayOriginOffset = Vector3.zero;
 
     [Header("OverlapBox Fallback")]
-    [Tooltip("Ray‚¾‚¯‚Å‚Í•sˆÀ’è‚Èê‡‚ÉAƒXƒƒbƒg”ÍˆÍ“à‚ÌÔCollider‚àŠm”F‚µ‚Ü‚·B")]
+    [Tooltip("Rayã ã‘ã§ã¯ä¸å®‰å®šãªå ´åˆã«ã€ã‚¹ãƒ­ãƒƒãƒˆç¯„å›²å†…ã®è»ŠColliderã‚‚ç¢ºèªã—ã¾ã™ã€‚")]
     public bool useOverlapBoxDetection = true;
 
     public Vector3 overlapBoxSize = new Vector3(4.5f, 3.0f, 7.0f);
@@ -49,7 +49,7 @@ public class CameraParkingSensor : MonoBehaviour
 
         if (areaRoot == null)
         {
-            Debug.LogWarning($"{name}: areaRoot ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: areaRoot ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return;
         }
 
@@ -60,7 +60,7 @@ public class CameraParkingSensor : MonoBehaviour
             targetSlots.Add(slot);
         }
 
-        Debug.Log($"{name}: {targetSlots.Count}ŒÂ‚ÌƒXƒƒbƒg‚ğŠÄ‹‘ÎÛ‚É‚µ‚Ü‚µ‚½B");
+        Debug.Log($"{name}: {targetSlots.Count}å€‹ã®ã‚¹ãƒ­ãƒƒãƒˆã‚’ç›£è¦–å¯¾è±¡ã«ã—ã¾ã—ãŸã€‚");
     }
 
     private void InitializeTimers()
@@ -127,7 +127,7 @@ public class CameraParkingSensor : MonoBehaviour
 
                         if (logStateChange)
                         {
-                            Debug.Log($"{name}: {slot.slotId} ‚ğOccupied”»’è‚É‚µ‚Ü‚µ‚½B", this);
+                            Debug.Log($"{name}: {slot.slotId} ã‚’Occupiedåˆ¤å®šã«ã—ã¾ã—ãŸã€‚", this);
                         }
                     }
                 }
@@ -145,7 +145,7 @@ public class CameraParkingSensor : MonoBehaviour
 
                         if (logStateChange)
                         {
-                            Debug.Log($"{name}: {slot.slotId} ‚ğEmpty”»’è‚É‚µ‚Ü‚µ‚½B", this);
+                            Debug.Log($"{name}: {slot.slotId} ã‚’Emptyåˆ¤å®šã«ã—ã¾ã—ãŸã€‚", this);
                         }
                     }
                 }

@@ -1,0 +1,167 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f49f976406a3f442b6b020eb72e68fc, type: 3}
+  m_Name: P1_LocalScenario
+  m_EditorClassIdentifier: 
+  schemaVersion: 1.0
+  scenarioId: scenario-concert-rain
+  scenarioVersion: p1-local-2
+  facilityId: facility-main
+  mapVersion: 2026-07-16
+  scenarioName: P1 Local External Factors
+  description: "\u96E8\u30FB\u731B\u6691\u30FB\u30B3\u30F3\u30B5\u30FC\u30C8\u3001\u30A8\u30EA\u30A2\u9700\u8981\u3001Poisson\u6D41\u5165\u3092Unity\u30ED\u30FC\u30AB\u30EB\u3067\u518D\u73FE\u3059\u308B\u3002Backend
+    Command\u306F\u4F7F\u7528\u3057\u306A\u3044\u3002"
+  timeOfDay: daytime
+  durationSeconds: 14400
+  randomSeedPolicy: fixed_per_repetition
+  randomSeed: 12345
+  arrivalRateSegments:
+  - enabled: 1
+    arrivalRateSegmentId: arrival-global-1800-5400
+    accessPointId: 
+    startSimulationTimeSeconds: 1800
+    endSimulationTimeSeconds: 5400
+    vehiclesPerMinute: 3
+    distribution: 0
+  scenarioFactors:
+  - enabled: 1
+    scenarioFactorId: factor-concert
+    category: 2
+    factorCode: concert
+    label: "\u30B3\u30F3\u30B5\u30FC\u30C8"
+    startSimulationTimeSeconds: 1800
+    endSimulationTimeSeconds: 10800
+    intensity: 1
+    informationAvailability: 0
+    hasKnownFromSimulationTimeSeconds: 1
+    knownFromSimulationTimeSeconds: 0
+    effects:
+    - enabled: 1
+      scenarioFactorEffectId: effect-concert-arrival-rate
+      targetType: 0
+      targetId: 
+      metric: arrival_rate
+      operation: 1
+      value: 1.8
+      unit: ratio
+    - enabled: 1
+      scenarioFactorEffectId: effect-concert-event-entrance
+      targetType: 2
+      targetId: entrance-event
+      metric: parking_preference_weight
+      operation: 1
+      value: 2
+      unit: ratio
+    - enabled: 1
+      scenarioFactorEffectId: effect-concert-area-a
+      targetType: 1
+      targetId: area-a
+      metric: parking_preference_weight
+      operation: 1
+      value: 1.5
+      unit: ratio
+    - enabled: 1
+      scenarioFactorEffectId: effect-concert-area-b
+      targetType: 1
+      targetId: area-b
+      metric: parking_preference_weight
+      operation: 1
+      value: 2
+      unit: ratio
+  - enabled: 1
+    scenarioFactorId: factor-heavy-rain
+    category: 0
+    factorCode: heavy_rain
+    label: "\u5F37\u3044\u96E8"
+    startSimulationTimeSeconds: 3600
+    endSimulationTimeSeconds: 9000
+    intensity: 0.8
+    informationAvailability: 1
+    hasKnownFromSimulationTimeSeconds: 1
+    knownFromSimulationTimeSeconds: 0
+    effects:
+    - enabled: 1
+      scenarioFactorEffectId: effect-heavy-rain-speed
+      targetType: 4
+      targetId: 
+      metric: speed
+      operation: 1
+      value: 0.85
+      unit: ratio
+    - enabled: 1
+      scenarioFactorEffectId: effect-heavy-rain-covered-entrance
+      targetType: 2
+      targetId: entrance-covered
+      metric: parking_preference_weight
+      operation: 1
+      value: 1.4
+      unit: ratio
+    - enabled: 1
+      scenarioFactorEffectId: effect-heavy-rain-area-b
+      targetType: 1
+      targetId: area-b
+      metric: parking_preference_weight
+      operation: 1
+      value: 1.25
+      unit: ratio
+    - enabled: 1
+      scenarioFactorEffectId: effect-heavy-rain-area-d
+      targetType: 1
+      targetId: area-d
+      metric: parking_preference_weight
+      operation: 1
+      value: 1.25
+      unit: ratio
+  - enabled: 1
+    scenarioFactorId: factor-extreme-heat
+    category: 1
+    factorCode: extreme_heat
+    label: "\u731B\u6691"
+    startSimulationTimeSeconds: 0
+    endSimulationTimeSeconds: 14400
+    intensity: 1
+    informationAvailability: 1
+    hasKnownFromSimulationTimeSeconds: 1
+    knownFromSimulationTimeSeconds: 0
+    effects:
+    - enabled: 1
+      scenarioFactorEffectId: effect-extreme-heat-main-entrance
+      targetType: 2
+      targetId: entrance-main
+      metric: parking_preference_weight
+      operation: 1
+      value: 1.6
+      unit: ratio
+    - enabled: 1
+      scenarioFactorEffectId: effect-extreme-heat-area-a
+      targetType: 1
+      targetId: area-a
+      metric: parking_preference_weight
+      operation: 1
+      value: 1.25
+      unit: ratio
+    - enabled: 1
+      scenarioFactorEffectId: effect-extreme-heat-area-b
+      targetType: 1
+      targetId: area-b
+      metric: parking_preference_weight
+      operation: 1
+      value: 1.25
+      unit: ratio
+    - enabled: 1
+      scenarioFactorEffectId: effect-extreme-heat-area-d
+      targetType: 1
+      targetId: area-d
+      metric: parking_preference_weight
+      operation: 1
+      value: 1.25
+      unit: ratio

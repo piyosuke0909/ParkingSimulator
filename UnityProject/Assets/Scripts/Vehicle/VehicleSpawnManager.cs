@@ -1,6 +1,7 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class EntranceExitPair
@@ -17,6 +18,12 @@ public class VehicleSpawnManager : MonoBehaviour
     public ParkingLotManager parkingLotManager;
     public WaypointRouteManager routeManager;
 
+    [Header("P1 Scenario (Optional)")]
+    public bool useScenarioSystem = true;
+    public ScenarioFactorRuntime scenarioRuntime;
+    public ScenarioRandomService scenarioRandomService;
+    public ScenarioRunLogger scenarioRunLogger;
+
     [Header("Vehicle")]
     public GameObject npcCarPrefab;
     public Transform vehicleParent;
@@ -24,50 +31,86 @@ public class VehicleSpawnManager : MonoBehaviour
     [Header("Entrance / Exit Pairs")]
     public List<EntranceExitPair> entranceExitPairs = new List<EntranceExitPair>();
 
-    [Tooltip("true: ƒ‰ƒ“ƒ_ƒ€ / false: ‡”Ô‚Ég—p")]
+    [Tooltip("true: é‡ã¿ä»˜ããƒ©ãƒ³ãƒ€ãƒ  / false: é †ç•ªã«ä½¿ç”¨")]
     public bool useRandomEntranceExitPair = true;
 
-    [Header("Multiple Spawn Settings")]
+    [Header("Concurrent Spawn Settings")]
     public bool spawnOnStart = true;
-    public int maxSpawnCount = 10;
-    public float spawnInterval = 3f;
+
+    [FormerlySerializedAs("maxSpawnCount")]
+    [Min(1)]
+    [Tooltip("ç´¯è¨ˆç”Ÿæˆæ•°ã§ã¯ãªãã€Sceneå†…ã«åŒæ™‚ã«å­˜åœ¨ã§ãã‚‹è»Šä¸¡æ•°ã§ã™ã€‚")]
+    public int maxConcurrentVehicles = 60;
+
+    [Tooltip("ArrivalRateSegmentãŒæœ‰åŠ¹ã§ãªã„æ™‚é–“å¸¯ã®æ—¢å®šç”Ÿæˆé–“éš”ã§ã™ã€‚æ—¢å®šæµå…¥ç‡ã¯ 60 / spawnInterval å°/åˆ†ã§ã™ã€‚")]
+    [Min(0.01f)]
+    public float spawnInterval = 5f;
+
+    [Tooltip("Playé–‹å§‹æ™‚ã«æ—¢å­˜ã®NPCè»Šä¸¡ã‚‚åŒæ™‚å­˜åœ¨å°æ•°ã¸ç™»éŒ²ã—ã¾ã™ã€‚")]
+    public bool includeExistingVehiclesOnStart = true;
 
     [Header("Spawn Area Check")]
     public bool useSpawnAreaCheck = true;
-
-    [Tooltip("SpawnPoint‚ÌCube”ÍˆÍ“à‚É‚ ‚éCar Layer‚ğŒŸ’m‚µ‚Ü‚·B")]
     public LayerMask carLayerMask;
-
-    [Tooltip("SpawnPoint Cube‚ÌScale‚ğ‚»‚Ì‚Ü‚Ü”»’è”ÍˆÍ‚Ég‚¢‚Ü‚·B")]
     public bool useSpawnPointScaleAsCheckArea = true;
-
-    [Tooltip("useSpawnPointScaleAsCheckArea ‚ª false ‚Ìê‡‚Ég‚¤”»’èƒTƒCƒY‚Å‚·B")]
     public Vector3 spawnCheckBoxSize = new Vector3(12f, 4f, 18f);
-
-    [Tooltip("SpawnPoint‚ª–„‚Ü‚Á‚Ä‚¢‚½ê‡AŸ‚ÉŠm”F‚·‚é‚Ü‚Å‚Ì‘Ò‹@ŠÔ‚Å‚·B")]
     public float spawnRetryInterval = 1f;
-
     public bool drawSpawnAreaGizmo = true;
 
     [Header("Slot Selection")]
     public bool useRandomSlot = true;
 
+    [Tooltip("Scenarioä½¿ç”¨æ™‚ã¯ã€ã‚¨ãƒªã‚¢ã‚’é‡ã¿ä»˜ãæŠ½é¸ã—ã¦ã‹ã‚‰ã‚¨ãƒªã‚¢å†…ã®ç©ºãæ ã‚’å›ºå®šseedã§é¸ã³ã¾ã™ã€‚")]
+    public bool useScenarioAreaPreference = true;
+
     [Header("Spawn Control")]
-    public bool stopWhenNoAvailableSlot = true;
+    public bool stopWhenNoAvailableSlot = false;
     public bool stopWhenRouteNotFound = false;
 
     [Header("Debug")]
     public bool debugLog = true;
 
-    private int spawnedCount;
+    [Header("Runtime (Read Only)")]
+    [SerializeField]
+    private int activeVehicleCount;
+
+    [SerializeField]
+    private int totalSpawnedCount;
+
+    private readonly HashSet<GameObject> activeVehicles = new HashSet<GameObject>();
     private bool isSpawning;
     private int nextPairIndex;
+    private int spawnSequenceNumber;
+
+    public int ActiveVehicleCount => activeVehicleCount;
+
+    public int TotalSpawnedCount => totalSpawnedCount;
+
+    // æ—¢å­˜ã‚³ãƒ¼ãƒ‰ã‹ã‚‰ã®å‚ç…§äº’æ›ç”¨ã€‚æ„å‘³ã¯ç´¯è¨ˆä¸Šé™ã§ã¯ãªãåŒæ™‚å­˜åœ¨å°æ•°ä¸Šé™ã§ã™ã€‚
+    public int maxSpawnCount
+    {
+        get => maxConcurrentVehicles;
+        set => maxConcurrentVehicles = value;
+    }
+
+    private void Awake()
+    {
+        ResolveScenarioReferences();
+    }
 
     private void Start()
     {
+        if (includeExistingVehiclesOnStart)
+        {
+            RegisterExistingVehicles();
+        }
+
         if (debugLog)
         {
-            Debug.Log($"{name}: VehicleSpawnManager Start");
+            Debug.Log(
+                $"{name}: VehicleSpawnManager Start. " +
+                $"Active={ActiveVehicleCount}/{maxConcurrentVehicles}"
+            );
         }
 
         if (spawnOnStart)
@@ -95,38 +138,149 @@ public class VehicleSpawnManager : MonoBehaviour
 
         if (debugLog)
         {
-            Debug.Log($"{name}: •¡”‘äƒXƒ|[ƒ“‚ğ’â~‚µ‚Ü‚µ‚½B");
+            Debug.Log($"{name}: è»Šä¸¡ç”Ÿæˆã‚’åœæ­¢ã—ã¾ã—ãŸã€‚");
         }
+    }
+
+    [ContextMenu("Rebuild Active Vehicle Set")]
+    public void RegisterExistingVehicles()
+    {
+        activeVehicles.Clear();
+
+        NPC_CarController[] controllers;
+
+        if (vehicleParent != null)
+        {
+            controllers = vehicleParent.GetComponentsInChildren<NPC_CarController>(true);
+        }
+        else
+        {
+#if UNITY_2023_1_OR_NEWER
+            controllers = FindObjectsByType<NPC_CarController>(FindObjectsSortMode.None);
+#else
+            controllers = FindObjectsOfType<NPC_CarController>();
+#endif
+        }
+
+        foreach (NPC_CarController controller in controllers)
+        {
+            if (controller == null)
+            {
+                continue;
+            }
+
+            RegisterActiveVehicle(controller.gameObject);
+        }
+
+        RefreshActiveVehicleCount();
     }
 
     private IEnumerator SpawnRoutine()
     {
         isSpawning = true;
-        spawnedCount = 0;
+        bool firstNonScenarioAttempt = true;
 
-        while (spawnedCount < maxSpawnCount)
+        while (true)
         {
-            bool success = SpawnVehicleToAvailableSlot();
+            ResolveScenarioReferences();
+            CleanupDestroyedVehicles();
 
-            if (success)
+            if (useScenarioSystem && scenarioRuntime != null && scenarioRuntime.IsScenarioCompleted)
             {
-                spawnedCount++;
-
-                if (debugLog)
-                {
-                    Debug.Log($"{name}: Spawned {spawnedCount}/{maxSpawnCount}");
-                }
-
-                yield return new WaitForSeconds(spawnInterval);
+                break;
             }
-            else
+
+            if (ActiveVehicleCount >= Mathf.Max(1, maxConcurrentVehicles))
             {
-                if (debugLog)
+                yield return WaitForSimulationSeconds(spawnRetryInterval);
+                continue;
+            }
+
+            if (useScenarioSystem && scenarioRuntime != null)
+            {
+                string scheduledSourceId = scenarioRuntime.GetArrivalRateSourceId();
+                ArrivalDistribution scheduledDistribution = scenarioRuntime.GetArrivalDistribution();
+                float baseVehiclesPerMinute = scenarioRuntime.GetBaseVehiclesPerMinute(spawnInterval);
+                float nextDelay = scenarioRuntime.GetNextSpawnDelay(spawnInterval);
+
+                if (float.IsInfinity(nextDelay))
                 {
-                    Debug.Log($"{name}: ƒXƒ|[ƒ“‚Å‚«‚È‚¢‚½‚ß‘Ò‹@‚µ‚Ü‚·B");
+                    yield return WaitForSimulationSeconds(spawnRetryInterval);
+                    continue;
                 }
 
-                yield return new WaitForSeconds(spawnRetryInterval);
+                scenarioRunLogger?.LogArrivalScheduled(
+                    scenarioRuntime.SimulationTimeSeconds,
+                    scheduledSourceId,
+                    scheduledDistribution,
+                    baseVehiclesPerMinute,
+                    scenarioRuntime.GetArrivalRateMultiplier(),
+                    scenarioRuntime.GetEffectiveVehiclesPerMinute(spawnInterval),
+                    nextDelay
+                );
+
+                yield return WaitForSimulationSeconds(nextDelay);
+
+                if (scenarioRuntime.IsScenarioCompleted)
+                {
+                    break;
+                }
+
+                // å¾…æ©Ÿä¸­ã«æ—¢å®šæµå…¥ã¨æ™‚é–“å¸¯SegmentãŒåˆ‡ã‚Šæ›¿ã‚ã£ãŸå ´åˆã¯ã€
+                // æ–°ã—ã„æµå…¥æ¡ä»¶ã§æ¬¡å›æ™‚åˆ»ã‚’å¼•ãç›´ã—ã¾ã™ã€‚
+                if (scenarioRuntime.GetArrivalRateSourceId() != scheduledSourceId)
+                {
+                    continue;
+                }
+            }
+            else if (!firstNonScenarioAttempt)
+            {
+                yield return WaitForSimulationSeconds(spawnInterval);
+            }
+
+            firstNonScenarioAttempt = false;
+
+            while (ActiveVehicleCount >= Mathf.Max(1, maxConcurrentVehicles))
+            {
+                if (useScenarioSystem && scenarioRuntime != null && scenarioRuntime.IsScenarioCompleted)
+                {
+                    break;
+                }
+
+                yield return WaitForSimulationSeconds(spawnRetryInterval);
+            }
+
+            if (useScenarioSystem && scenarioRuntime != null && scenarioRuntime.IsScenarioCompleted)
+            {
+                break;
+            }
+
+            bool success = false;
+
+            while (!success)
+            {
+                if (useScenarioSystem && scenarioRuntime != null && scenarioRuntime.IsScenarioCompleted)
+                {
+                    break;
+                }
+
+                if (ActiveVehicleCount >= Mathf.Max(1, maxConcurrentVehicles))
+                {
+                    yield return WaitForSimulationSeconds(spawnRetryInterval);
+                    continue;
+                }
+
+                success = SpawnVehicleToAvailableSlot();
+
+                if (!success)
+                {
+                    if (debugLog)
+                    {
+                        Debug.Log($"{name}: åˆ°ç€è»Šä¸¡ã‚’ç”Ÿæˆã§ããªã„ãŸã‚ã€åŒã˜åˆ°ç€è¦æ±‚ã‚’å†è©¦è¡Œã—ã¾ã™ã€‚");
+                    }
+
+                    yield return WaitForSimulationSeconds(spawnRetryInterval);
+                }
             }
         }
 
@@ -134,7 +288,10 @@ public class VehicleSpawnManager : MonoBehaviour
 
         if (debugLog)
         {
-            Debug.Log($"{name}: •¡”‘äƒXƒ|[ƒ“Š®—¹B¶¬”={spawnedCount}");
+            Debug.Log(
+                $"{name}: ã‚·ãƒŠãƒªã‚ªçµ‚äº†ã¾ãŸã¯æ‰‹å‹•åœæ­¢ã«ã‚ˆã‚Šç”Ÿæˆå‡¦ç†ã‚’çµ‚äº†ã—ã¾ã—ãŸã€‚" +
+                $"ç´¯è¨ˆç”Ÿæˆæ•°={totalSpawnedCount}, ç¾åœ¨å­˜åœ¨æ•°={ActiveVehicleCount}"
+            );
         }
     }
 
@@ -146,9 +303,16 @@ public class VehicleSpawnManager : MonoBehaviour
 
     public bool SpawnVehicleToAvailableSlot()
     {
-        if (debugLog)
+        CleanupDestroyedVehicles();
+
+        if (ActiveVehicleCount >= Mathf.Max(1, maxConcurrentVehicles))
         {
-            Debug.Log($"{name}: SpawnVehicleToAvailableSlot Às");
+            if (debugLog)
+            {
+                Debug.Log($"{name}: åŒæ™‚å­˜åœ¨å°æ•°ä¸Šé™ã§ã™ã€‚{ActiveVehicleCount}/{maxConcurrentVehicles}");
+            }
+
+            return false;
         }
 
         if (!ValidateReferences())
@@ -162,39 +326,37 @@ public class VehicleSpawnManager : MonoBehaviour
         {
             if (debugLog)
             {
-                Debug.Log($"{name}: g—p‰Â”\‚ÈSpawnPoint‚ª‚ ‚è‚Ü‚¹‚ñB‘S“üŒû‚ª¬G’†‚Ì‰Â”\«‚ª‚ ‚è‚Ü‚·B");
+                Debug.Log($"{name}: ä½¿ç”¨å¯èƒ½ãªSpawnPointãŒã‚ã‚Šã¾ã›ã‚“ã€‚å…¨å…¥å£ãŒæ··é›‘ä¸­ã®å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚");
             }
 
             return false;
         }
 
-        ParkingSlot targetSlot = useRandomSlot
-            ? parkingLotManager.ReserveRandomAvailableSlot()
-            : parkingLotManager.ReserveFirstAvailableSlot();
+        string selectedSceneAreaId;
+        ParkingSlot targetSlot = ReserveTargetSlot(out selectedSceneAreaId);
 
         if (targetSlot == null)
         {
-            Debug.LogWarning($"{name}: —˜—p‰Â”\‚ÈParkingSlot‚ª‚ ‚è‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: åˆ©ç”¨å¯èƒ½ãªParkingSlotãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
             Debug.LogWarning(
                 $"{name}: Empty={parkingLotManager.GetSlotCountByState(ParkingSlotState.Empty)}, " +
                 $"Reserved={parkingLotManager.GetSlotCountByState(ParkingSlotState.Reserved)}, " +
                 $"Occupied={parkingLotManager.GetSlotCountByState(ParkingSlotState.Occupied)}"
             );
 
+            if (stopWhenNoAvailableSlot)
+            {
+                StopMultipleSpawn();
+            }
+
             return false;
         }
 
         if (targetSlot.accessWaypoint == null)
         {
-            Debug.LogWarning($"{name}: Target Slot ‚É AccessWaypoint ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBSlot={targetSlot.slotId}");
+            Debug.LogWarning($"{name}: Target Slot ã« AccessWaypoint ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚Slot={targetSlot.slotId}");
             parkingLotManager.ReleaseReservation(targetSlot);
             return false;
-        }
-
-        if (debugLog)
-        {
-            Debug.Log($"{name}: EntranceExitPair = {selectedPair.pairName}");
-            Debug.Log($"{name}: Target Slot = {targetSlot.slotId}");
         }
 
         List<Waypoint> routeToSlot = routeManager.FindRoute(
@@ -205,7 +367,7 @@ public class VehicleSpawnManager : MonoBehaviour
         if (routeToSlot == null || routeToSlot.Count == 0)
         {
             Debug.LogWarning(
-                $"{name}: “üŒÉƒ‹[ƒg‚ªì‚ê‚Ü‚¹‚ñB{selectedPair.entranceWaypoint.name} ¨ {targetSlot.accessWaypoint.name}"
+                $"{name}: å…¥åº«ãƒ«ãƒ¼ãƒˆãŒä½œã‚Œã¾ã›ã‚“ã€‚{selectedPair.entranceWaypoint.name} â†’ {targetSlot.accessWaypoint.name}"
             );
 
             parkingLotManager.ReleaseReservation(targetSlot);
@@ -226,7 +388,7 @@ public class VehicleSpawnManager : MonoBehaviour
         if (routeToExit == null || routeToExit.Count == 0)
         {
             Debug.LogWarning(
-                $"{name}: oŒÉƒ‹[ƒg‚ªì‚ê‚Ü‚¹‚ñB{targetSlot.accessWaypoint.name} ¨ {selectedPair.exitWaypoint.name}"
+                $"{name}: å‡ºåº«ãƒ«ãƒ¼ãƒˆãŒä½œã‚Œã¾ã›ã‚“ã€‚{targetSlot.accessWaypoint.name} â†’ {selectedPair.exitWaypoint.name}"
             );
 
             parkingLotManager.ReleaseReservation(targetSlot);
@@ -250,7 +412,7 @@ public class VehicleSpawnManager : MonoBehaviour
 
         if (carController == null)
         {
-            Debug.LogWarning($"{name}: ¶¬‚µ‚½Ô‚É NPC_CarController ‚ª•t‚¢‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: ç”Ÿæˆã—ãŸè»Šã« NPC_CarController ãŒä»˜ã„ã¦ã„ã¾ã›ã‚“ã€‚");
             Destroy(carObject);
             parkingLotManager.ReleaseReservation(targetSlot);
             return false;
@@ -258,32 +420,173 @@ public class VehicleSpawnManager : MonoBehaviour
 
         if (!targetSlot.TryAssignReservedOwner(carController))
         {
-            Debug.LogWarning($"{name}: —\–ñSlot‚ÌŠ—LÒİ’è‚É¸”s‚µ‚Ü‚µ‚½BSlot={targetSlot.slotId}");
+            Debug.LogWarning($"{name}: äºˆç´„Slotã®æ‰€æœ‰è€…è¨­å®šã«å¤±æ•—ã—ã¾ã—ãŸã€‚Slot={targetSlot.slotId}");
             Destroy(carObject);
             parkingLotManager.ReleaseReservation(targetSlot);
             return false;
         }
 
+        spawnSequenceNumber++;
+        totalSpawnedCount++;
+
         Car carInfo = carObject.GetComponent<Car>();
 
         if (carInfo != null)
         {
-            carInfo.carId = $"NPC_Car_{spawnedCount + 1:000}";
+            carInfo.carId = $"NPC_Car_{spawnSequenceNumber:000}";
         }
 
         carController.targetParkingSlot = targetSlot;
         carController.exitRoute = routeToExit;
         carController.SetRouteToParkingSlot(routeToSlot, targetSlot);
 
+        RegisterActiveVehicle(carObject);
+        LogScenarioSpawn(selectedPair, targetSlot);
+
         if (debugLog)
         {
             Debug.Log(
-                $"{name}: Ô‚ğ¶¬‚µ‚Ü‚µ‚½BPair={selectedPair.pairName}, " +
-                $"–Ú“ISlot={targetSlot.slotId}, “üŒÉRoute={routeToSlot.Count}, oŒÉRoute={routeToExit.Count}"
+                $"{name}: è»Šã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚Pair={selectedPair.pairName}, " +
+                $"Area={selectedSceneAreaId}, Slot={targetSlot.slotId}, " +
+                $"Active={ActiveVehicleCount}/{maxConcurrentVehicles}, Total={totalSpawnedCount}"
             );
         }
 
         return true;
+    }
+
+    public void NotifyVehicleDestroyed(GameObject vehicleObject)
+    {
+        string vehicleName = vehicleObject != null ? vehicleObject.name : "destroyed-vehicle";
+
+        if (vehicleObject != null)
+        {
+            activeVehicles.Remove(vehicleObject);
+        }
+
+        CleanupDestroyedVehicles();
+
+        float time = scenarioRuntime != null
+            ? scenarioRuntime.SimulationTimeSeconds
+            : Time.time;
+
+        scenarioRunLogger?.LogVehicleRemoved(
+            time,
+            vehicleName,
+            ActiveVehicleCount,
+            maxConcurrentVehicles
+        );
+    }
+
+    private void RegisterActiveVehicle(GameObject carObject)
+    {
+        if (carObject == null)
+        {
+            return;
+        }
+
+        activeVehicles.Add(carObject);
+
+        SpawnedVehicleTracker tracker = carObject.GetComponent<SpawnedVehicleTracker>();
+
+        if (tracker == null)
+        {
+            tracker = carObject.AddComponent<SpawnedVehicleTracker>();
+        }
+
+        tracker.Initialize(this);
+        RefreshActiveVehicleCount();
+    }
+
+    private void CleanupDestroyedVehicles()
+    {
+        activeVehicles.RemoveWhere(item => item == null);
+        RefreshActiveVehicleCount();
+    }
+
+    private void RefreshActiveVehicleCount()
+    {
+        activeVehicleCount = activeVehicles.Count;
+    }
+
+    private ParkingSlot ReserveTargetSlot(out string selectedSceneAreaId)
+    {
+        selectedSceneAreaId = string.Empty;
+
+        if (useScenarioSystem &&
+            useScenarioAreaPreference &&
+            useRandomSlot &&
+            scenarioRandomService != null)
+        {
+            List<string> availableAreaIds = parkingLotManager.GetAvailableAreaIdsWithAccessWaypoint();
+
+            if (availableAreaIds.Count == 0)
+            {
+                return null;
+            }
+
+            List<float> weights = new List<float>(availableAreaIds.Count);
+            List<int> availableSlotCounts = new List<int>(availableAreaIds.Count);
+            List<string> canonicalAreaIds = new List<string>(availableAreaIds.Count);
+
+            foreach (string sceneAreaId in availableAreaIds)
+            {
+                float weight = scenarioRuntime != null
+                    ? scenarioRuntime.GetAreaPreferenceWeight(sceneAreaId)
+                    : 1f;
+
+                weights.Add(weight);
+                availableSlotCounts.Add(parkingLotManager.GetAvailableSlotCountInArea(sceneAreaId));
+                canonicalAreaIds.Add(
+                    scenarioRuntime != null
+                        ? scenarioRuntime.GetCanonicalAreaId(sceneAreaId)
+                        : sceneAreaId
+                );
+            }
+
+            int areaIndex = scenarioRandomService.ChooseWeightedIndex(weights);
+
+            if (areaIndex < 0 || areaIndex >= availableAreaIds.Count)
+            {
+                return null;
+            }
+
+            selectedSceneAreaId = availableAreaIds[areaIndex];
+
+            scenarioRunLogger?.LogParkingAreaSelected(
+                scenarioRuntime != null ? scenarioRuntime.SimulationTimeSeconds : Time.time,
+                canonicalAreaIds,
+                availableSlotCounts,
+                weights,
+                canonicalAreaIds[areaIndex],
+                selectedSceneAreaId
+            );
+
+            return parkingLotManager.ReserveRandomAvailableSlotInArea(
+                selectedSceneAreaId,
+                scenarioRandomService
+            );
+        }
+
+        ParkingSlot slot;
+
+        if (useRandomSlot)
+        {
+            slot = useScenarioSystem && scenarioRandomService != null
+                ? parkingLotManager.ReserveRandomAvailableSlot(scenarioRandomService)
+                : parkingLotManager.ReserveRandomAvailableSlot();
+        }
+        else
+        {
+            slot = parkingLotManager.ReserveFirstAvailableSlot();
+        }
+
+        if (slot != null)
+        {
+            selectedSceneAreaId = slot.areaId;
+        }
+
+        return slot;
     }
 
     private EntranceExitPair GetAvailableEntranceExitPair()
@@ -312,6 +615,29 @@ public class VehicleSpawnManager : MonoBehaviour
 
         if (useRandomEntranceExitPair)
         {
+            if (useScenarioSystem && scenarioRandomService != null)
+            {
+                List<float> weights = new List<float>(availablePairs.Count);
+
+                foreach (EntranceExitPair pair in availablePairs)
+                {
+                    float weight = scenarioRuntime != null
+                        ? scenarioRuntime.GetAccessPointPreferenceWeight(pair.pairName)
+                        : 1f;
+
+                    weights.Add(weight);
+                }
+
+                int weightedIndex = scenarioRandomService.ChooseWeightedIndex(weights);
+
+                if (weightedIndex >= 0 && weightedIndex < availablePairs.Count)
+                {
+                    EntranceExitPair selectedPair = availablePairs[weightedIndex];
+                    LogEntranceSelection(availablePairs, weights, selectedPair);
+                    return selectedPair;
+                }
+            }
+
             int index = Random.Range(0, availablePairs.Count);
             return availablePairs[index];
         }
@@ -330,6 +656,39 @@ public class VehicleSpawnManager : MonoBehaviour
         return null;
     }
 
+    private void LogEntranceSelection(
+        List<EntranceExitPair> availablePairs,
+        List<float> weights,
+        EntranceExitPair selectedPair)
+    {
+        ResolveScenarioReferences();
+
+        if (!useScenarioSystem ||
+            scenarioRuntime == null ||
+            scenarioRunLogger == null ||
+            availablePairs == null ||
+            weights == null ||
+            selectedPair == null)
+        {
+            return;
+        }
+
+        List<string> pairNames = new List<string>(availablePairs.Count);
+
+        foreach (EntranceExitPair pair in availablePairs)
+        {
+            pairNames.Add(pair != null ? pair.pairName : "null");
+        }
+
+        scenarioRunLogger.LogEntranceSelected(
+            scenarioRuntime.SimulationTimeSeconds,
+            pairNames,
+            weights,
+            selectedPair.pairName,
+            scenarioRuntime.GetCanonicalAccessPointId(selectedPair.pairName)
+        );
+    }
+
     private List<EntranceExitPair> GetValidEntranceExitPairs()
     {
         List<EntranceExitPair> validPairs = new List<EntranceExitPair>();
@@ -341,22 +700,10 @@ public class VehicleSpawnManager : MonoBehaviour
 
         foreach (EntranceExitPair pair in entranceExitPairs)
         {
-            if (pair == null)
-            {
-                continue;
-            }
-
-            if (pair.spawnPoint == null)
-            {
-                continue;
-            }
-
-            if (pair.entranceWaypoint == null)
-            {
-                continue;
-            }
-
-            if (pair.exitWaypoint == null)
+            if (pair == null ||
+                pair.spawnPoint == null ||
+                pair.entranceWaypoint == null ||
+                pair.exitWaypoint == null)
             {
                 continue;
             }
@@ -383,59 +730,171 @@ public class VehicleSpawnManager : MonoBehaviour
             ? spawnPoint.lossyScale
             : spawnCheckBoxSize;
 
-        Vector3 halfExtents = boxSize * 0.5f;
-
         Collider[] hits = Physics.OverlapBox(
             spawnPoint.position,
-            halfExtents,
+            boxSize * 0.5f,
             spawnPoint.rotation,
             carLayerMask
         );
 
         foreach (Collider hit in hits)
         {
-            Car hitCar = hit.GetComponentInParent<Car>();
-
-            if (hitCar == null)
+            if (hit.GetComponentInParent<Car>() != null)
             {
-                continue;
+                return false;
             }
-
-            return false;
         }
 
         return true;
+    }
+
+    private void ResolveScenarioReferences()
+    {
+        if (!useScenarioSystem)
+        {
+            return;
+        }
+
+        if (scenarioRuntime == null)
+        {
+            scenarioRuntime = ScenarioFactorRuntime.Instance;
+        }
+
+        if (scenarioRandomService == null &&
+            scenarioRuntime != null &&
+            scenarioRuntime.RandomService != null)
+        {
+            scenarioRandomService = scenarioRuntime.RandomService;
+        }
+
+        if (scenarioRandomService == null)
+        {
+            scenarioRandomService = ScenarioRandomService.Instance;
+        }
+
+        if (scenarioRunLogger == null && scenarioRuntime != null)
+        {
+            scenarioRunLogger = scenarioRuntime.RunLogger;
+        }
+    }
+
+    private IEnumerator WaitForSimulationSeconds(float seconds)
+    {
+        seconds = Mathf.Max(0f, seconds);
+        ResolveScenarioReferences();
+
+        SimulationClock clock = useScenarioSystem && scenarioRuntime != null
+            ? scenarioRuntime.Clock
+            : null;
+
+        if (clock == null)
+        {
+            yield return new WaitForSeconds(seconds);
+            yield break;
+        }
+
+        if (seconds <= 0f)
+        {
+            yield break;
+        }
+
+        float elapsedSimulationSeconds = 0f;
+        float previousSimulationTime = clock.SimulationTimeSeconds;
+
+        while (elapsedSimulationSeconds < seconds)
+        {
+            if (!clock.IsRunning && scenarioRuntime != null && scenarioRuntime.IsScenarioCompleted)
+            {
+                yield break;
+            }
+
+            yield return null;
+
+            if (clock == null)
+            {
+                yield break;
+            }
+
+            float currentSimulationTime = clock.SimulationTimeSeconds;
+            float frameIncrement = currentSimulationTime - previousSimulationTime;
+
+            // SetSimulationTimeã€ResetClockã€ã‚·ãƒŠãƒªã‚ªãƒ«ãƒ¼ãƒ—ãªã©ã§æ™‚åˆ»ãŒ
+            // å·»ãæˆ»ã£ãŸãƒ•ãƒ¬ãƒ¼ãƒ ã¯å¾…æ©Ÿæ™‚é–“ã‚’æ¸›ã‚‰ã•ãšã€è² ã®å¢—åˆ†ã ã‘ç„¡è¦–ã—ã¾ã™ã€‚
+            // å·»ãæˆ»ã—å¾Œã®æ¬¡ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰ã¯ã€æ–°ã—ã„æ™‚åˆ»ã‚’åŸºæº–ã«å†ã³åŠ ç®—ã—ã¾ã™ã€‚
+            if (frameIncrement > 0f &&
+                !float.IsNaN(frameIncrement) &&
+                !float.IsInfinity(frameIncrement))
+            {
+                elapsedSimulationSeconds += frameIncrement;
+            }
+
+            previousSimulationTime = currentSimulationTime;
+        }
+    }
+
+    private void LogScenarioSpawn(EntranceExitPair selectedPair, ParkingSlot targetSlot)
+    {
+        ResolveScenarioReferences();
+
+        if (!useScenarioSystem ||
+            scenarioRuntime == null ||
+            scenarioRunLogger == null ||
+            selectedPair == null ||
+            targetSlot == null)
+        {
+            return;
+        }
+
+        int seed = scenarioRandomService != null
+            ? scenarioRandomService.CurrentSeed
+            : 0;
+
+        scenarioRunLogger.LogVehicleSpawned(
+            spawnSequenceNumber,
+            scenarioRuntime.SimulationTimeSeconds,
+            seed,
+            scenarioRuntime.GetActiveFactorIdsCsv(),
+            scenarioRuntime.GetArrivalRateMultiplier(),
+            scenarioRuntime.GetVehicleSpeedMultiplier(),
+            scenarioRuntime.GetEffectiveVehiclesPerMinute(spawnInterval),
+            scenarioRuntime.GetCanonicalAccessPointId(selectedPair.pairName),
+            selectedPair.pairName,
+            targetSlot.slotId,
+            scenarioRuntime.GetCanonicalAreaId(targetSlot.areaId),
+            ActiveVehicleCount,
+            maxConcurrentVehicles
+        );
     }
 
     private bool ValidateReferences()
     {
         if (parkingLotManager == null)
         {
-            Debug.LogWarning($"{name}: ParkingLotManager ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: ParkingLotManager ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return false;
         }
 
         if (routeManager == null)
         {
-            Debug.LogWarning($"{name}: WaypointRouteManager ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: WaypointRouteManager ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return false;
         }
 
         if (npcCarPrefab == null)
         {
-            Debug.LogWarning($"{name}: NPC Car Prefab ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: NPC Car Prefab ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return false;
         }
 
         if (entranceExitPairs == null || entranceExitPairs.Count == 0)
         {
-            Debug.LogWarning($"{name}: Entrance Exit Pairs ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: Entrance Exit Pairs ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return false;
         }
 
         if (GetValidEntranceExitPairs().Count == 0)
         {
-            Debug.LogWarning($"{name}: —LŒø‚È Entrance Exit Pair ‚ª‚ ‚è‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: æœ‰åŠ¹ãª Entrance Exit Pair ãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
             return false;
         }
 
@@ -444,12 +903,7 @@ public class VehicleSpawnManager : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (!drawSpawnAreaGizmo)
-        {
-            return;
-        }
-
-        if (entranceExitPairs == null)
+        if (!drawSpawnAreaGizmo || entranceExitPairs == null)
         {
             return;
         }
@@ -468,15 +922,12 @@ public class VehicleSpawnManager : MonoBehaviour
                 : spawnCheckBoxSize;
 
             Matrix4x4 oldMatrix = Gizmos.matrix;
-
             Gizmos.matrix = Matrix4x4.TRS(
                 pair.spawnPoint.position,
                 pair.spawnPoint.rotation,
                 boxSize
             );
-
             Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
-
             Gizmos.matrix = oldMatrix;
         }
     }
