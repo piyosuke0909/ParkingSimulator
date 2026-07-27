@@ -1,33 +1,33 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 
 public enum WaypointTrafficRole
 {
-    [Tooltip("©“®‡—¬ŒŸo‚Ì‘ÎÛŠO‚Å‚·B")]
+    [Tooltip("è‡ªå‹•åˆæµæ¤œå‡ºã®å¯¾è±¡å¤–ã§ã™ã€‚")]
     Unspecified,
 
-    [Tooltip("‰¡•ûŒü‚Ìˆê•û’Ês–{ü‚Å‚·B")]
+    [Tooltip("æ¨ªæ–¹å‘ã®ä¸€æ–¹é€šè¡Œæœ¬ç·šã§ã™ã€‚")]
     Mainline,
 
-    [Tooltip("ã‰º‚Ì–{ü‚ğŒ‹‚Ôc•ûŒü‚Ì˜A—ƒŒ[ƒ“‚Å‚·B")]
+    [Tooltip("ä¸Šä¸‹ã®æœ¬ç·šã‚’çµã¶ç¸¦æ–¹å‘ã®é€£çµ¡ãƒ¬ãƒ¼ãƒ³ã§ã™ã€‚")]
     ConnectorLane,
 
-    [Tooltip("”’ŠÛ‚Ì’“ÔˆÊ’u‚Å‚·B’Êí‚Ì‡—¬ŒŸo‘ÎÛŠO‚Å‚·B")]
+    [Tooltip("ç™½ä¸¸ã®é§è»Šä½ç½®ã§ã™ã€‚é€šå¸¸ã®åˆæµæ¤œå‡ºå¯¾è±¡å¤–ã§ã™ã€‚")]
     ParkingPoint
 }
 
 /// <summary>
-/// –{üE’“ÔƒŒ[ƒ“‹¤’Ê‚Ì1‘ä•ªŒğ’ÊƒZƒ‹‚Æ‚µ‚Äg—p‚·‚éWaypoint‚Å‚·B
+/// æœ¬ç·šãƒ»é§è»Šãƒ¬ãƒ¼ãƒ³å…±é€šã®1å°åˆ†äº¤é€šã‚»ãƒ«ã¨ã—ã¦ä½¿ç”¨ã™ã‚‹Waypointã§ã™ã€‚
 ///
 /// Reserved By:
-/// Ÿ‚É“’…‚·‚éÔ
+/// æ¬¡ã«åˆ°ç€ã™ã‚‹è»Š
 ///
 /// Occupied By:
-/// Œ»İ‚»‚ÌƒZƒ‹‚É‚¢‚éÔ
+/// ç¾åœ¨ãã®ã‚»ãƒ«ã«ã„ã‚‹è»Š
 ///
-/// “¯‚¶Waypoint‚Ö•¡”Œo˜H‚ª‡—¬‚·‚éê‡‚àA
-/// Target Waypoint‚Ì—\–ñ‚É‚æ‚Á‚Ä“¯i“ü‚ğ–h‚¬‚Ü‚·B
+/// åŒã˜Waypointã¸è¤‡æ•°çµŒè·¯ãŒåˆæµã™ã‚‹å ´åˆã‚‚ã€
+/// Target Waypointã®äºˆç´„ã«ã‚ˆã£ã¦åŒæ™‚é€²å…¥ã‚’é˜²ãã¾ã™ã€‚
 /// </summary>
 public class Waypoint : MonoBehaviour
 {
@@ -45,11 +45,11 @@ public class Waypoint : MonoBehaviour
     public bool isExit;
 
     [Header("Traffic Auto Setup")]
-    [Tooltip("‰¡•ûŒü‚Ì•ŠÛ‚ÍMainlineAc•ûŒü‚Ì•ŠÛ‚ÍConnectorLaneA”’ŠÛ‚ÍParkingPoint‚ğİ’è‚µ‚Ü‚·B")]
+    [Tooltip("æ¨ªæ–¹å‘ã®é»’ä¸¸ã¯Mainlineã€ç¸¦æ–¹å‘ã®é»’ä¸¸ã¯ConnectorLaneã€ç™½ä¸¸ã¯ParkingPointã‚’è¨­å®šã—ã¾ã™ã€‚")]
     public WaypointTrafficRole trafficRole =
         WaypointTrafficRole.Unspecified;
 
-    [Tooltip("‰¡•ûŒü6ƒŒ[ƒ“‚ÆŠec˜A—ƒŒ[ƒ“‚ğ‹æ•Ê‚·‚éID‚Å‚·B“¯‚¶ˆê•ûŒüƒŒ[ƒ““à‚Å“ˆê‚µ‚Ä‚­‚¾‚³‚¢B")]
+    [Tooltip("æ¨ªæ–¹å‘6ãƒ¬ãƒ¼ãƒ³ã¨å„ç¸¦é€£çµ¡ãƒ¬ãƒ¼ãƒ³ã‚’åŒºåˆ¥ã™ã‚‹IDã§ã™ã€‚åŒã˜ä¸€æ–¹å‘ãƒ¬ãƒ¼ãƒ³å†…ã§çµ±ä¸€ã—ã¦ãã ã•ã„ã€‚")]
     public int laneGroupId;
 
     [Header("Runtime State")]

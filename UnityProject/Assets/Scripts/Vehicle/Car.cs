@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Car : MonoBehaviour
 {
@@ -12,7 +12,7 @@ public class Car : MonoBehaviour
     [Header("Movement Info")]
     public Rigidbody carRigidbody;
 
-    [Tooltip("‚±‚Ì‘¬“xˆÈ‰º‚È‚ç’â~’†‚Æ‚İ‚È‚µ‚Ü‚·B")]
+    [Tooltip("ã“ã®é€Ÿåº¦ä»¥ä¸‹ãªã‚‰åœæ­¢ä¸­ã¨ã¿ãªã—ã¾ã™ã€‚")]
     public float stoppedSpeedThreshold = 0.2f;
 
     private void Awake()
@@ -56,7 +56,7 @@ public class Car : MonoBehaviour
 
         if (parkingSlot != null)
         {
-            Debug.Log($"{carId} ‚Í {parkingSlot.slotId} ‚É’“Ô‚µ‚Ü‚µ‚½B");
+            Debug.Log($"{carId} ã¯ {parkingSlot.slotId} ã«é§è»Šã—ã¾ã—ãŸã€‚");
         }
     }
 
@@ -64,7 +64,7 @@ public class Car : MonoBehaviour
     {
         if (currentParkingSlot != null)
         {
-            Debug.Log($"{carId} ‚Í {currentParkingSlot.slotId} ‚©‚ço‚Ü‚µ‚½B");
+            Debug.Log($"{carId} ã¯ {currentParkingSlot.slotId} ã‹ã‚‰å‡ºã¾ã—ãŸã€‚");
         }
 
         currentParkingSlot = null;

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class ParkingLotManager : MonoBehaviour
@@ -25,7 +25,7 @@ public class ParkingLotManager : MonoBehaviour
     {
         if (logOnStart)
         {
-            Debug.Log($"ParkingSlot“o˜^Š®—¹: {allSlots.Count}Œ");
+            Debug.Log($"ParkingSlotç™»éŒ²å®Œäº†: {allSlots.Count}ä»¶");
             Debug.Log($"Empty: {GetSlotCountByState(ParkingSlotState.Empty)} / " +
                       $"Reserved: {GetSlotCountByState(ParkingSlotState.Reserved)} / " +
                       $"Occupied: {GetSlotCountByState(ParkingSlotState.Occupied)} / " +
@@ -56,13 +56,13 @@ public class ParkingLotManager : MonoBehaviour
 
             if (string.IsNullOrEmpty(slot.slotId))
             {
-                Debug.LogWarning($"Slot ID‚ª–¢Ý’è‚Å‚·: {slot.name}");
+                Debug.LogWarning($"Slot IDãŒæœªè¨­å®šã§ã™: {slot.name}");
                 continue;
             }
 
             if (slotDictionary.ContainsKey(slot.slotId))
             {
-                Debug.LogWarning($"Slot ID‚ªd•¡‚µ‚Ä‚¢‚Ü‚·: {slot.slotId}");
+                Debug.LogWarning($"Slot IDãŒé‡è¤‡ã—ã¦ã„ã¾ã™: {slot.slotId}");
                 continue;
             }
 
@@ -82,7 +82,7 @@ public class ParkingLotManager : MonoBehaviour
             return slot;
         }
 
-        Debug.LogWarning($"Žw’è‚³‚ê‚½Slot ID‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ: {slotId}");
+        Debug.LogWarning($"æŒ‡å®šã•ã‚ŒãŸSlot IDãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: {slotId}");
         return null;
     }
 
@@ -324,7 +324,7 @@ public class ParkingLotManager : MonoBehaviour
             return null;
         }
 
-        // FindObjects‚Ì•Ô‹p‡‚ÉˆË‘¶‚¹‚¸A“¯ˆêseed‚Å“¯‚¶Œó•â‡‚É‚È‚é‚æ‚¤ŒÅ’è‚µ‚Ü‚·B
+        // FindObjectsã®è¿”å´é †ã«ä¾å­˜ã›ãšã€åŒä¸€seedã§åŒã˜å€™è£œé †ã«ãªã‚‹ã‚ˆã†å›ºå®šã—ã¾ã™ã€‚
         availableSlots.Sort((left, right) =>
             string.CompareOrdinal(
                 left != null ? left.slotId : string.Empty,

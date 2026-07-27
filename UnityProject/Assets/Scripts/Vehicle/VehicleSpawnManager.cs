@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -31,7 +31,7 @@ public class VehicleSpawnManager : MonoBehaviour
     [Header("Entrance / Exit Pairs")]
     public List<EntranceExitPair> entranceExitPairs = new List<EntranceExitPair>();
 
-    [Tooltip("true: d‚İ•t‚«ƒ‰ƒ“ƒ_ƒ€ / false: ‡”Ô‚Ég—p")]
+    [Tooltip("true: é‡ã¿ä»˜ããƒ©ãƒ³ãƒ€ãƒ  / false: é †ç•ªã«ä½¿ç”¨")]
     public bool useRandomEntranceExitPair = true;
 
     [Header("Concurrent Spawn Settings")]
@@ -39,14 +39,14 @@ public class VehicleSpawnManager : MonoBehaviour
 
     [FormerlySerializedAs("maxSpawnCount")]
     [Min(1)]
-    [Tooltip("—İŒv¶¬”‚Å‚Í‚È‚­AScene“à‚É“¯‚É‘¶İ‚Å‚«‚éÔ—¼”‚Å‚·B")]
+    [Tooltip("ç´¯è¨ˆç”Ÿæˆæ•°ã§ã¯ãªãã€Sceneå†…ã«åŒæ™‚ã«å­˜åœ¨ã§ãã‚‹è»Šä¸¡æ•°ã§ã™ã€‚")]
     public int maxConcurrentVehicles = 60;
 
-    [Tooltip("ArrivalRateSegment‚ª—LŒø‚Å‚È‚¢ŠÔ‘Ñ‚ÌŠù’è¶¬ŠÔŠu‚Å‚·BŠù’è—¬“ü—¦‚Í 60 / spawnInterval ‘ä/•ª‚Å‚·B")]
+    [Tooltip("ArrivalRateSegmentãŒæœ‰åŠ¹ã§ãªã„æ™‚é–“å¸¯ã®æ—¢å®šç”Ÿæˆé–“éš”ã§ã™ã€‚æ—¢å®šæµå…¥ç‡ã¯ 60 / spawnInterval å°/åˆ†ã§ã™ã€‚")]
     [Min(0.01f)]
     public float spawnInterval = 5f;
 
-    [Tooltip("PlayŠJn‚ÉŠù‘¶‚ÌNPCÔ—¼‚à“¯‘¶İ‘ä”‚Ö“o˜^‚µ‚Ü‚·B")]
+    [Tooltip("Playé–‹å§‹æ™‚ã«æ—¢å­˜ã®NPCè»Šä¸¡ã‚‚åŒæ™‚å­˜åœ¨å°æ•°ã¸ç™»éŒ²ã—ã¾ã™ã€‚")]
     public bool includeExistingVehiclesOnStart = true;
 
     [Header("Spawn Area Check")]
@@ -60,7 +60,7 @@ public class VehicleSpawnManager : MonoBehaviour
     [Header("Slot Selection")]
     public bool useRandomSlot = true;
 
-    [Tooltip("Scenariog—p‚ÍAƒGƒŠƒA‚ğd‚İ•t‚«’Š‘I‚µ‚Ä‚©‚çƒGƒŠƒA“à‚Ì‹ó‚«˜g‚ğŒÅ’èseed‚Å‘I‚Ñ‚Ü‚·B")]
+    [Tooltip("Scenarioä½¿ç”¨æ™‚ã¯ã€ã‚¨ãƒªã‚¢ã‚’é‡ã¿ä»˜ãæŠ½é¸ã—ã¦ã‹ã‚‰ã‚¨ãƒªã‚¢å†…ã®ç©ºãæ ã‚’å›ºå®šseedã§é¸ã³ã¾ã™ã€‚")]
     public bool useScenarioAreaPreference = true;
 
     [Header("Spawn Control")]
@@ -86,7 +86,7 @@ public class VehicleSpawnManager : MonoBehaviour
 
     public int TotalSpawnedCount => totalSpawnedCount;
 
-    // Šù‘¶ƒR[ƒh‚©‚ç‚ÌQÆŒİŠ·—pBˆÓ–¡‚Í—İŒvãŒÀ‚Å‚Í‚È‚­“¯‘¶İ‘ä”ãŒÀ‚Å‚·B
+    // æ—¢å­˜ã‚³ãƒ¼ãƒ‰ã‹ã‚‰ã®å‚ç…§äº’æ›ç”¨ã€‚æ„å‘³ã¯ç´¯è¨ˆä¸Šé™ã§ã¯ãªãåŒæ™‚å­˜åœ¨å°æ•°ä¸Šé™ã§ã™ã€‚
     public int maxSpawnCount
     {
         get => maxConcurrentVehicles;
@@ -138,7 +138,7 @@ public class VehicleSpawnManager : MonoBehaviour
 
         if (debugLog)
         {
-            Debug.Log($"{name}: Ô—¼¶¬‚ğ’â~‚µ‚Ü‚µ‚½B");
+            Debug.Log($"{name}: è»Šä¸¡ç”Ÿæˆã‚’åœæ­¢ã—ã¾ã—ãŸã€‚");
         }
     }
 
@@ -226,8 +226,8 @@ public class VehicleSpawnManager : MonoBehaviour
                     break;
                 }
 
-                // ‘Ò‹@’†‚ÉŠù’è—¬“ü‚ÆŠÔ‘ÑSegment‚ªØ‚è‘Ö‚í‚Á‚½ê‡‚ÍA
-                // V‚µ‚¢—¬“üğŒ‚ÅŸ‰ñ‚ğˆø‚«’¼‚µ‚Ü‚·B
+                // å¾…æ©Ÿä¸­ã«æ—¢å®šæµå…¥ã¨æ™‚é–“å¸¯SegmentãŒåˆ‡ã‚Šæ›¿ã‚ã£ãŸå ´åˆã¯ã€
+                // æ–°ã—ã„æµå…¥æ¡ä»¶ã§æ¬¡å›æ™‚åˆ»ã‚’å¼•ãç›´ã—ã¾ã™ã€‚
                 if (scenarioRuntime.GetArrivalRateSourceId() != scheduledSourceId)
                 {
                     continue;
@@ -276,7 +276,7 @@ public class VehicleSpawnManager : MonoBehaviour
                 {
                     if (debugLog)
                     {
-                        Debug.Log($"{name}: “’…Ô—¼‚ğ¶¬‚Å‚«‚È‚¢‚½‚ßA“¯‚¶“’…—v‹‚ğÄs‚µ‚Ü‚·B");
+                        Debug.Log($"{name}: åˆ°ç€è»Šä¸¡ã‚’ç”Ÿæˆã§ããªã„ãŸã‚ã€åŒã˜åˆ°ç€è¦æ±‚ã‚’å†è©¦è¡Œã—ã¾ã™ã€‚");
                     }
 
                     yield return WaitForSimulationSeconds(spawnRetryInterval);
@@ -289,8 +289,8 @@ public class VehicleSpawnManager : MonoBehaviour
         if (debugLog)
         {
             Debug.Log(
-                $"{name}: ƒVƒiƒŠƒII—¹‚Ü‚½‚Íè“®’â~‚É‚æ‚è¶¬ˆ—‚ğI—¹‚µ‚Ü‚µ‚½B" +
-                $"—İŒv¶¬”={totalSpawnedCount}, Œ»İ‘¶İ”={ActiveVehicleCount}"
+                $"{name}: ã‚·ãƒŠãƒªã‚ªçµ‚äº†ã¾ãŸã¯æ‰‹å‹•åœæ­¢ã«ã‚ˆã‚Šç”Ÿæˆå‡¦ç†ã‚’çµ‚äº†ã—ã¾ã—ãŸã€‚" +
+                $"ç´¯è¨ˆç”Ÿæˆæ•°={totalSpawnedCount}, ç¾åœ¨å­˜åœ¨æ•°={ActiveVehicleCount}"
             );
         }
     }
@@ -309,7 +309,7 @@ public class VehicleSpawnManager : MonoBehaviour
         {
             if (debugLog)
             {
-                Debug.Log($"{name}: “¯‘¶İ‘ä”ãŒÀ‚Å‚·B{ActiveVehicleCount}/{maxConcurrentVehicles}");
+                Debug.Log($"{name}: åŒæ™‚å­˜åœ¨å°æ•°ä¸Šé™ã§ã™ã€‚{ActiveVehicleCount}/{maxConcurrentVehicles}");
             }
 
             return false;
@@ -326,7 +326,7 @@ public class VehicleSpawnManager : MonoBehaviour
         {
             if (debugLog)
             {
-                Debug.Log($"{name}: g—p‰Â”\‚ÈSpawnPoint‚ª‚ ‚è‚Ü‚¹‚ñB‘S“üŒû‚ª¬G’†‚Ì‰Â”\«‚ª‚ ‚è‚Ü‚·B");
+                Debug.Log($"{name}: ä½¿ç”¨å¯èƒ½ãªSpawnPointãŒã‚ã‚Šã¾ã›ã‚“ã€‚å…¨å…¥å£ãŒæ··é›‘ä¸­ã®å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚");
             }
 
             return false;
@@ -337,7 +337,7 @@ public class VehicleSpawnManager : MonoBehaviour
 
         if (targetSlot == null)
         {
-            Debug.LogWarning($"{name}: —˜—p‰Â”\‚ÈParkingSlot‚ª‚ ‚è‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: åˆ©ç”¨å¯èƒ½ãªParkingSlotãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
             Debug.LogWarning(
                 $"{name}: Empty={parkingLotManager.GetSlotCountByState(ParkingSlotState.Empty)}, " +
                 $"Reserved={parkingLotManager.GetSlotCountByState(ParkingSlotState.Reserved)}, " +
@@ -354,7 +354,7 @@ public class VehicleSpawnManager : MonoBehaviour
 
         if (targetSlot.accessWaypoint == null)
         {
-            Debug.LogWarning($"{name}: Target Slot ‚É AccessWaypoint ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBSlot={targetSlot.slotId}");
+            Debug.LogWarning($"{name}: Target Slot ã« AccessWaypoint ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚Slot={targetSlot.slotId}");
             parkingLotManager.ReleaseReservation(targetSlot);
             return false;
         }
@@ -367,7 +367,7 @@ public class VehicleSpawnManager : MonoBehaviour
         if (routeToSlot == null || routeToSlot.Count == 0)
         {
             Debug.LogWarning(
-                $"{name}: “üŒÉƒ‹[ƒg‚ªì‚ê‚Ü‚¹‚ñB{selectedPair.entranceWaypoint.name} ¨ {targetSlot.accessWaypoint.name}"
+                $"{name}: å…¥åº«ãƒ«ãƒ¼ãƒˆãŒä½œã‚Œã¾ã›ã‚“ã€‚{selectedPair.entranceWaypoint.name} â†’ {targetSlot.accessWaypoint.name}"
             );
 
             parkingLotManager.ReleaseReservation(targetSlot);
@@ -388,7 +388,7 @@ public class VehicleSpawnManager : MonoBehaviour
         if (routeToExit == null || routeToExit.Count == 0)
         {
             Debug.LogWarning(
-                $"{name}: oŒÉƒ‹[ƒg‚ªì‚ê‚Ü‚¹‚ñB{targetSlot.accessWaypoint.name} ¨ {selectedPair.exitWaypoint.name}"
+                $"{name}: å‡ºåº«ãƒ«ãƒ¼ãƒˆãŒä½œã‚Œã¾ã›ã‚“ã€‚{targetSlot.accessWaypoint.name} â†’ {selectedPair.exitWaypoint.name}"
             );
 
             parkingLotManager.ReleaseReservation(targetSlot);
@@ -412,7 +412,7 @@ public class VehicleSpawnManager : MonoBehaviour
 
         if (carController == null)
         {
-            Debug.LogWarning($"{name}: ¶¬‚µ‚½Ô‚É NPC_CarController ‚ª•t‚¢‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: ç”Ÿæˆã—ãŸè»Šã« NPC_CarController ãŒä»˜ã„ã¦ã„ã¾ã›ã‚“ã€‚");
             Destroy(carObject);
             parkingLotManager.ReleaseReservation(targetSlot);
             return false;
@@ -420,7 +420,7 @@ public class VehicleSpawnManager : MonoBehaviour
 
         if (!targetSlot.TryAssignReservedOwner(carController))
         {
-            Debug.LogWarning($"{name}: —\–ñSlot‚ÌŠ—LÒİ’è‚É¸”s‚µ‚Ü‚µ‚½BSlot={targetSlot.slotId}");
+            Debug.LogWarning($"{name}: äºˆç´„Slotã®æ‰€æœ‰è€…è¨­å®šã«å¤±æ•—ã—ã¾ã—ãŸã€‚Slot={targetSlot.slotId}");
             Destroy(carObject);
             parkingLotManager.ReleaseReservation(targetSlot);
             return false;
@@ -446,7 +446,7 @@ public class VehicleSpawnManager : MonoBehaviour
         if (debugLog)
         {
             Debug.Log(
-                $"{name}: Ô‚ğ¶¬‚µ‚Ü‚µ‚½BPair={selectedPair.pairName}, " +
+                $"{name}: è»Šã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚Pair={selectedPair.pairName}, " +
                 $"Area={selectedSceneAreaId}, Slot={targetSlot.slotId}, " +
                 $"Active={ActiveVehicleCount}/{maxConcurrentVehicles}, Total={totalSpawnedCount}"
             );
@@ -818,9 +818,9 @@ public class VehicleSpawnManager : MonoBehaviour
             float currentSimulationTime = clock.SimulationTimeSeconds;
             float frameIncrement = currentSimulationTime - previousSimulationTime;
 
-            // SetSimulationTimeAResetClockAƒVƒiƒŠƒIƒ‹[ƒv‚È‚Ç‚Å‚ª
-            // Šª‚«–ß‚Á‚½ƒtƒŒ[ƒ€‚Í‘Ò‹@ŠÔ‚ğŒ¸‚ç‚³‚¸A•‰‚Ì‘•ª‚¾‚¯–³‹‚µ‚Ü‚·B
-            // Šª‚«–ß‚µŒã‚ÌŸƒtƒŒ[ƒ€‚©‚ç‚ÍAV‚µ‚¢‚ğŠî€‚ÉÄ‚Ñ‰ÁZ‚µ‚Ü‚·B
+            // SetSimulationTimeã€ResetClockã€ã‚·ãƒŠãƒªã‚ªãƒ«ãƒ¼ãƒ—ãªã©ã§æ™‚åˆ»ãŒ
+            // å·»ãæˆ»ã£ãŸãƒ•ãƒ¬ãƒ¼ãƒ ã¯å¾…æ©Ÿæ™‚é–“ã‚’æ¸›ã‚‰ã•ãšã€è² ã®å¢—åˆ†ã ã‘ç„¡è¦–ã—ã¾ã™ã€‚
+            // å·»ãæˆ»ã—å¾Œã®æ¬¡ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰ã¯ã€æ–°ã—ã„æ™‚åˆ»ã‚’åŸºæº–ã«å†ã³åŠ ç®—ã—ã¾ã™ã€‚
             if (frameIncrement > 0f &&
                 !float.IsNaN(frameIncrement) &&
                 !float.IsInfinity(frameIncrement))
@@ -870,31 +870,31 @@ public class VehicleSpawnManager : MonoBehaviour
     {
         if (parkingLotManager == null)
         {
-            Debug.LogWarning($"{name}: ParkingLotManager ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: ParkingLotManager ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return false;
         }
 
         if (routeManager == null)
         {
-            Debug.LogWarning($"{name}: WaypointRouteManager ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: WaypointRouteManager ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return false;
         }
 
         if (npcCarPrefab == null)
         {
-            Debug.LogWarning($"{name}: NPC Car Prefab ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: NPC Car Prefab ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return false;
         }
 
         if (entranceExitPairs == null || entranceExitPairs.Count == 0)
         {
-            Debug.LogWarning($"{name}: Entrance Exit Pairs ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: Entrance Exit Pairs ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return false;
         }
 
         if (GetValidEntranceExitPairs().Count == 0)
         {
-            Debug.LogWarning($"{name}: —LŒø‚È Entrance Exit Pair ‚ª‚ ‚è‚Ü‚¹‚ñB");
+            Debug.LogWarning($"{name}: æœ‰åŠ¹ãª Entrance Exit Pair ãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
             return false;
         }
 

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class WaypointRouteManager : MonoBehaviour
@@ -50,7 +50,7 @@ public class WaypointRouteManager : MonoBehaviour
             }
         }
 
-        Debug.LogWarning($"ƒ‹[ƒg‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ: {start.name} ¨ {goal.name}");
+        Debug.LogWarning($"ãƒ«ãƒ¼ãƒˆãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: {start.name} â†’ {goal.name}");
         return new List<Waypoint>();
     }
 

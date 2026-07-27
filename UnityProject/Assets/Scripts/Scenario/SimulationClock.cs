@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 [DefaultExecutionOrder(-1000)]
 public class SimulationClock : MonoBehaviour
@@ -29,8 +29,8 @@ public class SimulationClock : MonoBehaviour
     [SerializeField]
     private bool isRunning;
 
-    // •\¦‚Æ‚Í•Ê‚ÉAClock‚ªÀÛ‚É‘Oi‚³‚¹‚½ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“•b”‚ğ•Û‚µ‚Ü‚·B
-    // SetSimulationTime‚É‚æ‚éè“®ƒWƒƒƒ“ƒv‚â‚ÌŠª‚«–ß‚µ‚Í‰ÁZ‚µ‚Ü‚¹‚ñB
+    // è¡¨ç¤ºæ™‚åˆ»ã¨ã¯åˆ¥ã«ã€ClockãŒå®Ÿéš›ã«å‰é€²ã•ã›ãŸã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ç§’æ•°ã‚’ä¿æŒã—ã¾ã™ã€‚
+    // SetSimulationTimeã«ã‚ˆã‚‹æ‰‹å‹•ã‚¸ãƒ£ãƒ³ãƒ—ã‚„æ™‚åˆ»ã®å·»ãæˆ»ã—ã¯åŠ ç®—ã—ã¾ã›ã‚“ã€‚
     private double totalAdvancedSimulationSeconds;
 
     public float SimulationTimeSeconds => simulationTimeSeconds;
@@ -86,7 +86,7 @@ public class SimulationClock : MonoBehaviour
                 duration
             );
 
-            // •\¦‚ª0•b‚Ö–ß‚Á‚Ä‚àAÀÛ‚Éi‚ñ‚¾•b”‚Í¸‚í‚È‚¢‚æ‚¤‚É‚µ‚Ü‚·B
+            // è¡¨ç¤ºæ™‚åˆ»ãŒ0ç§’ã¸æˆ»ã£ã¦ã‚‚ã€å®Ÿéš›ã«é€²ã‚“ã ç§’æ•°ã¯å¤±ã‚ãªã„ã‚ˆã†ã«ã—ã¾ã™ã€‚
             totalAdvancedSimulationSeconds += requestedAdvance;
             return;
         }
