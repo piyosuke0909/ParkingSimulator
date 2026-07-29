@@ -342,7 +342,7 @@ public class P2SimulationSnapshotBuilder : MonoBehaviour
                 slotId = NullToEmpty(slot.slotId),
                 areaId = GetCanonicalAreaId(slot.areaId),
                 sceneAreaId = NullToEmpty(slot.areaId),
-                state = slot.state.ToString(),
+                state = GetSnapshotSlotState(slot).ToString(),
                 isAvailable = slot.IsAvailable(),
                 sensorOccupied = slot.sensorOccupied,
                 isLeaving = slot.isLeaving,
@@ -395,7 +395,7 @@ public class P2SimulationSnapshotBuilder : MonoBehaviour
                     area.availableSlotCount++;
                 }
 
-                switch (slot.state)
+                switch (GetSnapshotSlotState(slot))
                 {
                     case ParkingSlotState.Empty:
                         area.emptySlotCount++;
@@ -435,15 +435,11 @@ public class P2SimulationSnapshotBuilder : MonoBehaviour
 
             NPC_CarController controller = car.GetComponent<NPC_CarController>();
             P2VehicleSnapshotMetadata metadata = car.GetComponent<P2VehicleSnapshotMetadata>();
-            Rigidbody body = car.carRigidbody != null
-                ? car.carRigidbody
-                : car.GetComponent<Rigidbody>();
-
             ParkingSlot targetSlot = controller != null
                 ? controller.targetParkingSlot
                 : null;
             ParkingSlot currentSlot = car.currentParkingSlot;
-            Vector3 velocity = GetVelocity(body);
+            Vector3 velocity = car.GetCurrentVelocity();
 
             P2VehicleSnapshot item = new P2VehicleSnapshot
             {
@@ -680,18 +676,22 @@ public class P2SimulationSnapshotBuilder : MonoBehaviour
             : waypoint.gameObject.name;
     }
 
-    private static Vector3 GetVelocity(Rigidbody body)
+    private static ParkingSlotState GetSnapshotSlotState(ParkingSlot slot)
     {
-        if (body == null)
+        if (slot == null)
         {
-            return Vector3.zero;
+            return ParkingSlotState.Empty;
         }
 
-#if UNITY_6000_0_OR_NEWER
-        return body.linearVelocity;
-#else
-        return body.velocity;
-#endif
+        // Unity内部では、センサーがまだ車を検知している間はstateがOccupiedでも、
+        // isLeaving=trueなら業務上は出庫中です。Snapshotでは排他的な正規化状態として
+        // Leavingを優先し、各状態件数の合計が総枠数と一致するようにします。
+        if (slot.state != ParkingSlotState.Disabled && slot.isLeaving)
+        {
+            return ParkingSlotState.Leaving;
+        }
+
+        return slot.state;
     }
 
     private P2Vector3Snapshot ToVector(Vector3 value)

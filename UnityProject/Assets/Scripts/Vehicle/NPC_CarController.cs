@@ -2439,6 +2439,13 @@ public class NPC_CarController : MonoBehaviour
 
         moveState = NPC_CarMoveState.Finished;
 
+        SpawnedVehicleTracker vehicleTracker = GetComponent<SpawnedVehicleTracker>();
+
+        if (vehicleTracker != null)
+        {
+            vehicleTracker.NotifyExited();
+        }
+
         if (destroyOnFinished)
         {
             Destroy(gameObject);
