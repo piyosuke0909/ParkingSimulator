@@ -54,6 +54,8 @@ public class VehicleSpawnManager : MonoBehaviour
     public LayerMask carLayerMask;
     public bool useSpawnPointScaleAsCheckArea = true;
     public Vector3 spawnCheckBoxSize = new Vector3(12f, 4f, 18f);
+
+    [Tooltip("SpawnPointが埋まっている場合、空きが確認されるまでの待機時間です。")]
     public float spawnRetryInterval = 1f;
     public bool drawSpawnAreaGizmo = true;
 
@@ -436,6 +438,36 @@ public class VehicleSpawnManager : MonoBehaviour
             carInfo.carId = $"NPC_Car_{spawnSequenceNumber:000}";
         }
 
+        // P2 Snapshot用の読み取り専用メタデータです。
+        // 車両の走行・駐車制御には使用しません。
+        P2VehicleSnapshotMetadata snapshotMetadata =
+            carObject.GetComponent<P2VehicleSnapshotMetadata>();
+
+        if (snapshotMetadata == null)
+        {
+            snapshotMetadata = carObject.AddComponent<P2VehicleSnapshotMetadata>();
+        }
+
+        string snapshotAccessPointId = scenarioRuntime != null
+            ? scenarioRuntime.GetCanonicalAccessPointId(selectedPair.pairName)
+            : selectedPair.pairName;
+        string snapshotAreaId = scenarioRuntime != null
+            ? scenarioRuntime.GetCanonicalAreaId(targetSlot.areaId)
+            : targetSlot.areaId;
+        float snapshotSimulationTime = scenarioRuntime != null
+            ? scenarioRuntime.SimulationTimeSeconds
+            : Time.time;
+
+        snapshotMetadata.Initialize(
+            spawnSequenceNumber,
+            snapshotAccessPointId,
+            selectedPair.pairName,
+            snapshotAreaId,
+            targetSlot.areaId,
+            targetSlot.slotId,
+            snapshotSimulationTime
+        );
+
         carController.targetParkingSlot = targetSlot;
         carController.exitRoute = routeToExit;
         carController.SetRouteToParkingSlot(routeToSlot, targetSlot);
@@ -798,8 +830,8 @@ public class VehicleSpawnManager : MonoBehaviour
             yield break;
         }
 
-        float elapsedSimulationSeconds = 0f;
-        float previousSimulationTime = clock.SimulationTimeSeconds;
+        double elapsedSimulationSeconds = 0d;
+        double previousAdvancedSeconds = clock.TotalAdvancedSimulationSeconds;
 
         while (elapsedSimulationSeconds < seconds)
         {
@@ -815,20 +847,20 @@ public class VehicleSpawnManager : MonoBehaviour
                 yield break;
             }
 
-            float currentSimulationTime = clock.SimulationTimeSeconds;
-            float frameIncrement = currentSimulationTime - previousSimulationTime;
+            double currentAdvancedSeconds = clock.TotalAdvancedSimulationSeconds;
+            double frameIncrement = currentAdvancedSeconds - previousAdvancedSeconds;
 
-            // SetSimulationTime、ResetClock、シナリオループなどで時刻が
-            // 巻き戻ったフレームは待機時間を減らさず、負の増分だけ無視します。
-            // 巻き戻し後の次フレームからは、新しい時刻を基準に再び加算します。
-            if (frameIncrement > 0f &&
-                !float.IsNaN(frameIncrement) &&
-                !float.IsInfinity(frameIncrement))
+            // Clockが自然に前進させた秒数だけを積算します。
+            // SetSimulationTimeによる巻き戻し・早送りや、表示時刻のループは
+            // 待機秒数そのものを増減させません。
+            if (frameIncrement > 0d &&
+                !double.IsNaN(frameIncrement) &&
+                !double.IsInfinity(frameIncrement))
             {
                 elapsedSimulationSeconds += frameIncrement;
             }
 
-            previousSimulationTime = currentSimulationTime;
+            previousAdvancedSeconds = currentAdvancedSeconds;
         }
     }
 
