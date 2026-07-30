@@ -67600,6 +67600,7 @@ MonoBehaviour:
   logErrors: 1
   sequenceNumber: 1
   lastWrittenPath: C:/Users/hrk11/AppData/LocalLow/DefaultCompany/UnityProject\P2Snapshots\snapshot-scenario-concert-rain-t0000000000_000-seq00000001.json
+  currentRunId: 
 --- !u!114 &1597037660
 MonoBehaviour:
   m_ObjectHideFlags: 0

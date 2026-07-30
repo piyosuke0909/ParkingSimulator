@@ -122,15 +122,22 @@ public class P2SimulationSnapshotBuilder : MonoBehaviour
 
         float simulationTimeSeconds = GetSimulationTimeSeconds();
         LocalScenarioDefinition definition = GetScenarioDefinition();
+        P2SimulationRunIdentity runIdentity = P2SimulationRunContext.EnsureCurrentRun();
 
         P2SimulationSnapshot snapshot = new P2SimulationSnapshot
         {
             sequenceNumber = Math.Max(1L, sequenceNumber),
             generatedAtUtc = DateTimeOffset.UtcNow.ToString("o"),
-            sceneName = SceneManager.GetActiveScene().name
+            sceneName = SceneManager.GetActiveScene().name,
+            sessionId = runIdentity.sessionId,
+            runId = runIdentity.runId
         };
 
-        snapshot.snapshotId = BuildSnapshotId(definition, snapshot.sequenceNumber);
+        snapshot.snapshotId = BuildSnapshotId(
+            definition,
+            snapshot.runId,
+            snapshot.sequenceNumber
+        );
         snapshot.scenario = BuildScenarioSnapshot(definition, simulationTimeSeconds);
         snapshot.runtime = BuildRuntimeSnapshot(simulationTimeSeconds);
         snapshot.activeScenarioFactors = BuildActiveScenarioFactors(definition, simulationTimeSeconds);
@@ -633,13 +640,20 @@ public class P2SimulationSnapshotBuilder : MonoBehaviour
         return NormalizeFallbackId(sceneAreaId, "area");
     }
 
-    private static string BuildSnapshotId(LocalScenarioDefinition definition, long sequenceNumber)
+    private static string BuildSnapshotId(
+        LocalScenarioDefinition definition,
+        string runId,
+        long sequenceNumber)
     {
         string scenarioId = definition != null && !string.IsNullOrWhiteSpace(definition.scenarioId)
             ? definition.scenarioId.Trim()
             : "scenario-unconfigured";
+        string resolvedRunId = !string.IsNullOrWhiteSpace(runId)
+            ? runId.Trim()
+            : P2SimulationRunContext.EnsureCurrentRun().runId;
 
-        return scenarioId + "-snapshot-" + Math.Max(1L, sequenceNumber).ToString("D8");
+        return scenarioId + "-" + resolvedRunId + "-snapshot-" +
+               Math.Max(1L, sequenceNumber).ToString("D8");
     }
 
     private static string GetVehicleId(NPC_CarController controller)

@@ -47,6 +47,9 @@ public class P2LocalSnapshotWriter : MonoBehaviour
     [SerializeField]
     private string lastWrittenPath;
 
+    [SerializeField]
+    private string currentRunId;
+
     private double nextSimulationWriteAt;
     private double previousTotalAdvancedSimulationSeconds;
     private float nextRealWriteAt;
@@ -123,7 +126,13 @@ public class P2LocalSnapshotWriter : MonoBehaviour
             return false;
         }
 
-        long candidateSequence = sequenceNumber + 1L;
+        P2SimulationRunIdentity runIdentity = P2SimulationRunContext.EnsureCurrentRun();
+        bool runChanged = !string.Equals(
+            currentRunId,
+            runIdentity.runId,
+            StringComparison.Ordinal
+        );
+        long candidateSequence = runChanged ? 1L : sequenceNumber + 1L;
         P2SimulationSnapshot snapshot;
 
         try
@@ -180,7 +189,8 @@ public class P2LocalSnapshotWriter : MonoBehaviour
         string validitySuffix = validation.isValid ? string.Empty : "-invalid";
         string fileName =
             SanitizeFileName(fileNamePrefix) + "-" +
-            SanitizeFileName(scenarioId) + "-t" +
+            SanitizeFileName(scenarioId) + "-" +
+            SanitizeFileName(snapshot.runId) + "-t" +
             timeText.Replace('.', '_') + "-seq" +
             candidateSequence.ToString("D8") + validitySuffix + ".json";
 
@@ -221,6 +231,7 @@ public class P2LocalSnapshotWriter : MonoBehaviour
             return false;
         }
 
+        currentRunId = snapshot.runId;
         sequenceNumber = candidateSequence;
         completionSnapshotWritten = snapshot.scenario != null && snapshot.scenario.isCompleted;
 
@@ -228,7 +239,8 @@ public class P2LocalSnapshotWriter : MonoBehaviour
         {
             Debug.Log(
                 "[P2Snapshot] Written. " +
-                "sequence=" + sequenceNumber +
+                "runId=" + currentRunId +
+                ", sequence=" + sequenceNumber +
                 ", simulationTimeSeconds=" +
                 (snapshot.scenario != null
                     ? snapshot.scenario.simulationTimeSeconds.ToString(
@@ -258,7 +270,17 @@ public class P2LocalSnapshotWriter : MonoBehaviour
     [ContextMenu("Reset Snapshot Sequence")]
     public void ResetSnapshotSequence()
     {
+        if (Application.isPlaying && !string.IsNullOrWhiteSpace(currentRunId))
+        {
+            Debug.LogWarning(
+                "[P2Snapshot] The sequence is scoped to the current run and was not reset. " +
+                "Start a new simulation run to begin again from sequence 1 without overwriting files."
+            );
+            return;
+        }
+
         sequenceNumber = 0L;
+        currentRunId = string.Empty;
         lastWrittenPath = string.Empty;
         automaticOutputStopped = false;
         completionSnapshotWritten = false;

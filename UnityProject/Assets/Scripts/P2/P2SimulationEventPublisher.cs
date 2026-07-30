@@ -97,13 +97,13 @@ public class P2SimulationEventPublisher : MonoBehaviour
             Instance = this;
         }
 
-        sessionId = BuildSessionId();
+        sessionId = P2SimulationRunContext.SessionId;
         ResolveReferences();
     }
 
     private void Start()
     {
-        BeginNewRun("play_start");
+        BeginInitialRun("play_start");
     }
 
     private void Update()
@@ -250,11 +250,26 @@ public class P2SimulationEventPublisher : MonoBehaviour
 
     public void BeginNewRun(string startReason)
     {
+        BeginRun(startReason, false);
+    }
+
+    private void BeginInitialRun(string startReason)
+    {
+        BeginRun(startReason, true);
+    }
+
+    private void BeginRun(string startReason, bool reuseExistingRun)
+    {
         ResolveReferences();
 
-        runSequence++;
+        P2SimulationRunIdentity runIdentity = reuseExistingRun
+            ? P2SimulationRunContext.EnsureCurrentRun()
+            : P2SimulationRunContext.BeginNewRun();
+
+        sessionId = runIdentity.sessionId;
+        currentRunId = runIdentity.runId;
+        runSequence = runIdentity.runSequence;
         eventSequenceNumber = 0L;
-        currentRunId = sessionId + "-run-" + runSequence.ToString("D4");
         scenarioCompletedPublished = false;
         activeFactorKeys.Clear();
         observedVehicles.Clear();
@@ -1307,10 +1322,6 @@ public class P2SimulationEventPublisher : MonoBehaviour
             : weight;
     }
 
-    private string BuildSessionId()
-    {
-        return "unity-session-" + DateTimeOffset.UtcNow.ToString("yyyyMMddTHHmmssfffZ");
-    }
 
     private static string NullToEmpty(string value)
     {

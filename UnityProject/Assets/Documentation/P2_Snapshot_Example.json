@@ -1,11 +1,13 @@
 {
   "contractName": "smart-parking.simulation-snapshot",
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "snapshotType": "simulation_snapshot",
-  "snapshotId": "scenario-concert-rain-snapshot-00000001",
+  "snapshotId": "scenario-concert-rain-unity-session-20260729T085408673Z-run-0001-snapshot-00000001",
   "sourceSystem": "unity",
   "generatedAtUtc": "2026-07-27T05:00:00.0000000+00:00",
   "sceneName": "SampleScene",
+  "sessionId": "unity-session-20260729T085408673Z",
+  "runId": "unity-session-20260729T085408673Z-run-0001",
   "sequenceNumber": 1,
   "scenario": {
     "scenarioId": "scenario-concert-rain",

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public static class P2SnapshotContractConstants
 {
     public const string ContractName = "smart-parking.simulation-snapshot";
-    public const string SchemaVersion = "1.0";
+    public const string SchemaVersion = "1.1";
     public const string SnapshotType = "simulation_snapshot";
     public const string SourceSystem = "unity";
 }
@@ -19,6 +19,8 @@ public class P2SimulationSnapshot
     public string sourceSystem = P2SnapshotContractConstants.SourceSystem;
     public string generatedAtUtc;
     public string sceneName;
+    public string sessionId;
+    public string runId;
     public long sequenceNumber;
 
     public P2ScenarioSnapshot scenario = new P2ScenarioSnapshot();

@@ -37,6 +37,24 @@ public class P2SnapshotContractValidator : MonoBehaviour
         RequireText(result, snapshot.sourceSystem, "sourceSystem");
         RequireText(result, snapshot.generatedAtUtc, "generatedAtUtc");
         RequireText(result, snapshot.sceneName, "sceneName");
+        RequireText(result, snapshot.sessionId, "sessionId");
+        RequireText(result, snapshot.runId, "runId");
+
+        if (!string.IsNullOrWhiteSpace(snapshot.sessionId) &&
+            !string.IsNullOrWhiteSpace(snapshot.runId) &&
+            !snapshot.runId.StartsWith(
+                snapshot.sessionId + "-run-",
+                StringComparison.Ordinal))
+        {
+            result.errors.Add("runId must belong to sessionId.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(snapshot.snapshotId) &&
+            !string.IsNullOrWhiteSpace(snapshot.runId) &&
+            snapshot.snapshotId.IndexOf(snapshot.runId, StringComparison.Ordinal) < 0)
+        {
+            result.errors.Add("snapshotId must include runId.");
+        }
 
         if (snapshot.sequenceNumber <= 0)
         {
