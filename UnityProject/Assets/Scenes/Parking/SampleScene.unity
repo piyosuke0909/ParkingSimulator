@@ -39058,6 +39058,7 @@ MonoBehaviour:
   logToFile: 1
   fileNamePrefix: p1-scenario
   currentLogFilePath: 
+  fileLoggingDisabledAfterFailure: 0
 --- !u!114 &885648327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61554,6 +61555,7 @@ MonoBehaviour:
   scenarioRuntime: {fileID: 885648325}
   scenarioRandomService: {fileID: 885648328}
   scenarioRunLogger: {fileID: 885648326}
+  p2EventPublisher: {fileID: 1663448875}
   npcCarPrefab: {fileID: 100000, guid: aae5dba1f4c24024a5092f395ab9326d, type: 3}
   vehicleParent: {fileID: 1277895586}
   entranceExitPairs:
@@ -67548,6 +67550,115 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+--- !u!1 &1597037658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1597037662}
+  - component: {fileID: 1597037661}
+  - component: {fileID: 1597037660}
+  - component: {fileID: 1597037659}
+  m_Layer: 0
+  m_Name: P2SnapshotSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1597037659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597037658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2274aa1a63dd45c192345f45169b3a37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  snapshotBuilder: {fileID: 1597037661}
+  contractValidator: {fileID: 1597037660}
+  simulationClock: {fileID: 885648329}
+  writeOnStart: 1
+  writeRepeatedly: 1
+  intervalMode: 0
+  writeIntervalSeconds: 60
+  stopAfterScenarioCompleted: 1
+  outputDirectoryName: P2Snapshots
+  fileNamePrefix: snapshot
+  prettyPrint: 1
+  keepSequenceFiles: 1
+  writeLatestCopy: 1
+  writeWhenValidationFails: 0
+  logSuccess: 0
+  logValidationWarnings: 1
+  logErrors: 1
+  sequenceNumber: 1
+  lastWrittenPath: C:/Users/hrk11/AppData/LocalLow/DefaultCompany/UnityProject\P2Snapshots\snapshot-scenario-concert-rain-t0000000000_000-seq00000001.json
+  currentRunId: 
+--- !u!114 &1597037660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597037658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9895c4a86394e9ea228ebf4eed55c13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  requireVehicles: 0
+  requireParkingSlots: 1
+  requireAreas: 1
+  requireAccessPoints: 1
+  warnWhenActiveCountDiffersFromDiscoveredCount: 1
+--- !u!114 &1597037661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597037658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13c19b98d9b24b7eab08d3fbd5ceb7a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scenarioRuntime: {fileID: 885648325}
+  simulationClock: {fileID: 885648329}
+  scenarioDefinition: {fileID: 11400000, guid: a5aff451c21a18445b2bffeb14f65d95, type: 2}
+  targetBinding: {fileID: 885648327}
+  parkingLotManager: {fileID: 542516997}
+  vehicleSpawnManager: {fileID: 1445731035}
+  autoFindReferences: 1
+  includeParkingSlots: 1
+  includeVehicles: 1
+  includeAccessPoints: 1
+  includeScenarioFactorEffects: 1
+  timeDecimalPlaces: 3
+  scalarDecimalPlaces: 4
+  vectorDecimalPlaces: 3
+--- !u!4 &1597037662
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597037658}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1597838666
 GameObject:
   m_ObjectHideFlags: 0
@@ -70576,6 +70687,110 @@ MonoBehaviour:
   freeConnectionColor: {r: 0.2, g: 0.85, b: 1, a: 1}
   reservedConnectionColor: {r: 0.2, g: 0.45, b: 1, a: 1}
   occupiedConnectionColor: {r: 1, g: 0.2, b: 0.1, a: 1}
+--- !u!1 &1663448872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1663448876}
+  - component: {fileID: 1663448875}
+  - component: {fileID: 1663448874}
+  - component: {fileID: 1663448873}
+  m_Layer: 0
+  m_Name: P2EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1663448873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663448872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e1d74b6288c4489aec940b9f1f0e008, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventPublisher: {fileID: 1663448875}
+  contractValidator: {fileID: 1663448874}
+  enableFileOutput: 1
+  outputDirectoryName: P2Events
+  fileNamePrefix: events
+  flushAfterEveryEvent: 1
+  writeWhenValidationFails: 0
+  logSuccess: 0
+  logValidationWarnings: 1
+  logErrors: 1
+  currentFilePath: 
+  writtenEventCount: 0
+  fileLoggingDisabledAfterFailure: 0
+--- !u!114 &1663448874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663448872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3055d57b79d2463f9ad2e754e37591a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  requireKnownEventType: 1
+  requirePayloadForTypedEvents: 1
+--- !u!114 &1663448875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663448872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a67b527925f45d29cd820dc4ac80d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scenarioRuntime: {fileID: 885648325}
+  simulationClock: {fileID: 885648329}
+  scenarioDefinition: {fileID: 11400000, guid: a5aff451c21a18445b2bffeb14f65d95, type: 2}
+  targetBinding: {fileID: 885648327}
+  vehicleSpawnManager: {fileID: 1445731035}
+  autoFindReferences: 1
+  publishScenarioEvents: 1
+  publishScenarioFactorEvents: 1
+  publishVehicleStateEvents: 1
+  vehicleStatePollIntervalSeconds: 0.1
+  rewindDetectionToleranceSeconds: 0.01
+  timeDecimalPlaces: 3
+  scalarDecimalPlaces: 4
+  vectorDecimalPlaces: 3
+  sessionId: 
+  currentRunId: 
+  runSequence: 0
+  eventSequenceNumber: 0
+  scenarioCompletedPublished: 0
+--- !u!4 &1663448876
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663448872}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1665725616
 GameObject:
   m_ObjectHideFlags: 0
@@ -92156,3 +92371,5 @@ SceneRoots:
   - {fileID: 1591024421}
   - {fileID: 1613677099}
   - {fileID: 885648330}
+  - {fileID: 1597037662}
+  - {fileID: 1663448876}

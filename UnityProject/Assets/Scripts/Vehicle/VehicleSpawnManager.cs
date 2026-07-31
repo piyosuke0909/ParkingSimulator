@@ -24,6 +24,9 @@ public class VehicleSpawnManager : MonoBehaviour
     public ScenarioRandomService scenarioRandomService;
     public ScenarioRunLogger scenarioRunLogger;
 
+    [Header("P2 Event Output (Optional)")]
+    public P2SimulationEventPublisher p2EventPublisher;
+
     [Header("Vehicle")]
     public GameObject npcCarPrefab;
     public Transform vehicleParent;
@@ -54,6 +57,8 @@ public class VehicleSpawnManager : MonoBehaviour
     public LayerMask carLayerMask;
     public bool useSpawnPointScaleAsCheckArea = true;
     public Vector3 spawnCheckBoxSize = new Vector3(12f, 4f, 18f);
+
+    [Tooltip("SpawnPointが埋まっている場合、空きが確認されるまでの待機時間です。")]
     public float spawnRetryInterval = 1f;
     public bool drawSpawnAreaGizmo = true;
 
@@ -82,6 +87,20 @@ public class VehicleSpawnManager : MonoBehaviour
     private int nextPairIndex;
     private int spawnSequenceNumber;
 
+    // 生成成功時だけ選択Eventを出すため、1回の生成試行中の候補情報を保持します。
+    private readonly List<string> pendingEntranceCanonicalIds = new List<string>();
+    private readonly List<string> pendingEntranceSceneIds = new List<string>();
+    private readonly List<float> pendingEntranceWeights = new List<float>();
+    private string pendingSelectedEntranceCanonicalId;
+    private string pendingSelectedEntranceSceneId;
+
+    private readonly List<string> pendingAreaCanonicalIds = new List<string>();
+    private readonly List<string> pendingAreaSceneIds = new List<string>();
+    private readonly List<int> pendingAreaAvailableSlotCounts = new List<int>();
+    private readonly List<float> pendingAreaWeights = new List<float>();
+    private string pendingSelectedAreaCanonicalId;
+    private string pendingSelectedAreaSceneId;
+
     public int ActiveVehicleCount => activeVehicleCount;
 
     public int TotalSpawnedCount => totalSpawnedCount;
@@ -96,6 +115,7 @@ public class VehicleSpawnManager : MonoBehaviour
     private void Awake()
     {
         ResolveScenarioReferences();
+        ResolveP2EventPublisher();
     }
 
     private void Start()
@@ -303,6 +323,8 @@ public class VehicleSpawnManager : MonoBehaviour
 
     public bool SpawnVehicleToAvailableSlot()
     {
+        ResetPendingEventSelection();
+        ResolveP2EventPublisher();
         CleanupDestroyedVehicles();
 
         if (ActiveVehicleCount >= Mathf.Max(1, maxConcurrentVehicles))
@@ -436,11 +458,42 @@ public class VehicleSpawnManager : MonoBehaviour
             carInfo.carId = $"NPC_Car_{spawnSequenceNumber:000}";
         }
 
+        // P2 Snapshot用の読み取り専用メタデータです。
+        // 車両の走行・駐車制御には使用しません。
+        P2VehicleSnapshotMetadata snapshotMetadata =
+            carObject.GetComponent<P2VehicleSnapshotMetadata>();
+
+        if (snapshotMetadata == null)
+        {
+            snapshotMetadata = carObject.AddComponent<P2VehicleSnapshotMetadata>();
+        }
+
+        string snapshotAccessPointId = scenarioRuntime != null
+            ? scenarioRuntime.GetCanonicalAccessPointId(selectedPair.pairName)
+            : selectedPair.pairName;
+        string snapshotAreaId = scenarioRuntime != null
+            ? scenarioRuntime.GetCanonicalAreaId(targetSlot.areaId)
+            : targetSlot.areaId;
+        float snapshotSimulationTime = scenarioRuntime != null
+            ? scenarioRuntime.SimulationTimeSeconds
+            : Time.time;
+
+        snapshotMetadata.Initialize(
+            spawnSequenceNumber,
+            snapshotAccessPointId,
+            selectedPair.pairName,
+            snapshotAreaId,
+            targetSlot.areaId,
+            targetSlot.slotId,
+            snapshotSimulationTime
+        );
+
         carController.targetParkingSlot = targetSlot;
         carController.exitRoute = routeToExit;
         carController.SetRouteToParkingSlot(routeToSlot, targetSlot);
 
         RegisterActiveVehicle(carObject);
+        PublishSuccessfulP2Events(carObject, selectedPair, targetSlot);
         LogScenarioSpawn(selectedPair, targetSlot);
 
         if (debugLog)
@@ -455,7 +508,13 @@ public class VehicleSpawnManager : MonoBehaviour
         return true;
     }
 
+    // 既存コードとの互換用。通常の出口到達はNotifyVehicleRemovedから同期通知します。
     public void NotifyVehicleDestroyed(GameObject vehicleObject)
+    {
+        NotifyVehicleRemoved(vehicleObject, "vehicle_destroyed");
+    }
+
+    public void NotifyVehicleRemoved(GameObject vehicleObject, string removalReason)
     {
         string vehicleName = vehicleObject != null ? vehicleObject.name : "destroyed-vehicle";
 
@@ -465,6 +524,22 @@ public class VehicleSpawnManager : MonoBehaviour
         }
 
         CleanupDestroyedVehicles();
+
+        // Active集合を更新した直後にvehicle.exitedを発行します。
+        // これにより、その後に発行される別車両EventのactiveVehicleCountと
+        // Event列を順番に再生した台数が一致します。
+        P2SimulationEventPublisher eventPublisher = P2SimulationEventPublisher.Instance;
+
+        if (eventPublisher != null)
+        {
+            eventPublisher.PublishVehicleExited(
+                vehicleObject,
+                ActiveVehicleCount,
+                maxConcurrentVehicles,
+                TotalSpawnedCount,
+                removalReason
+            );
+        }
 
         float time = scenarioRuntime != null
             ? scenarioRuntime.SimulationTimeSeconds
@@ -562,6 +637,15 @@ public class VehicleSpawnManager : MonoBehaviour
                 selectedSceneAreaId
             );
 
+            RememberAreaSelection(
+                canonicalAreaIds,
+                availableAreaIds,
+                availableSlotCounts,
+                weights,
+                canonicalAreaIds[areaIndex],
+                selectedSceneAreaId
+            );
+
             return parkingLotManager.ReserveRandomAvailableSlotInArea(
                 selectedSceneAreaId,
                 scenarioRandomService
@@ -584,6 +668,21 @@ public class VehicleSpawnManager : MonoBehaviour
         if (slot != null)
         {
             selectedSceneAreaId = slot.areaId;
+            string canonicalAreaId = scenarioRuntime != null
+                ? scenarioRuntime.GetCanonicalAreaId(slot.areaId)
+                : slot.areaId;
+
+            RememberAreaSelection(
+                new List<string> { canonicalAreaId },
+                new List<string> { slot.areaId },
+                new List<int>
+                {
+                    parkingLotManager.GetAvailableSlotCountInArea(slot.areaId) + 1
+                },
+                new List<float> { 1f },
+                canonicalAreaId,
+                slot.areaId
+            );
         }
 
         return slot;
@@ -613,33 +712,39 @@ public class VehicleSpawnManager : MonoBehaviour
             return null;
         }
 
+        List<float> weights = new List<float>(availablePairs.Count);
+
+        foreach (EntranceExitPair pair in availablePairs)
+        {
+            bool useWeightedScenarioSelection =
+                useRandomEntranceExitPair &&
+                useScenarioSystem &&
+                scenarioRandomService != null;
+            float weight = useWeightedScenarioSelection && scenarioRuntime != null
+                ? scenarioRuntime.GetAccessPointPreferenceWeight(pair.pairName)
+                : 1f;
+            weights.Add(weight);
+        }
+
         if (useRandomEntranceExitPair)
         {
             if (useScenarioSystem && scenarioRandomService != null)
             {
-                List<float> weights = new List<float>(availablePairs.Count);
-
-                foreach (EntranceExitPair pair in availablePairs)
-                {
-                    float weight = scenarioRuntime != null
-                        ? scenarioRuntime.GetAccessPointPreferenceWeight(pair.pairName)
-                        : 1f;
-
-                    weights.Add(weight);
-                }
-
                 int weightedIndex = scenarioRandomService.ChooseWeightedIndex(weights);
 
                 if (weightedIndex >= 0 && weightedIndex < availablePairs.Count)
                 {
                     EntranceExitPair selectedPair = availablePairs[weightedIndex];
                     LogEntranceSelection(availablePairs, weights, selectedPair);
+                    RememberEntranceSelection(availablePairs, weights, selectedPair);
                     return selectedPair;
                 }
             }
 
             int index = Random.Range(0, availablePairs.Count);
-            return availablePairs[index];
+            EntranceExitPair randomSelectedPair = availablePairs[index];
+            RememberEntranceSelection(availablePairs, weights, randomSelectedPair);
+            return randomSelectedPair;
         }
 
         for (int i = 0; i < availablePairs.Count; i++)
@@ -649,6 +754,7 @@ public class VehicleSpawnManager : MonoBehaviour
 
             if (pair != null)
             {
+                RememberEntranceSelection(availablePairs, weights, pair);
                 return pair;
             }
         }
@@ -748,6 +854,166 @@ public class VehicleSpawnManager : MonoBehaviour
         return true;
     }
 
+    private void ResolveP2EventPublisher()
+    {
+        if (p2EventPublisher == null)
+        {
+            p2EventPublisher = P2SimulationEventPublisher.Instance;
+        }
+
+        if (p2EventPublisher == null)
+        {
+#if UNITY_2023_1_OR_NEWER
+            p2EventPublisher = FindFirstObjectByType<P2SimulationEventPublisher>();
+#else
+            p2EventPublisher = FindObjectOfType<P2SimulationEventPublisher>();
+#endif
+        }
+    }
+
+    private void ResetPendingEventSelection()
+    {
+        pendingEntranceCanonicalIds.Clear();
+        pendingEntranceSceneIds.Clear();
+        pendingEntranceWeights.Clear();
+        pendingSelectedEntranceCanonicalId = string.Empty;
+        pendingSelectedEntranceSceneId = string.Empty;
+
+        pendingAreaCanonicalIds.Clear();
+        pendingAreaSceneIds.Clear();
+        pendingAreaAvailableSlotCounts.Clear();
+        pendingAreaWeights.Clear();
+        pendingSelectedAreaCanonicalId = string.Empty;
+        pendingSelectedAreaSceneId = string.Empty;
+    }
+
+    private void RememberEntranceSelection(
+        List<EntranceExitPair> availablePairs,
+        List<float> weights,
+        EntranceExitPair selectedPair)
+    {
+        pendingEntranceCanonicalIds.Clear();
+        pendingEntranceSceneIds.Clear();
+        pendingEntranceWeights.Clear();
+
+        if (availablePairs != null)
+        {
+            for (int index = 0; index < availablePairs.Count; index++)
+            {
+                EntranceExitPair pair = availablePairs[index];
+                string scenePairName = pair != null ? pair.pairName : string.Empty;
+                string canonicalId = scenarioRuntime != null
+                    ? scenarioRuntime.GetCanonicalAccessPointId(scenePairName)
+                    : scenePairName;
+
+                pendingEntranceCanonicalIds.Add(canonicalId);
+                pendingEntranceSceneIds.Add(scenePairName);
+                pendingEntranceWeights.Add(
+                    weights != null && index < weights.Count ? weights[index] : 1f
+                );
+            }
+        }
+
+        pendingSelectedEntranceSceneId = selectedPair != null
+            ? selectedPair.pairName
+            : string.Empty;
+        pendingSelectedEntranceCanonicalId = scenarioRuntime != null
+            ? scenarioRuntime.GetCanonicalAccessPointId(pendingSelectedEntranceSceneId)
+            : pendingSelectedEntranceSceneId;
+    }
+
+    private void RememberAreaSelection(
+        List<string> canonicalAreaIds,
+        List<string> sceneAreaIds,
+        List<int> availableSlotCounts,
+        List<float> weights,
+        string selectedCanonicalId,
+        string selectedSceneId)
+    {
+        pendingAreaCanonicalIds.Clear();
+        pendingAreaSceneIds.Clear();
+        pendingAreaAvailableSlotCounts.Clear();
+        pendingAreaWeights.Clear();
+
+        if (canonicalAreaIds != null)
+        {
+            pendingAreaCanonicalIds.AddRange(canonicalAreaIds);
+        }
+
+        if (sceneAreaIds != null)
+        {
+            pendingAreaSceneIds.AddRange(sceneAreaIds);
+        }
+
+        if (availableSlotCounts != null)
+        {
+            pendingAreaAvailableSlotCounts.AddRange(availableSlotCounts);
+        }
+
+        if (weights != null)
+        {
+            pendingAreaWeights.AddRange(weights);
+        }
+
+        pendingSelectedAreaCanonicalId = selectedCanonicalId ?? string.Empty;
+        pendingSelectedAreaSceneId = selectedSceneId ?? string.Empty;
+    }
+
+    private void PublishSuccessfulP2Events(
+        GameObject carObject,
+        EntranceExitPair selectedPair,
+        ParkingSlot targetSlot)
+    {
+        ResolveP2EventPublisher();
+
+        if (p2EventPublisher == null || carObject == null || targetSlot == null)
+        {
+            return;
+        }
+
+        Car carInfo = carObject.GetComponent<Car>();
+        string vehicleId = carInfo != null && !string.IsNullOrWhiteSpace(carInfo.carId)
+            ? carInfo.carId
+            : carObject.name;
+
+        p2EventPublisher.PublishEntranceSelected(
+            vehicleId,
+            pendingEntranceCanonicalIds,
+            pendingEntranceSceneIds,
+            pendingEntranceWeights,
+            pendingSelectedEntranceCanonicalId,
+            pendingSelectedEntranceSceneId
+        );
+
+        p2EventPublisher.PublishParkingAreaSelected(
+            vehicleId,
+            pendingAreaCanonicalIds,
+            pendingAreaSceneIds,
+            pendingAreaAvailableSlotCounts,
+            pendingAreaWeights,
+            pendingSelectedAreaCanonicalId,
+            pendingSelectedAreaSceneId
+        );
+
+        string canonicalAreaId = scenarioRuntime != null
+            ? scenarioRuntime.GetCanonicalAreaId(targetSlot.areaId)
+            : targetSlot.areaId;
+
+        p2EventPublisher.PublishParkingSlotSelected(
+            vehicleId,
+            targetSlot.slotId,
+            canonicalAreaId,
+            targetSlot.areaId
+        );
+
+        p2EventPublisher.PublishVehicleSpawned(
+            carObject,
+            ActiveVehicleCount,
+            maxConcurrentVehicles,
+            totalSpawnedCount
+        );
+    }
+
     private void ResolveScenarioReferences()
     {
         if (!useScenarioSystem)
@@ -798,8 +1064,8 @@ public class VehicleSpawnManager : MonoBehaviour
             yield break;
         }
 
-        float elapsedSimulationSeconds = 0f;
-        float previousSimulationTime = clock.SimulationTimeSeconds;
+        double elapsedSimulationSeconds = 0d;
+        double previousAdvancedSeconds = clock.TotalAdvancedSimulationSeconds;
 
         while (elapsedSimulationSeconds < seconds)
         {
@@ -815,20 +1081,20 @@ public class VehicleSpawnManager : MonoBehaviour
                 yield break;
             }
 
-            float currentSimulationTime = clock.SimulationTimeSeconds;
-            float frameIncrement = currentSimulationTime - previousSimulationTime;
+            double currentAdvancedSeconds = clock.TotalAdvancedSimulationSeconds;
+            double frameIncrement = currentAdvancedSeconds - previousAdvancedSeconds;
 
-            // SetSimulationTime、ResetClock、シナリオループなどで時刻が
-            // 巻き戻ったフレームは待機時間を減らさず、負の増分だけ無視します。
-            // 巻き戻し後の次フレームからは、新しい時刻を基準に再び加算します。
-            if (frameIncrement > 0f &&
-                !float.IsNaN(frameIncrement) &&
-                !float.IsInfinity(frameIncrement))
+            // Clockが自然に前進させた秒数だけを積算します。
+            // SetSimulationTimeによる巻き戻し・早送りや、表示時刻のループは
+            // 待機秒数そのものを増減させません。
+            if (frameIncrement > 0d &&
+                !double.IsNaN(frameIncrement) &&
+                !double.IsInfinity(frameIncrement))
             {
                 elapsedSimulationSeconds += frameIncrement;
             }
 
-            previousSimulationTime = currentSimulationTime;
+            previousAdvancedSeconds = currentAdvancedSeconds;
         }
     }
 
