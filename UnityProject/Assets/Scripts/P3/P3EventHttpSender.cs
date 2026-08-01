@@ -88,7 +88,7 @@ public class P3EventHttpSender : MonoBehaviour
             return;
         }
 
-        bool batchFull = pendingEventCount >= Mathf.Max(1, settings.eventBatchSize);
+        bool batchFull = pendingEventCount >= settings.EffectiveEventBatchSize;
         bool intervalElapsed = Time.unscaledTime >= nextRegularFlushAtUnscaledTime;
 
         if (immediateFlushRequested || batchFull || intervalElapsed)
@@ -235,6 +235,30 @@ public class P3EventHttpSender : MonoBehaviour
                 return;
             }
 
+            int requestBytes = GetBatchBodyByteCount(new List<string> { json });
+            if (requestBytes > settings.EffectiveEventMaximumRequestBytes)
+            {
+                string reason = BuildOversizedEventReason(requestBytes);
+                P3PendingFileStore.WriteFailedPayload(
+                    settings.FailedEventPath,
+                    BuildEventFileName(simulationEvent),
+                    json,
+                    reason
+                );
+
+                if (transmissionStatus != null)
+                {
+                    transmissionStatus.RecordEventPermanentFailure(1, 0, reason);
+                }
+
+                if (settings.logPermanentFailures)
+                {
+                    Debug.LogError("[P3Event] " + reason);
+                }
+
+                return;
+            }
+
             EnsureQueueDirectories();
             P3PendingFileStore.WriteIfMissing(
                 settings.PendingEventPath,
@@ -244,7 +268,7 @@ public class P3EventHttpSender : MonoBehaviour
 
             RefreshPendingCount();
 
-            if (pendingEventCount >= Mathf.Max(1, settings.eventBatchSize))
+            if (pendingEventCount >= settings.EffectiveEventBatchSize)
             {
                 immediateFlushRequested = true;
             }
@@ -277,11 +301,12 @@ public class P3EventHttpSender : MonoBehaviour
             yield break;
         }
 
-        int maximum = Mathf.Min(Mathf.Max(1, settings.eventBatchSize), allFiles.Length);
+        int maximum = Mathf.Min(settings.EffectiveEventBatchSize, allFiles.Length);
+        int maximumBytes = settings.EffectiveEventMaximumRequestBytes;
         List<string> batchPaths = new List<string>(maximum);
         List<string> eventJsonList = new List<string>(maximum);
 
-        for (int i = 0; i < maximum; i++)
+        for (int i = 0; i < allFiles.Length && batchPaths.Count < maximum; i++)
         {
             string path = allFiles[i];
 
@@ -290,16 +315,30 @@ public class P3EventHttpSender : MonoBehaviour
                 string json = File.ReadAllText(path, Encoding.UTF8).Trim();
                 if (string.IsNullOrWhiteSpace(json))
                 {
-                    MoveUnreadableFileToFailed(path, "Pending Event file was empty.");
+                    MovePendingFileToFailed(path, "Pending Event file was empty.");
                     continue;
                 }
 
-                batchPaths.Add(path);
+                int singleEventBytes = GetBatchBodyByteCount(new List<string> { json });
+                if (singleEventBytes > maximumBytes)
+                {
+                    MovePendingFileToFailed(path, BuildOversizedEventReason(singleEventBytes));
+                    continue;
+                }
+
                 eventJsonList.Add(json);
+                int candidateBytes = GetBatchBodyByteCount(eventJsonList);
+                if (candidateBytes > maximumBytes)
+                {
+                    eventJsonList.RemoveAt(eventJsonList.Count - 1);
+                    break;
+                }
+
+                batchPaths.Add(path);
             }
             catch (Exception exception)
             {
-                MoveUnreadableFileToFailed(
+                MovePendingFileToFailed(
                     path,
                     "Pending Event file could not be read: " + exception.Message
                 );
@@ -422,6 +461,20 @@ public class P3EventHttpSender : MonoBehaviour
         return string.Join("\n", events.ToArray()) + "\n";
     }
 
+    private int GetBatchBodyByteCount(List<string> events)
+    {
+        return Encoding.UTF8.GetByteCount(BuildBatchBody(events));
+    }
+
+    private string BuildOversizedEventReason(int actualBytes)
+    {
+        return "Event request body exceeds the confirmed Backend limit. Actual=" +
+               actualBytes.ToString(CultureInfo.InvariantCulture) +
+               " bytes, Limit=" +
+               settings.EffectiveEventMaximumRequestBytes.ToString(CultureInfo.InvariantCulture) +
+               " bytes.";
+    }
+
     private void ScheduleRetry(long statusCode, string reason)
     {
         consecutiveRetryAttempts++;
@@ -460,7 +513,7 @@ public class P3EventHttpSender : MonoBehaviour
         }
     }
 
-    private void MoveUnreadableFileToFailed(string path, string reason)
+    private void MovePendingFileToFailed(string path, string reason)
     {
         try
         {
@@ -474,7 +527,7 @@ public class P3EventHttpSender : MonoBehaviour
         catch (Exception exception)
         {
             Debug.LogError(
-                "[P3Event] Failed to quarantine an unreadable pending file: " + exception
+                "[P3Event] Failed to quarantine a pending file: " + exception
             );
         }
     }

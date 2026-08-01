@@ -20473,6 +20473,167 @@ Transform:
   m_Children: []
   m_Father: {fileID: 561490920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &467083330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 467083336}
+  - component: {fileID: 467083335}
+  - component: {fileID: 467083334}
+  - component: {fileID: 467083333}
+  - component: {fileID: 467083332}
+  - component: {fileID: 467083331}
+  m_Layer: 0
+  m_Name: P3BackendSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &467083331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467083330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81942537c19549d6960b2beeaa525dfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settings: {fileID: 467083335}
+  transmissionStatus: {fileID: 467083334}
+  requestInProgress: 0
+  nextHealthCheckAtUnscaledTime: 0
+--- !u!114 &467083332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467083330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd50aeced80547e0ab563a00eb2075b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settings: {fileID: 467083335}
+  transmissionStatus: {fileID: 467083334}
+  snapshotWriter: {fileID: 1597037659}
+  contractValidator: {fileID: 1597037660}
+  subscribed: 0
+  requestInProgress: 0
+  consecutiveRetryAttempts: 0
+  nextAttemptAtUnscaledTime: 0
+  pendingSnapshotCount: 0
+--- !u!114 &467083333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467083330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca04b6d508d740028a7245cd0633b683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settings: {fileID: 467083335}
+  transmissionStatus: {fileID: 467083334}
+  eventPublisher: {fileID: 1663448875}
+  contractValidator: {fileID: 1663448874}
+  subscribed: 0
+  requestInProgress: 0
+  consecutiveRetryAttempts: 0
+  nextAttemptAtUnscaledTime: 0
+  pendingEventCount: 0
+--- !u!114 &467083334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467083330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d3bd164faca479d907b49856a10e3f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backendReachable: 0
+  lastHealthCheckUtc: 
+  lastHealthError: 
+  pendingSnapshotCount: 0
+  pendingEventCount: 0
+  snapshotRequestInProgress: 0
+  eventRequestInProgress: 0
+  transmittedSnapshotCount: 0
+  transmittedEventCount: 0
+  permanentlyFailedSnapshotCount: 0
+  permanentlyFailedEventCount: 0
+  lastSuccessUtc: 
+  lastFailureUtc: 
+  lastHttpStatusCode: 0
+  lastError: 
+--- !u!114 &467083335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467083330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e7b1bf5f0f34e63a2568233ed949bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableSnapshotTransmission: 1
+  enableEventTransmission: 1
+  enableHealthCheck: 1
+  baseUrl: http://localhost:8000
+  healthEndpoint: /api/health
+  snapshotEndpoint: /api/v1/snapshots
+  eventEndpoint: /api/v1/events
+  eventBatchFormat: 0
+  eventBatchSize: 50
+  eventFlushIntervalSeconds: 2
+  eventMaximumRequestBytes: 1048576
+  snapshotMaximumRequestBytes: 5242880
+  requestTimeoutSeconds: 10
+  treatHttp409AsSuccess: 0
+  retryDelaySeconds: 2
+  retryCooldownSeconds: 30
+  maxRetryAttemptsBeforeCooldown: 5
+  useExponentialBackoff: 1
+  healthCheckIntervalSeconds: 10
+  authenticationMode: 0
+  apiKeyHeaderName: X-API-Key
+  apiKey: 
+  bearerToken: 
+  pendingDirectoryName: P3Pending
+  failedDirectoryName: P3Failed
+  logSuccessfulRequests: 0
+  logRetryWarnings: 1
+  logPermanentFailures: 1
+--- !u!4 &467083336
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467083330}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &469109541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -92373,3 +92534,4 @@ SceneRoots:
   - {fileID: 885648330}
   - {fileID: 1597037662}
   - {fileID: 1663448876}
+  - {fileID: 467083336}

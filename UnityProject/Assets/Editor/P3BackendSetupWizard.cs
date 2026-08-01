@@ -39,29 +39,21 @@ public static class P3BackendSetupWizard
         P2SnapshotContractValidator snapshotValidator = FindSceneObject<P2SnapshotContractValidator>();
 
         Undo.RecordObject(settings, "Configure P3 Backend Settings");
-        if (string.IsNullOrWhiteSpace(settings.baseUrl))
-        {
-            settings.baseUrl = "http://localhost:8000";
-        }
-        if (string.IsNullOrWhiteSpace(settings.healthEndpoint))
-        {
-            settings.healthEndpoint = "/health";
-        }
-        if (string.IsNullOrWhiteSpace(settings.snapshotEndpoint))
-        {
-            settings.snapshotEndpoint = "/api/v1/snapshots";
-        }
-        if (string.IsNullOrWhiteSpace(settings.eventEndpoint))
-        {
-            settings.eventEndpoint = "/api/v1/events";
-        }
+        settings.baseUrl = "http://localhost:8000";
+        settings.healthEndpoint = "/api/health";
+        settings.snapshotEndpoint = "/api/v1/snapshots";
+        settings.eventEndpoint = "/api/v1/events";
         settings.enableSnapshotTransmission = true;
         settings.enableEventTransmission = true;
         settings.enableHealthCheck = true;
         settings.eventBatchFormat = P3EventBatchFormat.Ndjson;
-        settings.eventBatchSize = Mathf.Max(1, settings.eventBatchSize);
+        settings.eventBatchSize = P3BackendSettings.BackendMaximumEventBatchCount;
         settings.eventFlushIntervalSeconds = Mathf.Max(0.1f, settings.eventFlushIntervalSeconds);
-        settings.requestTimeoutSeconds = Mathf.Max(1f, settings.requestTimeoutSeconds);
+        settings.eventMaximumRequestBytes = P3BackendSettings.BackendMaximumEventRequestBytes;
+        settings.snapshotMaximumRequestBytes = P3BackendSettings.BackendMaximumSnapshotRequestBytes;
+        settings.requestTimeoutSeconds = 10f;
+        settings.treatHttp409AsSuccess = false;
+        settings.authenticationMode = P3AuthenticationMode.None;
         settings.retryDelaySeconds = Mathf.Max(0.1f, settings.retryDelaySeconds);
         settings.retryCooldownSeconds = Mathf.Max(1f, settings.retryCooldownSeconds);
         settings.maxRetryAttemptsBeforeCooldown = Mathf.Max(
@@ -106,7 +98,7 @@ public static class P3BackendSetupWizard
         {
             Debug.Log(
                 "[P3] Backend transmission setup was created or updated. " +
-                "Configure the Backend Base URL and authentication on P3BackendSystem."
+                "Confirmed local Backend contract values were applied to P3BackendSystem."
             );
         }
     }
@@ -192,8 +184,7 @@ public static class P3BackendSetupWizard
         {
             Debug.Log(
                 "[P3] Backend transmission setup validation passed. " +
-                "This validates Unity-side configuration only; the Backend response contract " +
-                "must still be confirmed with the Backend team."
+                "Confirmed local Backend contract settings are valid on the Unity side."
             );
         }
     }

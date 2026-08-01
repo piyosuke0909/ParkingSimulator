@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 [Serializable]
@@ -57,6 +58,25 @@ public class P2EventContractValidator : MonoBehaviour
         RequireText(result, simulationEvent.eventId, "eventId");
         RequireText(result, simulationEvent.eventType, "eventType");
         RequireText(result, simulationEvent.generatedAtUtc, "generatedAtUtc");
+
+        DateTimeOffset generatedAtUtc;
+        if (!string.IsNullOrWhiteSpace(simulationEvent.generatedAtUtc) &&
+            !DateTimeOffset.TryParse(
+                simulationEvent.generatedAtUtc,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out generatedAtUtc
+            ))
+        {
+            result.AddError("generatedAtUtc must be a valid date-time string.");
+        }
+
+        if (simulationEvent.commandId != null &&
+            simulationEvent.commandId.Length > 0 &&
+            string.IsNullOrWhiteSpace(simulationEvent.commandId))
+        {
+            result.AddError("commandId must not contain only whitespace when supplied.");
+        }
         RequireText(result, simulationEvent.sceneName, "sceneName");
         RequireText(result, simulationEvent.sessionId, "sessionId");
         RequireText(result, simulationEvent.runId, "runId");

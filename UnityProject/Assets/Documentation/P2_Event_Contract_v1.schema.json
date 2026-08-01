@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "smart-parking.simulation-event.schema.json",
-  "title": "Smart Parking Simulation Event v1",
+  "title": "Smart Parking Simulation Event v1.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -22,9 +22,16 @@
     "payload"
   ],
   "properties": {
-    "contractName": { "const": "smart-parking.simulation-event" },
-    "schemaVersion": { "const": "1.0" },
-    "eventId": { "type": "string", "minLength": 1 },
+    "contractName": {
+      "const": "smart-parking.simulation-event"
+    },
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "eventId": {
+      "type": "string",
+      "minLength": 1
+    },
     "eventType": {
       "type": "string",
       "enum": [
@@ -41,78 +48,78 @@
         "vehicle.exited"
       ]
     },
-    "sourceSystem": { "const": "unity" },
-    "generatedAtUtc": { "type": "string", "minLength": 1 },
-    "sceneName": { "type": "string", "minLength": 1 },
-    "sessionId": { "type": "string", "minLength": 1 },
-    "runId": { "type": "string", "minLength": 1 },
-    "sequenceNumber": { "type": "integer", "minimum": 1 },
-    "scenarioId": { "type": "string", "minLength": 1 },
-    "scenarioVersion": { "type": "string" },
-    "facilityId": { "type": "string" },
-    "simulationTimeSeconds": { "type": "number", "minimum": 0 },
-    "correlationId": { "type": "string" },
-    "entityType": { "type": "string", "minLength": 1 },
-    "entityId": { "type": "string", "minLength": 1 },
+    "sourceSystem": {
+      "const": "unity"
+    },
+    "generatedAtUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sceneName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sessionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sequenceNumber": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "scenarioId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scenarioVersion": {
+      "type": "string"
+    },
+    "facilityId": {
+      "type": "string"
+    },
+    "simulationTimeSeconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "correlationId": {
+      "type": "string"
+    },
+    "entityType": {
+      "type": "string",
+      "minLength": 1
+    },
+    "entityId": {
+      "type": "string",
+      "minLength": 1
+    },
     "payload": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "scenario": { "$ref": "#/$defs/nullableScenarioPayload" },
-        "scenarioFactor": { "$ref": "#/$defs/nullableFactorPayload" },
-        "selection": { "$ref": "#/$defs/nullableSelectionPayload" },
-        "vehicle": { "$ref": "#/$defs/nullableVehiclePayload" }
+        "scenario": {
+          "$ref": "#/$defs/scenarioPayload"
+        },
+        "scenarioFactor": {
+          "$ref": "#/$defs/factorPayload"
+        },
+        "selection": {
+          "$ref": "#/$defs/selectionPayload"
+        },
+        "vehicle": {
+          "$ref": "#/$defs/vehiclePayload"
+        }
       }
+    },
+    "commandId": {
+      "type": "string",
+      "minLength": 1
     }
   },
   "$defs": {
-    "nullableScenarioPayload": {
-      "oneOf": [
-        { "type": "null" },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "startReason": { "type": "string" },
-            "completionReason": { "type": "string" },
-            "scenarioName": { "type": "string" },
-            "mapVersion": { "type": "string" },
-            "timeOfDay": { "type": "string" },
-            "randomSeed": { "type": "integer" },
-            "randomSeedPolicy": { "type": "string" },
-            "durationSeconds": { "type": "number", "minimum": 0 },
-            "activeVehicleCount": { "type": "integer", "minimum": 0 },
-            "totalSpawnedCount": { "type": "integer", "minimum": 0 }
-          }
-        }
-      ]
-    },
-    "nullableFactorPayload": {
-      "oneOf": [
-        { "type": "null" },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["scenarioFactorId", "factorCode", "effects"],
-          "properties": {
-            "scenarioFactorId": { "type": "string", "minLength": 1 },
-            "factorCode": { "type": "string" },
-            "label": { "type": "string" },
-            "category": { "type": "string" },
-            "informationAvailability": { "type": "string" },
-            "intensity": { "type": "number" },
-            "startSimulationTimeSeconds": { "type": "number", "minimum": 0 },
-            "endSimulationTimeSeconds": { "type": "number", "minimum": 0 },
-            "hasKnownFromSimulationTimeSeconds": { "type": "boolean" },
-            "knownFromSimulationTimeSeconds": { "type": "number", "minimum": 0 },
-            "effects": {
-              "type": "array",
-              "items": { "$ref": "#/$defs/factorEffect" }
-            }
-          }
-        }
-      ]
-    },
     "factorEffect": {
       "type": "object",
       "additionalProperties": false,
@@ -127,88 +134,365 @@
         "unit"
       ],
       "properties": {
-        "scenarioFactorEffectId": { "type": "string" },
-        "targetType": { "type": "string" },
-        "targetId": { "type": "string" },
-        "resolvedTargetId": { "type": "string" },
-        "metric": { "type": "string" },
-        "operation": { "type": "string" },
-        "value": { "type": "number" },
-        "unit": { "type": "string" }
-      }
-    },
-    "nullableSelectionPayload": {
-      "oneOf": [
-        { "type": "null" },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["selectionType", "selectedCanonicalId", "candidates"],
-          "properties": {
-            "selectionType": { "type": "string" },
-            "selectedCanonicalId": { "type": "string", "minLength": 1 },
-            "selectedSceneId": { "type": "string" },
-            "selectedParentCanonicalId": { "type": "string" },
-            "selectedParentSceneId": { "type": "string" },
-            "selectedSlotId": { "type": "string" },
-            "selectedAvailableSlotCount": { "type": "integer", "minimum": 0 },
-            "candidates": {
-              "type": "array",
-              "items": { "$ref": "#/$defs/weightedCandidate" }
-            }
-          }
+        "scenarioFactorEffectId": {
+          "type": "string"
+        },
+        "targetType": {
+          "type": "string"
+        },
+        "targetId": {
+          "type": "string"
+        },
+        "resolvedTargetId": {
+          "type": "string"
+        },
+        "metric": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string"
         }
-      ]
+      }
     },
     "weightedCandidate": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["canonicalId", "sceneId", "weight", "availableSlotCount"],
+      "required": [
+        "canonicalId",
+        "sceneId",
+        "weight",
+        "availableSlotCount"
+      ],
       "properties": {
-        "canonicalId": { "type": "string" },
-        "sceneId": { "type": "string" },
-        "weight": { "type": "number", "minimum": 0 },
-        "availableSlotCount": { "type": "integer", "minimum": 0 }
-      }
-    },
-    "nullableVehiclePayload": {
-      "oneOf": [
-        { "type": "null" },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["vehicleId", "objectName", "movementState", "position"],
-          "properties": {
-            "vehicleId": { "type": "string", "minLength": 1 },
-            "objectName": { "type": "string" },
-            "spawnSequenceNumber": { "type": "integer", "minimum": 0 },
-            "spawnedAtSimulationTimeSeconds": { "type": "number", "minimum": 0 },
-            "entranceAccessPointId": { "type": "string" },
-            "entranceScenePairName": { "type": "string" },
-            "targetAreaId": { "type": "string" },
-            "targetSceneAreaId": { "type": "string" },
-            "targetSlotId": { "type": "string" },
-            "currentSlotId": { "type": "string" },
-            "movementState": { "type": "string" },
-            "previousMovementState": { "type": "string" },
-            "reason": { "type": "string" },
-            "activeVehicleCount": { "type": "integer", "minimum": 0 },
-            "maxConcurrentVehicles": { "type": "integer", "minimum": 0 },
-            "totalSpawnedCount": { "type": "integer", "minimum": 0 },
-            "position": { "$ref": "#/$defs/vector3" }
-          }
+        "canonicalId": {
+          "type": "string"
+        },
+        "sceneId": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0
+        },
+        "availableSlotCount": {
+          "type": "integer",
+          "minimum": 0
         }
-      ]
+      }
     },
     "vector3": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["x", "y", "z"],
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
       "properties": {
-        "x": { "type": "number" },
-        "y": { "type": "number" },
-        "z": { "type": "number" }
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "z": {
+          "type": "number"
+        }
+      }
+    },
+    "scenarioPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "startReason": {
+          "type": "string"
+        },
+        "completionReason": {
+          "type": "string"
+        },
+        "scenarioName": {
+          "type": "string"
+        },
+        "mapVersion": {
+          "type": "string"
+        },
+        "timeOfDay": {
+          "type": "string"
+        },
+        "randomSeed": {
+          "type": "integer"
+        },
+        "randomSeedPolicy": {
+          "type": "string"
+        },
+        "durationSeconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "activeVehicleCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalSpawnedCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "factorPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scenarioFactorId",
+        "factorCode",
+        "effects"
+      ],
+      "properties": {
+        "scenarioFactorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "factorCode": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "informationAvailability": {
+          "type": "string"
+        },
+        "intensity": {
+          "type": "number"
+        },
+        "startSimulationTimeSeconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "endSimulationTimeSeconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "hasKnownFromSimulationTimeSeconds": {
+          "type": "boolean"
+        },
+        "knownFromSimulationTimeSeconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/factorEffect"
+          }
+        }
+      }
+    },
+    "selectionPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selectionType",
+        "selectedCanonicalId",
+        "candidates"
+      ],
+      "properties": {
+        "selectionType": {
+          "type": "string"
+        },
+        "selectedCanonicalId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selectedSceneId": {
+          "type": "string"
+        },
+        "selectedParentCanonicalId": {
+          "type": "string"
+        },
+        "selectedParentSceneId": {
+          "type": "string"
+        },
+        "selectedSlotId": {
+          "type": "string"
+        },
+        "selectedAvailableSlotCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/weightedCandidate"
+          }
+        }
+      }
+    },
+    "vehiclePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vehicleId",
+        "objectName",
+        "movementState",
+        "position"
+      ],
+      "properties": {
+        "vehicleId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "objectName": {
+          "type": "string"
+        },
+        "spawnSequenceNumber": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "spawnedAtSimulationTimeSeconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "entranceAccessPointId": {
+          "type": "string"
+        },
+        "entranceScenePairName": {
+          "type": "string"
+        },
+        "targetAreaId": {
+          "type": "string"
+        },
+        "targetSceneAreaId": {
+          "type": "string"
+        },
+        "targetSlotId": {
+          "type": "string"
+        },
+        "currentSlotId": {
+          "type": "string"
+        },
+        "movementState": {
+          "type": "string"
+        },
+        "previousMovementState": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "activeVehicleCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxConcurrentVehicles": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalSpawnedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "position": {
+          "$ref": "#/$defs/vector3"
+        }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "enum": [
+              "scenario.started",
+              "scenario.completed"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "required": [
+              "scenario"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "enum": [
+              "scenario_factor.activated",
+              "scenario_factor.deactivated"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "required": [
+              "scenarioFactor"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "enum": [
+              "entrance.selected",
+              "parking_area.selected",
+              "parking_slot.selected"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "required": [
+              "selection"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "enum": [
+              "vehicle.spawned",
+              "vehicle.parked",
+              "vehicle.leaving",
+              "vehicle.exited"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "required": [
+              "vehicle"
+            ]
+          }
+        }
+      }
+    }
+  ]
 }

@@ -38,6 +38,7 @@ public class P2SimulationEvent
     public string facilityId;
     public double simulationTimeSeconds;
     public string correlationId;
+    public string commandId;
     public string entityType;
     public string entityId;
     public P2EventPayload payload = new P2EventPayload();

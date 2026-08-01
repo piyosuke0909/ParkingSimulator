@@ -215,6 +215,30 @@ public class P3SnapshotHttpSender : MonoBehaviour
                 json = JsonUtility.ToJson(snapshot, false);
             }
 
+            int requestBytes = Encoding.UTF8.GetByteCount(json);
+            if (requestBytes > settings.EffectiveSnapshotMaximumRequestBytes)
+            {
+                string reason = BuildOversizedSnapshotReason(requestBytes);
+                P3PendingFileStore.WriteFailedPayload(
+                    settings.FailedSnapshotPath,
+                    BuildSnapshotFileName(snapshot),
+                    json,
+                    reason
+                );
+
+                if (transmissionStatus != null)
+                {
+                    transmissionStatus.RecordSnapshotPermanentFailure(1, 0, reason);
+                }
+
+                if (settings.logPermanentFailures)
+                {
+                    Debug.LogError("[P3Snapshot] " + reason);
+                }
+
+                return;
+            }
+
             EnsureQueueDirectories();
             P3PendingFileStore.WriteIfMissing(
                 settings.PendingSnapshotPath,
@@ -261,17 +285,26 @@ public class P3SnapshotHttpSender : MonoBehaviour
 
             if (string.IsNullOrWhiteSpace(json))
             {
-                MoveUnreadableFileToFailed(path, "Pending Snapshot file was empty.");
+                MovePendingFileToFailed(path, "Pending Snapshot file was empty.");
                 RefreshPendingCount();
                 yield break;
             }
         }
         catch (Exception exception)
         {
-            MoveUnreadableFileToFailed(
+            MovePendingFileToFailed(
                 path,
                 "Pending Snapshot file could not be read: " + exception.Message
             );
+            RefreshPendingCount();
+            yield break;
+        }
+
+        int requestBytes = Encoding.UTF8.GetByteCount(json);
+        if (requestBytes > settings.EffectiveSnapshotMaximumRequestBytes)
+        {
+            string reason = BuildOversizedSnapshotReason(requestBytes);
+            MovePendingFileToFailed(path, reason);
             RefreshPendingCount();
             yield break;
         }
@@ -383,7 +416,7 @@ public class P3SnapshotHttpSender : MonoBehaviour
         }
     }
 
-    private void MoveUnreadableFileToFailed(string path, string reason)
+    private void MovePendingFileToFailed(string path, string reason)
     {
         try
         {
@@ -397,7 +430,7 @@ public class P3SnapshotHttpSender : MonoBehaviour
         catch (Exception exception)
         {
             Debug.LogError(
-                "[P3Snapshot] Failed to quarantine an unreadable pending file: " + exception
+                "[P3Snapshot] Failed to quarantine a pending file: " + exception
             );
         }
     }
@@ -443,6 +476,15 @@ public class P3SnapshotHttpSender : MonoBehaviour
         }
 
         return true;
+    }
+
+    private string BuildOversizedSnapshotReason(int actualBytes)
+    {
+        return "Snapshot request body exceeds the confirmed Backend limit. Actual=" +
+               actualBytes.ToString(CultureInfo.InvariantCulture) +
+               " bytes, Limit=" +
+               settings.EffectiveSnapshotMaximumRequestBytes.ToString(CultureInfo.InvariantCulture) +
+               " bytes.";
     }
 
     private static string BuildSnapshotFileName(P2SimulationSnapshot snapshot)
