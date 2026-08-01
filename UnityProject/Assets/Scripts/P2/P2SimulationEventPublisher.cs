@@ -855,7 +855,26 @@ public class P2SimulationEventPublisher : MonoBehaviour
 
     private void Publish(P2SimulationEvent simulationEvent)
     {
-        EventPublished?.Invoke(simulationEvent);
+        Action<P2SimulationEvent> handlers = EventPublished;
+        if (handlers == null)
+        {
+            return;
+        }
+
+        foreach (Delegate subscriber in handlers.GetInvocationList())
+        {
+            try
+            {
+                ((Action<P2SimulationEvent>)subscriber)(simulationEvent);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError(
+                    "[P2Event] An EventPublished subscriber failed. " +
+                    "Other Event consumers continue. " + exception
+                );
+            }
+        }
     }
 
     private P2ScenarioEventPayload BuildScenarioPayload()
