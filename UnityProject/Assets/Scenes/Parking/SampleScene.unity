@@ -20624,7 +20624,7 @@ MonoBehaviour:
   healthCheckIntervalSeconds: 10
   authenticationMode: 1
   apiKeyHeaderName: X-API-Key
-  apiKey: 
+  apiKey: local-dev-key
   bearerToken: 
   pendingDirectoryName: P3Pending
   failedDirectoryName: P3Failed
