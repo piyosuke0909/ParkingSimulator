@@ -45,7 +45,13 @@
         "vehicle.spawned",
         "vehicle.parked",
         "vehicle.leaving",
-        "vehicle.exited"
+        "vehicle.exited",
+        "command.accepted",
+        "command.started",
+        "command.succeeded",
+        "command.failed",
+        "command.rejected",
+        "command.expired"
       ]
     },
     "sourceSystem": {
@@ -111,6 +117,9 @@
         },
         "vehicle": {
           "$ref": "#/$defs/vehiclePayload"
+        },
+        "command": {
+          "$ref": "#/$defs/commandPayload"
         }
       }
     },
@@ -404,6 +413,60 @@
           "$ref": "#/$defs/vector3"
         }
       }
+    },
+    "commandResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "areaId": {
+          "type": "string"
+        },
+        "previousPolicy": {
+          "type": "string"
+        },
+        "appliedPolicy": {
+          "type": "string"
+        }
+      }
+    },
+    "commandPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "idempotencyKey",
+        "commandType",
+        "status",
+        "reasonCode",
+        "message",
+        "retryable",
+        "result"
+      ],
+      "properties": {
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commandType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reasonCode": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "result": {
+          "$ref": "#/$defs/commandResult"
+        }
+      }
     }
   },
   "allOf": [
@@ -489,6 +552,34 @@
           "payload": {
             "required": [
               "vehicle"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "enum": [
+              "command.accepted",
+              "command.started",
+              "command.succeeded",
+              "command.failed",
+              "command.rejected",
+              "command.expired"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "commandId"
+        ],
+        "properties": {
+          "payload": {
+            "required": [
+              "command"
             ]
           }
         }

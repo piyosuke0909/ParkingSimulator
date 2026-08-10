@@ -27,6 +27,9 @@ public class VehicleSpawnManager : MonoBehaviour
     [Header("P2 Event Output (Optional)")]
     public P2SimulationEventPublisher p2EventPublisher;
 
+    [Header("P3 Area Policy (Optional)")]
+    public P3AreaPolicyRuntime p3AreaPolicyRuntime;
+
     [Header("Vehicle")]
     public GameObject npcCarPrefab;
     public Transform vehicleParent;
@@ -116,6 +119,7 @@ public class VehicleSpawnManager : MonoBehaviour
     {
         ResolveScenarioReferences();
         ResolveP2EventPublisher();
+        ResolveP3AreaPolicyRuntime();
     }
 
     private void Start()
@@ -588,12 +592,21 @@ public class VehicleSpawnManager : MonoBehaviour
     {
         selectedSceneAreaId = string.Empty;
 
-        if (useScenarioSystem &&
-            useScenarioAreaPreference &&
+        ResolveP3AreaPolicyRuntime();
+
+        bool useWeightedAreaSelection =
             useRandomSlot &&
-            scenarioRandomService != null)
+            scenarioRandomService != null &&
+            ((useScenarioSystem && useScenarioAreaPreference) || p3AreaPolicyRuntime != null);
+
+        if (useWeightedAreaSelection)
         {
             List<string> availableAreaIds = parkingLotManager.GetAvailableAreaIdsWithAccessWaypoint();
+
+            if (p3AreaPolicyRuntime != null)
+            {
+                availableAreaIds.RemoveAll(sceneAreaId => p3AreaPolicyRuntime.IsClosed(sceneAreaId));
+            }
 
             if (availableAreaIds.Count == 0)
             {
@@ -610,7 +623,12 @@ public class VehicleSpawnManager : MonoBehaviour
                     ? scenarioRuntime.GetAreaPreferenceWeight(sceneAreaId)
                     : 1f;
 
-                weights.Add(weight);
+                if (p3AreaPolicyRuntime != null)
+                {
+                    weight *= p3AreaPolicyRuntime.GetSelectionWeightMultiplier(sceneAreaId);
+                }
+
+                weights.Add(Mathf.Max(0f, weight));
                 availableSlotCounts.Add(parkingLotManager.GetAvailableSlotCountInArea(sceneAreaId));
                 canonicalAreaIds.Add(
                     scenarioRuntime != null
@@ -1041,6 +1059,25 @@ public class VehicleSpawnManager : MonoBehaviour
         if (scenarioRunLogger == null && scenarioRuntime != null)
         {
             scenarioRunLogger = scenarioRuntime.RunLogger;
+        }
+    }
+
+    private void ResolveP3AreaPolicyRuntime()
+    {
+        if (p3AreaPolicyRuntime != null)
+        {
+            return;
+        }
+
+        p3AreaPolicyRuntime = P3AreaPolicyRuntime.Instance;
+
+        if (p3AreaPolicyRuntime == null)
+        {
+#if UNITY_2023_1_OR_NEWER
+            p3AreaPolicyRuntime = FindFirstObjectByType<P3AreaPolicyRuntime>();
+#else
+            p3AreaPolicyRuntime = FindObjectOfType<P3AreaPolicyRuntime>();
+#endif
         }
     }
 

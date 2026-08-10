@@ -94,13 +94,23 @@ public static class P3HttpRequestUtility
         P3BackendSettings settings,
         Action<P3HttpResponse> completed)
     {
+        float timeoutSeconds = settings != null ? settings.requestTimeoutSeconds : 10f;
+        yield return Get(url, settings, timeoutSeconds, completed);
+    }
+
+    public static IEnumerator Get(
+        string url,
+        P3BackendSettings settings,
+        float timeoutSeconds,
+        Action<P3HttpResponse> completed)
+    {
         UnityWebRequest request = null;
 
         try
         {
             request = UnityWebRequest.Get(url);
             request.SetRequestHeader("Accept", "application/json");
-            ConfigureRequest(request, settings);
+            ConfigureRequest(request, settings, timeoutSeconds);
         }
         catch (Exception exception)
         {
@@ -123,12 +133,24 @@ public static class P3HttpRequestUtility
 
     private static void ConfigureRequest(UnityWebRequest request, P3BackendSettings settings)
     {
+        ConfigureRequest(
+            request,
+            settings,
+            settings != null ? settings.requestTimeoutSeconds : 10f
+        );
+    }
+
+    private static void ConfigureRequest(
+        UnityWebRequest request,
+        P3BackendSettings settings,
+        float timeoutSeconds)
+    {
         if (request == null || settings == null)
         {
             return;
         }
 
-        request.timeout = Mathf.Max(1, Mathf.CeilToInt(settings.requestTimeoutSeconds));
+        request.timeout = Mathf.Max(1, Mathf.CeilToInt(timeoutSeconds));
 
         switch (settings.authenticationMode)
         {

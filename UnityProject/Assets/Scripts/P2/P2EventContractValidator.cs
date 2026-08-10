@@ -40,7 +40,13 @@ public class P2EventContractValidator : MonoBehaviour
         P2EventContractConstants.VehicleSpawned,
         P2EventContractConstants.VehicleParked,
         P2EventContractConstants.VehicleLeaving,
-        P2EventContractConstants.VehicleExited
+        P2EventContractConstants.VehicleExited,
+        P2EventContractConstants.CommandAccepted,
+        P2EventContractConstants.CommandStarted,
+        P2EventContractConstants.CommandSucceeded,
+        P2EventContractConstants.CommandFailed,
+        P2EventContractConstants.CommandRejected,
+        P2EventContractConstants.CommandExpired
     };
 
     public P2EventValidationResult Validate(P2SimulationEvent simulationEvent)
@@ -194,6 +200,26 @@ public class P2EventContractValidator : MonoBehaviour
             }
 
             RequireText(result, payload.vehicle.vehicleId, "payload.vehicle.vehicleId");
+        }
+
+        if (eventType == P2EventContractConstants.CommandAccepted ||
+            eventType == P2EventContractConstants.CommandStarted ||
+            eventType == P2EventContractConstants.CommandSucceeded ||
+            eventType == P2EventContractConstants.CommandFailed ||
+            eventType == P2EventContractConstants.CommandRejected ||
+            eventType == P2EventContractConstants.CommandExpired)
+        {
+            RequireText(result, simulationEvent.commandId, "commandId");
+
+            if (payload.command == null)
+            {
+                result.AddError("payload.command is required for " + eventType + ".");
+                return;
+            }
+
+            RequireText(result, payload.command.idempotencyKey, "payload.command.idempotencyKey");
+            RequireText(result, payload.command.commandType, "payload.command.commandType");
+            RequireText(result, payload.command.status, "payload.command.status");
         }
     }
 

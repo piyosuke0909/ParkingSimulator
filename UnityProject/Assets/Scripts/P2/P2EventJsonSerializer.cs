@@ -100,6 +100,7 @@ public static class P2EventJsonSerializer
             AppendPayload(builder, "scenarioFactor", payload.scenarioFactor, ref hasPayload);
             AppendPayload(builder, "selection", payload.selection, ref hasPayload);
             AppendPayload(builder, "vehicle", payload.vehicle, ref hasPayload);
+            AppendPayload(builder, "command", payload.command, ref hasPayload);
         }
 
         builder.Append("}}");

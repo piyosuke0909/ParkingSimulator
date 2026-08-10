@@ -15,6 +15,9 @@ public class P2SimulationSnapshotBuilder : MonoBehaviour
     public ParkingLotManager parkingLotManager;
     public VehicleSpawnManager vehicleSpawnManager;
 
+    [Header("P3 Policy Source (Optional)")]
+    public P3AreaPolicyRuntime p3AreaPolicyRuntime;
+
     [Header("Build Options")]
     public bool autoFindReferences = true;
     public bool includeParkingSlots = true;
@@ -112,6 +115,20 @@ public class P2SimulationSnapshotBuilder : MonoBehaviour
             vehicleSpawnManager = FindFirstObjectByType<VehicleSpawnManager>();
 #else
             vehicleSpawnManager = FindObjectOfType<VehicleSpawnManager>();
+#endif
+        }
+
+        if (p3AreaPolicyRuntime == null)
+        {
+            p3AreaPolicyRuntime = P3AreaPolicyRuntime.Instance;
+        }
+
+        if (p3AreaPolicyRuntime == null)
+        {
+#if UNITY_2023_1_OR_NEWER
+            p3AreaPolicyRuntime = FindFirstObjectByType<P3AreaPolicyRuntime>();
+#else
+            p3AreaPolicyRuntime = FindObjectOfType<P3AreaPolicyRuntime>();
 #endif
         }
     }
@@ -324,6 +341,20 @@ public class P2SimulationSnapshotBuilder : MonoBehaviour
         return result;
     }
 
+    private float GetEffectiveAreaPreferenceWeight(string sceneAreaId)
+    {
+        float weight = scenarioRuntime != null
+            ? scenarioRuntime.GetAreaPreferenceWeight(sceneAreaId)
+            : 1f;
+
+        if (p3AreaPolicyRuntime != null)
+        {
+            weight *= p3AreaPolicyRuntime.GetSelectionWeightMultiplier(sceneAreaId);
+        }
+
+        return Mathf.Max(0f, weight);
+    }
+
     private List<P2ParkingSlotSnapshot> BuildParkingSlots()
     {
         List<P2ParkingSlotSnapshot> result = new List<P2ParkingSlotSnapshot>();
@@ -388,9 +419,7 @@ public class P2SimulationSnapshotBuilder : MonoBehaviour
                     {
                         sceneAreaId = sceneAreaId,
                         areaId = GetCanonicalAreaId(sceneAreaId),
-                        currentPreferenceWeight = RoundScalar(scenarioRuntime != null
-                            ? scenarioRuntime.GetAreaPreferenceWeight(sceneAreaId)
-                            : 1f)
+                        currentPreferenceWeight = RoundScalar(GetEffectiveAreaPreferenceWeight(sceneAreaId))
                     };
                     bySceneAreaId.Add(sceneAreaId, area);
                 }

@@ -32,28 +32,44 @@ public static class P3BackendSetupWizard
         P3EventHttpSender eventSender = GetOrAddComponent<P3EventHttpSender>(root);
         P3SnapshotHttpSender snapshotSender = GetOrAddComponent<P3SnapshotHttpSender>(root);
         P3BackendHealthChecker healthChecker = GetOrAddComponent<P3BackendHealthChecker>(root);
+        P3CommandStatus commandStatus = GetOrAddComponent<P3CommandStatus>(root);
+        P3CommandContractValidator commandValidator = GetOrAddComponent<P3CommandContractValidator>(root);
+        P3AreaPolicyRuntime areaPolicyRuntime = GetOrAddComponent<P3AreaPolicyRuntime>(root);
+        P3CommandPollingClient commandPollingClient = GetOrAddComponent<P3CommandPollingClient>(root);
 
         P2SimulationEventPublisher eventPublisher = FindSceneObject<P2SimulationEventPublisher>();
         P2EventContractValidator eventValidator = FindSceneObject<P2EventContractValidator>();
         P2LocalSnapshotWriter snapshotWriter = FindSceneObject<P2LocalSnapshotWriter>();
         P2SnapshotContractValidator snapshotValidator = FindSceneObject<P2SnapshotContractValidator>();
+        P2SimulationSnapshotBuilder snapshotBuilder = FindSceneObject<P2SimulationSnapshotBuilder>();
+        VehicleSpawnManager vehicleSpawnManager = FindSceneObject<VehicleSpawnManager>();
+        ParkingLotManager parkingLotManager = FindSceneObject<ParkingLotManager>();
 
         Undo.RecordObject(settings, "Configure P3 Backend Settings");
         settings.baseUrl = "http://localhost:8000";
         settings.healthEndpoint = "/api/health";
         settings.snapshotEndpoint = "/api/v1/snapshots";
         settings.eventEndpoint = "/api/v1/events";
+        settings.commandEndpoint = "/api/v1/commands";
+        settings.sourceId = "unity-webgl-admin-01";
         settings.enableSnapshotTransmission = true;
         settings.enableEventTransmission = true;
         settings.enableHealthCheck = true;
+        settings.enableCommandPolling = true;
         settings.eventBatchFormat = P3EventBatchFormat.Ndjson;
         settings.eventBatchSize = P3BackendSettings.BackendMaximumEventBatchCount;
         settings.eventFlushIntervalSeconds = Mathf.Max(0.1f, settings.eventFlushIntervalSeconds);
         settings.eventMaximumRequestBytes = P3BackendSettings.BackendMaximumEventRequestBytes;
         settings.snapshotMaximumRequestBytes = P3BackendSettings.BackendMaximumSnapshotRequestBytes;
         settings.requestTimeoutSeconds = 10f;
+        settings.commandPollingIntervalSeconds = 1f;
+        settings.commandRequestTimeoutSeconds = 5f;
+        settings.commandMaximumCount = P3BackendSettings.BackendMaximumCommandCount;
+        settings.commandRetryInitialDelaySeconds = 2f;
+        settings.commandRetryMaximumDelaySeconds = 30f;
         settings.treatHttp409AsSuccess = false;
-        settings.authenticationMode = P3AuthenticationMode.None;
+        settings.authenticationMode = P3AuthenticationMode.ApiKeyHeader;
+        settings.apiKeyHeaderName = "X-API-Key";
         settings.retryDelaySeconds = Mathf.Max(0.1f, settings.retryDelaySeconds);
         settings.retryCooldownSeconds = Mathf.Max(1f, settings.retryCooldownSeconds);
         settings.maxRetryAttemptsBeforeCooldown = Mathf.Max(
@@ -78,11 +94,39 @@ public static class P3BackendSetupWizard
         healthChecker.settings = settings;
         healthChecker.transmissionStatus = status;
 
+        Undo.RecordObject(areaPolicyRuntime, "Configure P3 Area Policy Runtime");
+        areaPolicyRuntime.parkingLotManager = parkingLotManager;
+
+        Undo.RecordObject(commandPollingClient, "Configure P3 Command Polling");
+        commandPollingClient.settings = settings;
+        commandPollingClient.commandStatus = commandStatus;
+        commandPollingClient.contractValidator = commandValidator;
+        commandPollingClient.areaPolicyRuntime = areaPolicyRuntime;
+        commandPollingClient.eventPublisher = eventPublisher;
+
+        if (vehicleSpawnManager != null)
+        {
+            Undo.RecordObject(vehicleSpawnManager, "Connect P3 Area Policy");
+            vehicleSpawnManager.p3AreaPolicyRuntime = areaPolicyRuntime;
+            EditorUtility.SetDirty(vehicleSpawnManager);
+        }
+
+        if (snapshotBuilder != null)
+        {
+            Undo.RecordObject(snapshotBuilder, "Connect P3 Area Policy To Snapshot");
+            snapshotBuilder.p3AreaPolicyRuntime = areaPolicyRuntime;
+            EditorUtility.SetDirty(snapshotBuilder);
+        }
+
         EditorUtility.SetDirty(settings);
         EditorUtility.SetDirty(status);
         EditorUtility.SetDirty(eventSender);
         EditorUtility.SetDirty(snapshotSender);
         EditorUtility.SetDirty(healthChecker);
+        EditorUtility.SetDirty(commandStatus);
+        EditorUtility.SetDirty(commandValidator);
+        EditorUtility.SetDirty(areaPolicyRuntime);
+        EditorUtility.SetDirty(commandPollingClient);
         EditorUtility.SetDirty(root);
         EditorSceneManager.MarkSceneDirty(scene);
         Selection.activeGameObject = root;
@@ -98,7 +142,8 @@ public static class P3BackendSetupWizard
         {
             Debug.Log(
                 "[P3] Backend transmission setup was created or updated. " +
-                "Confirmed local Backend contract values were applied to P3BackendSystem."
+                "Confirmed Snapshot/Event and Command v1.0 contract values were applied to P3BackendSystem. " +
+                "Set the local API key in P3BackendSettings before connecting to Backend."
             );
         }
     }
@@ -111,6 +156,10 @@ public static class P3BackendSetupWizard
         P3EventHttpSender eventSender = FindSceneObject<P3EventHttpSender>();
         P3SnapshotHttpSender snapshotSender = FindSceneObject<P3SnapshotHttpSender>();
         P3BackendHealthChecker healthChecker = FindSceneObject<P3BackendHealthChecker>();
+        P3CommandStatus commandStatus = FindSceneObject<P3CommandStatus>();
+        P3CommandContractValidator commandValidator = FindSceneObject<P3CommandContractValidator>();
+        P3AreaPolicyRuntime areaPolicyRuntime = FindSceneObject<P3AreaPolicyRuntime>();
+        P3CommandPollingClient commandPollingClient = FindSceneObject<P3CommandPollingClient>();
         bool valid = true;
 
         if (settings == null)
@@ -125,6 +174,15 @@ public static class P3BackendSetupWizard
             {
                 Debug.LogError("[P3] Settings validation failed: " + error);
                 valid = false;
+            }
+
+            if (settings.authenticationMode == P3AuthenticationMode.ApiKeyHeader &&
+                string.IsNullOrWhiteSpace(settings.apiKey))
+            {
+                Debug.LogWarning(
+                    "[P3] Local Command v1.0 contract requires X-API-Key. " +
+                    "Enter the local development key in P3BackendSettings. Do not commit real keys."
+                );
             }
         }
 
@@ -180,11 +238,26 @@ public static class P3BackendSetupWizard
             valid = false;
         }
 
+        if (commandStatus == null || commandValidator == null || areaPolicyRuntime == null || commandPollingClient == null)
+        {
+            Debug.LogError("[P3] One or more Command v1.0 components are missing.");
+            valid = false;
+        }
+        else
+        {
+            commandPollingClient.ResolveReferences();
+            if (commandPollingClient.eventPublisher == null)
+            {
+                Debug.LogError("[P3] P2SimulationEventPublisher is not assigned to Command Polling.");
+                valid = false;
+            }
+        }
+
         if (valid)
         {
             Debug.Log(
                 "[P3] Backend transmission setup validation passed. " +
-                "Confirmed local Backend contract settings are valid on the Unity side."
+                "Confirmed Snapshot/Event and Command v1.0 settings are valid on the Unity side."
             );
         }
     }
@@ -215,6 +288,25 @@ public static class P3BackendSetupWizard
         {
             Debug.LogError("[P3] No P3 sender was found.");
         }
+    }
+
+    [MenuItem("Tools/Smart Parking/P3/Poll Commands Now")]
+    public static void PollCommandsNow()
+    {
+        if (!Application.isPlaying)
+        {
+            Debug.LogError("[P3] Poll Commands Now is available during Play only.");
+            return;
+        }
+
+        P3CommandPollingClient client = FindSceneObject<P3CommandPollingClient>();
+        if (client == null)
+        {
+            Debug.LogError("[P3] P3CommandPollingClient was not found.");
+            return;
+        }
+
+        client.PollNow();
     }
 
     [MenuItem("Tools/Smart Parking/P3/Check Backend Health Now")]

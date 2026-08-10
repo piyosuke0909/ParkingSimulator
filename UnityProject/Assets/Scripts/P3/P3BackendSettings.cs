@@ -20,17 +20,23 @@ public class P3BackendSettings : MonoBehaviour
     public const int BackendMaximumEventBatchCount = 50;
     public const int BackendMaximumEventRequestBytes = 1024 * 1024;
     public const int BackendMaximumSnapshotRequestBytes = 5 * 1024 * 1024;
+    public const int BackendMaximumCommandCount = 10;
 
     [Header("Transmission")]
     public bool enableSnapshotTransmission = true;
     public bool enableEventTransmission = true;
     public bool enableHealthCheck = true;
+    public bool enableCommandPolling = true;
 
     [Header("Backend Endpoints")]
     public string baseUrl = "http://localhost:8000";
     public string healthEndpoint = "/api/health";
     public string snapshotEndpoint = "/api/v1/snapshots";
     public string eventEndpoint = "/api/v1/events";
+    public string commandEndpoint = "/api/v1/commands";
+
+    [Header("Unity Identity")]
+    public string sourceId = "unity-webgl-admin-01";
 
     [Header("Event Batch")]
     public P3EventBatchFormat eventBatchFormat = P3EventBatchFormat.Ndjson;
@@ -54,6 +60,22 @@ public class P3BackendSettings : MonoBehaviour
     [Min(1f)]
     public float requestTimeoutSeconds = 10f;
 
+    [Header("Command Polling v1.0")]
+    [Min(0.1f)]
+    public float commandPollingIntervalSeconds = 1f;
+
+    [Min(1f)]
+    public float commandRequestTimeoutSeconds = 5f;
+
+    [Range(1, BackendMaximumCommandCount)]
+    public int commandMaximumCount = BackendMaximumCommandCount;
+
+    [Min(0.1f)]
+    public float commandRetryInitialDelaySeconds = 2f;
+
+    [Min(1f)]
+    public float commandRetryMaximumDelaySeconds = 30f;
+
     [Tooltip("Confirmed Backend contract uses HTTP 409 for conflicting payloads. Keep this OFF.")]
     public bool treatHttp409AsSuccess = false;
 
@@ -74,7 +96,7 @@ public class P3BackendSettings : MonoBehaviour
     public float healthCheckIntervalSeconds = 10f;
 
     [Header("Authentication")]
-    public P3AuthenticationMode authenticationMode = P3AuthenticationMode.None;
+    public P3AuthenticationMode authenticationMode = P3AuthenticationMode.ApiKeyHeader;
     public string apiKeyHeaderName = "X-API-Key";
     public string apiKey = string.Empty;
     public string bearerToken = string.Empty;
@@ -101,6 +123,10 @@ public class P3BackendSettings : MonoBehaviour
     public int EffectiveSnapshotMaximumRequestBytes => snapshotMaximumRequestBytes <= 0
         ? BackendMaximumSnapshotRequestBytes
         : Mathf.Min(snapshotMaximumRequestBytes, BackendMaximumSnapshotRequestBytes);
+
+    public float EffectiveCommandPollingIntervalSeconds => Mathf.Max(0.1f, commandPollingIntervalSeconds);
+    public float EffectiveCommandRequestTimeoutSeconds => Mathf.Max(1f, commandRequestTimeoutSeconds);
+    public int EffectiveCommandMaximumCount => Mathf.Clamp(commandMaximumCount, 1, BackendMaximumCommandCount);
 
     public string PendingRootPath => Path.Combine(
         Application.persistentDataPath,
@@ -130,6 +156,11 @@ public class P3BackendSettings : MonoBehaviour
     public string BuildEventUrl()
     {
         return BuildUrl(eventEndpoint);
+    }
+
+    public string BuildCommandUrl()
+    {
+        return BuildUrl(commandEndpoint);
     }
 
     public string BuildUrl(string endpoint)
@@ -188,6 +219,18 @@ public class P3BackendSettings : MonoBehaviour
             return false;
         }
 
+        if (enableCommandPolling && string.IsNullOrWhiteSpace(commandEndpoint))
+        {
+            error = "Command Endpoint is empty.";
+            return false;
+        }
+
+        if (enableCommandPolling && string.IsNullOrWhiteSpace(sourceId))
+        {
+            error = "Unity sourceId is empty.";
+            return false;
+        }
+
         if (enableEventTransmission && eventBatchFormat != P3EventBatchFormat.Ndjson)
         {
             error = "The confirmed Backend contract requires application/x-ndjson for Events.";
@@ -217,6 +260,35 @@ public class P3BackendSettings : MonoBehaviour
         return true;
     }
 
+    public bool TryValidateCommandSettings(out string error)
+    {
+        if (!TryValidate(out error))
+        {
+            return false;
+        }
+
+        if (!enableCommandPolling)
+        {
+            error = string.Empty;
+            return true;
+        }
+
+        if (commandMaximumCount < 1 || commandMaximumCount > BackendMaximumCommandCount)
+        {
+            error = "Command maximum count must be between 1 and 10.";
+            return false;
+        }
+
+        if (commandRetryMaximumDelaySeconds < commandRetryInitialDelaySeconds)
+        {
+            error = "Command maximum retry delay must be greater than or equal to the initial delay.";
+            return false;
+        }
+
+        error = string.Empty;
+        return true;
+    }
+
     private void OnValidate()
     {
         eventBatchSize = Mathf.Clamp(eventBatchSize, 1, BackendMaximumEventBatchCount);
@@ -236,6 +308,11 @@ public class P3BackendSettings : MonoBehaviour
             BackendMaximumSnapshotRequestBytes
         );
         requestTimeoutSeconds = Mathf.Max(1f, requestTimeoutSeconds);
+        commandPollingIntervalSeconds = Mathf.Max(0.1f, commandPollingIntervalSeconds);
+        commandRequestTimeoutSeconds = Mathf.Max(1f, commandRequestTimeoutSeconds);
+        commandMaximumCount = Mathf.Clamp(commandMaximumCount, 1, BackendMaximumCommandCount);
+        commandRetryInitialDelaySeconds = Mathf.Max(0.1f, commandRetryInitialDelaySeconds);
+        commandRetryMaximumDelaySeconds = Mathf.Max(commandRetryInitialDelaySeconds, commandRetryMaximumDelaySeconds);
         retryDelaySeconds = Mathf.Max(0.1f, retryDelaySeconds);
         retryCooldownSeconds = Mathf.Max(1f, retryCooldownSeconds);
         maxRetryAttemptsBeforeCooldown = Mathf.Max(1, maxRetryAttemptsBeforeCooldown);

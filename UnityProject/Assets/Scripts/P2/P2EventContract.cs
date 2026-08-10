@@ -18,6 +18,12 @@ public static class P2EventContractConstants
     public const string VehicleParked = "vehicle.parked";
     public const string VehicleLeaving = "vehicle.leaving";
     public const string VehicleExited = "vehicle.exited";
+    public const string CommandAccepted = "command.accepted";
+    public const string CommandStarted = "command.started";
+    public const string CommandSucceeded = "command.succeeded";
+    public const string CommandFailed = "command.failed";
+    public const string CommandRejected = "command.rejected";
+    public const string CommandExpired = "command.expired";
 }
 
 [Serializable]
@@ -51,6 +57,7 @@ public class P2EventPayload
     public P2ScenarioFactorEventPayload scenarioFactor;
     public P2SelectionEventPayload selection;
     public P2VehicleEventPayload vehicle;
+    public P2CommandEventPayload command;
 }
 
 [Serializable]
@@ -139,4 +146,25 @@ public class P2VehicleEventPayload
     public int maxConcurrentVehicles;
     public int totalSpawnedCount;
     public P2Vector3Snapshot position = new P2Vector3Snapshot();
+}
+
+
+[Serializable]
+public class P2CommandEventPayload
+{
+    public string idempotencyKey;
+    public string commandType;
+    public string status;
+    public string reasonCode;
+    public string message;
+    public bool retryable;
+    public P2CommandResultPayload result = new P2CommandResultPayload();
+}
+
+[Serializable]
+public class P2CommandResultPayload
+{
+    public string areaId;
+    public string previousPolicy;
+    public string appliedPolicy;
 }
