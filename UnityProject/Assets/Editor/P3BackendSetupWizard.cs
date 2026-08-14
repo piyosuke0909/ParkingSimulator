@@ -70,6 +70,8 @@ public static class P3BackendSetupWizard
         settings.treatHttp409AsSuccess = false;
         settings.authenticationMode = P3AuthenticationMode.ApiKeyHeader;
         settings.apiKeyHeaderName = "X-API-Key";
+        settings.apiKeyEnvironmentVariable = "SMARTPARKING_LOCAL_API_KEY";
+        settings.bearerTokenEnvironmentVariable = "SMARTPARKING_BEARER_TOKEN";
         settings.retryDelaySeconds = Mathf.Max(0.1f, settings.retryDelaySeconds);
         settings.retryCooldownSeconds = Mathf.Max(1f, settings.retryCooldownSeconds);
         settings.maxRetryAttemptsBeforeCooldown = Mathf.Max(
@@ -103,6 +105,8 @@ public static class P3BackendSetupWizard
         commandPollingClient.contractValidator = commandValidator;
         commandPollingClient.areaPolicyRuntime = areaPolicyRuntime;
         commandPollingClient.eventPublisher = eventPublisher;
+        commandPollingClient.maximumIdempotencyCacheEntries =
+            P3CommandPollingClient.DefaultMaximumIdempotencyCacheEntries;
 
         if (vehicleSpawnManager != null)
         {
@@ -143,7 +147,7 @@ public static class P3BackendSetupWizard
             Debug.Log(
                 "[P3] Backend transmission setup was created or updated. " +
                 "Confirmed Snapshot/Event and Command v1.0 contract values were applied to P3BackendSystem. " +
-                "Set the local API key in P3BackendSettings before connecting to Backend."
+                "Authentication secrets are resolved from OS environment variables or the project-root .env file."
             );
         }
     }
@@ -176,13 +180,32 @@ public static class P3BackendSetupWizard
                 valid = false;
             }
 
-            if (settings.authenticationMode == P3AuthenticationMode.ApiKeyHeader &&
-                string.IsNullOrWhiteSpace(settings.apiKey))
+            if (settings.authenticationMode == P3AuthenticationMode.ApiKeyHeader)
             {
-                Debug.LogWarning(
-                    "[P3] Local Command v1.0 contract requires X-API-Key. " +
-                    "Enter the local development key in P3BackendSettings. Do not commit real keys."
-                );
+                string resolvedApiKey;
+                if (!settings.TryResolveApiKey(out resolvedApiKey))
+                {
+                    Debug.LogWarning(
+                        "[P3] X-API-Key is not available. Set " +
+                        settings.apiKeyEnvironmentVariable +
+                        " in the OS environment or in the Unity project-root .env file. " +
+                        "Do not store the secret in a Scene or commit .env."
+                    );
+                }
+            }
+
+            if (settings.authenticationMode == P3AuthenticationMode.BearerToken)
+            {
+                string resolvedBearerToken;
+                if (!settings.TryResolveBearerToken(out resolvedBearerToken))
+                {
+                    Debug.LogWarning(
+                        "[P3] Bearer token is not available. Set " +
+                        settings.bearerTokenEnvironmentVariable +
+                        " in the OS environment or in the Unity project-root .env file. " +
+                        "Do not store the secret in a Scene or commit .env."
+                    );
+                }
             }
         }
 

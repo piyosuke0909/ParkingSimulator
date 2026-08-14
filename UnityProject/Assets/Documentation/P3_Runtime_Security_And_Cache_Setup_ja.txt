@@ -1,0 +1,92 @@
+P3 ランタイム認証・Commandキャッシュ・UTC設定
+================================================
+
+1. APIキー / Bearer Token
+-------------------------
+P3BackendSettings は apiKey / bearerToken の実値を Scene に保存しません。
+Scene に保存されるのは環境変数名だけです。
+
+API Key:
+  SMARTPARKING_LOCAL_API_KEY
+
+Bearer Token:
+  SMARTPARKING_BEARER_TOKEN
+
+Unity Editor / Standalone では、次の優先順位で値を取得します。
+
+  1) 実行時override
+  2) OS環境変数
+  3) Unityプロジェクト直下の .env
+
+Mock Backend用の .env 例:
+
+  SMARTPARKING_LOCAL_API_KEY=local-dev-key
+
+.env は Assets/ の中ではなく、Assets/ と同じ階層へ置いてください。
+
+  <UnityProject>/
+    .env
+    Assets/
+    Packages/
+    ProjectSettings/
+
+プロジェクトルートの .gitignore には以下を追加してください。
+
+  .env
+
+.env 自体はGitへコミットしないでください。
+共有用には値を空にした .env.example を使用してください。
+
+Unity Editor起動後に .env を変更した場合は、
+P3BackendSettings の Context Menu
+「Reload Authentication Secrets」を実行するか、Playを再起動してください。
+
+WebGL:
+  ブラウザへ渡したAPIキーを秘密情報として保護することはできません。
+  本番用の秘密値をWebGLへ埋め込まないでください。
+  ローカルデモ等で公開されても問題ない固定値が必要な場合のみ、
+  P3BackendSettings.SetRuntimeApiKey(string) で実行時注入できます。
+  P3BackendSystem に対する Unity SendMessage から呼ぶことも可能です。
+
+2. Command冪等性キャッシュ
+--------------------------
+P3CommandPollingClient の processedIdempotencyKeys / terminalResults は
+無制限に増加しないよう上限を設けています。
+
+初期値:
+  Maximum Idempotency Cache Entries = 1024
+
+動作:
+  - 上限を超えた場合は古いidempotencyKeyから削除
+  - processedIdempotencyKeys と terminalResults を同時に削除
+  - runId が変わった場合は旧Runのキャッシュを全消去
+  - 現在Run内のBackend再配信に対する二重実行防止は維持
+
+通常は1024のままで問題ありません。
+
+3. generatedAtUtc のUTC解釈
+---------------------------
+P2 Event と P2 Snapshot の generatedAtUtc は以下で解析します。
+
+  DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal
+
+Command側のUTC解析方針と統一し、タイムゾーン情報が省略された場合に
+ローカルPC時刻として解釈されることを防ぎます。
+
+4. Inspectorで特に確認する項目
+------------------------------
+P3BackendSettings:
+  Authentication Mode
+    ApiKeyHeader
+
+  API Key Header Name
+    X-API-Key
+
+  API Key Environment Variable
+    SMARTPARKING_LOCAL_API_KEY
+
+P3CommandPollingClient:
+  Maximum Idempotency Cache Entries
+    1024
+
+APIキーそのものをInspectorへ入力・保存する設定はありません。

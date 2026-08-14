@@ -70,7 +70,7 @@ public class P2EventContractValidator : MonoBehaviour
             !DateTimeOffset.TryParse(
                 simulationEvent.generatedAtUtc,
                 CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
+                DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
                 out generatedAtUtc
             ))
         {

@@ -7,11 +7,18 @@ using UnityEngine.Networking;
 [DefaultExecutionOrder(-300)]
 public class P3CommandPollingClient : MonoBehaviour
 {
+    public const int DefaultMaximumIdempotencyCacheEntries = 1024;
+
     public P3BackendSettings settings;
     public P3CommandStatus commandStatus;
     public P3CommandContractValidator contractValidator;
     public P3AreaPolicyRuntime areaPolicyRuntime;
     public P2SimulationEventPublisher eventPublisher;
+
+    [Header("Idempotency Cache")]
+    [Min(1)]
+    [Tooltip("Maximum number of processed Command idempotency keys retained for the current run. Oldest entries are evicted first.")]
+    public int maximumIdempotencyCacheEntries = DefaultMaximumIdempotencyCacheEntries;
 
     [Header("Logging")]
     public bool logSuccessfulPolls = false;
@@ -24,6 +31,10 @@ public class P3CommandPollingClient : MonoBehaviour
     private readonly Dictionary<string, CachedTerminalResult> terminalResults =
         new Dictionary<string, CachedTerminalResult>(StringComparer.Ordinal);
 
+    private readonly Queue<string> idempotencyInsertionOrder =
+        new Queue<string>();
+
+    private string idempotencyCacheRunId = string.Empty;
     private Coroutine pollingCoroutine;
     private int consecutiveFailures;
     private bool hasStarted;
@@ -176,6 +187,7 @@ public class P3CommandPollingClient : MonoBehaviour
         }
 
         P2SimulationRunIdentity identity = P2SimulationRunContext.EnsureCurrentRun();
+        EnsureIdempotencyCacheForRun(identity.runId);
         string url = BuildCommandUrl(identity);
         P3HttpResponse response = null;
 
@@ -272,7 +284,7 @@ public class P3CommandPollingClient : MonoBehaviour
         if (!P3CommandContractValidator.TryParseUtc(command.expiresAtUtc, out expiresAtUtc) ||
             DateTimeOffset.UtcNow >= expiresAtUtc)
         {
-            processedIdempotencyKeys.Add(command.idempotencyKey);
+            MarkIdempotencyKeyProcessed(command.idempotencyKey);
             PublishTerminal(
                 command,
                 P2EventContractConstants.CommandExpired,
@@ -333,7 +345,7 @@ public class P3CommandPollingClient : MonoBehaviour
             }
 
             string areaId = P3CommandContractValidator.NormalizeAreaId(command.payload.areaId);
-            processedIdempotencyKeys.Add(command.idempotencyKey);
+            MarkIdempotencyKeyProcessed(command.idempotencyKey);
             PublishTerminal(
                 command,
                 P2EventContractConstants.CommandSucceeded,
@@ -355,7 +367,7 @@ public class P3CommandPollingClient : MonoBehaviour
         }
         catch (Exception exception)
         {
-            processedIdempotencyKeys.Add(command.idempotencyKey);
+            MarkIdempotencyKeyProcessed(command.idempotencyKey);
             string safeMessage = "SET_AREA_POLICY execution failed.";
             PublishTerminal(
                 command,
@@ -389,7 +401,7 @@ public class P3CommandPollingClient : MonoBehaviour
     {
         if (command != null && !string.IsNullOrWhiteSpace(command.idempotencyKey))
         {
-            processedIdempotencyKeys.Add(command.idempotencyKey);
+            MarkIdempotencyKeyProcessed(command.idempotencyKey);
         }
 
         string eventType = P2EventContractConstants.CommandRejected;
@@ -478,6 +490,63 @@ public class P3CommandPollingClient : MonoBehaviour
             previousPolicy = previousPolicy,
             appliedPolicy = appliedPolicy
         };
+    }
+
+    private void EnsureIdempotencyCacheForRun(string runId)
+    {
+        string normalizedRunId = runId ?? string.Empty;
+        if (string.Equals(
+                idempotencyCacheRunId,
+                normalizedRunId,
+                StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        ClearIdempotencyCache();
+        idempotencyCacheRunId = normalizedRunId;
+    }
+
+    private void MarkIdempotencyKeyProcessed(string idempotencyKey)
+    {
+        if (string.IsNullOrWhiteSpace(idempotencyKey))
+        {
+            return;
+        }
+
+        if (processedIdempotencyKeys.Add(idempotencyKey))
+        {
+            idempotencyInsertionOrder.Enqueue(idempotencyKey);
+        }
+
+        TrimIdempotencyCache();
+    }
+
+    private void TrimIdempotencyCache()
+    {
+        int maximumEntries = Mathf.Max(1, maximumIdempotencyCacheEntries);
+        while (processedIdempotencyKeys.Count > maximumEntries &&
+               idempotencyInsertionOrder.Count > 0)
+        {
+            string oldestKey = idempotencyInsertionOrder.Dequeue();
+            processedIdempotencyKeys.Remove(oldestKey);
+            terminalResults.Remove(oldestKey);
+        }
+    }
+
+    private void ClearIdempotencyCache()
+    {
+        processedIdempotencyKeys.Clear();
+        terminalResults.Clear();
+        idempotencyInsertionOrder.Clear();
+    }
+
+    private void OnValidate()
+    {
+        maximumIdempotencyCacheEntries = Mathf.Max(
+            1,
+            maximumIdempotencyCacheEntries
+        );
     }
 
     private string BuildCommandUrl(P2SimulationRunIdentity identity)

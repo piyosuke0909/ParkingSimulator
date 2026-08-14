@@ -20624,8 +20624,8 @@ MonoBehaviour:
   healthCheckIntervalSeconds: 10
   authenticationMode: 1
   apiKeyHeaderName: X-API-Key
-  apiKey: local-dev-key
-  bearerToken: 
+  apiKeyEnvironmentVariable: SMARTPARKING_LOCAL_API_KEY
+  bearerTokenEnvironmentVariable: SMARTPARKING_BEARER_TOKEN
   pendingDirectoryName: P3Pending
   failedDirectoryName: P3Failed
   logSuccessfulRequests: 0
@@ -20663,6 +20663,7 @@ MonoBehaviour:
   contractValidator: {fileID: 467083339}
   areaPolicyRuntime: {fileID: 467083338}
   eventPublisher: {fileID: 1663448875}
+  maximumIdempotencyCacheEntries: 1024
   logSuccessfulPolls: 0
   logCommands: 1
   logFailures: 1

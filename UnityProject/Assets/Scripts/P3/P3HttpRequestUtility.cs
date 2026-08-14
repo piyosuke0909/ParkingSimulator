@@ -155,19 +155,26 @@ public static class P3HttpRequestUtility
         switch (settings.authenticationMode)
         {
             case P3AuthenticationMode.ApiKeyHeader:
+                string apiKey;
                 if (!string.IsNullOrWhiteSpace(settings.apiKeyHeaderName) &&
-                    !string.IsNullOrWhiteSpace(settings.apiKey))
+                    settings.TryResolveApiKey(out apiKey) &&
+                    !string.IsNullOrWhiteSpace(apiKey))
                 {
-                    request.SetRequestHeader(settings.apiKeyHeaderName.Trim(), settings.apiKey);
+                    request.SetRequestHeader(
+                        settings.apiKeyHeaderName.Trim(),
+                        apiKey.Trim()
+                    );
                 }
                 break;
 
             case P3AuthenticationMode.BearerToken:
-                if (!string.IsNullOrWhiteSpace(settings.bearerToken))
+                string bearerToken;
+                if (settings.TryResolveBearerToken(out bearerToken) &&
+                    !string.IsNullOrWhiteSpace(bearerToken))
                 {
                     request.SetRequestHeader(
                         "Authorization",
-                        "Bearer " + settings.bearerToken.Trim()
+                        "Bearer " + bearerToken.Trim()
                     );
                 }
                 break;

@@ -98,8 +98,12 @@ public class P3BackendSettings : MonoBehaviour
     [Header("Authentication")]
     public P3AuthenticationMode authenticationMode = P3AuthenticationMode.ApiKeyHeader;
     public string apiKeyHeaderName = "X-API-Key";
-    public string apiKey = string.Empty;
-    public string bearerToken = string.Empty;
+
+    [Tooltip("Name of the OS environment/.env variable containing the API key. The secret value itself is never serialized into the Scene.")]
+    public string apiKeyEnvironmentVariable = "SMARTPARKING_LOCAL_API_KEY";
+
+    [Tooltip("Name of the OS environment/.env variable containing the bearer token. The secret value itself is never serialized into the Scene.")]
+    public string bearerTokenEnvironmentVariable = "SMARTPARKING_BEARER_TOKEN";
 
     [Header("Persistent Queue")]
     public string pendingDirectoryName = "P3Pending";
@@ -161,6 +165,40 @@ public class P3BackendSettings : MonoBehaviour
     public string BuildCommandUrl()
     {
         return BuildUrl(commandEndpoint);
+    }
+
+    public bool TryResolveApiKey(out string value)
+    {
+        return P3SecretProvider.TryResolveApiKey(apiKeyEnvironmentVariable, out value);
+    }
+
+    public bool TryResolveBearerToken(out string value)
+    {
+        return P3SecretProvider.TryResolveBearerToken(
+            bearerTokenEnvironmentVariable,
+            out value
+        );
+    }
+
+    public void SetRuntimeApiKey(string value)
+    {
+        P3SecretProvider.SetRuntimeApiKey(value);
+    }
+
+    public void SetRuntimeBearerToken(string value)
+    {
+        P3SecretProvider.SetRuntimeBearerToken(value);
+    }
+
+    public void ClearRuntimeAuthenticationOverrides()
+    {
+        P3SecretProvider.ClearRuntimeOverrides();
+    }
+
+    [ContextMenu("Reload Authentication Secrets")]
+    public void ReloadAuthenticationSecrets()
+    {
+        P3SecretProvider.ReloadDotEnv();
     }
 
     public string BuildUrl(string endpoint)
@@ -253,6 +291,20 @@ public class P3BackendSettings : MonoBehaviour
             string.IsNullOrWhiteSpace(apiKeyHeaderName))
         {
             error = "API key header name is empty.";
+            return false;
+        }
+
+        if (authenticationMode == P3AuthenticationMode.ApiKeyHeader &&
+            string.IsNullOrWhiteSpace(apiKeyEnvironmentVariable))
+        {
+            error = "API key environment variable name is empty.";
+            return false;
+        }
+
+        if (authenticationMode == P3AuthenticationMode.BearerToken &&
+            string.IsNullOrWhiteSpace(bearerTokenEnvironmentVariable))
+        {
+            error = "Bearer token environment variable name is empty.";
             return false;
         }
 

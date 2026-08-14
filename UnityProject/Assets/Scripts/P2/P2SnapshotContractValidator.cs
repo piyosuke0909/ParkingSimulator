@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 [Serializable]
@@ -36,6 +37,19 @@ public class P2SnapshotContractValidator : MonoBehaviour
         RequireText(result, snapshot.snapshotId, "snapshotId");
         RequireText(result, snapshot.sourceSystem, "sourceSystem");
         RequireText(result, snapshot.generatedAtUtc, "generatedAtUtc");
+
+        DateTimeOffset generatedAtUtc;
+        if (!string.IsNullOrWhiteSpace(snapshot.generatedAtUtc) &&
+            !DateTimeOffset.TryParse(
+                snapshot.generatedAtUtc,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+                out generatedAtUtc
+            ))
+        {
+            result.errors.Add("generatedAtUtc must be a valid UTC-compatible date-time string.");
+        }
+
         RequireText(result, snapshot.sceneName, "sceneName");
         RequireText(result, snapshot.sessionId, "sessionId");
         RequireText(result, snapshot.runId, "runId");
