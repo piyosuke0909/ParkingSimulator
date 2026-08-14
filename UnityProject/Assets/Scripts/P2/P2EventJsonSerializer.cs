@@ -32,6 +32,13 @@ public static class P2EventJsonSerializer
         public string entityId;
     }
 
+
+    [Serializable]
+    private class OptionalCommandIdEnvelope
+    {
+        public string commandId;
+    }
+
     public static string ToJson(P2SimulationEvent simulationEvent)
     {
         if (simulationEvent == null)
@@ -70,6 +77,18 @@ public static class P2EventJsonSerializer
 
         StringBuilder builder = new StringBuilder(envelopeJson.Length + 512);
         builder.Append(envelopeJson, 0, envelopeJson.Length - 1);
+
+        if (!string.IsNullOrWhiteSpace(simulationEvent.commandId))
+        {
+            string commandIdJson = JsonUtility.ToJson(
+                new OptionalCommandIdEnvelope { commandId = simulationEvent.commandId },
+                false
+            );
+
+            builder.Append(',');
+            builder.Append(commandIdJson, 1, commandIdJson.Length - 2);
+        }
+
         builder.Append(",\"payload\":{");
 
         bool hasPayload = false;
@@ -81,6 +100,7 @@ public static class P2EventJsonSerializer
             AppendPayload(builder, "scenarioFactor", payload.scenarioFactor, ref hasPayload);
             AppendPayload(builder, "selection", payload.selection, ref hasPayload);
             AppendPayload(builder, "vehicle", payload.vehicle, ref hasPayload);
+            AppendPayload(builder, "command", payload.command, ref hasPayload);
         }
 
         builder.Append("}}");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 [Serializable]
@@ -39,7 +40,13 @@ public class P2EventContractValidator : MonoBehaviour
         P2EventContractConstants.VehicleSpawned,
         P2EventContractConstants.VehicleParked,
         P2EventContractConstants.VehicleLeaving,
-        P2EventContractConstants.VehicleExited
+        P2EventContractConstants.VehicleExited,
+        P2EventContractConstants.CommandAccepted,
+        P2EventContractConstants.CommandStarted,
+        P2EventContractConstants.CommandSucceeded,
+        P2EventContractConstants.CommandFailed,
+        P2EventContractConstants.CommandRejected,
+        P2EventContractConstants.CommandExpired
     };
 
     public P2EventValidationResult Validate(P2SimulationEvent simulationEvent)
@@ -57,6 +64,25 @@ public class P2EventContractValidator : MonoBehaviour
         RequireText(result, simulationEvent.eventId, "eventId");
         RequireText(result, simulationEvent.eventType, "eventType");
         RequireText(result, simulationEvent.generatedAtUtc, "generatedAtUtc");
+
+        DateTimeOffset generatedAtUtc;
+        if (!string.IsNullOrWhiteSpace(simulationEvent.generatedAtUtc) &&
+            !DateTimeOffset.TryParse(
+                simulationEvent.generatedAtUtc,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+                out generatedAtUtc
+            ))
+        {
+            result.AddError("generatedAtUtc must be a valid date-time string.");
+        }
+
+        if (simulationEvent.commandId != null &&
+            simulationEvent.commandId.Length > 0 &&
+            string.IsNullOrWhiteSpace(simulationEvent.commandId))
+        {
+            result.AddError("commandId must not contain only whitespace when supplied.");
+        }
         RequireText(result, simulationEvent.sceneName, "sceneName");
         RequireText(result, simulationEvent.sessionId, "sessionId");
         RequireText(result, simulationEvent.runId, "runId");
@@ -174,6 +200,26 @@ public class P2EventContractValidator : MonoBehaviour
             }
 
             RequireText(result, payload.vehicle.vehicleId, "payload.vehicle.vehicleId");
+        }
+
+        if (eventType == P2EventContractConstants.CommandAccepted ||
+            eventType == P2EventContractConstants.CommandStarted ||
+            eventType == P2EventContractConstants.CommandSucceeded ||
+            eventType == P2EventContractConstants.CommandFailed ||
+            eventType == P2EventContractConstants.CommandRejected ||
+            eventType == P2EventContractConstants.CommandExpired)
+        {
+            RequireText(result, simulationEvent.commandId, "commandId");
+
+            if (payload.command == null)
+            {
+                result.AddError("payload.command is required for " + eventType + ".");
+                return;
+            }
+
+            RequireText(result, payload.command.idempotencyKey, "payload.command.idempotencyKey");
+            RequireText(result, payload.command.commandType, "payload.command.commandType");
+            RequireText(result, payload.command.status, "payload.command.status");
         }
     }
 

@@ -12,6 +12,8 @@ public enum P2SnapshotIntervalMode
 
 public class P2LocalSnapshotWriter : MonoBehaviour
 {
+    public event Action<P2SimulationSnapshot, string> SnapshotReady;
+
     [Header("Components")]
     public P2SimulationSnapshotBuilder snapshotBuilder;
     public P2SnapshotContractValidator contractValidator;
@@ -174,6 +176,8 @@ public class P2LocalSnapshotWriter : MonoBehaviour
             LogError("Snapshot JSON serialization returned an empty string.");
             return false;
         }
+
+        NotifySnapshotReady(snapshot, json);
 
         string directory = OutputDirectoryPath;
         string scenarioId = snapshot.scenario != null
@@ -412,6 +416,30 @@ public class P2LocalSnapshotWriter : MonoBehaviour
         if (logErrors)
         {
             Debug.LogError("[P2Snapshot] " + message);
+        }
+    }
+
+    private void NotifySnapshotReady(P2SimulationSnapshot snapshot, string json)
+    {
+        Action<P2SimulationSnapshot, string> handlers = SnapshotReady;
+        if (handlers == null)
+        {
+            return;
+        }
+
+        foreach (Delegate subscriber in handlers.GetInvocationList())
+        {
+            try
+            {
+                ((Action<P2SimulationSnapshot, string>)subscriber)(snapshot, json);
+            }
+            catch (Exception exception)
+            {
+                LogError(
+                    "A SnapshotReady subscriber failed. Local Snapshot output continues. " +
+                    exception
+                );
+            }
         }
     }
 

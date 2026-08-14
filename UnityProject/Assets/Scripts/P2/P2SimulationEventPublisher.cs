@@ -813,6 +813,61 @@ public class P2SimulationEventPublisher : MonoBehaviour
         };
     }
 
+    public void PublishCommandResult(
+        string eventType,
+        string commandId,
+        string idempotencyKey,
+        string commandType,
+        string status,
+        string reasonCode,
+        string message,
+        bool retryable,
+        string areaId,
+        string previousPolicy,
+        string appliedPolicy)
+    {
+        if (string.IsNullOrWhiteSpace(commandId))
+        {
+            Debug.LogWarning("[P2Event] commandId is required for Command result Events.");
+            return;
+        }
+
+        if (!runStarted)
+        {
+            BeginInitialRun("command_event_initialization");
+        }
+
+        P2CommandEventPayload commandPayload = new P2CommandEventPayload
+        {
+            idempotencyKey = NullToEmpty(idempotencyKey),
+            commandType = NullToEmpty(commandType),
+            status = NullToEmpty(status),
+            reasonCode = NullToEmpty(reasonCode),
+            message = NullToEmpty(message),
+            retryable = retryable,
+            result = new P2CommandResultPayload
+            {
+                areaId = NullToEmpty(areaId),
+                previousPolicy = NullToEmpty(previousPolicy),
+                appliedPolicy = NullToEmpty(appliedPolicy)
+            }
+        };
+
+        P2SimulationEvent simulationEvent = CreateEvent(
+            eventType,
+            "command",
+            commandId,
+            idempotencyKey,
+            null,
+            null,
+            null,
+            null
+        );
+        simulationEvent.commandId = commandId;
+        simulationEvent.payload.command = commandPayload;
+        Publish(simulationEvent);
+    }
+
     private P2SimulationEvent CreateEvent(
         string eventType,
         string entityType,
@@ -855,7 +910,26 @@ public class P2SimulationEventPublisher : MonoBehaviour
 
     private void Publish(P2SimulationEvent simulationEvent)
     {
-        EventPublished?.Invoke(simulationEvent);
+        Action<P2SimulationEvent> handlers = EventPublished;
+        if (handlers == null)
+        {
+            return;
+        }
+
+        foreach (Delegate subscriber in handlers.GetInvocationList())
+        {
+            try
+            {
+                ((Action<P2SimulationEvent>)subscriber)(simulationEvent);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError(
+                    "[P2Event] An EventPublished subscriber failed. " +
+                    "Other Event consumers continue. " + exception
+                );
+            }
+        }
     }
 
     private P2ScenarioEventPayload BuildScenarioPayload()

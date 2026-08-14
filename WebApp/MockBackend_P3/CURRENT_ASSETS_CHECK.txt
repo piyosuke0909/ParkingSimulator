@@ -1,0 +1,33 @@
+Assets(8) 現行構成確認
+====================
+
+確認対象: ユーザー提供 Assets(8).zip
+
+確認結果:
+- SampleScene に P3BackendSystem が存在する。
+- P3BackendSettings / P3TransmissionStatus / P3EventHttpSender /
+  P3SnapshotHttpSender / P3BackendHealthChecker / P3CommandPollingClient /
+  P3AreaPolicyRuntime / P3CommandContractValidator / P3CommandStatus が構成済み。
+- VehicleSpawnManager と P2SimulationSnapshotBuilder は P3AreaPolicyRuntime へ接続済み。
+- Command契約は smart-parking.command-batch / smart-parking.command v1.0。
+- v1.0 commandType は SET_AREA_POLICY。
+- Endpoint:
+    Base      http://localhost:8000
+    Health    /api/health
+    Snapshot  /api/v1/snapshots
+    Event     /api/v1/events
+    Command   /api/v1/commands
+- sourceId: unity-webgl-admin-01
+- Event: NDJSON / 最大50件 / 最大1MiB
+- Snapshot: 1件 / 最大5MiB
+- Command: Polling 1秒 / Timeout 5秒 / 最大10件 / 再試行初期2秒・最大30秒
+- treatHttp409AsSuccess: false
+- Authentication Mode: ApiKeyHeader
+- API Key Header Name: X-API-Key
+- API Key値はSceneでは空欄。Mock接続前に local-dev-key をInspectorへ入力する必要がある。
+- Documentationには現行契約として以下が存在する。
+    P2_Event_Contract_v1.schema.json
+    P2_Snapshot_Contract_v1_1.schema.json
+    P3_Command_Contract_v1.schema.json
+
+Unity Editorでの実コンパイル/Play確認はこの確認には含まれない。
