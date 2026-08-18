@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SmartParking P3 Local Admin</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:1050px;margin:32px auto;padding:0 16px;background:#f6f7f9;color:#20242a}section{background:#fff;padding:18px;margin:16px 0;border:1px solid #ddd;border-radius:10px}label{display:block;margin:8px 0 4px}input,select,button{padding:8px;font:inherit}input,select{min-width:280px}button{cursor:pointer;margin-top:12px}pre{white-space:pre-wrap;background:#111;color:#eee;padding:12px;overflow:auto}small{color:#666}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:800px){.grid{grid-template-columns:1fr}}</style>
+</head>
+<body>
+<h1>SmartParking P3 Local Admin</h1>
+<p>ローカル結合試験用です。本番認証UIとして使用しないでください。</p>
+<section>
+<label>API Key</label><input id="apiKey" type="password" placeholder="local-dev-key">
+<button onclick="loadTargets()">Runtime Targetを取得</button>
+<label>操作対象Runtime Target</label><select id="targetSelect" onchange="applySelectedTarget()"><option value="">未取得</option></select>
+<small>最終Polling時刻が最も新しいTargetを自動選択します。smoke testのTargetが残っていても、現在Polling中のUnityを優先します。</small>
+<pre id="targets">未取得</pre>
+</section>
+<div class="grid"><section>
+<h2>SET_AREA_POLICY</h2>
+<label>sourceId</label><input id="sourceId" value="unity-webgl-admin-01">
+<label>sessionId</label><input id="sessionId">
+<label>runId</label><input id="runId">
+<label>Area</label><select id="area"><option>A</option><option>B</option><option>C</option><option>D</option></select>
+<label>Policy</label><select id="policy"><option>CLOSED</option><option>NORMAL</option><option>PRIORITY</option><option>RESTRICTED</option></select>
+<label>Priority</label><input id="priority" type="number" value="0">
+<button onclick="createCommand()">Command登録</button>
+<pre id="createResult">未実行</pre>
+</section><section>
+<h2>Command状態</h2>
+<button onclick="loadCommands()">更新</button>
+<pre id="commands">未取得</pre>
+</section></div>
+<script>
+const H=()=>({'X-API-Key':document.getElementById('apiKey').value});
+let runtimeTargets=[];
+function applySelectedTarget(){
+  const i=Number(targetSelect.value);
+  const t=runtimeTargets[i];
+  if(!t)return;
+  sourceId.value=t.sourceId||'';
+  sessionId.value=t.sessionId||'';
+  runId.value=t.runId||'';
+}
+async function loadTargets(){
+  const r=await fetch('/api/v1/admin/runtime-targets',{headers:H()});
+  const j=await r.json();
+  targets.textContent=r.status+'\n'+JSON.stringify(j,null,2);
+  runtimeTargets=Array.isArray(j.targets)?j.targets:[];
+  targetSelect.innerHTML='';
+  runtimeTargets.forEach((t,i)=>{
+    const o=document.createElement('option');
+    o.value=String(i);
+    o.textContent=`${t.sourceId} | ${t.runId} | lastPoll=${t.lastPollAtUtc||'-'}`;
+    targetSelect.appendChild(o);
+  });
+  if(runtimeTargets.length){targetSelect.value='0';applySelectedTarget();}
+  else{const o=document.createElement('option');o.value='';o.textContent='Targetなし';targetSelect.appendChild(o);}
+}
+async function createCommand(){const body={targetSourceId:sourceId.value,targetSessionId:sessionId.value,targetRunId:runId.value,commandType:'SET_AREA_POLICY',priority:Number(priority.value),issuedBy:'local-admin',expiresInSeconds:30,payload:{areaId:area.value,policy:policy.value}};const headers={...H(),'Content-Type':'application/json','Idempotency-Key':crypto.randomUUID()};const r=await fetch('/api/v1/admin/commands',{method:'POST',headers,body:JSON.stringify(body)});createResult.textContent=r.status+'\n'+JSON.stringify(await r.json(),null,2);await loadCommands();}
+async function loadCommands(){const r=await fetch('/api/v1/admin/commands?limit=30',{headers:H()});commands.textContent=r.status+'\n'+JSON.stringify(await r.json(),null,2);}
+</script>
+</body></html>

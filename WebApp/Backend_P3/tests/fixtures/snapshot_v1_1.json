@@ -1,0 +1,5862 @@
+{
+    "contractName": "smart-parking.simulation-snapshot",
+    "schemaVersion": "1.1",
+    "snapshotType": "simulation_snapshot",
+    "snapshotId": "scenario-concert-rain-unity-session-20260801T054002874Z-run-0001-snapshot-00000002",
+    "sourceSystem": "unity",
+    "generatedAtUtc": "2026-08-01T05:41:03.7685036+00:00",
+    "sceneName": "SampleScene",
+    "sessionId": "unity-session-20260801T054002874Z",
+    "runId": "unity-session-20260801T054002874Z-run-0001",
+    "sequenceNumber": 2,
+    "scenario": {
+        "scenarioId": "scenario-concert-rain",
+        "scenarioVersion": "p1-local-2",
+        "scenarioName": "P1 Local External Factors",
+        "facilityId": "facility-main",
+        "mapVersion": "2026-07-16",
+        "timeOfDay": "daytime",
+        "randomSeed": 12345,
+        "randomSeedPolicy": "fixed_per_repetition",
+        "simulationTimeSeconds": 60.008,
+        "durationSeconds": 14400.0,
+        "isCompleted": false
+    },
+    "runtime": {
+        "arrivalRateSourceId": "default",
+        "arrivalDistribution": "fixed",
+        "baseVehiclesPerMinute": 12.0,
+        "arrivalRateMultiplier": 1.0,
+        "effectiveVehiclesPerMinute": 12.0,
+        "vehicleSpeedMultiplier": 1.0,
+        "activeVehicleCount": 11,
+        "discoveredVehicleCount": 11,
+        "maxConcurrentVehicles": 60,
+        "totalSpawnedCount": 11
+    },
+    "summary": {
+        "totalSlotCount": 240,
+        "availableSlotCount": 231,
+        "emptySlotCount": 231,
+        "reservedSlotCount": 5,
+        "occupiedSlotCount": 3,
+        "leavingSlotCount": 1,
+        "disabledSlotCount": 0,
+        "areaCount": 4,
+        "accessPointCount": 2,
+        "vehicleCount": 11,
+        "activeScenarioFactorCount": 1
+    },
+    "activeScenarioFactors": [
+        {
+            "scenarioFactorId": "factor-extreme-heat",
+            "factorCode": "extreme_heat",
+            "label": "猛暑",
+            "category": "Temperature",
+            "informationAvailability": "Forecasted",
+            "intensity": 1.0,
+            "startSimulationTimeSeconds": 0.0,
+            "endSimulationTimeSeconds": 14400.0,
+            "hasKnownFromSimulationTimeSeconds": true,
+            "knownFromSimulationTimeSeconds": 0.0,
+            "effects": [
+                {
+                    "scenarioFactorEffectId": "effect-extreme-heat-area-a",
+                    "targetType": "Area",
+                    "targetId": "area-a",
+                    "resolvedTargetId": "area-a",
+                    "metric": "parking_preference_weight",
+                    "operation": "Multiply",
+                    "value": 1.25,
+                    "unit": "ratio"
+                },
+                {
+                    "scenarioFactorEffectId": "effect-extreme-heat-area-b",
+                    "targetType": "Area",
+                    "targetId": "area-b",
+                    "resolvedTargetId": "area-b",
+                    "metric": "parking_preference_weight",
+                    "operation": "Multiply",
+                    "value": 1.25,
+                    "unit": "ratio"
+                },
+                {
+                    "scenarioFactorEffectId": "effect-extreme-heat-area-d",
+                    "targetType": "Area",
+                    "targetId": "area-d",
+                    "resolvedTargetId": "area-d",
+                    "metric": "parking_preference_weight",
+                    "operation": "Multiply",
+                    "value": 1.25,
+                    "unit": "ratio"
+                },
+                {
+                    "scenarioFactorEffectId": "effect-extreme-heat-main-entrance",
+                    "targetType": "AccessPoint",
+                    "targetId": "entrance-main",
+                    "resolvedTargetId": "entrance-south",
+                    "metric": "parking_preference_weight",
+                    "operation": "Multiply",
+                    "value": 1.6,
+                    "unit": "ratio"
+                }
+            ]
+        }
+    ],
+    "accessPoints": [
+        {
+            "accessPointId": "entrance-south",
+            "scenePairName": "south_gate",
+            "entranceWaypointId": "Entrance_south",
+            "exitWaypointId": "Exit_south",
+            "currentPreferenceWeight": 1.6,
+            "spawnPosition": {
+                "x": -5.0,
+                "y": 0.02,
+                "z": -117.5
+            }
+        },
+        {
+            "accessPointId": "entrance-west",
+            "scenePairName": "west_gate",
+            "entranceWaypointId": "Entrance_west",
+            "exitWaypointId": "Exit_west",
+            "currentPreferenceWeight": 1.0,
+            "spawnPosition": {
+                "x": -152.5,
+                "y": 0.02,
+                "z": 5.0
+            }
+        }
+    ],
+    "areas": [
+        {
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "totalSlotCount": 60,
+            "availableSlotCount": 57,
+            "emptySlotCount": 57,
+            "reservedSlotCount": 1,
+            "occupiedSlotCount": 1,
+            "leavingSlotCount": 1,
+            "disabledSlotCount": 0,
+            "currentPreferenceWeight": 1.25
+        },
+        {
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "totalSlotCount": 60,
+            "availableSlotCount": 57,
+            "emptySlotCount": 57,
+            "reservedSlotCount": 3,
+            "occupiedSlotCount": 0,
+            "leavingSlotCount": 0,
+            "disabledSlotCount": 0,
+            "currentPreferenceWeight": 1.25
+        },
+        {
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "totalSlotCount": 60,
+            "availableSlotCount": 58,
+            "emptySlotCount": 58,
+            "reservedSlotCount": 1,
+            "occupiedSlotCount": 1,
+            "leavingSlotCount": 0,
+            "disabledSlotCount": 0,
+            "currentPreferenceWeight": 1.0
+        },
+        {
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "totalSlotCount": 60,
+            "availableSlotCount": 59,
+            "emptySlotCount": 59,
+            "reservedSlotCount": 0,
+            "occupiedSlotCount": 1,
+            "leavingSlotCount": 0,
+            "disabledSlotCount": 0,
+            "currentPreferenceWeight": 1.25
+        }
+    ],
+    "parkingSlots": [
+        {
+            "slotId": "A-01",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_01",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "A-02",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_02",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "A-03",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_03",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "A-04",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_04",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "A-05",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_05",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "A-06",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_06",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "A-07",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_07",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "A-08",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_08",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "A-09",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_09",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "A-10",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_10",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "A-11",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_11",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "A-12",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_12",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "A-13",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_13",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "A-14",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_14",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "A-15",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_15",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "A-16",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_16",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "A-17",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_17",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "A-18",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_18",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "A-19",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_19",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "A-20",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_20",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "A-21",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_21",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "A-22",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_22",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "A-23",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Occupied",
+            "isAvailable": false,
+            "sensorOccupied": true,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "NPC_Car_004",
+            "accessWaypointId": "WP_Slot_A_23",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "A-24",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_24",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "A-25",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_25",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "A-26",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_26",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "A-27",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_27",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "A-28",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_28",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "A-29",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_29",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "A-30",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_30",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "A-31",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_31",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "A-32",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Reserved",
+            "isAvailable": false,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "NPC_Car_011",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_32",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "A-33",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_33",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "A-34",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_34",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "A-35",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_35",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "A-36",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_36",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "A-37",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_37",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "A-38",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_38",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "A-39",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_39",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "A-40",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_40",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "A-41",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_41",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "A-42",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_42",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "A-43",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_43",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "A-44",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_44",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "A-45",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_45",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "A-46",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_46",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "A-47",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_47",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "A-48",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_48",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "A-49",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_49",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "A-50",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_50",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "A-51",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_51",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "A-52",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_52",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "A-53",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_53",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "A-54",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Leaving",
+            "isAvailable": false,
+            "sensorOccupied": true,
+            "isLeaving": true,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "NPC_Car_006",
+            "accessWaypointId": "WP_Slot_A_54",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "A-55",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_55",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "A-56",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_56",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "A-57",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_57",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "A-58",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_58",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "A-59",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_59",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "A-60",
+            "areaId": "area-a",
+            "sceneAreaId": "A",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_A_60",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "B-01",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_01",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        },
+        {
+            "slotId": "B-02",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_02",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "B-03",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_03",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "B-04",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_04",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "B-05",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_05",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "B-06",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_06",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "B-07",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Reserved",
+            "isAvailable": false,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "NPC_Car_007",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_07",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "B-08",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_08",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "B-09",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_09",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "B-10",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_10",
+            "position": {
+                "x": -119.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": -119.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "B-11",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_11",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "B-12",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_12",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "B-13",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_13",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "B-14",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_14",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "B-15",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_15",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "B-16",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Reserved",
+            "isAvailable": false,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "NPC_Car_010",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_16",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "B-17",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_17",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "B-18",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_18",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "B-19",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_19",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "B-20",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_20",
+            "position": {
+                "x": -106.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": -106.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        },
+        {
+            "slotId": "B-21",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_21",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        },
+        {
+            "slotId": "B-22",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_22",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "B-23",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_23",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "B-24",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_24",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "B-25",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_25",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "B-26",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_26",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "B-27",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_27",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "B-28",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_28",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "B-29",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_29",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "B-30",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_30",
+            "position": {
+                "x": -74.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": -74.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "B-31",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_31",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "B-32",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_32",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "B-33",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_33",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "B-34",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_34",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "B-35",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_35",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "B-36",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_36",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "B-37",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_37",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "B-38",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_38",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "B-39",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_39",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "B-40",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_40",
+            "position": {
+                "x": -61.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": -61.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        },
+        {
+            "slotId": "B-41",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_41",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        },
+        {
+            "slotId": "B-42",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_42",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "B-43",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Reserved",
+            "isAvailable": false,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "NPC_Car_008",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_43",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "B-44",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_44",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "B-45",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_45",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "B-46",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_46",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "B-47",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_47",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "B-48",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_48",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "B-49",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_49",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "B-50",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_50",
+            "position": {
+                "x": -29.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": -29.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "B-51",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_51",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "B-52",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_52",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "B-53",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_53",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "B-54",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_54",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "B-55",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_55",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "B-56",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_56",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "B-57",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_57",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "B-58",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_58",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "B-59",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_59",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "B-60",
+            "areaId": "area-b",
+            "sceneAreaId": "B",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_B_60",
+            "position": {
+                "x": -16.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": -16.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        },
+        {
+            "slotId": "C-01",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_01",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "C-02",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_02",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "C-03",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_03",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "C-04",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_04",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "C-05",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_05",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "C-06",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_06",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "C-07",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_07",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "C-08",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_08",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "C-09",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_09",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "C-10",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_10",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "C-11",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_11",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "C-12",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_12",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "C-13",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_13",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "C-14",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_14",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "C-15",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_15",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "C-16",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Occupied",
+            "isAvailable": false,
+            "sensorOccupied": true,
+            "isLeaving": false,
+            "reservedByVehicleId": "NPC_Car_003",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_16",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "C-17",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_17",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "C-18",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_18",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "C-19",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_19",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "C-20",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_20",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "C-21",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_21",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "C-22",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_22",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "C-23",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_23",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "C-24",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_24",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "C-25",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_25",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "C-26",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_26",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "C-27",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_27",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "C-28",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_28",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "C-29",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_29",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "C-30",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_30",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "C-31",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_31",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "C-32",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_32",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "C-33",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_33",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "C-34",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_34",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "C-35",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_35",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "C-36",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_36",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "C-37",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_37",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "C-38",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_38",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "C-39",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_39",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "C-40",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_40",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "C-41",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_41",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "C-42",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_42",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "C-43",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_43",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "C-44",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_44",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "C-45",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Reserved",
+            "isAvailable": false,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "NPC_Car_009",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_45",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "C-46",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_46",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "C-47",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_47",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "C-48",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_48",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "C-49",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_49",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "C-50",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_50",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "C-51",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_51",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": -14.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": -14.0
+            }
+        },
+        {
+            "slotId": "C-52",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_52",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": -22.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": -22.0
+            }
+        },
+        {
+            "slotId": "C-53",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_53",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": -30.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": -30.0
+            }
+        },
+        {
+            "slotId": "C-54",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_54",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": -38.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": -38.0
+            }
+        },
+        {
+            "slotId": "C-55",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_55",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": -46.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": -46.0
+            }
+        },
+        {
+            "slotId": "C-56",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_56",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": -54.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": -54.0
+            }
+        },
+        {
+            "slotId": "C-57",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_57",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": -62.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": -62.0
+            }
+        },
+        {
+            "slotId": "C-58",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_58",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": -70.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": -70.0
+            }
+        },
+        {
+            "slotId": "C-59",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_59",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": -78.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": -78.0
+            }
+        },
+        {
+            "slotId": "C-60",
+            "areaId": "area-c",
+            "sceneAreaId": "C",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_C_60",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": -86.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": -86.0
+            }
+        },
+        {
+            "slotId": "D-01",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_01",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        },
+        {
+            "slotId": "D-02",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_02",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "D-03",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_03",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "D-04",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_04",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "D-05",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_05",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "D-06",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_06",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "D-07",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_07",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "D-08",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_08",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "D-09",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_09",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "D-10",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_10",
+            "position": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "D-11",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_11",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "D-12",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_12",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "D-13",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_13",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "D-14",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_14",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "D-15",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_15",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "D-16",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_16",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "D-17",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_17",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "D-18",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_18",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "D-19",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_19",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "D-20",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_20",
+            "position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": 29.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        },
+        {
+            "slotId": "D-21",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_21",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        },
+        {
+            "slotId": "D-22",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_22",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "D-23",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_23",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "D-24",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_24",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "D-25",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_25",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "D-26",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_26",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "D-27",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_27",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "D-28",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_28",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "D-29",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_29",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "D-30",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_30",
+            "position": {
+                "x": 61.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": 61.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "D-31",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_31",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "D-32",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_32",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "D-33",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_33",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "D-34",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_34",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "D-35",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_35",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "D-36",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_36",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "D-37",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_37",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "D-38",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_38",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "D-39",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_39",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "D-40",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_40",
+            "position": {
+                "x": 74.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": 74.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        },
+        {
+            "slotId": "D-41",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_41",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        },
+        {
+            "slotId": "D-42",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_42",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "D-43",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_43",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "D-44",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_44",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "D-45",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_45",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "D-46",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_46",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "D-47",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_47",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "D-48",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_48",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "D-49",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_49",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "D-50",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Occupied",
+            "isAvailable": false,
+            "sensorOccupied": true,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "NPC_Car_002",
+            "accessWaypointId": "WP_Slot_D_50",
+            "position": {
+                "x": 106.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": 106.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "D-51",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_51",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": 86.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": 86.0
+            }
+        },
+        {
+            "slotId": "D-52",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_52",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": 78.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": 78.0
+            }
+        },
+        {
+            "slotId": "D-53",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_53",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": 70.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": 70.0
+            }
+        },
+        {
+            "slotId": "D-54",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_54",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": 62.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": 62.0
+            }
+        },
+        {
+            "slotId": "D-55",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_55",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": 54.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": 54.0
+            }
+        },
+        {
+            "slotId": "D-56",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_56",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": 46.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": 46.0
+            }
+        },
+        {
+            "slotId": "D-57",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_57",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": 38.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": 38.0
+            }
+        },
+        {
+            "slotId": "D-58",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_58",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": 30.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": 30.0
+            }
+        },
+        {
+            "slotId": "D-59",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_59",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": 22.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": 22.0
+            }
+        },
+        {
+            "slotId": "D-60",
+            "areaId": "area-d",
+            "sceneAreaId": "D",
+            "state": "Empty",
+            "isAvailable": true,
+            "sensorOccupied": false,
+            "isLeaving": false,
+            "reservedByVehicleId": "",
+            "occupiedByVehicleId": "",
+            "accessWaypointId": "WP_Slot_D_60",
+            "position": {
+                "x": 119.0,
+                "y": 0.0,
+                "z": 14.0
+            },
+            "parkingPointPosition": {
+                "x": 119.0,
+                "y": 1.0,
+                "z": 14.0
+            }
+        }
+    ],
+    "vehicles": [
+        {
+            "vehicleId": "NPC_Car_001",
+            "objectName": "Car_NPC(Clone)",
+            "movementState": "Leaving",
+            "isParked": false,
+            "isStopped": false,
+            "isStoppedByFrontVehicle": false,
+            "stopReason": "",
+            "entranceAccessPointId": "entrance-west",
+            "entranceScenePairName": "west_gate",
+            "targetAreaId": "area-a",
+            "targetSceneAreaId": "A",
+            "targetSlotId": "A-47",
+            "currentAreaId": "",
+            "currentSceneAreaId": "",
+            "currentSlotId": "",
+            "currentTargetWaypointId": "WP_Slot_A_40",
+            "spawnSequenceNumber": 1,
+            "spawnedAtSimulationTimeSeconds": 5.008,
+            "currentSpeedMetersPerSecond": 18.2579,
+            "position": {
+                "x": -49.964,
+                "y": 0.02,
+                "z": -89.836
+            },
+            "rotationEuler": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "velocity": {
+                "x": -0.172,
+                "y": 0.0,
+                "z": 18.257
+            }
+        },
+        {
+            "vehicleId": "NPC_Car_002",
+            "objectName": "Car_NPC(Clone)",
+            "movementState": "Parked",
+            "isParked": true,
+            "isStopped": true,
+            "isStoppedByFrontVehicle": false,
+            "stopReason": "",
+            "entranceAccessPointId": "entrance-south",
+            "entranceScenePairName": "south_gate",
+            "targetAreaId": "area-d",
+            "targetSceneAreaId": "D",
+            "targetSlotId": "D-50",
+            "currentAreaId": "area-d",
+            "currentSceneAreaId": "D",
+            "currentSlotId": "D-50",
+            "currentTargetWaypointId": "",
+            "spawnSequenceNumber": 2,
+            "spawnedAtSimulationTimeSeconds": 10.017,
+            "currentSpeedMetersPerSecond": 0.0,
+            "position": {
+                "x": 105.844,
+                "y": 0.02,
+                "z": 86.014
+            },
+            "rotationEuler": {
+                "x": 0.0,
+                "y": 94.99,
+                "z": 0.0
+            },
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "vehicleId": "NPC_Car_003",
+            "objectName": "Car_NPC(Clone)",
+            "movementState": "Parking",
+            "isParked": false,
+            "isStopped": false,
+            "isStoppedByFrontVehicle": false,
+            "stopReason": "",
+            "entranceAccessPointId": "entrance-west",
+            "entranceScenePairName": "west_gate",
+            "targetAreaId": "area-c",
+            "targetSceneAreaId": "C",
+            "targetSlotId": "C-16",
+            "currentAreaId": "",
+            "currentSceneAreaId": "",
+            "currentSlotId": "",
+            "currentTargetWaypointId": "",
+            "spawnSequenceNumber": 3,
+            "spawnedAtSimulationTimeSeconds": 15.022,
+            "currentSpeedMetersPerSecond": 3.1951,
+            "position": {
+                "x": 32.988,
+                "y": 0.02,
+                "z": -54.27
+            },
+            "rotationEuler": {
+                "x": 0.0,
+                "y": 273.876,
+                "z": 0.0
+            },
+            "velocity": {
+                "x": -3.188,
+                "y": 0.0,
+                "z": 0.216
+            }
+        },
+        {
+            "vehicleId": "NPC_Car_004",
+            "objectName": "Car_NPC(Clone)",
+            "movementState": "Parked",
+            "isParked": true,
+            "isStopped": true,
+            "isStoppedByFrontVehicle": false,
+            "stopReason": "",
+            "entranceAccessPointId": "entrance-south",
+            "entranceScenePairName": "south_gate",
+            "targetAreaId": "area-a",
+            "targetSceneAreaId": "A",
+            "targetSlotId": "A-23",
+            "currentAreaId": "area-a",
+            "currentSceneAreaId": "A",
+            "currentSlotId": "A-23",
+            "currentTargetWaypointId": "",
+            "spawnSequenceNumber": 4,
+            "spawnedAtSimulationTimeSeconds": 20.027,
+            "currentSpeedMetersPerSecond": 0.0,
+            "position": {
+                "x": -74.182,
+                "y": 0.02,
+                "z": -69.986
+            },
+            "rotationEuler": {
+                "x": 0.0,
+                "y": 94.468,
+                "z": 0.0
+            },
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "vehicleId": "NPC_Car_005",
+            "objectName": "Car_NPC(Clone)",
+            "movementState": "Leaving",
+            "isParked": false,
+            "isStopped": false,
+            "isStoppedByFrontVehicle": false,
+            "stopReason": "",
+            "entranceAccessPointId": "entrance-west",
+            "entranceScenePairName": "west_gate",
+            "targetAreaId": "area-a",
+            "targetSceneAreaId": "A",
+            "targetSlotId": "A-08",
+            "currentAreaId": "",
+            "currentSceneAreaId": "",
+            "currentSlotId": "",
+            "currentTargetWaypointId": "WP_Slot_A_05",
+            "spawnSequenceNumber": 5,
+            "spawnedAtSimulationTimeSeconds": 25.035,
+            "currentSpeedMetersPerSecond": 18.2582,
+            "position": {
+                "x": -129.999,
+                "y": 0.02,
+                "z": -48.83
+            },
+            "rotationEuler": {
+                "x": 0.0,
+                "y": 180.0,
+                "z": 0.0
+            },
+            "velocity": {
+                "x": -0.004,
+                "y": 0.0,
+                "z": -18.258
+            }
+        },
+        {
+            "vehicleId": "NPC_Car_006",
+            "objectName": "Car_NPC(Clone)",
+            "movementState": "BackingOut",
+            "isParked": false,
+            "isStopped": false,
+            "isStoppedByFrontVehicle": false,
+            "stopReason": "",
+            "entranceAccessPointId": "entrance-south",
+            "entranceScenePairName": "south_gate",
+            "targetAreaId": "area-a",
+            "targetSceneAreaId": "A",
+            "targetSlotId": "A-54",
+            "currentAreaId": "",
+            "currentSceneAreaId": "",
+            "currentSlotId": "",
+            "currentTargetWaypointId": "WP_Slot_A_54",
+            "spawnSequenceNumber": 6,
+            "spawnedAtSimulationTimeSeconds": 30.044,
+            "currentSpeedMetersPerSecond": 1.8258,
+            "position": {
+                "x": -8.078,
+                "y": 0.02,
+                "z": -38.004
+            },
+            "rotationEuler": {
+                "x": 0.0,
+                "y": 274.292,
+                "z": 0.0
+            },
+            "velocity": {
+                "x": 1.826,
+                "y": 0.0,
+                "z": 0.002
+            }
+        },
+        {
+            "vehicleId": "NPC_Car_007",
+            "objectName": "Car_NPC(Clone)",
+            "movementState": "DrivingRoute",
+            "isParked": false,
+            "isStopped": false,
+            "isStoppedByFrontVehicle": false,
+            "stopReason": "",
+            "entranceAccessPointId": "entrance-south",
+            "entranceScenePairName": "south_gate",
+            "targetAreaId": "area-b",
+            "targetSceneAreaId": "B",
+            "targetSlotId": "B-07",
+            "currentAreaId": "",
+            "currentSceneAreaId": "",
+            "currentSlotId": "",
+            "currentTargetWaypointId": "WP_Slot_B_52",
+            "spawnSequenceNumber": 7,
+            "spawnedAtSimulationTimeSeconds": 35.052,
+            "currentSpeedMetersPerSecond": 18.2578,
+            "position": {
+                "x": -5.0,
+                "y": 0.02,
+                "z": 73.253
+            },
+            "rotationEuler": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 18.258
+            }
+        },
+        {
+            "vehicleId": "NPC_Car_008",
+            "objectName": "Car_NPC(Clone)",
+            "movementState": "DrivingRoute",
+            "isParked": false,
+            "isStopped": false,
+            "isStoppedByFrontVehicle": false,
+            "stopReason": "",
+            "entranceAccessPointId": "entrance-south",
+            "entranceScenePairName": "south_gate",
+            "targetAreaId": "area-b",
+            "targetSceneAreaId": "B",
+            "targetSlotId": "B-43",
+            "currentAreaId": "",
+            "currentSceneAreaId": "",
+            "currentSlotId": "",
+            "currentTargetWaypointId": "WP_Slot_B_54",
+            "spawnSequenceNumber": 8,
+            "spawnedAtSimulationTimeSeconds": 40.054,
+            "currentSpeedMetersPerSecond": 18.2582,
+            "position": {
+                "x": -5.0,
+                "y": 0.02,
+                "z": 53.869
+            },
+            "rotationEuler": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 18.258
+            }
+        },
+        {
+            "vehicleId": "NPC_Car_009",
+            "objectName": "Car_NPC(Clone)",
+            "movementState": "DrivingRoute",
+            "isParked": false,
+            "isStopped": false,
+            "isStoppedByFrontVehicle": false,
+            "stopReason": "",
+            "entranceAccessPointId": "entrance-south",
+            "entranceScenePairName": "south_gate",
+            "targetAreaId": "area-c",
+            "targetSceneAreaId": "C",
+            "targetSlotId": "C-45",
+            "currentAreaId": "",
+            "currentSceneAreaId": "",
+            "currentSlotId": "",
+            "currentTargetWaypointId": "WP_Slot_C_40",
+            "spawnSequenceNumber": 9,
+            "spawnedAtSimulationTimeSeconds": 45.056,
+            "currentSpeedMetersPerSecond": 18.2576,
+            "position": {
+                "x": 84.695,
+                "y": 0.02,
+                "z": -89.471
+            },
+            "rotationEuler": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "velocity": {
+                "x": 1.596,
+                "y": 0.0,
+                "z": 18.188
+            }
+        },
+        {
+            "vehicleId": "NPC_Car_010",
+            "objectName": "Car_NPC(Clone)",
+            "movementState": "DrivingRoute",
+            "isParked": false,
+            "isStopped": true,
+            "isStoppedByFrontVehicle": false,
+            "stopReason": "Waypoint予約待機: Target=WP_Slot_A_54, BlockingCar=Car_NPC(Clone)",
+            "entranceAccessPointId": "entrance-south",
+            "entranceScenePairName": "south_gate",
+            "targetAreaId": "area-b",
+            "targetSceneAreaId": "B",
+            "targetSlotId": "B-16",
+            "currentAreaId": "",
+            "currentSceneAreaId": "",
+            "currentSlotId": "",
+            "currentTargetWaypointId": "WP_Slot_A_54",
+            "spawnSequenceNumber": 10,
+            "spawnedAtSimulationTimeSeconds": 50.06,
+            "currentSpeedMetersPerSecond": 0.0,
+            "position": {
+                "x": -5.0,
+                "y": 0.02,
+                "z": -46.944
+            },
+            "rotationEuler": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "vehicleId": "NPC_Car_011",
+            "objectName": "Car_NPC(Clone)",
+            "movementState": "DrivingRoute",
+            "isParked": false,
+            "isStopped": false,
+            "isStoppedByFrontVehicle": false,
+            "stopReason": "",
+            "entranceAccessPointId": "entrance-south",
+            "entranceScenePairName": "south_gate",
+            "targetAreaId": "area-a",
+            "targetSceneAreaId": "A",
+            "targetSlotId": "A-32",
+            "currentAreaId": "",
+            "currentSceneAreaId": "",
+            "currentSlotId": "",
+            "currentTargetWaypointId": "WP_A_Lane_28",
+            "spawnSequenceNumber": 11,
+            "spawnedAtSimulationTimeSeconds": 55.066,
+            "currentSpeedMetersPerSecond": 18.2583,
+            "position": {
+                "x": -29.05,
+                "y": 0.02,
+                "z": -105.005
+            },
+            "rotationEuler": {
+                "x": 0.0,
+                "y": 270.0,
+                "z": 0.0
+            },
+            "velocity": {
+                "x": -18.258,
+                "y": 0.0,
+                "z": 0.104
+            }
+        }
+    ]
+}
