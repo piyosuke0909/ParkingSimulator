@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import type { AdminState, AiRecommendation, AiStatus } from "../types";
+import type { AdminState, AiRecommendation, AiStatus, AreaPolicyValue } from "../types";
 import { guardNames, riskLabel } from "./constants";
 import type { AdminPolicy } from "./types";
 import { formatTime, percent, riskClass } from "./utils";
+import { unityBuildUrl } from "./unityBuildUrl";
 
 type Props = {
   state: AdminState | null;
@@ -12,30 +13,13 @@ type Props = {
   generating: boolean;
   unityBuildAvailable: boolean | null;
   policy: AdminPolicy;
+  commandBusyAreas: Set<string>;
+  commandNotice: string | null;
   onInstructionChange: (value: string) => void;
   onGenerateAi: () => void;
-  onPolicyChange: (value: AdminPolicy) => void;
+  onSetAreaPolicy: (areaId: string, policy: AreaPolicyValue) => Promise<void>;
   onOpenArea: (areaId: string) => void;
 };
-
-type PolicyBucket = keyof AdminPolicy;
-
-function removeArea(policy: AdminPolicy, areaId: string): AdminPolicy {
-  return {
-    priorityAreaIds: policy.priorityAreaIds.filter((value) => value !== areaId),
-    closedAreaIds: policy.closedAreaIds.filter((value) => value !== areaId),
-    restrictedAreaIds: policy.restrictedAreaIds.filter((value) => value !== areaId)
-  };
-}
-
-function togglePolicy(policy: AdminPolicy, bucket: PolicyBucket, areaId: string) {
-  const existed = policy[bucket].includes(areaId);
-  const next = removeArea(policy, areaId);
-  if (!existed) {
-    next[bucket] = [...next[bucket], areaId];
-  }
-  return next;
-}
 
 function policyLabel(policy: AdminPolicy, areaId: string) {
   if (policy.closedAreaIds.includes(areaId)) {
@@ -75,19 +59,30 @@ export function OverviewView({
   generating,
   unityBuildAvailable,
   policy,
+  commandBusyAreas,
+  commandNotice,
   onInstructionChange,
   onGenerateAi,
-  onPolicyChange,
+  onSetAreaPolicy,
   onOpenArea
 }: Props) {
   const [selectedPolicyAreaId, setSelectedPolicyAreaId] = useState("A");
   const [leftPanelOpen, setLeftPanelOpen] = useState(true);
   const [rightPanelOpen, setRightPanelOpen] = useState(true);
+  const [unityVisible, setUnityVisible] = useState(false);
   const [dismissedAlertKeys, setDismissedAlertKeys] = useState<Set<string>>(() => new Set());
   const areas = state?.areas ?? [];
   const alerts = state?.alerts ?? [];
   const visibleAlerts = alerts.filter((alert) => !dismissedAlertKeys.has(alertKey(alert)));
   const selectedPolicyArea = areas.find((area) => area.areaId === selectedPolicyAreaId) ?? areas[0] ?? null;
+  const latestAreaCommand = state?.commands?.find((command) => command.payload.areaId === selectedPolicyArea?.areaId) ?? null;
+  const commandBusy = selectedPolicyArea ? commandBusyAreas.has(selectedPolicyArea.areaId) : false;
+  const commandDisabled =
+    !selectedPolicyArea ||
+    Boolean(state?.stale) ||
+    !state?.commandTarget ||
+    state?.commandTargetMatchesSnapshot !== true ||
+    commandBusy;
 
   useEffect(() => {
     if (areas.length && !areas.some((area) => area.areaId === selectedPolicyAreaId)) {
@@ -102,14 +97,6 @@ export function OverviewView({
       return next.size === current.size ? current : next;
     });
   }, [alerts]);
-
-  function setAreaPolicy(bucket: PolicyBucket, areaId: string) {
-    onPolicyChange(togglePolicy(policy, bucket, areaId));
-  }
-
-  function resetAreaPolicy(areaId: string) {
-    onPolicyChange(removeArea(policy, areaId));
-  }
 
   return (
     <section className={`opsDashboard ${leftPanelOpen ? "" : "leftCollapsed"} ${rightPanelOpen ? "" : "rightCollapsed"}`}>
@@ -179,8 +166,20 @@ export function OverviewView({
 
         <main className="opsMapPanel" aria-label="駐車場状態">
           <div className="opsUnityViewport">
-            {unityBuildAvailable ? (
-              <iframe src="/unity-build/index.html?view=admin-fit-16x10&embed=admin" title="Unity WebGL 駐車場状態" className="opsUnityFrame" />
+            {unityBuildAvailable && unityVisible ? (
+              <>
+                <iframe src={unityBuildUrl({ view: "admin-fit-16x10", embed: "admin" })} title="Unity WebGL 駐車場状態" className="opsUnityFrame" />
+                <button className="adminButton unityVisibilityButton" type="button" onClick={() => setUnityVisible(false)}>
+                  Unity画面を閉じる
+                </button>
+              </>
+            ) : unityBuildAvailable ? (
+              <div className="adminEmpty">
+                <p>管理画面を軽く保つため、Unity映像は必要なときだけ読み込みます。</p>
+                <button className="adminButton primary" type="button" onClick={() => setUnityVisible(true)}>
+                  Unity画面を表示
+                </button>
+              </div>
             ) : (
               <div className="adminEmpty">Unity WebGL build がありません。</div>
             )}
@@ -235,19 +234,27 @@ export function OverviewView({
                     </div>
                   </div>
                   <div className="opsCommandStack">
-                    <button type="button" className="primary" onClick={() => setAreaPolicy("priorityAreaIds", selectedPolicyArea.areaId)}>
+                    <button type="button" className="primary" disabled={commandDisabled} onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "PRIORITY")}>
                       優先案内先に設定
                     </button>
-                    <button type="button" className="danger" onClick={() => setAreaPolicy("closedAreaIds", selectedPolicyArea.areaId)}>
+                    <button type="button" className="danger" disabled={commandDisabled} onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "CLOSED")}>
                       一時閉鎖
                     </button>
-                    <button type="button" className="warn" onClick={() => setAreaPolicy("restrictedAreaIds", selectedPolicyArea.areaId)}>
+                    <button type="button" className="warn" disabled={commandDisabled} onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "RESTRICTED")}>
                       優先度を一時的に下げる
                     </button>
-                    <button type="button" onClick={() => resetAreaPolicy(selectedPolicyArea.areaId)}>
+                    <button type="button" disabled={commandDisabled} onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "NORMAL")}>
                       閉鎖・制限を解除
                     </button>
                   </div>
+                  {state?.stale ? <p className="opsEmpty">Unity接続中のみ操作できます。</p> : null}
+                  {!state?.stale && !state?.commandTarget ? <p className="opsEmpty">UnityのCommand受信接続を待っています。</p> : null}
+                  {!state?.stale && state?.commandTarget && !state.commandTargetMatchesSnapshot ? (
+                    <p className="opsEmpty">表示中のUnity状態と操作先が一致するまで待っています。</p>
+                  ) : null}
+                  {commandBusy ? <p className="opsEmpty">Commandを登録しています...</p> : null}
+                  {latestAreaCommand ? <p className="opsEmpty">最新Command: {latestAreaCommand.status}</p> : null}
+                  {commandNotice ? <p className="opsEmpty">{commandNotice}</p> : null}
                 </article>
               ) : (
                 <p className="opsEmpty">Unity snapshot の受信待ちです。</p>

@@ -1,4 +1,4 @@
-import type { AdminState, AiRecommendation, AreaStatus } from "../types";
+import type { AdminState, AiRecommendation, AreaPolicyValue, AreaStatus } from "../types";
 import { riskLabel } from "./constants";
 import type { AdminPolicy } from "./types";
 import { percent, riskClass } from "./utils";
@@ -7,7 +7,8 @@ type Props = {
   state: AdminState | null;
   ai: AiRecommendation | null;
   policy: AdminPolicy;
-  onPolicyChange: (policy: AdminPolicy) => void;
+  commandBusyAreas: Set<string>;
+  onSetAreaPolicy: (areaId: string, policy: AreaPolicyValue) => Promise<void>;
   onOpenArea: (areaId: string) => void;
 };
 
@@ -17,27 +18,8 @@ function hasArea(policy: AdminPolicy, bucket: PolicyBucket, areaId: string) {
   return policy[bucket].includes(areaId);
 }
 
-function withoutArea(values: string[], areaId: string) {
-  return values.filter((value) => value !== areaId);
-}
-
 function unique(values: string[]) {
   return Array.from(new Set(values));
-}
-
-function togglePolicyArea(policy: AdminPolicy, bucket: PolicyBucket, areaId: string): AdminPolicy {
-  const exists = hasArea(policy, bucket, areaId);
-  const next: AdminPolicy = {
-    priorityAreaIds: withoutArea(policy.priorityAreaIds, areaId),
-    closedAreaIds: withoutArea(policy.closedAreaIds, areaId),
-    restrictedAreaIds: withoutArea(policy.restrictedAreaIds, areaId)
-  };
-
-  if (!exists) {
-    next[bucket] = unique([...next[bucket], areaId]);
-  }
-
-  return next;
 }
 
 function policyStatus(policy: AdminPolicy, areaId: string) {
@@ -87,26 +69,30 @@ function policyReason(area: AreaStatus, policy: AdminPolicy) {
   return "空き状況と混雑度から判定";
 }
 
-export function PolicyView({ state, ai, policy, onPolicyChange, onOpenArea }: Props) {
+export function PolicyView({ state, ai, policy, commandBusyAreas, onSetAreaPolicy, onOpenArea }: Props) {
   const areas = state?.areas ?? [];
+  const commandUnavailable =
+    Boolean(state?.stale) ||
+    !state?.commandTarget ||
+    state?.commandTargetMatchesSnapshot !== true;
   const rankedAreas = [...areas].sort((a, b) => policyScore(b, policy) - policyScore(a, policy));
   const topCandidate = rankedAreas.find((area) => !hasArea(policy, "closedAreaIds", area.areaId)) ?? null;
   const aiAreaIds = unique((ai?.actions ?? []).map((action) => action.areaId).filter((areaId) => areas.some((area) => area.areaId === areaId)));
 
-  function toggle(bucket: PolicyBucket, areaId: string) {
-    onPolicyChange(togglePolicyArea(policy, bucket, areaId));
+  function requestPolicy(bucket: PolicyBucket, areaId: string, nextPolicy: AreaPolicyValue) {
+    const policyValue = hasArea(policy, bucket, areaId) ? "NORMAL" : nextPolicy;
+    void onSetAreaPolicy(areaId, policyValue);
   }
 
   function applyAiPriority() {
-    onPolicyChange({
-      ...policy,
-      priorityAreaIds: aiAreaIds.filter((areaId) => !policy.closedAreaIds.includes(areaId)),
-      restrictedAreaIds: policy.restrictedAreaIds.filter((areaId) => !aiAreaIds.includes(areaId))
-    });
+    aiAreaIds
+      .filter((areaId) => !policy.closedAreaIds.includes(areaId))
+      .forEach((areaId) => void onSetAreaPolicy(areaId, "PRIORITY"));
   }
 
   function clearPolicy() {
-    onPolicyChange({ priorityAreaIds: [], closedAreaIds: [], restrictedAreaIds: [] });
+    unique([...policy.priorityAreaIds, ...policy.closedAreaIds, ...policy.restrictedAreaIds])
+      .forEach((areaId) => void onSetAreaPolicy(areaId, "NORMAL"));
   }
 
   return (
@@ -118,14 +104,18 @@ export function PolicyView({ state, ai, policy, onPolicyChange, onOpenArea }: Pr
             <p>現場判断として、優先案内・停止・制限をエリア単位で調整します。</p>
           </div>
           <div className="policyHeaderActions">
-            <button className="adminLinkButton" type="button" onClick={clearPolicy}>
+            <button className="adminLinkButton" type="button" onClick={clearPolicy} disabled={commandUnavailable}>
               解除
             </button>
-            <button className="adminButton" type="button" onClick={applyAiPriority} disabled={!aiAreaIds.length}>
+            <button className="adminButton" type="button" onClick={applyAiPriority} disabled={!aiAreaIds.length || commandUnavailable}>
               AI提案を反映
             </button>
           </div>
         </div>
+        {!state?.stale && !state?.commandTarget ? <p className="adminNotice">UnityのCommand受信接続を待っています。</p> : null}
+        {!state?.stale && state?.commandTarget && !state.commandTargetMatchesSnapshot ? (
+          <p className="adminNotice">表示中のUnity状態と操作先が一致するまでCommand操作を停止しています。</p>
+        ) : null}
 
         <div className="policyDecision">
           <div>
@@ -181,21 +171,24 @@ export function PolicyView({ state, ai, policy, onPolicyChange, onOpenArea }: Pr
                 <button
                   className={hasArea(policy, "priorityAreaIds", area.areaId) ? "active" : ""}
                   type="button"
-                  onClick={() => toggle("priorityAreaIds", area.areaId)}
+                  disabled={commandUnavailable || commandBusyAreas.has(area.areaId)}
+                  onClick={() => requestPolicy("priorityAreaIds", area.areaId, "PRIORITY")}
                 >
                   優先案内
                 </button>
                 <button
                   className={hasArea(policy, "closedAreaIds", area.areaId) ? "active danger" : ""}
                   type="button"
-                  onClick={() => toggle("closedAreaIds", area.areaId)}
+                  disabled={commandUnavailable || commandBusyAreas.has(area.areaId)}
+                  onClick={() => requestPolicy("closedAreaIds", area.areaId, "CLOSED")}
                 >
                   一時閉鎖
                 </button>
                 <button
                   className={hasArea(policy, "restrictedAreaIds", area.areaId) ? "active warn" : ""}
                   type="button"
-                  onClick={() => toggle("restrictedAreaIds", area.areaId)}
+                  disabled={commandUnavailable || commandBusyAreas.has(area.areaId)}
+                  onClick={() => requestPolicy("restrictedAreaIds", area.areaId, "RESTRICTED")}
                 >
                   誘導制限
                 </button>

@@ -5,7 +5,7 @@ Unity WebGL の駐車場シミュレーションから 1 秒ごとに snapshot �
 ## 現在できていること
 
 - 管理者画面に Unity WebGL を iframe 表示
-- Unity WebGL から FastAPI backend へ snapshot JSON を送信
+- headless Unity WebGL runnerからFastAPI backendへSnapshot/Eventを送信
 - backend で A/B/C/D エリア別の空き台数、混雑率、risk score を集計
 - ユーザー画面で推奨エリア案内を表示
 - 「案内開始」で 5 分 TTL のエリア予約を作成
@@ -13,16 +13,22 @@ Unity WebGL の駐車場シミュレーションから 1 秒ごとに snapshot �
 - 管理者画面で AI 提案を手動生成
 - Gemini 失敗時は fallback 提案を返す
 - 管理者ログを in-memory で保持
+- 管理者画面から `SET_AREA_POLICY` Commandを発行
+- Unityが1秒PollingでCommandを取得し、結果をP2 Eventとして返却
 
 ## 構成
 
 ```text
 Unity WebGL
-  ├─ 管理者画面 iframe 内で映像を描画
-  └─ 1秒ごとに FastAPI backend へ snapshot POST
+  ├─ 管理者画面iframe: viewer modeで映像だけを描画
+  └─ headless runner: sender mode
+       ├─ 1秒ごとに FastAPI backend へ Snapshot v1.1 POST
+       ├─ Command v1.0を1秒ごとにPolling
+       └─ Command結果をEvent v1.0 NDJSONでPOST
 
 FastAPI backend
   ├─ Unity snapshot 受信
+  ├─ Unity Event受信 / Command配信
   ├─ エリア集計 / risk score
   ├─ ユーザー案内 / 予約 TTL
   ├─ Gemini prompt / fallback
@@ -63,15 +69,15 @@ User Browser
 ```text
 Admin Browser
   -> Next.js /admin
-  -> iframe /unity-build/index.html
-  -> Unity WebGL がブラウザ内で描画
+  -> iframe /unity-build/index.html?backendMode=viewer
+  -> Unity WebGL が通信せずブラウザ内で描画
 ```
 
 状態データ:
 
 ```text
-Unity WebGL
-  -> POST http://localhost:8000/api/unity/snapshot
+Unity WebGL runner (backendMode=sender)
+  -> POST http://localhost:8000/api/v1/snapshots
   -> FastAPI state store
   -> Next.js /api/backend/admin/state
   -> Admin Browser
@@ -94,8 +100,8 @@ Admin Browser
 - frontend は画面表示と FastAPI への proxy を担当
 - backend は Unity snapshot、状態集計、予約、Gemini、fallback を担当
 - Unity 映像は backend から配信していない。WebGL build を frontend で直接表示している
-- MVP では backend から Unity へ予約・案内・車両制御を送り返していない
-- Unity から backend への一方向連携を前提にしている
+- Command v1ではbackendからUnityへエリア方針を返す双方向連携を行う
+- ユーザー個人への再案内や走行中車両の目的地変更はCommand v1の対象外
 
 ## Unity WebGL と backend のデータ境界
 
@@ -157,6 +163,7 @@ Copy-Item .env.example .env
 
 ```env
 CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+SMARTPARKING_LOCAL_API_KEY=local-dev-key
 GEMINI_API_KEY=
 GEMINI_MODEL=gemini-3.5-flash
 ```
@@ -195,14 +202,14 @@ Windows:
 powershell -ExecutionPolicy Bypass -File .\scripts\start-dev.ps1
 ```
 
-このスクリプトは backend / frontend に加えて、Edge または Chrome の headless プロセスで Unity WebGL runner も起動します。runner は `http://127.0.0.1:3000/unity-build/index.html?runner=dev` を開き、画面操作とは独立して Unity から backend へ snapshot を送り続けるためのものです。
+このスクリプトは backend / frontend に加えて、Edge または Chrome のheadlessプロセスでUnity WebGL runnerも起動します。runnerだけが `backendMode=sender` としてSnapshot/Eventを送り、CommandをPollingします。管理画面のiframeは `backendMode=viewer` で通信しないため、2つのUnity実行IDがBackend上で競合しません。Backendの `.env` に設定したローカルAPIキーはrunnerだけへ渡します。viewer/sender分離前の古いbuildを検出した場合は、安全のためrunnerを起動せず警告します。
 
 起動後:
 
 ```text
 ユーザー画面: http://127.0.0.1:3000
 管理者画面:   http://127.0.0.1:3000/admin
-API:          http://127.0.0.1:8000/api/health
+API:          http://127.0.0.1:8000/api/health（X-API-Keyが必要）
 ```
 
 停止:
@@ -296,7 +303,7 @@ FastAPI の `8000` は API 専用です。画面は Next.js の `3000` を開い
 
 MVP ではチームが clone 後すぐ管理者画面を確認できるように、`WebApp/frontend/public/unity-build/` の WebGL build 成果物も Git に含めます。
 
-現在の WebGL build は Unity `2022.3.62f2` で生成済みです。
+コミット済みWebGL buildは表示確認用です。2026-08-14の最新P3 Command sourceを含むbuildへの更新はUnity担当の再build待ちです。build処理自体はP3構成を有効化し、旧Snapshot exporterを無効化し、viewer/senderを分離し、senderへローカルAPIキーを実行時に渡すところまで対応済みです。
 
 ```text
 WebApp/frontend/public/unity-build/
@@ -305,15 +312,20 @@ WebApp/frontend/public/unity-build/
   TemplateData/
 ```
 
-Unity 側では `BackendBridge` に `UnityStateExporter` を追加し、次の値を設定します。
+Unity側の最新設定は `P3BackendSystem` / `P3BackendSettings` に構成済みです。主な値は次のとおりです。
 
 ```text
-Backend Snapshot Url: http://localhost:8000/api/unity/snapshot
+Base Url: http://localhost:8000
+Snapshot Endpoint: /api/v1/snapshots
+Event Endpoint: /api/v1/events
+Command Endpoint: /api/v1/commands
 Source Id: unity-webgl-admin-01
-Send Interval Seconds: 1
-Include Slots: true
-Include Cars: true
+Command Polling Interval Seconds: 1
+Command Request Timeout Seconds: 5
+API Key Environment Variable: SMARTPARKING_LOCAL_API_KEY
 ```
+
+Unity Editorでは `UnityProject/.env` の `SMARTPARKING_LOCAL_API_KEY` を使用します。WebGLではOS環境変数や `.env` を直接読めないため、一括起動runnerだけがローカルAPIキーを実行時に受け取ります。管理画面iframeはviewer modeなのでAPIキーを受け取りません。本番公開時はURLへ秘密鍵を載せず、クラウド担当が決める本番認証へ置き換えてください。
 
 再 build する場合:
 
@@ -332,6 +344,9 @@ Include Cars: true
 | --- | --- | --- |
 | GET | `/api/health` | backend health check |
 | POST | `/api/unity/snapshot` | Unity snapshot 受信 |
+| POST | `/api/v1/snapshots` | Unity Snapshot v1.1受信 |
+| POST | `/api/v1/events` | Unity Event v1.0 NDJSON受信 |
+| GET | `/api/v1/commands` | Unity向けCommand Batch取得 |
 | GET | `/api/parking/status` | 駐車場状態 |
 | GET | `/api/parking/recommendation` | ユーザー向け推奨エリア |
 | POST | `/api/guidance/start` | エリア案内予約開始 |
@@ -340,6 +355,7 @@ Include Cars: true
 | GET | `/api/admin/areas` | area master |
 | GET | `/api/admin/ai/status` | Gemini 設定状態 |
 | POST | `/api/admin/ai/recommendations` | AI 提案生成 |
+| POST | `/api/admin/commands` | 管理画面からSET_AREA_POLICY作成 |
 
 ## Git に含めるもの / 含めないもの
 
@@ -380,8 +396,16 @@ cd WebApp\backend
 python -m py_compile main.py models\schemas.py routers\admin.py services\state_store.py
 ```
 
+Command v1の実通信スモークテスト（backend起動中）:
+
+```powershell
+python scripts\smoke-test-command-v1.py
+```
+
 ## 残タスク
 
+- 最新P3 sourceを含むUnity WebGL buildの再生成
+- PostgreSQL等への永続化とクラウド本番認証
 - Gemini API の 429 レート制限が落ち着いた状態で実生成確認
 - エリア polygon の見た目最終確認
 - 発表向け UI 文言とレイアウト調整
@@ -391,3 +415,4 @@ python -m py_compile main.py models\schemas.py routers\admin.py services\state_s
 
 - `docs/mvp-decisions-and-design-notes.md`
 - `docs/realtime-ai-integration-plan.md`
+- `docs/integration-handoff-checklist.md`

@@ -1,10 +1,11 @@
 import os
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers import admin, guidance, parking, unity
+from routers import admin, guidance, parking, unity, v1
+from services.api_auth import require_local_api_key
 
 load_dotenv()
 
@@ -37,8 +38,9 @@ app.include_router(unity.router)
 app.include_router(parking.router)
 app.include_router(guidance.router)
 app.include_router(admin.router)
+app.include_router(v1.router)
 
 
-@app.get("/api/health")
+@app.get("/api/health", dependencies=[Depends(require_local_api_key)])
 def health() -> dict[str, str]:
     return {"status": "ok"}

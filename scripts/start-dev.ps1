@@ -36,6 +36,18 @@ if (!(Test-Path $FrontendEnv) -and (Test-Path $FrontendEnvExample)) {
     Write-Host "Created WebApp\frontend\.env from .env.example"
 }
 
+$ConfiguredLocalApiKey = if ($env:SMARTPARKING_LOCAL_API_KEY) { $env:SMARTPARKING_LOCAL_API_KEY } else { "local-dev-key" }
+if (!$env:SMARTPARKING_LOCAL_API_KEY -and (Test-Path $BackendEnv)) {
+    $ApiKeyLine = Get-Content -Path $BackendEnv | Where-Object { $_ -match '^\s*SMARTPARKING_LOCAL_API_KEY\s*=' } | Select-Object -First 1
+    if ($ApiKeyLine) {
+        $ApiKeyValue = ($ApiKeyLine -split '=', 2)[1].Trim().Trim('"').Trim("'")
+        if ($ApiKeyValue) {
+            $ConfiguredLocalApiKey = $ApiKeyValue
+        }
+    }
+}
+$env:SMARTPARKING_LOCAL_API_KEY = $ConfiguredLocalApiKey
+
 if (!$NoInstall -and !(Test-Path (Join-Path $FrontendDir "node_modules"))) {
     Write-Host "Installing frontend dependencies..."
     Push-Location $FrontendDir
@@ -52,6 +64,7 @@ $BackendPidFile = Join-Path $Root ".dev-backend.pid"
 $FrontendPidFile = Join-Path $Root ".dev-frontend.pid"
 $UnityRunnerPidFile = Join-Path $Root ".dev-unity-runner.pid"
 $UnityRunnerProfile = Join-Path $Root ".unity-runner-profile"
+$UnityIndexPath = Join-Path $FrontendDir "public\unity-build\index.html"
 
 function Resolve-ExecutablePath {
     param(
@@ -165,6 +178,11 @@ function Start-UnityWebGLRunner {
         return
     }
 
+    if (!(Test-Path $UnityIndexPath) -or !(Select-String -Path $UnityIndexPath -SimpleMatch "smartParkingBackendMode" -Quiet)) {
+        Write-Warning "Unity WebGL runner was not started because the committed build is older than the viewer/sender split. Rebuild with SmartParkingWebGLBuild.Build first."
+        return
+    }
+
     $BrowserPath = Get-BrowserPath
     if (!$BrowserPath) {
         Write-Warning "Unity WebGL runner was not started because Edge/Chrome was not found."
@@ -173,9 +191,9 @@ function Start-UnityWebGLRunner {
 
     New-Item -ItemType Directory -Force -Path $UnityRunnerProfile | Out-Null
 
-    $UnityUrl = "http://127.0.0.1:3000/unity-build/index.html?runner=dev"
+    $UnityUrl = "http://127.0.0.1:3000/unity-build/index.html?runner=dev&backendMode=sender&apiKey=$([Uri]::EscapeDataString($env:SMARTPARKING_LOCAL_API_KEY))"
     if (!(Wait-ForUrl -Url $UnityUrl -TimeoutSeconds 90)) {
-        Write-Warning "Unity WebGL runner was not started because frontend did not serve $UnityUrl in time."
+        Write-Warning "Unity WebGL runner was not started because frontend did not serve the Unity build in time."
         return
     }
 
@@ -229,7 +247,7 @@ Write-Host ""
 Write-Host "SmartParking dev servers are starting."
 Write-Host "User:  http://127.0.0.1:3000"
 Write-Host "Admin: http://127.0.0.1:3000/admin"
-Write-Host "API:   http://127.0.0.1:8000/api/health"
+Write-Host "API:   http://127.0.0.1:8000/api/health (X-API-Key required)"
 Write-Host ""
 Write-Host "Logs:"
 Write-Host "  $BackendLog"

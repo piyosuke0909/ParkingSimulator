@@ -1,5 +1,53 @@
 # Current System Status
 
+> 2026-08-19更新: 下の「2026-06-28時点」記録は履歴です。現在の判断には本節を使用してください。
+
+## 2026-08-19 現在
+
+- Unity simulation: P1/P2/P3のシナリオ、Snapshot v1.1、Event v1.0送信を実装済み
+- Backend: FastAPI、旧MVP API、`/api/v1/snapshots`、`/api/v1/events`、Command配信・結果受信を実装済み
+- Contract validation: Unity同梱のP2/P3正式JSON SchemaでSnapshot/Event/Command Batchを検証
+- Frontend: ユーザー画面、管理画面、Backend proxy、Unity WebGL埋め込みを実装済み
+- 管理画面: `SET_AREA_POLICY` をBackendへ登録し、Unity結果後に確定方針を表示
+- Unity Command: source/session/run一致、期限確認、冪等性、方針適用、P2結果Event返却を実装済み
+- Command結果整合性: Event種類とstatus、成功時のarea/policyを照合し、遅着した途中経過がTerminal状態を上書きしないよう実装済み。方針の`effectiveUntilUtc`到達後はUnityと同じく管理画面表示も`NORMAL`へ戻る
+- 実行ID分離: 管理画面表示中SnapshotとCommand Polling対象の`sessionId`・`runId`を照合し、別起動のデータが混在した場合は画面操作を無効化してBackendも409で拒否
+- WebGL実行分離: 管理画面iframeはviewer modeで通信停止、headless runnerだけをsender modeとしてSnapshot/Event/Command通信
+- WebGL認証連携: Backend `.env` のローカルAPIキーをheadless runnerのP3 Unityだけへ実行時に渡す処理を実装済み
+- 共通契約: `docs/architecture/command-receive-contract-v1.md`
+
+現在の統合フロー:
+
+```text
+管理画面
+  -> POST /api/admin/commands
+Backend
+  -> GET /api/v1/commands?sourceId&sessionId&runId (Unity polling)
+Unity
+  -> 新規車両のエリア選択へ反映
+  -> POST /api/v1/events (P2 Event NDJSON)
+Backend
+  -> GET /api/admin/state
+管理画面
+  -> succeeded / failed と確定方針を表示
+```
+
+未完了または他担当確認待ち:
+
+- Unity Editor Playでの最終目視確認（この環境ではUnityライセンスがなくbatch compile不可）
+- 最新Unity sourceからWebGL buildを再生成し、`WebApp/frontend/public/unity-build`を更新（build処理と実行時APIキー注入は対応済み）
+- Cloud/DBへの永続化と本番認証。本実装のCommand/状態保存はMVPのin-memory
+- SharePoint担当表との最終照合（この環境ではSharePoint connector未接続）
+- 実機・本番URLでCORS、HTTPS、認証、再起動復元を確認
+
+担当別の提出物・合否条件は `docs/integration-handoff-checklist.md`、共通の実通信確認は `scripts/smoke-test-command-v1.py` を使用する。
+
+2026-08-19再取得: GitHubの公開済みUnity最新版は`origin/feature/unity-update-p3`の`6639aaa`。open PRや追加Unityブランチはなく、`origin/develop`の`2c8d18b`は同じtree内容。検証件数は下記監査結果を正とする。
+
+---
+
+## 2026-06-28 時点の履歴
+
 Last checked: 2026-06-28
 
 ## Premise

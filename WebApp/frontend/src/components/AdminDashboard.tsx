@@ -12,7 +12,26 @@ import { ParkingView } from "./admin/ParkingView";
 import { PolicyView } from "./admin/PolicyView";
 import type { AdminPolicy, AdminView, MapMode } from "./admin/types";
 import { selectedPriorityAreas } from "./admin/utils";
-import type { AdminState, AiRecommendation, AiStatus } from "./types";
+import type { AdminCommand, AdminState, AiRecommendation, AiStatus, AreaPolicyValue } from "./types";
+
+function policyFromState(state: AdminState): AdminPolicy {
+  const policy: AdminPolicy = { priorityAreaIds: [], closedAreaIds: [], restrictedAreaIds: [] };
+  Object.entries(state.areaPolicies ?? {}).forEach(([areaId, value]) => {
+    if (value === "PRIORITY") policy.priorityAreaIds.push(areaId);
+    if (value === "CLOSED") policy.closedAreaIds.push(areaId);
+    if (value === "RESTRICTED") policy.restrictedAreaIds.push(areaId);
+  });
+  return policy;
+}
+
+function commandStatusLabel(command: AdminCommand): string {
+  if (command.status === "succeeded") return "Unityへの反映が完了しました。";
+  if (command.status === "failed") return `Unityでの実行に失敗しました${command.lastResult?.payload?.command?.message ? `：${command.lastResult.payload.command.message}` : "。"}`;
+  if (command.status === "rejected") return "UnityがCommandを拒否しました。";
+  if (command.status === "expired") return "Commandの有効期限が切れました。";
+  if (command.status === "timed_out") return "Unityから結果を確認できず、再配信を終了しました。";
+  return "Unityの実行結果を待っています。";
+}
 
 export function AdminDashboard() {
   const [view, setView] = useState<AdminView>("overview");
@@ -27,6 +46,8 @@ export function AdminDashboard() {
   const [aiStatus, setAiStatus] = useState<AiStatus | null>(null);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [commandBusyAreas, setCommandBusyAreas] = useState<Set<string>>(() => new Set());
+  const [commandNotice, setCommandNotice] = useState<string | null>(null);
   const [unityBuildAvailable, setUnityBuildAvailable] = useState<boolean | null>(null);
 
   const selectedArea = useMemo(
@@ -59,6 +80,10 @@ export function AdminDashboard() {
     try {
       const next = await fetchJson<AdminState>("/api/backend/admin/state");
       setState(next);
+      setPolicy(policyFromState(next));
+      if (next.commands?.[0]) {
+        setCommandNotice(`${next.commands[0].payload.areaId}エリア: ${commandStatusLabel(next.commands[0])}`);
+      }
       if (!next.areas.some((area) => area.areaId === selectedAreaId) && next.areas[0]) {
         setSelectedAreaId(next.areas[0].areaId);
       }
@@ -85,6 +110,31 @@ export function AdminDashboard() {
       setError(err instanceof Error ? err.message : "AI提案の生成に失敗しました。");
     } finally {
       setGenerating(false);
+    }
+  }
+
+  async function setAreaPolicy(areaId: string, nextPolicy: AreaPolicyValue) {
+    setCommandBusyAreas((current) => new Set(current).add(areaId));
+    setCommandNotice(null);
+    try {
+      const response = await fetchJson<{ command: AdminCommand }>("/api/backend/admin/commands", {
+        method: "POST",
+        body: JSON.stringify({
+          commandType: "SET_AREA_POLICY",
+          idempotencyKey: `admin-${areaId}-${nextPolicy}-${Date.now()}`,
+          payload: { areaId, policy: nextPolicy }
+        })
+      });
+      setCommandNotice(`${areaId}エリア: ${commandStatusLabel(response.command)}`);
+      await refresh();
+    } catch (err) {
+      setCommandNotice(err instanceof Error ? err.message : "案内方針Commandの送信に失敗しました。");
+    } finally {
+      setCommandBusyAreas((current) => {
+        const next = new Set(current);
+        next.delete(areaId);
+        return next;
+      });
     }
   }
 
@@ -137,9 +187,11 @@ export function AdminDashboard() {
             generating={generating}
             unityBuildAvailable={unityBuildAvailable}
             policy={policy}
+            commandBusyAreas={commandBusyAreas}
+            commandNotice={commandNotice}
             onInstructionChange={setInstruction}
             onGenerateAi={generateAi}
-            onPolicyChange={setPolicy}
+            onSetAreaPolicy={setAreaPolicy}
             onOpenArea={openArea}
           />
         ) : null}
@@ -162,7 +214,16 @@ export function AdminDashboard() {
           />
         ) : null}
 
-        {view === "policy" ? <PolicyView state={state} ai={ai} policy={policy} onPolicyChange={setPolicy} onOpenArea={openArea} /> : null}
+        {view === "policy" ? (
+          <PolicyView
+            state={state}
+            ai={ai}
+            policy={policy}
+            commandBusyAreas={commandBusyAreas}
+            onSetAreaPolicy={setAreaPolicy}
+            onOpenArea={openArea}
+          />
+        ) : null}
 
         {view === "guards" ? <GuardsView state={state} ai={ai} busiestArea={busiestArea} priorityAreas={priorityAreas} /> : null}
 

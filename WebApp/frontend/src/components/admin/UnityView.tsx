@@ -1,3 +1,5 @@
+import { unityBuildUrl } from "./unityBuildUrl";
+
 export function UnityView({ unityBuildAvailable }: { unityBuildAvailable: boolean | null }) {
   return (
     <section className="adminPanel">
@@ -9,7 +11,7 @@ export function UnityView({ unityBuildAvailable }: { unityBuildAvailable: boolea
         <span className={`statusPill ${unityBuildAvailable ? "live" : "stale"}`}>{unityBuildAvailable ? "buildあり" : "buildなし"}</span>
       </div>
       {unityBuildAvailable ? (
-        <iframe src="/unity-build/index.html?view=admin-fit-16x10" title="Unity WebGL" className="adminUnityFrame" />
+        <iframe src={unityBuildUrl({ view: "admin-fit-16x10" })} title="Unity WebGL" className="adminUnityFrame" />
       ) : (
         <div className="adminEmpty">Unity WebGL build がありません。</div>
       )}

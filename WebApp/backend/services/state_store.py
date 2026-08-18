@@ -81,6 +81,9 @@ class StateStore:
     def now(self) -> datetime:
         return datetime.now(UTC)
 
+    def add_log(self, event_type: str, message: str, metadata: dict[str, Any] | None = None) -> None:
+        self._log(event_type, message, metadata or {})
+
     def ingest_snapshot(self, snapshot: UnitySnapshot) -> dict[str, Any]:
         key = f"{snapshot.sourceId}:{snapshot.scene}"
         latest_sequence = self.latest_sequence_by_source_scene.get(key)
@@ -149,13 +152,28 @@ class StateStore:
     def admin_state(self) -> dict[str, Any]:
         status = self.parking_status()
         alerts = self._alerts(status["areas"], status["stale"])
+        snapshot = self.latest_snapshot
         return {
             **status,
+            "snapshotIdentity": None
+            if not snapshot
+            else {
+                "sourceId": snapshot.sourceId,
+                "scene": snapshot.scene,
+                "sessionId": snapshot.sessionId,
+                "runId": snapshot.runId,
+            },
             "guards": self._available_guards(),
             "alerts": alerts,
             "logs": self.logs[-30:],
             "lastAiRecommendation": self.last_valid_ai_recommendation,
         }
+
+    def snapshot_matches_command_target(self, session_id: str, run_id: str) -> bool:
+        snapshot = self.latest_snapshot
+        if not snapshot or not self.snapshot_received_at or self._is_stale(self.now()):
+            return False
+        return snapshot.sessionId == session_id and snapshot.runId == run_id
 
     def recommendation(self, user_session_id: str) -> dict[str, Any]:
         self._prune_expired_reservations()
@@ -197,6 +215,18 @@ class StateStore:
 
     def start_guidance(self, user_session_id: str, target_area_id: str | None = None) -> dict[str, Any]:
         self._prune_expired_reservations()
+        now = self.now()
+        existing = self._active_reservation_for_user(user_session_id, now)
+        if existing:
+            areas = self._area_statuses(now)
+            current = next((area for area in areas if area["areaId"] == existing.target_area_id), None)
+            self._log(
+                "guidance_start_deduplicated",
+                "同じ利用者の有効な案内予約を再利用しました。",
+                {"userSessionId": user_session_id, "reservationId": existing.reservation_id},
+            )
+            return self._guidance_response(current or self._select_area(areas), existing, None)
+
         areas = self._area_statuses(self.now())
         selected = None
         if target_area_id:
@@ -206,7 +236,6 @@ class StateStore:
         if not selected:
             raise ValueError("案内可能なエリアがありません。")
 
-        now = self.now()
         selected_slot = self._select_recommended_slot(selected["areaId"], now)
         assigned_car = self._assign_car_to_guidance(selected["areaId"], selected_slot.slotId if selected_slot else None, now)
         reservation = Reservation(
