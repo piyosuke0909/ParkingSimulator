@@ -37,6 +37,7 @@ export function AdminSidebar({ view, state, open, onClose, onViewChange }: Sideb
         <span className={`statusPill ${connectionClass}`}>{connectionLabel}</span>
         <p>最終更新 {formatTime(state?.updatedAt)}</p>
         <p>snapshot v{state?.snapshotVersion ?? 0}</p>
+        <p>Command {state?.commandTarget ? "操作可能" : "受信待ち"}</p>
       </div>
     </aside>
   );

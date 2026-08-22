@@ -27,6 +27,7 @@ ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 BACKEND_DIR="$ROOT/WebApp/backend"
 FRONTEND_DIR="$ROOT/WebApp/frontend"
 LOG_DIR="$ROOT/.logs"
+UNITY_INDEX_PATH="$FRONTEND_DIR/public/unity-build/index.html"
 
 mkdir -p "$LOG_DIR"
 
@@ -96,9 +97,13 @@ ensure_port_available() {
 wait_for_url() {
   local url="$1"
   local attempts="${2:-60}"
+  local api_key="${3:-}"
 
   for ((i = 0; i < attempts; i += 1)); do
-    if curl --fail --silent --show-error "$url" >/dev/null 2>&1; then
+    if [[ -n "$api_key" ]] && curl --fail --silent --show-error -H "X-API-Key: $api_key" "$url" >/dev/null 2>&1; then
+      return 0
+    fi
+    if [[ -z "$api_key" ]] && curl --fail --silent --show-error "$url" >/dev/null 2>&1; then
       return 0
     fi
     sleep 0.5
@@ -149,15 +154,23 @@ start_unity_runner() {
     return
   fi
 
+  if [[ ! -f "$UNITY_INDEX_PATH" ]] || ! grep -q "smartParkingBackendMode" "$UNITY_INDEX_PATH"; then
+    echo "Unity WebGL runner was not started because the committed build is older than the viewer/sender split. Rebuild with SmartParkingWebGLBuild.Build first." >&2
+    return
+  fi
+
   local browser
   if ! browser="$(find_browser)"; then
     echo "Unity WebGL runner was not started because Chrome, Chromium, or Edge was not found." >&2
     return
   fi
 
-  local unity_url="http://127.0.0.1:3000/unity-build/index.html?runner=dev"
+  local api_key="${SMARTPARKING_LOCAL_API_KEY:-local-dev-key}"
+  local encoded_api_key
+  encoded_api_key="$("$PYTHON_BIN" -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$api_key")"
+  local unity_url="http://127.0.0.1:3000/unity-build/index.html?runner=dev&backendMode=sender&apiKey=$encoded_api_key"
   if ! wait_for_url "$unity_url" 180; then
-    echo "Unity WebGL runner was not started because the frontend did not serve $unity_url in time." >&2
+    echo "Unity WebGL runner was not started because the frontend did not serve the Unity build in time." >&2
     return
   fi
 
@@ -180,6 +193,19 @@ start_unity_runner() {
 
 copy_env_if_needed "$BACKEND_DIR"
 copy_env_if_needed "$FRONTEND_DIR"
+
+CONFIGURED_LOCAL_API_KEY="${SMARTPARKING_LOCAL_API_KEY:-local-dev-key}"
+if [[ -z "${SMARTPARKING_LOCAL_API_KEY:-}" && -f "$BACKEND_DIR/.env" ]]; then
+  while IFS='=' read -r key value; do
+    if [[ "$key" == "SMARTPARKING_LOCAL_API_KEY" && -n "$value" ]]; then
+      CONFIGURED_LOCAL_API_KEY="${value%$'\r'}"
+      CONFIGURED_LOCAL_API_KEY="${CONFIGURED_LOCAL_API_KEY%\"}"
+      CONFIGURED_LOCAL_API_KEY="${CONFIGURED_LOCAL_API_KEY#\"}"
+      break
+    fi
+  done < "$BACKEND_DIR/.env"
+fi
+export SMARTPARKING_LOCAL_API_KEY="$CONFIGURED_LOCAL_API_KEY"
 
 if ! PYTHON_SOURCE="$(find_python)"; then
   echo "Python 3.11 or later is required. On macOS with Homebrew, run: brew install python@3.13" >&2
@@ -235,7 +261,7 @@ start_process "backend" "$BACKEND_DIR" "$BACKEND_LOG" "$BACKEND_ERROR_LOG" "$BAC
 start_process "frontend" "$FRONTEND_DIR" "$FRONTEND_LOG" "$FRONTEND_ERROR_LOG" "$FRONTEND_PID_FILE" \
   npm run dev -- --hostname 127.0.0.1 --port 3000
 
-if ! wait_for_url "http://127.0.0.1:8000/api/health"; then
+if ! wait_for_url "http://127.0.0.1:8000/api/health" 60 "${SMARTPARKING_LOCAL_API_KEY:-local-dev-key}"; then
   echo "Backend did not become ready. See $BACKEND_LOG and $BACKEND_ERROR_LOG." >&2
   exit 1
 fi

@@ -21,6 +21,8 @@ export const guardNames: Record<string, string> = {
 export const navItems: { id: AdminView; label: string }[] = [
   { id: "overview", label: "全体状況" },
   { id: "parking", label: "駐車場マップ" },
+  { id: "policy", label: "案内方針" },
   { id: "guards", label: "警備員配置" },
-  { id: "ai", label: "AI提案" }
+  { id: "ai", label: "AI提案" },
+  { id: "logs", label: "運用ログ" }
 ];
