@@ -16,13 +16,15 @@ Unity から受け取ったデータを可視化し、最適経路を提示す�
 ## システム図
 ```
 Unity（2人目のスクリプト）
-    ↓ POST /api/parking/event
+    ↓ POST Snapshot/Event、GET Command
 backend/（FastAPI）
     ↓ データ処理・経路計算
 frontend/（React）
     ↓ ブラウザで表示
 ユーザー（どこに停めたか確認）
 ```
+
+Command v1では管理画面からBackendへエリア方針を登録し、Unityが `/api/v1/commands` から取得します。Unityの成功・失敗は `/api/v1/events` へ返します。
 
 ## ローカル起動
 ```powershell

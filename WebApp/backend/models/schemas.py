@@ -59,6 +59,8 @@ class WaypointSnapshot(BaseModel):
 class UnitySnapshot(BaseModel):
     sourceId: str = "unity-webgl-admin-01"
     scene: str = "Unknown"
+    sessionId: str | None = None
+    runId: str | None = None
     sequenceNumber: int = Field(ge=0)
     timestamp: datetime
     summary: SnapshotSummary = Field(default_factory=SnapshotSummary)

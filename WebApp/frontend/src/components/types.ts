@@ -1,4 +1,33 @@
 export type RiskLevel = "low" | "medium" | "high";
+export type AreaPolicyValue = "PRIORITY" | "CLOSED" | "RESTRICTED" | "NORMAL";
+
+export type AdminCommand = {
+  commandId: string;
+  idempotencyKey: string;
+  commandType: "SET_AREA_POLICY";
+  targetSourceId: string;
+  targetSessionId: string;
+  targetRunId: string;
+  createdAtUtc: string;
+  expiresAtUtc: string;
+  priority: number;
+  payload: { areaId: string; policy: AreaPolicyValue; effectiveUntilUtc?: string; reason?: string };
+  status: "pending" | "delivered" | "accepted" | "started" | "succeeded" | "failed" | "rejected" | "expired" | "timed_out";
+  deliveryAttempts: number;
+  completedAtUtc?: string | null;
+  lastResult?: {
+    eventType: string;
+    payload?: {
+      command?: {
+        status: string;
+        reasonCode?: string;
+        message?: string;
+        retryable?: boolean;
+        result?: { areaId?: string; previousPolicy?: string; appliedPolicy?: string };
+      };
+    };
+  } | null;
+};
 
 export type AreaStatus = {
   areaId: string;
@@ -44,6 +73,11 @@ export type AdminState = ParkingStatus & {
   alerts: { type: string; areaId: string | null; severity: RiskLevel; message: string }[];
   guards: { guardId: string; status: string; currentArea: string; shift: string; break: string; canMove: boolean }[];
   logs: { id: string; timestamp: string; type: string; message: string }[];
+  areaPolicies: Record<string, AreaPolicyValue>;
+  commands: AdminCommand[];
+  commandTarget?: { sourceId: string; sessionId: string; runId: string } | null;
+  snapshotIdentity?: { sourceId: string; scene: string; sessionId?: string | null; runId?: string | null } | null;
+  commandTargetMatchesSnapshot: boolean;
   lastAiRecommendation?: AiRecommendation | null;
 };
 

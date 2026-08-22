@@ -55,6 +55,7 @@ Desktop.ini
 *.log
 .logs/
 .dev-*.pid
+.preview-*.pid
 .unity-runner-profile/
 __pycache__/
 *~.nib

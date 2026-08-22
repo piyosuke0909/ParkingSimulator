@@ -15,6 +15,7 @@ public enum P3EventBatchFormat
     JsonEnvelope
 }
 
+[DefaultExecutionOrder(-1000)]
 public class P3BackendSettings : MonoBehaviour
 {
     public const int BackendMaximumEventBatchCount = 50;
@@ -132,6 +133,13 @@ public class P3BackendSettings : MonoBehaviour
     public float EffectiveCommandRequestTimeoutSeconds => Mathf.Max(1f, commandRequestTimeoutSeconds);
     public int EffectiveCommandMaximumCount => Mathf.Clamp(commandMaximumCount, 1, BackendMaximumCommandCount);
 
+    private void Awake()
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        ApplyWebGlRuntimeConfiguration(Application.absoluteURL);
+#endif
+    }
+
     public string PendingRootPath => Path.Combine(
         Application.persistentDataPath,
         P3PendingFileStore.SanitizePathPart(pendingDirectoryName, "P3Pending")
@@ -185,6 +193,26 @@ public class P3BackendSettings : MonoBehaviour
         P3SecretProvider.SetRuntimeApiKey(value);
     }
 
+    public void SetRuntimeBackendMode(string value)
+    {
+        if (string.Equals(value, "viewer", StringComparison.OrdinalIgnoreCase))
+        {
+            enableSnapshotTransmission = false;
+            enableEventTransmission = false;
+            enableHealthCheck = false;
+            enableCommandPolling = false;
+            return;
+        }
+
+        if (string.Equals(value, "sender", StringComparison.OrdinalIgnoreCase))
+        {
+            enableSnapshotTransmission = true;
+            enableEventTransmission = true;
+            enableHealthCheck = true;
+            enableCommandPolling = true;
+        }
+    }
+
     public void SetRuntimeBearerToken(string value)
     {
         P3SecretProvider.SetRuntimeBearerToken(value);
@@ -199,6 +227,54 @@ public class P3BackendSettings : MonoBehaviour
     public void ReloadAuthenticationSecrets()
     {
         P3SecretProvider.ReloadDotEnv();
+    }
+
+    private void ApplyWebGlRuntimeConfiguration(string absoluteUrl)
+    {
+        string backendMode = GetQueryParameter(absoluteUrl, "backendMode");
+        if (!string.IsNullOrWhiteSpace(backendMode))
+        {
+            SetRuntimeBackendMode(backendMode);
+        }
+
+        string apiKey = GetQueryParameter(absoluteUrl, "apiKey");
+        if (!string.IsNullOrWhiteSpace(apiKey))
+        {
+            SetRuntimeApiKey(apiKey);
+        }
+    }
+
+    private static string GetQueryParameter(string absoluteUrl, string parameterName)
+    {
+        Uri parsed;
+        if (string.IsNullOrWhiteSpace(absoluteUrl) ||
+            !Uri.TryCreate(absoluteUrl, UriKind.Absolute, out parsed))
+        {
+            return string.Empty;
+        }
+
+        string query = parsed.Query;
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return string.Empty;
+        }
+
+        string[] entries = query.TrimStart('?').Split('&');
+        foreach (string entry in entries)
+        {
+            int separator = entry.IndexOf('=');
+            string rawName = separator >= 0 ? entry.Substring(0, separator) : entry;
+            string decodedName = Uri.UnescapeDataString(rawName.Replace("+", " "));
+            if (!string.Equals(decodedName, parameterName, StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            string rawValue = separator >= 0 ? entry.Substring(separator + 1) : string.Empty;
+            return Uri.UnescapeDataString(rawValue.Replace("+", " "));
+        }
+
+        return string.Empty;
     }
 
     public string BuildUrl(string endpoint)

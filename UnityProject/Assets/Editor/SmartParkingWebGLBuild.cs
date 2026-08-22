@@ -15,7 +15,7 @@ public static class SmartParkingWebGLBuild
     {
         EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.WebGL, BuildTarget.WebGL);
         ConfigureWebGLPlayer();
-        EnsureExporterInScene();
+        EnsureP3BackendInScene();
 
         string configuredOutputPath = Environment.GetEnvironmentVariable("SMARTPARKING_WEBGL_OUTPUT");
         string outputPath = string.IsNullOrWhiteSpace(configuredOutputPath)
@@ -48,33 +48,22 @@ public static class SmartParkingWebGLBuild
         PlayerSettings.WebGL.decompressionFallback = true;
     }
 
-    private static void EnsureExporterInScene()
+    private static void EnsureP3BackendInScene()
     {
         var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+        P3BackendSetupWizard.CreateOrUpdateSetup();
+
         GameObject bridge = GameObject.Find(BackendBridgeName);
-
-        if (bridge == null)
+        if (bridge != null)
         {
-            bridge = new GameObject(BackendBridgeName);
+            UnityStateExporter legacyExporter = bridge.GetComponent<UnityStateExporter>();
+            if (legacyExporter != null && legacyExporter.enabled)
+            {
+                Undo.RecordObject(legacyExporter, "Disable Legacy Snapshot Exporter");
+                legacyExporter.enabled = false;
+                EditorUtility.SetDirty(legacyExporter);
+            }
         }
-
-        UnityStateExporter exporter = bridge.GetComponent<UnityStateExporter>();
-        if (exporter == null)
-        {
-            exporter = bridge.AddComponent<UnityStateExporter>();
-        }
-
-        SerializedObject serialized = new SerializedObject(exporter);
-        SetString(serialized, "backendSnapshotUrl", "http://localhost:8000/api/unity/snapshot");
-        SetString(serialized, "sourceId", "unity-webgl-admin-01");
-        SetFloat(serialized, "sendIntervalSeconds", 1f);
-        SetBool(serialized, "autoFindParkingLotManager", true);
-        SetBool(serialized, "includeSlots", true);
-        SetBool(serialized, "includeCars", true);
-        SetBool(serialized, "includeWaypoints", true);
-        SetBool(serialized, "logSuccess", false);
-        SetBool(serialized, "logFailure", true);
-        serialized.ApplyModifiedPropertiesWithoutUndo();
 
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
@@ -105,34 +94,25 @@ public static class SmartParkingWebGLBuild
             html = html.Replace(
                 "        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:\n\n        canvas.style.width = \"960px\";\n        canvas.style.height = \"600px\";",
                 "        // Desktop style: fill the iframe supplied by the admin screen.\n        canvas.style.width = \"100vw\";\n        canvas.style.height = \"100vh\";");
+
+            const string unityReadyToken = "}).then((unityInstance) => {";
+            if (html.Contains(unityReadyToken) && !html.Contains("smartParkingApiKey"))
+            {
+                html = html.Replace(
+                    unityReadyToken,
+                    unityReadyToken +
+                    "\n                window.smartParkingUnityInstance = unityInstance;" +
+                    "\n                var smartParkingParameters = new URLSearchParams(window.location.search);" +
+                    "\n                var smartParkingApiKey = smartParkingParameters.get(\"apiKey\");" +
+                    "\n                var smartParkingBackendMode = smartParkingParameters.get(\"backendMode\");" +
+                    "\n                if (smartParkingApiKey) {" +
+                    "\n                  unityInstance.SendMessage(\"P3BackendSystem\", \"SetRuntimeApiKey\", smartParkingApiKey);" +
+                    "\n                }" +
+                    "\n                if (smartParkingBackendMode) {" +
+                    "\n                  unityInstance.SendMessage(\"P3BackendSystem\", \"SetRuntimeBackendMode\", smartParkingBackendMode);" +
+                    "\n                }");
+            }
             File.WriteAllText(indexPath, html);
-        }
-    }
-
-    private static void SetString(SerializedObject serialized, string propertyName, string value)
-    {
-        SerializedProperty property = serialized.FindProperty(propertyName);
-        if (property != null)
-        {
-            property.stringValue = value;
-        }
-    }
-
-    private static void SetFloat(SerializedObject serialized, string propertyName, float value)
-    {
-        SerializedProperty property = serialized.FindProperty(propertyName);
-        if (property != null)
-        {
-            property.floatValue = value;
-        }
-    }
-
-    private static void SetBool(SerializedObject serialized, string propertyName, bool value)
-    {
-        SerializedProperty property = serialized.FindProperty(propertyName);
-        if (property != null)
-        {
-            property.boolValue = value;
         }
     }
 }

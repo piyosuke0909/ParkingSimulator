@@ -1,6 +1,6 @@
 # ユーザー画面担当 進捗
 
-更新日: 2026-07-22
+更新日: 2026-08-18
 
 ## P0
 
@@ -38,16 +38,16 @@ npm.cmd run build
 
 ### P3: Command結果による再案内
 
-`CommandEnvelope`と`DomainEventEnvelope`の型・DDLはあるが、Command/Eventの配信・取得APIがない。
-FrontendがCommand結果に応じて案内先と理由を更新するには、Backend担当から次が必要。
+Command v1の配信とUnity結果Event受信は実装済み。管理画面のエリア方針変更はUnityまで往復できる。
+ユーザー画面の「既に案内中の利用者を別の枠へ変更する」機能はv1対象外のため、次版で以下を確定する必要がある。
 
-- Frontendが取得するCommand結果Eventのendpointまたは既存recommendation応答への反映方法
+- `SET_AREA_POLICY`以外の再案内Command種別とpayload
+- 既存recommendation応答へCommand結果を反映する規則
 - `guidanceSessionId`の確定とMVP `reservationId`からの移行規則
 - 再案内理由の`reasonCode`と利用者向けmessageの返却形式
-- commandId/eventIdの重複排除・順序保証
+- 利用者への通知・同意後に案内先を切り替える画面フロー
 
 ### Backend契約で確認した不整合
 
-`POST /api/guidance/start`を同じ`userSessionId`で連続実行すると、仕様上は409の想定だが、
-現行Backendは200で複数予約を作成する。Frontendはsingle-flightで二重送信を抑止するが、
-冪等性と二重開始拒否はBackend側でも実装が必要。
+`POST /api/guidance/start`を同じ`userSessionId`で連続実行した場合は、
+Backendが有効な既存予約を再利用する。Frontendのsingle-flightとBackendの重複排除の両方で二重開始を防ぐ。

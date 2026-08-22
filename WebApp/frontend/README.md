@@ -34,7 +34,7 @@ npm run dev -- --hostname 127.0.0.1 --port 3000
 ```text
 ユーザー画面: http://127.0.0.1:3000
 管理者画面:   http://127.0.0.1:3000/admin
-Unity WebGL:  http://127.0.0.1:3000/unity-build/index.html
+Unity WebGL表示用: http://127.0.0.1:3000/unity-build/index.html?backendMode=viewer
 ```
 
 ## 画面
@@ -50,8 +50,10 @@ Unity WebGL:  http://127.0.0.1:3000/unity-build/index.html
 管理者画面は次の path を iframe で表示します。
 
 ```text
-/unity-build/index.html
+/unity-build/index.html?backendMode=viewer
 ```
+
+管理画面iframeは表示専用です。BackendとのSnapshot/Event/Command通信は一括起動スクリプトが開く `backendMode=sender` のheadless runnerだけが担当します。
 
 実ファイルの配置先:
 
