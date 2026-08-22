@@ -16,3 +16,10 @@ test("caller cannot override viewer-only mode", () => {
     "/unity-build/index.html?view=admin-fit-16x10&backendMode=viewer"
   );
 });
+
+test("admin Unity build URL never exposes the API key", () => {
+  assert.equal(
+    unityBuildUrl({ view: "admin-fit-16x10", apiKey: "local-secret" }),
+    "/unity-build/index.html?view=admin-fit-16x10&backendMode=viewer"
+  );
+});

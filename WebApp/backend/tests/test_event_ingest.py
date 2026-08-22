@@ -3,11 +3,12 @@ from __future__ import annotations
 import asyncio
 import json
 import unittest
+from collections import OrderedDict
 from datetime import UTC, datetime
 
 from fastapi import HTTPException
 
-from routers.v1 import receive_events
+from routers.v1 import _remember_hash, receive_events
 
 
 class FakeRequest:
@@ -59,6 +60,16 @@ class EventIngestTests(unittest.TestCase):
         with self.assertRaises(HTTPException) as raised:
             asyncio.run(receive_events(FakeRequest(body, "application/json")))
         self.assertEqual(raised.exception.status_code, 415)
+
+    def test_deduplication_cache_evicts_least_recently_seen_entry(self) -> None:
+        cache: OrderedDict[str, str] = OrderedDict()
+        _remember_hash(cache, "first", "digest-1", 2)
+        _remember_hash(cache, "second", "digest-2", 2)
+        _remember_hash(cache, "first", "digest-1", 2)
+        _remember_hash(cache, "third", "digest-3", 2)
+
+        self.assertEqual(list(cache), ["first", "third"])
+        self.assertNotIn("second", cache)
 
 
 if __name__ == "__main__":

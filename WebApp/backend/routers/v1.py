@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections import OrderedDict
 from datetime import datetime
 from threading import RLock
 from typing import Any
@@ -34,10 +35,24 @@ router = APIRouter(
 MAX_EVENT_BATCH_COUNT = 50
 MAX_EVENT_REQUEST_BYTES = 1024 * 1024
 MAX_SNAPSHOT_REQUEST_BYTES = 5 * 1024 * 1024
-_event_hashes: dict[str, str] = {}
+MAX_EVENT_DEDUPLICATION_ENTRIES = 50_000
+MAX_SNAPSHOT_DEDUPLICATION_ENTRIES = 10_000
+_event_hashes: OrderedDict[str, str] = OrderedDict()
 _event_lock = RLock()
-_snapshot_hashes: dict[str, str] = {}
+_snapshot_hashes: OrderedDict[str, str] = OrderedDict()
 _snapshot_lock = RLock()
+
+
+def _remember_hash(
+    cache: OrderedDict[str, str],
+    item_id: str,
+    digest: str,
+    max_entries: int,
+) -> None:
+    cache[item_id] = digest
+    cache.move_to_end(item_id)
+    while len(cache) > max_entries:
+        cache.popitem(last=False)
 
 
 @router.post("/snapshots", status_code=status.HTTP_204_NO_CONTENT)
@@ -68,8 +83,15 @@ async def receive_snapshot(request: Request) -> Response:
         previous = _snapshot_hashes.get(snapshot.snapshotId)
         if previous and previous != digest:
             raise HTTPException(status_code=409, detail="snapshotId is already used for different content")
-        if not previous:
-            _snapshot_hashes[snapshot.snapshotId] = digest
+        if previous:
+            _snapshot_hashes.move_to_end(snapshot.snapshotId)
+        else:
+            _remember_hash(
+                _snapshot_hashes,
+                snapshot.snapshotId,
+                digest,
+                MAX_SNAPSHOT_DEDUPLICATION_ENTRIES,
+            )
             store.ingest_snapshot(snapshot.to_mvp_snapshot())
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -161,6 +183,7 @@ async def receive_events(request: Request) -> Response:
 
         for event_id, digest, event, command_event in parsed:
             if event_id in _event_hashes:
+                _event_hashes.move_to_end(event_id)
                 continue
             if command_event:
                 try:
@@ -169,7 +192,7 @@ async def receive_events(request: Request) -> Response:
                     raise HTTPException(status_code=404, detail="commandId was not found") from exc
                 except CommandConflictError as exc:
                     raise HTTPException(status_code=409, detail=str(exc)) from exc
-            _event_hashes[event_id] = digest
+            _remember_hash(_event_hashes, event_id, digest, MAX_EVENT_DEDUPLICATION_ENTRIES)
             store.add_log(
                 "unity_event_received",
                 f"Unity Event {event.get('eventType')} を受信しました。",
