@@ -21,3 +21,17 @@ test("server failures never expose raw response bodies", () => {
     "サーバーに接続できません。しばらくしてから再試行してください。"
   );
 });
+
+test("P3 backend error message is shown from the direct error envelope", () => {
+  assert.equal(
+    apiErrorMessage('{"error":{"code":"COMMAND_TARGET_UNAVAILABLE","message":"UnityのCommand接続がありません。"}}', 409),
+    "UnityのCommand接続がありません。"
+  );
+});
+
+test("FastAPI dependency error message is shown from detail.error", () => {
+  assert.equal(
+    apiErrorMessage('{"detail":{"error":{"code":"INVALID_API_KEY","message":"API Keyが無効です。"}}}', 401),
+    "API Keyが無効です。"
+  );
+});

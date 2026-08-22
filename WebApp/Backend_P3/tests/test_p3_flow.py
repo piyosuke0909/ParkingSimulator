@@ -167,3 +167,143 @@ def test_command_round_trip() -> None:
         assert r.status_code == 200
         assert r.json()["status"] == "SUCCEEDED"
         assert r.json()["resultPayload"]["reasonCode"] == "POLICY_APPLIED"
+
+
+def test_frontend_compat_admin_state_and_parking_status() -> None:
+    snap = _snapshot()
+    snap = copy.deepcopy(snap)
+    snap["snapshotId"] = snap["snapshotId"] + "-frontend-compat"
+    snap["sequenceNumber"] = int(snap["sequenceNumber"]) + 2000
+    snap["generatedAtUtc"] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    with TestClient(app) as client:
+        r = client.post("/api/v1/snapshots", headers={**HEADERS, "Content-Type": "application/json"}, json=snap)
+        assert r.status_code == 204, r.text
+
+        r = client.get("/api/admin/state", headers=HEADERS)
+        assert r.status_code == 200, r.text
+        admin = r.json()
+        assert [area["areaId"] for area in admin["areas"]] == ["A", "B", "C", "D"]
+        assert admin["summary"]["capacity"] == 240
+        assert len(admin["slots"]) == 240
+        assert "alerts" in admin and "guards" in admin and "logs" in admin
+
+        r = client.get("/api/parking/status", headers=HEADERS)
+        assert r.status_code == 200
+        parking = r.json()
+        assert parking["summary"]["capacity"] == 240
+        assert len(parking["areas"]) == 4
+
+        r = client.get("/api/parking/recommendation", headers=HEADERS, params={"userSessionId": "test-user"})
+        assert r.status_code == 200
+        assert r.json()["status"] in {"not_started", "unavailable"}
+
+
+def test_latest_frontend_admin_command_compatibility() -> None:
+    snap = copy.deepcopy(_snapshot())
+    token = uuid.uuid4().hex[:8]
+    source_id = f"unity-webgl-admin-latest-{token}"
+    session_id = f"frontend-session-{token}"
+    run_id = f"{session_id}-run-0001"
+    snap["snapshotId"] = f"frontend-latest-snapshot-{token}"
+    snap["sessionId"] = session_id
+    snap["runId"] = run_id
+    snap["sequenceNumber"] = 1
+    snap["generatedAtUtc"] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+    with TestClient(app) as client:
+        # Current Unity execution must be observed by Command polling.
+        r = client.get(
+            "/api/v1/commands",
+            headers=HEADERS,
+            params={"sourceId": source_id, "sessionId": session_id, "runId": run_id, "limit": 10},
+        )
+        assert r.status_code == 200, r.text
+
+        # Latest Snapshot must match that session/run.
+        r = client.post("/api/v1/snapshots", headers={**HEADERS, "Content-Type": "application/json"}, json=snap)
+        assert r.status_code == 204, r.text
+
+        # Latest Frontend expects these P3 compatibility fields from /api/admin/state.
+        r = client.get("/api/admin/state", headers=HEADERS)
+        assert r.status_code == 200, r.text
+        state = r.json()
+        assert state["commandTarget"] == {"sourceId": source_id, "sessionId": session_id, "runId": run_id}
+        assert state["snapshotIdentity"]["sessionId"] == session_id
+        assert state["snapshotIdentity"]["runId"] == run_id
+        assert state["commandTargetMatchesSnapshot"] is True
+        assert state["areaPolicies"]["A"] == "NORMAL"
+
+        # Frontend does not supply target IDs; Backend resolves the active target from the latest Snapshot.
+        idem = f"frontend-{token}"
+        r = client.post(
+            "/api/admin/commands",
+            headers=HEADERS,
+            json={
+                "commandType": "SET_AREA_POLICY",
+                "idempotencyKey": idem,
+                "payload": {"areaId": "A", "policy": "CLOSED"},
+            },
+        )
+        assert r.status_code == 201, r.text
+        command = r.json()["command"]
+        command_id = command["commandId"]
+        assert command["targetSourceId"] == source_id
+        assert command["status"] == "pending"
+        assert command["deliveryAttempts"] == 0
+
+        # Unity receives the generated command.
+        r = client.get(
+            "/api/v1/commands",
+            headers=HEADERS,
+            params={"sourceId": source_id, "sessionId": session_id, "runId": run_id, "limit": 10},
+        )
+        assert r.status_code == 200, r.text
+        assert r.json()["commands"][0]["commandId"] == command_id
+
+        terminal_event = {
+            "contractName": "smart-parking.simulation-event",
+            "schemaVersion": "1.0",
+            "eventId": f"frontend-event-{token}",
+            "eventType": "command.succeeded",
+            "sourceSystem": "unity",
+            "generatedAtUtc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "sceneName": "SampleScene",
+            "sessionId": session_id,
+            "runId": run_id,
+            "sequenceNumber": 999001,
+            "scenarioId": snap["scenario"]["scenarioId"],
+            "scenarioVersion": snap["scenario"].get("scenarioVersion"),
+            "facilityId": snap["scenario"].get("facilityId"),
+            "simulationTimeSeconds": 123.0,
+            "correlationId": idem,
+            "entityType": "command",
+            "entityId": command_id,
+            "commandId": command_id,
+            "payload": {
+                "command": {
+                    "idempotencyKey": idem,
+                    "commandType": "SET_AREA_POLICY",
+                    "status": "SUCCEEDED",
+                    "reasonCode": "POLICY_APPLIED",
+                    "message": "Policy applied.",
+                    "retryable": False,
+                    "result": {"areaId": "A", "previousPolicy": "NORMAL", "appliedPolicy": "CLOSED"},
+                }
+            },
+        }
+        r = client.post(
+            "/api/v1/events",
+            headers={**HEADERS, "Content-Type": "application/x-ndjson"},
+            content=_ndjson([terminal_event]).encode("utf-8"),
+        )
+        assert r.status_code == 204, r.text
+
+        r = client.get("/api/admin/state", headers=HEADERS)
+        assert r.status_code == 200, r.text
+        state = r.json()
+        assert state["areaPolicies"]["A"] == "CLOSED"
+        latest = next(item for item in state["commands"] if item["commandId"] == command_id)
+        assert latest["status"] == "succeeded"
+        assert latest["deliveryAttempts"] == 1
+        assert latest["lastResult"]["eventType"] == "command.succeeded"
+        assert latest["lastResult"]["payload"]["command"]["reasonCode"] == "POLICY_APPLIED"

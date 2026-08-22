@@ -9,7 +9,7 @@ from fastapi.responses import FileResponse
 
 from app.config import settings
 from app.db import Base, engine
-from app.routers import admin, health, unity
+from app.routers import admin, frontend_compat, health, unity
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,6 +32,7 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(unity.router)
 app.include_router(admin.router)
+app.include_router(frontend_compat.router)
 
 
 @app.get("/admin", include_in_schema=False)

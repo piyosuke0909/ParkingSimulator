@@ -12,8 +12,14 @@ type SidebarProps = {
 };
 
 export function AdminSidebar({ view, state, open, onClose, onViewChange }: SidebarProps) {
-  const connectionLabel = !state ? "確認中" : state.stale ? "Unity未受信" : "Unity接続中";
-  const connectionClass = !state ? "" : state.stale ? "stale" : "live";
+  const connectionLabel = !state
+    ? "確認中"
+    : !state.unityConnected
+      ? "Unity未接続"
+      : state.stale
+        ? "Snapshot更新待ち"
+        : "Unity接続中";
+  const connectionClass = !state ? "" : !state.unityConnected || state.stale ? "stale" : "live";
 
   return (
     <aside className={`adminSidebar ${open ? "open" : ""}`}>
@@ -37,7 +43,7 @@ export function AdminSidebar({ view, state, open, onClose, onViewChange }: Sideb
         <span className={`statusPill ${connectionClass}`}>{connectionLabel}</span>
         <p>最終更新 {formatTime(state?.updatedAt)}</p>
         <p>snapshot v{state?.snapshotVersion ?? 0}</p>
-        <p>Command {state?.commandTarget ? "操作可能" : "受信待ち"}</p>
+        <p>Command {state?.unityConnected && state?.commandTarget ? "操作可能" : "受信待ち"}</p>
       </div>
     </aside>
   );

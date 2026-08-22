@@ -72,6 +72,7 @@ function policyReason(area: AreaStatus, policy: AdminPolicy) {
 export function PolicyView({ state, ai, policy, commandBusyAreas, onSetAreaPolicy, onOpenArea }: Props) {
   const areas = state?.areas ?? [];
   const commandUnavailable =
+    state?.unityConnected !== true ||
     Boolean(state?.stale) ||
     !state?.commandTarget ||
     state?.commandTargetMatchesSnapshot !== true;
@@ -112,10 +113,6 @@ export function PolicyView({ state, ai, policy, commandBusyAreas, onSetAreaPolic
             </button>
           </div>
         </div>
-        {!state?.stale && !state?.commandTarget ? <p className="adminNotice">UnityのCommand受信接続を待っています。</p> : null}
-        {!state?.stale && state?.commandTarget && !state.commandTargetMatchesSnapshot ? (
-          <p className="adminNotice">表示中のUnity状態と操作先が一致するまでCommand操作を停止しています。</p>
-        ) : null}
 
         <div className="policyDecision">
           <div>
@@ -191,6 +188,17 @@ export function PolicyView({ state, ai, policy, commandBusyAreas, onSetAreaPolic
                   onClick={() => requestPolicy("restrictedAreaIds", area.areaId, "RESTRICTED")}
                 >
                   誘導制限
+                </button>
+                <button
+                  type="button"
+                  disabled={
+                    commandUnavailable ||
+                    commandBusyAreas.has(area.areaId) ||
+                    policyStatus(policy, area.areaId) === "通常"
+                  }
+                  onClick={() => void onSetAreaPolicy(area.areaId, "NORMAL")}
+                >
+                  方針を解除
                 </button>
               </div>
             </section>

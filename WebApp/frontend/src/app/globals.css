@@ -2468,6 +2468,29 @@ h2 {
   background: #fff5f5;
 }
 
+
+.adminGlobalAlertStack {
+  position: fixed;
+  z-index: 35;
+  top: 70px;
+  left: 50%;
+  right: auto;
+  width: min(calc(100vw - 32px), 620px);
+  transform: translateX(-50%);
+}
+
+.opsPushAlert.info {
+  border-color: #9fc4f6;
+  border-left-color: var(--admin-info);
+  background: #f3f8ff;
+}
+
+.opsPushAlert.success {
+  border-color: #a7ddb8;
+  border-left-color: var(--admin-ok);
+  background: #f2fbf5;
+}
+
 .opsPushAlert div {
   min-width: 0;
 }
@@ -2993,7 +3016,7 @@ h2 {
 
 .policyControls {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
 }
 

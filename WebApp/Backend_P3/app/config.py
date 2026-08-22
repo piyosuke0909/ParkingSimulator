@@ -57,6 +57,7 @@ class Settings:
     require_api_key: bool = _bool("REQUIRE_API_KEY", True)
     cors_origins: list[str] = None  # type: ignore[assignment]
     target_stale_seconds: int = _int("TARGET_STALE_SECONDS", 120)
+    runtime_online_seconds: int = _int("RUNTIME_ONLINE_SECONDS", 5)
     command_lease_seconds: int = _int("COMMAND_LEASE_SECONDS", 10)
     command_max_deliveries: int = _int("COMMAND_MAX_DELIVERIES", 3)
     command_default_lifetime_seconds: int = _int("COMMAND_DEFAULT_LIFETIME_SECONDS", 30)
