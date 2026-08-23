@@ -13,33 +13,23 @@ const riskColor = {
 };
 
 const displayAreaLayout: Record<string, AreaStatus["layout"]> = {
-  A: {
-    center: { x: 203.5, y: 164 },
-    polygon: [[98.8, 87], [308.2, 87], [308.2, 241], [98.8, 241]]
-  },
-  B: {
-    center: { x: 203.5, y: 328 },
-    polygon: [[98.8, 251], [308.2, 251], [308.2, 405], [98.8, 405]]
-  },
-  C: {
-    center: { x: 433.5, y: 164 },
-    polygon: [[328.8, 87], [538.2, 87], [538.2, 241], [328.8, 241]]
-  },
-  D: {
-    center: { x: 433.5, y: 328 },
-    polygon: [[328.8, 251], [538.2, 251], [538.2, 405], [328.8, 405]]
-  }
+  B: { center: { x: 220.5, y: 166 }, polygon: [[43, 37], [398, 37], [398, 295], [43, 295]] },
+  D: { center: { x: 604.5, y: 166 }, polygon: [[427, 37], [782, 37], [782, 295], [427, 295]] },
+  A: { center: { x: 220.5, y: 449.5 }, polygon: [[43, 320], [398, 320], [398, 579], [43, 579]] },
+  C: { center: { x: 604.5, y: 449.5 }, polygon: [[427, 320], [782, 320], [782, 579], [427, 579]] }
 };
+
+const legacyRouteTransform = "matrix(1.340909 0 0 1.322997 -17.0909 -30.0258)";
 
 export function ParkingMap({ areas, mode, routePath }: Props) {
   return (
     <div className="mapFrame">
       <img
-        src={mode === "heatmap" ? "/assets/heatmap.png" : "/assets/parking.png"}
+        src={mode === "heatmap" ? "/assets/admin-heatmap-map.png" : "/assets/admin-parking-map.png"}
         alt="駐車場マップ"
         className="mapImage"
       />
-      <svg className="mapOverlay" viewBox="0 0 637 492" aria-hidden="true">
+      <svg className="mapOverlay" viewBox="0 0 825 619" aria-hidden="true">
         {areas.map((area) => {
           const layout = displayAreaLayout[area.areaId] ?? area.layout;
 
@@ -58,7 +48,7 @@ export function ParkingMap({ areas, mode, routePath }: Props) {
             </g>
           );
         })}
-        {routePath ? <path d={routePath} className="routePath" /> : null}
+        {routePath ? <g transform={legacyRouteTransform}><path d={routePath} className="routePath" /></g> : null}
       </svg>
     </div>
   );

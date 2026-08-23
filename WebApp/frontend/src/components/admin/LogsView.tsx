@@ -3,7 +3,7 @@ import { formatTime } from "./utils";
 
 export function LogsView({ state }: { state: AdminState | null }) {
   return (
-    <section className="adminPanel">
+    <section className="adminPanel adminLogsPanel">
       <div className="adminPanelHeader">
         <div>
           <h2>管理ログ</h2>

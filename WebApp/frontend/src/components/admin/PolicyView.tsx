@@ -22,6 +22,14 @@ function unique(values: string[]) {
   return Array.from(new Set(values));
 }
 
+const policyAreaDisplayOrder = ["B", "D", "A", "C"];
+
+function policyAreaOrder(areaId: string) {
+  const normalized = areaId.trim().toUpperCase().replace(/^AREA-/, "");
+  const index = policyAreaDisplayOrder.indexOf(normalized);
+  return index === -1 ? policyAreaDisplayOrder.length : index;
+}
+
 function policyStatus(policy: AdminPolicy, areaId: string) {
   if (hasArea(policy, "closedAreaIds", areaId)) {
     return "案内停止";
@@ -71,6 +79,7 @@ function policyReason(area: AreaStatus, policy: AdminPolicy) {
 
 export function PolicyView({ state, ai, policy, commandBusyAreas, onSetAreaPolicy, onOpenArea }: Props) {
   const areas = state?.areas ?? [];
+  const policyAreas = [...areas].sort((a, b) => policyAreaOrder(a.areaId) - policyAreaOrder(b.areaId));
   const commandUnavailable =
     state?.unityConnected !== true ||
     Boolean(state?.stale) ||
@@ -141,7 +150,7 @@ export function PolicyView({ state, ai, policy, commandBusyAreas, onSetAreaPolic
           </div>
         </div>
         <div className="policyAreaGrid">
-          {areas.map((area) => (
+          {policyAreas.map((area) => (
             <section className={`policyAreaCard ${riskClass(area.riskLevel)}`} key={area.areaId}>
               <div className="policyAreaTop">
                 <button type="button" onClick={() => onOpenArea(area.areaId)}>
@@ -198,7 +207,7 @@ export function PolicyView({ state, ai, policy, commandBusyAreas, onSetAreaPolic
                   }
                   onClick={() => void onSetAreaPolicy(area.areaId, "NORMAL")}
                 >
-                  方針を解除
+                  方針解除
                 </button>
               </div>
             </section>

@@ -273,7 +273,6 @@ export function AdminDashboard() {
         view={view}
         state={state}
         open={menuOpen}
-        onClose={() => setMenuOpen(false)}
         onViewChange={(nextView) => {
           setView(nextView);
           setMenuOpen(false);

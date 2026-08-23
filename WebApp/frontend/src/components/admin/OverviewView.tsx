@@ -84,26 +84,6 @@ export function OverviewView({
 
   return (
     <section className={`opsDashboard ${leftPanelOpen ? "" : "leftCollapsed"} ${rightPanelOpen ? "" : "rightCollapsed"}`}>
-      <section className="opsKpis" aria-label="運用指標">
-        <article>
-          <span>空き枠</span>
-          <strong>{state?.summary.emptyCount ?? 0}/{state?.summary.capacity ?? 0}</strong>
-        </article>
-        <article>
-          <span>使用中</span>
-          <strong>{state?.summary.occupiedCount ?? 0}</strong>
-        </article>
-        <article>
-          <span>混雑率</span>
-          <strong>{percent(state?.summary.occupancyRate)}</strong>
-        </article>
-        <article>
-          <span>警告</span>
-          <strong>{alerts.length}</strong>
-        </article>
-      </section>
-
-
       <section className="opsWorkspace">
         <aside className="opsPanel opsLeftRail" aria-label="状況パネル">
           <button className="opsRailHandle left" type="button" onClick={() => setLeftPanelOpen((current) => !current)}>
@@ -130,12 +110,53 @@ export function OverviewView({
         </aside>
 
         <main className="opsMapPanel" aria-label="駐車場状態">
+          <section className="opsKpis" aria-label="運用指標">
+            <article>
+              <span>空き枠</span>
+              <strong>{state?.summary.emptyCount ?? 0}/{state?.summary.capacity ?? 0}</strong>
+            </article>
+            <article>
+              <span>使用中</span>
+              <strong>{state?.summary.occupiedCount ?? 0}</strong>
+            </article>
+            <article>
+              <span>混雑率</span>
+              <strong>{percent(state?.summary.occupancyRate)}</strong>
+            </article>
+            <article>
+              <span>警告</span>
+              <strong>{alerts.length}</strong>
+            </article>
+          </section>
+
+          <section className="opsPanel opsBottomLog" aria-label="最近ログ">
+            <header>
+              <span>RECENT LOG</span>
+              <h2>最近の運用ログ</h2>
+            </header>
+            <div className="opsLogScroller">
+              {(state?.logs ?? []).slice(-8).reverse().map((log) => (
+                <p key={log.id}>
+                  <span>{formatTime(log.timestamp)}</span>
+                  <b>{log.type}</b>
+                  {log.message}
+                </p>
+              ))}
+            </div>
+          </section>
+
           <div className="opsUnityViewport">
             {unityBuildAvailable && unityVisible ? (
               <>
                 <iframe src={unityBuildUrl({ view: "admin-fit-16x10", embed: "admin" })} title="Unity WebGL 駐車場状態" className="opsUnityFrame" />
-                <button className="adminButton unityVisibilityButton" type="button" onClick={() => setUnityVisible(false)}>
-                  Unity画面を閉じる
+                <button
+                  className="adminButton unityVisibilityButton"
+                  type="button"
+                  aria-label="Unity画面を閉じる"
+                  title="×"
+                  onClick={() => setUnityVisible(false)}
+                >
+                  ×
                 </button>
               </>
             ) : unityBuildAvailable ? (
@@ -200,20 +221,20 @@ export function OverviewView({
                   </div>
                   <div className="opsCommandStack">
                     <button type="button" className="primary" disabled={commandDisabled} onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "PRIORITY")}>
-                      優先案内先に設定
+                      優先案内
                     </button>
                     <button type="button" className="danger" disabled={commandDisabled} onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "CLOSED")}>
                       一時閉鎖
                     </button>
                     <button type="button" className="warn" disabled={commandDisabled} onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "RESTRICTED")}>
-                      優先度を一時的に下げる
+                      誘導制限
                     </button>
                     <button
                       type="button"
                       disabled={commandDisabled || policyLabel(policy, selectedPolicyArea.areaId) === "通常"}
                       onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "NORMAL")}
                     >
-                      方針を解除
+                      方針解除
                     </button>
                   </div>
                 </article>
@@ -260,21 +281,6 @@ export function OverviewView({
         </aside>
       </section>
 
-      <section className="opsPanel opsBottomLog" aria-label="最近ログ">
-        <header>
-          <span>RECENT LOG</span>
-          <h2>最近の運用ログ</h2>
-        </header>
-        <div className="opsLogScroller">
-          {(state?.logs ?? []).slice(-8).reverse().map((log) => (
-            <p key={log.id}>
-              <span>{formatTime(log.timestamp)}</span>
-              <b>{log.type}</b>
-              {log.message}
-            </p>
-          ))}
-        </div>
-      </section>
     </section>
   );
 }

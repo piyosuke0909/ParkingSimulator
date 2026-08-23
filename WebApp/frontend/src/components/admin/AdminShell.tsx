@@ -7,11 +7,10 @@ type SidebarProps = {
   view: AdminView;
   state: AdminState | null;
   open: boolean;
-  onClose: () => void;
   onViewChange: (view: AdminView) => void;
 };
 
-export function AdminSidebar({ view, state, open, onClose, onViewChange }: SidebarProps) {
+export function AdminSidebar({ view, state, open, onViewChange }: SidebarProps) {
   const connectionLabel = !state
     ? "確認中"
     : !state.unityConnected
@@ -28,9 +27,6 @@ export function AdminSidebar({ view, state, open, onClose, onViewChange }: Sideb
           <strong>SmartParking</strong>
           <span>Operations Console</span>
         </div>
-        <button className="adminIconButton" type="button" aria-label="メニューを閉じる" onClick={onClose}>
-          ×
-        </button>
       </div>
       <nav className="adminNav" aria-label="管理メニュー">
         {navItems.map((item) => (

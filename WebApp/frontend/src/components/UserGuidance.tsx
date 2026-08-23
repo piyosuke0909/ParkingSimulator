@@ -10,6 +10,21 @@ import type { AreaStatus, MvpGuidanceResponse, ParkingMapSlot, ParkingStatus, Ri
 type DisplayMode = "map" | "aerial";
 type RouteMode = "parking" | "exit";
 
+const USER_MAP_WIDTH = 825;
+const USER_MAP_HEIGHT = 619;
+const USER_MAP_SCALE_X = (766 - 58) / (584 - 56);
+const USER_MAP_SCALE_Y = (564 - 52) / (449 - 62);
+const USER_MAP_TRANSLATE_X = 58 - 56 * USER_MAP_SCALE_X;
+const USER_MAP_TRANSLATE_Y = 52 - 62 * USER_MAP_SCALE_Y;
+const USER_MAP_TRANSFORM = `matrix(${USER_MAP_SCALE_X} 0 0 ${USER_MAP_SCALE_Y} ${USER_MAP_TRANSLATE_X} ${USER_MAP_TRANSLATE_Y})`;
+
+function legacyToUserMap(point: { x: number; y: number }) {
+  return {
+    x: point.x * USER_MAP_SCALE_X + USER_MAP_TRANSLATE_X,
+    y: point.y * USER_MAP_SCALE_Y + USER_MAP_TRANSLATE_Y
+  };
+}
+
 type MapView = {
   tilt: number;
   rotate: number;
@@ -26,10 +41,10 @@ type MapDragState = {
 };
 
 const areaGuidance: Record<string, { distance: string; eta: string; action: string; place: string; lane: string; route: string }> = {
-  A: { distance: "36m", eta: "2分", action: "左折", place: "Aエリア接続通路", lane: "徐行", route: "M28 246 H160 V164 H204" },
-  B: { distance: "45m", eta: "2分", action: "左折", place: "Bエリア接続通路", lane: "徐行", route: "M28 246 H160 V328 H204" },
-  C: { distance: "74m", eta: "3分", action: "直進", place: "Cエリア奥通路", lane: "注意", route: "M28 246 H360 V164 H434" },
-  D: { distance: "62m", eta: "3分", action: "右折", place: "Dエリア接続通路", lane: "注意", route: "M28 246 H360 V328 H434" }
+  A: { distance: "45m", eta: "2分", action: "左折", place: "Aエリア接続通路", lane: "徐行", route: "M28 246 H160 V328 H204" },
+  B: { distance: "36m", eta: "2分", action: "左折", place: "Bエリア接続通路", lane: "徐行", route: "M28 246 H160 V164 H204" },
+  C: { distance: "62m", eta: "3分", action: "右折", place: "Cエリア接続通路", lane: "注意", route: "M28 246 H360 V328 H434" },
+  D: { distance: "74m", eta: "3分", action: "直進", place: "Dエリア奥通路", lane: "注意", route: "M28 246 H360 V164 H434" }
 };
 
 const exitView = {
@@ -57,11 +72,31 @@ const riskLabel: Record<RiskLevel, string> = {
 };
 
 const slotGridOrigin: Record<string, { x: number; y: number }> = {
-  A: { x: 128, y: 122 },
-  B: { x: 128, y: 286 },
-  C: { x: 358, y: 122 },
-  D: { x: 358, y: 286 }
+  B: { x: 128, y: 122 },
+  D: { x: 358, y: 122 },
+  A: { x: 128, y: 286 },
+  C: { x: 358, y: 286 }
 };
+
+const LEGACY_LEFT_SLOT_X = [68.68, 95.53, 164.14, 190.98, 258.85, 285.69];
+const LEGACY_RIGHT_SLOT_X = [354.31, 381.15, 449.76, 476.61, 544.47, 571.32];
+const LEGACY_TOP_SLOT_Y = [71.45, 88.83, 105.65, 122.66, 139.85, 157.24, 174.43, 191.44, 208.26, 225.27];
+const LEGACY_BOTTOM_SLOT_Y = [285.73, 302.74, 319.75, 336.75, 353.76, 371.15, 388.34, 405.35, 422.17, 439.55];
+
+function exactLegacySlotPoint(slot: ParkingMapSlot) {
+  const match = String(slot.slotId ?? "").trim().toUpperCase().match(/^(?:AREA-)?([ABCD])[-_ ]?(\d{1,2})$/);
+  if (!match) return slot.mapPosition ?? null;
+  const areaCode = match[1];
+  const number = Number(match[2]);
+  if (!Number.isInteger(number) || number < 1 || number > 60) return slot.mapPosition ?? null;
+  const zeroBased = number - 1;
+  const lane = Math.floor(zeroBased / 10);
+  const rowInLane = zeroBased % 10;
+  const physicalRow = lane % 2 === 0 ? rowInLane : 9 - rowInLane;
+  const xs = areaCode === "A" || areaCode === "B" ? LEGACY_LEFT_SLOT_X : LEGACY_RIGHT_SLOT_X;
+  const ys = areaCode === "A" || areaCode === "C" ? LEGACY_BOTTOM_SLOT_Y : LEGACY_TOP_SLOT_Y;
+  return { x: xs[lane], y: ys[9 - physicalRow] };
+}
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -141,7 +176,8 @@ function mapSlots(state: ParkingStatus | null, guidance: UserGuidanceModel | nul
 
   const targetSlotId = guidance?.targetSlotId;
   return slots.map((slot) => {
-    const point = slot.mapPosition!;
+    const point = exactLegacySlotPoint(slot);
+    if (!point) return null;
     const cls = slotStateClass(slot);
     return (
       <rect
@@ -161,25 +197,27 @@ function focusPan(guidance: UserGuidanceModel | null) {
   if (!point) {
     return { x: 0, y: 0 };
   }
+  const mapped = legacyToUserMap(point);
   return {
-    x: clamp((318.5 - point.x) * 0.28, -76, 76),
-    y: clamp((246 - point.y) * 0.04, -10, 10)
+    x: clamp((USER_MAP_WIDTH / 2 - mapped.x) * 0.22, -76, 76),
+    y: clamp((USER_MAP_HEIGHT / 2 - mapped.y) * 0.03, -10, 10)
   };
 }
 
 function pointPan(point: { x: number; y: number }) {
+  const mapped = legacyToUserMap(point);
   const frameWidth = 650;
   const frameHeight = 520;
-  const mapWidth = 637;
-  const mapHeight = 492;
+  const mapWidth = USER_MAP_WIDTH;
+  const mapHeight = USER_MAP_HEIGHT;
   const frameLeft = -110;
   const frameTop = 190;
   const focusX = 215;
   const focusY = 338;
 
   return {
-    x: clamp(focusX - (frameLeft + (point.x / mapWidth) * frameWidth), -240, 320),
-    y: clamp(focusY - (frameTop + (point.y / mapHeight) * frameHeight), -220, 120)
+    x: clamp(focusX - (frameLeft + (mapped.x / mapWidth) * frameWidth), -240, 320),
+    y: clamp(focusY - (frameTop + (mapped.y / mapHeight) * frameHeight), -220, 120)
   };
 }
 
@@ -490,9 +528,10 @@ export function UserGuidance() {
             } as CSSProperties}
           >
             <div className="unity-label">Unity 上空マップ</div>
-            <img className="unity-parking-image" src="/assets/parking.png" alt="Unity駐車場マップ" />
-            <svg className="map-route-overlay" viewBox="0 0 637 492" preserveAspectRatio="none" aria-hidden="true">
-              <g>{mapSlots(parkingStatus, guidance)}</g>
+            <img className="unity-parking-image" src="/assets/admin-parking-map.png" alt="Unity駐車場マップ" />
+            <svg className="map-route-overlay" viewBox={`0 0 ${USER_MAP_WIDTH} ${USER_MAP_HEIGHT}`} preserveAspectRatio="none" aria-hidden="true">
+              <g transform={USER_MAP_TRANSFORM}>
+                <g>{mapSlots(parkingStatus, guidance)}</g>
               {showRouteLine ? (
                 <>
                   <path className={`route-main ${showRoutePreview ? "preview" : ""}`} d={routePath ?? ""} />
@@ -513,6 +552,7 @@ export function UserGuidance() {
                   </text>
                 </g>
               ) : null}
+              </g>
             </svg>
           </div>
 
@@ -544,14 +584,16 @@ export function UserGuidance() {
               <span className="live-badge"><span className="live-dot" />LIVE AERIAL</span>
               <span className="camera-meta">snapshot v{parkingStatus?.snapshotVersion ?? 0}</span>
             </div>
-            <img className="aerial-image" src="/assets/parking.png" alt="" />
-            <svg className="aerial-map" viewBox="0 0 637 492" preserveAspectRatio="none" aria-hidden="true">
+            <img className="aerial-image" src="/assets/admin-parking-map.png" alt="" />
+            <svg className="aerial-map" viewBox={`0 0 ${USER_MAP_WIDTH} ${USER_MAP_HEIGHT}`} preserveAspectRatio="none" aria-hidden="true">
+              <g transform={USER_MAP_TRANSFORM}>
               {showRouteLine ? (
                 <>
                   <path className={`mr-route-main ${showRoutePreview ? "preview" : ""}`} d={routePath ?? ""} />
                   <path className={`mr-route-core ${showRoutePreview ? "preview" : ""}`} d={routePath ?? ""} />
                 </>
               ) : null}
+              </g>
             </svg>
             <div className="route-progress" aria-hidden="true"><span /></div>
             <div className="mr-target">{routeMode === "parking" ? destinationLabel : "西出口"}</div>

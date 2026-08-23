@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type { AdminState, AreaStatus, ParkingMapSlot } from "../types";
 import { AreaMap } from "./AreaMap";
 import { riskLabel } from "./constants";
@@ -29,9 +30,39 @@ export function ParkingView({
   onAreaChange,
   onSlotChange
 }: Props) {
+  const mapPanelRef = useRef<HTMLElement>(null);
+  const detailPanelRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const mapPanel = mapPanelRef.current;
+    const detailPanel = detailPanelRef.current;
+    if (!mapPanel || !detailPanel) {
+      return;
+    }
+
+    const syncPanelHeight = () => {
+      if (window.matchMedia("(max-width: 1100px)").matches) {
+        detailPanel.style.height = "";
+        return;
+      }
+      detailPanel.style.height = `${mapPanel.getBoundingClientRect().height}px`;
+    };
+
+    syncPanelHeight();
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(syncPanelHeight);
+    observer?.observe(mapPanel);
+    window.addEventListener("resize", syncPanelHeight);
+
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener("resize", syncPanelHeight);
+      detailPanel.style.height = "";
+    };
+  }, []);
+
   return (
     <section className="parkingLayout">
-      <article className="adminPanel">
+      <article ref={mapPanelRef} className="adminPanel parkingMapPanel">
         <div className="adminPanelHeader parkingHeader">
           <div>
             <h2>駐車場マップ</h2>
@@ -59,10 +90,18 @@ export function ParkingView({
             </button>
           ))}
         </div>
-        <AreaMap state={state} mode={mapMode} selectedAreaId={selectedArea?.areaId} priorityAreas={priorityAreas} />
+        <div className="parkingMapHorizontalInset">
+          <AreaMap
+            state={state}
+            mode={mapMode}
+            selectedAreaId={selectedArea?.areaId}
+            selectedSlotId={selectedSlot?.slotId}
+            priorityAreas={priorityAreas}
+          />
+        </div>
       </article>
 
-      <aside className="adminPanel selectedPanel">
+      <aside ref={detailPanelRef} className="adminPanel selectedPanel">
         <div className="adminPanelHeader">
           <div>
             <h2>{selectedArea?.label ?? "区画"} 詳細</h2>
