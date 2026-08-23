@@ -8,7 +8,6 @@ public static class SmartParkingWebGLBuild
 {
     private const string ScenePath = "Assets/Scenes/Parking/SampleScene.unity";
     private const string OutputPath = "../../WebApp/frontend/public/unity-build";
-    private const string BackendBridgeName = "BackendBridge";
 
     [MenuItem("SmartParking/Build WebGL")]
     public static void Build()
@@ -52,18 +51,6 @@ public static class SmartParkingWebGLBuild
     {
         var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
         P3BackendSetupWizard.CreateOrUpdateSetup();
-
-        GameObject bridge = GameObject.Find(BackendBridgeName);
-        if (bridge != null)
-        {
-            UnityStateExporter legacyExporter = bridge.GetComponent<UnityStateExporter>();
-            if (legacyExporter != null && legacyExporter.enabled)
-            {
-                Undo.RecordObject(legacyExporter, "Disable Legacy Snapshot Exporter");
-                legacyExporter.enabled = false;
-                EditorUtility.SetDirty(legacyExporter);
-            }
-        }
 
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
