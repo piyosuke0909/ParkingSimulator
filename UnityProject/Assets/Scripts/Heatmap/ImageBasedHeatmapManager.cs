@@ -65,6 +65,12 @@ public class ImageBasedHeatmapManager : MonoBehaviour
 
     private void Start()
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        ConfigureWebGlNormalMapOnly();
+        enabled = false;
+        return;
+#endif
+
         if (showHeatmapOnlyInPlayMode && heatmapPlaneObject != null)
         {
             heatmapPlaneObject.SetActive(true);
@@ -77,6 +83,42 @@ public class ImageBasedHeatmapManager : MonoBehaviour
             AddTestHeatCenter();
         }
     }
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    /// <summary>
+    /// WebGL is used as the frontend viewer. In that build we show only the
+    /// normal parking-lot camera and skip the heatmap rendering pipeline.
+    /// Unity Editor Play Mode is intentionally unaffected.
+    /// </summary>
+    private void ConfigureWebGlNormalMapOnly()
+    {
+        if (heatmapPlaneObject != null)
+        {
+            heatmapPlaneObject.SetActive(false);
+        }
+
+        if (detectionCamera != null)
+        {
+            detectionCamera.enabled = false;
+        }
+
+        GameObject heatmapViewObject = GameObject.Find("HeatmapViewCamera");
+        if (heatmapViewObject != null)
+        {
+            Camera heatmapViewCamera = heatmapViewObject.GetComponent<Camera>();
+            if (heatmapViewCamera != null)
+            {
+                heatmapViewCamera.enabled = false;
+            }
+        }
+
+        Camera normalCamera = Camera.main;
+        if (normalCamera != null)
+        {
+            normalCamera.rect = new Rect(0f, 0f, 1f, 1f);
+        }
+    }
+#endif
 
     private void Update()
     {

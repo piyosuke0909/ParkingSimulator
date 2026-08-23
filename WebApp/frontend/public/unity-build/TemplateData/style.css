@@ -1,8 +1,8 @@
 html, body { width: 100%; height: 100%; padding: 0; margin: 0; overflow: hidden; background: #1F1F20 }
-#unity-container { position: fixed; inset: 0; width: 100%; height: 100%; display: grid; place-items: center }
+#unity-container { position: fixed; inset: 0; width: 100%; height: 100% }
 #unity-container.unity-desktop { left: 0; top: 0; transform: none }
 #unity-container.unity-mobile { position: fixed; width: 100%; height: 100% }
-#unity-canvas { width: min(100vw, calc(100vh * 1.6)); height: min(100vh, calc(100vw / 1.6)); background: #1F1F20 }
+#unity-canvas { width: 100%; height: 100%; background: #1F1F20 }
 .unity-mobile #unity-canvas { width: 100%; height: 100% }
 #unity-loading-bar { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none }
 #unity-logo { width: 154px; height: 130px; background: url('unity-logo-dark.png') no-repeat center }
@@ -14,7 +14,3 @@ html, body { width: 100%; height: 100%; padding: 0; margin: 0; overflow: hidden;
 #unity-build-title { float: right; margin-right: 10px; line-height: 38px; font-family: arial; font-size: 18px }
 #unity-fullscreen-button { cursor:pointer; float: right; width: 38px; height: 38px; background: url('fullscreen-button.png') no-repeat center }
 #unity-warning { position: absolute; left: 50%; top: 5%; transform: translate(-50%); background: white; padding: 10px; display: none }
-.admin-embed #unity-logo,
-.admin-embed #unity-footer {
-  display: none !important;
-}

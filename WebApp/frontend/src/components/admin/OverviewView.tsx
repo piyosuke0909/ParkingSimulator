@@ -153,7 +153,6 @@ export function OverviewView({
                   className="adminButton unityVisibilityButton"
                   type="button"
                   aria-label="Unity画面を閉じる"
-                  title="×"
                   onClick={() => setUnityVisible(false)}
                 >
                   ×
