@@ -53,6 +53,9 @@ public class P3CommandPollingClient : MonoBehaviour
 
     private void Awake()
     {
+        // Keep the simulation and P3 command polling active while the Unity window
+        // is not focused (for example, while operating the browser admin UI).
+        Application.runInBackground = true;
         ResolveReferences();
     }
 

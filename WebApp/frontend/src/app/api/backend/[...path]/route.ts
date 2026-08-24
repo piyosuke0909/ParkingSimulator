@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 
 const backendUrl = process.env.BACKEND_URL ?? "http://localhost:8000";
+const backendApiKey = process.env.BACKEND_API_KEY ?? process.env.SMARTPARKING_LOCAL_API_KEY ?? "";
 
 type RouteContext = {
   params: Promise<{ path: string[] }> | { path: string[] };
@@ -20,7 +21,11 @@ async function proxy(request: NextRequest, context: RouteContext) {
   const response = await fetch(targetUrl, {
     method: request.method,
     headers: {
-      "content-type": request.headers.get("content-type") ?? "application/json"
+      "content-type": request.headers.get("content-type") ?? "application/json",
+      ...(backendApiKey ? { "X-API-Key": backendApiKey } : {}),
+      ...(request.headers.get("Idempotency-Key")
+        ? { "Idempotency-Key": request.headers.get("Idempotency-Key") as string }
+        : {})
     },
     body,
     cache: "no-store"

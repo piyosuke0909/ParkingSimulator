@@ -14,7 +14,6 @@ type Props = {
   unityBuildAvailable: boolean | null;
   policy: AdminPolicy;
   commandBusyAreas: Set<string>;
-  commandNotice: string | null;
   onInstructionChange: (value: string) => void;
   onGenerateAi: () => void;
   onSetAreaPolicy: (areaId: string, policy: AreaPolicyValue) => Promise<void>;
@@ -47,10 +46,6 @@ function policyTone(policy: AdminPolicy, areaId: string) {
   return "normal";
 }
 
-function alertKey(alert: AdminState["alerts"][number]) {
-  return `${alert.type}-${alert.areaId}-${alert.message}`;
-}
-
 export function OverviewView({
   state,
   ai,
@@ -60,7 +55,6 @@ export function OverviewView({
   unityBuildAvailable,
   policy,
   commandBusyAreas,
-  commandNotice,
   onInstructionChange,
   onGenerateAi,
   onSetAreaPolicy,
@@ -70,15 +64,13 @@ export function OverviewView({
   const [leftPanelOpen, setLeftPanelOpen] = useState(true);
   const [rightPanelOpen, setRightPanelOpen] = useState(true);
   const [unityVisible, setUnityVisible] = useState(false);
-  const [dismissedAlertKeys, setDismissedAlertKeys] = useState<Set<string>>(() => new Set());
   const areas = state?.areas ?? [];
   const alerts = state?.alerts ?? [];
-  const visibleAlerts = alerts.filter((alert) => !dismissedAlertKeys.has(alertKey(alert)));
   const selectedPolicyArea = areas.find((area) => area.areaId === selectedPolicyAreaId) ?? areas[0] ?? null;
-  const latestAreaCommand = state?.commands?.find((command) => command.payload.areaId === selectedPolicyArea?.areaId) ?? null;
   const commandBusy = selectedPolicyArea ? commandBusyAreas.has(selectedPolicyArea.areaId) : false;
   const commandDisabled =
     !selectedPolicyArea ||
+    state?.unityConnected !== true ||
     Boolean(state?.stale) ||
     !state?.commandTarget ||
     state?.commandTargetMatchesSnapshot !== true ||
@@ -90,55 +82,8 @@ export function OverviewView({
     }
   }, [areas, selectedPolicyAreaId]);
 
-  useEffect(() => {
-    const activeKeys = new Set(alerts.map(alertKey));
-    setDismissedAlertKeys((current) => {
-      const next = new Set([...current].filter((key) => activeKeys.has(key)));
-      return next.size === current.size ? current : next;
-    });
-  }, [alerts]);
-
   return (
     <section className={`opsDashboard ${leftPanelOpen ? "" : "leftCollapsed"} ${rightPanelOpen ? "" : "rightCollapsed"}`}>
-      <section className="opsKpis" aria-label="運用指標">
-        <article>
-          <span>空き枠</span>
-          <strong>{state?.summary.emptyCount ?? 0}/{state?.summary.capacity ?? 0}</strong>
-        </article>
-        <article>
-          <span>使用中</span>
-          <strong>{state?.summary.occupiedCount ?? 0}</strong>
-        </article>
-        <article>
-          <span>混雑率</span>
-          <strong>{percent(state?.summary.occupancyRate)}</strong>
-        </article>
-        <article>
-          <span>警告</span>
-          <strong>{alerts.length}</strong>
-        </article>
-      </section>
-
-      {visibleAlerts.length ? (
-        <section className="opsAlertStack" aria-label="対応が必要な通知">
-          {visibleAlerts.map((alert) => (
-            <article className={`opsPushAlert ${alert.severity}`} key={alertKey(alert)} role="alert">
-              <div>
-                <strong>{alert.areaId ? `${alert.areaId}エリア` : "駐車場"}</strong>
-                <span>{alert.message}</span>
-              </div>
-              <button
-                type="button"
-                aria-label={`${alert.message}を閉じる`}
-                onClick={() => setDismissedAlertKeys((current) => new Set(current).add(alertKey(alert)))}
-              >
-                ×
-              </button>
-            </article>
-          ))}
-        </section>
-      ) : null}
-
       <section className="opsWorkspace">
         <aside className="opsPanel opsLeftRail" aria-label="状況パネル">
           <button className="opsRailHandle left" type="button" onClick={() => setLeftPanelOpen((current) => !current)}>
@@ -165,12 +110,52 @@ export function OverviewView({
         </aside>
 
         <main className="opsMapPanel" aria-label="駐車場状態">
+          <section className="opsKpis" aria-label="運用指標">
+            <article>
+              <span>空き枠</span>
+              <strong>{state?.summary.emptyCount ?? 0}/{state?.summary.capacity ?? 0}</strong>
+            </article>
+            <article>
+              <span>使用中</span>
+              <strong>{state?.summary.occupiedCount ?? 0}</strong>
+            </article>
+            <article>
+              <span>混雑率</span>
+              <strong>{percent(state?.summary.occupancyRate)}</strong>
+            </article>
+            <article>
+              <span>警告</span>
+              <strong>{alerts.length}</strong>
+            </article>
+          </section>
+
+          <section className="opsPanel opsBottomLog" aria-label="最近ログ">
+            <header>
+              <span>RECENT LOG</span>
+              <h2>最近の運用ログ</h2>
+            </header>
+            <div className="opsLogScroller">
+              {(state?.logs ?? []).slice(-8).reverse().map((log) => (
+                <p key={log.id}>
+                  <span>{formatTime(log.timestamp)}</span>
+                  <b>{log.type}</b>
+                  {log.message}
+                </p>
+              ))}
+            </div>
+          </section>
+
           <div className="opsUnityViewport">
             {unityBuildAvailable && unityVisible ? (
               <>
                 <iframe src={unityBuildUrl({ view: "admin-fit-16x10", embed: "admin" })} title="Unity WebGL 駐車場状態" className="opsUnityFrame" />
-                <button className="adminButton unityVisibilityButton" type="button" onClick={() => setUnityVisible(false)}>
-                  Unity画面を閉じる
+                <button
+                  className="adminButton unityVisibilityButton"
+                  type="button"
+                  aria-label="Unity画面を閉じる"
+                  onClick={() => setUnityVisible(false)}
+                >
+                  ×
                 </button>
               </>
             ) : unityBuildAvailable ? (
@@ -235,30 +220,24 @@ export function OverviewView({
                   </div>
                   <div className="opsCommandStack">
                     <button type="button" className="primary" disabled={commandDisabled} onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "PRIORITY")}>
-                      優先案内先に設定
+                      優先案内
                     </button>
                     <button type="button" className="danger" disabled={commandDisabled} onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "CLOSED")}>
                       一時閉鎖
                     </button>
                     <button type="button" className="warn" disabled={commandDisabled} onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "RESTRICTED")}>
-                      優先度を一時的に下げる
+                      誘導制限
                     </button>
-                    <button type="button" disabled={commandDisabled} onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "NORMAL")}>
-                      閉鎖・制限を解除
+                    <button
+                      type="button"
+                      disabled={commandDisabled || policyLabel(policy, selectedPolicyArea.areaId) === "通常"}
+                      onClick={() => onSetAreaPolicy(selectedPolicyArea.areaId, "NORMAL")}
+                    >
+                      方針解除
                     </button>
                   </div>
-                  {state?.stale ? <p className="opsEmpty">Unity接続中のみ操作できます。</p> : null}
-                  {!state?.stale && !state?.commandTarget ? <p className="opsEmpty">UnityのCommand受信接続を待っています。</p> : null}
-                  {!state?.stale && state?.commandTarget && !state.commandTargetMatchesSnapshot ? (
-                    <p className="opsEmpty">表示中のUnity状態と操作先が一致するまで待っています。</p>
-                  ) : null}
-                  {commandBusy ? <p className="opsEmpty">Commandを登録しています...</p> : null}
-                  {latestAreaCommand ? <p className="opsEmpty">最新Command: {latestAreaCommand.status}</p> : null}
-                  {commandNotice ? <p className="opsEmpty">{commandNotice}</p> : null}
                 </article>
-              ) : (
-                <p className="opsEmpty">Unity snapshot の受信待ちです。</p>
-              )}
+              ) : null}
             </div>
           </section>
 
@@ -301,21 +280,6 @@ export function OverviewView({
         </aside>
       </section>
 
-      <section className="opsPanel opsBottomLog" aria-label="最近ログ">
-        <header>
-          <span>RECENT LOG</span>
-          <h2>最近の運用ログ</h2>
-        </header>
-        <div className="opsLogScroller">
-          {(state?.logs ?? []).slice(-8).reverse().map((log) => (
-            <p key={log.id}>
-              <span>{formatTime(log.timestamp)}</span>
-              <b>{log.type}</b>
-              {log.message}
-            </p>
-          ))}
-        </div>
-      </section>
     </section>
   );
 }

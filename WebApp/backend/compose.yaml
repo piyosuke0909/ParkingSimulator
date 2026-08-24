@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - smartparking_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  backend:
+    build: .
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      SMARTPARKING_LOCAL_API_KEY: ${SMARTPARKING_LOCAL_API_KEY}
+      REQUIRE_API_KEY: ${REQUIRE_API_KEY:-true}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      TARGET_STALE_SECONDS: ${TARGET_STALE_SECONDS:-120}
+      RUNTIME_ONLINE_SECONDS: ${RUNTIME_ONLINE_SECONDS:-5}
+      COMMAND_LEASE_SECONDS: ${COMMAND_LEASE_SECONDS:-10}
+      COMMAND_MAX_DELIVERIES: ${COMMAND_MAX_DELIVERIES:-3}
+      COMMAND_DEFAULT_LIFETIME_SECONDS: ${COMMAND_DEFAULT_LIFETIME_SECONDS:-30}
+      COMMAND_MIN_POLL_INTERVAL_SECONDS: ${COMMAND_MIN_POLL_INTERVAL_SECONDS:-0.5}
+      MAX_EVENT_COUNT: ${MAX_EVENT_COUNT:-50}
+      MAX_EVENT_BYTES: ${MAX_EVENT_BYTES:-1048576}
+      MAX_SNAPSHOT_BYTES: ${MAX_SNAPSHOT_BYTES:-5242880}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  smartparking_postgres_data:

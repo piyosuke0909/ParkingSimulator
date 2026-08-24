@@ -15,9 +15,25 @@ export function apiErrorMessage(body: string, status: number): string {
 
   if (body) {
     try {
-      const parsed = JSON.parse(body) as { detail?: unknown; message?: unknown };
+      const parsed = JSON.parse(body) as { detail?: unknown; error?: unknown; message?: unknown };
       if (typeof parsed.detail === "string") {
         return parsed.detail;
+      }
+      const directError = parsed.error;
+      if (directError && typeof directError === "object") {
+        const message = (directError as { message?: unknown }).message;
+        if (typeof message === "string") {
+          return message;
+        }
+      }
+      if (parsed.detail && typeof parsed.detail === "object") {
+        const error = (parsed.detail as { error?: unknown }).error;
+        if (error && typeof error === "object") {
+          const message = (error as { message?: unknown }).message;
+          if (typeof message === "string") {
+            return message;
+          }
+        }
       }
       if (typeof parsed.message === "string") {
         return parsed.message;

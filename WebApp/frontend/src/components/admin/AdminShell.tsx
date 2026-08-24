@@ -7,13 +7,18 @@ type SidebarProps = {
   view: AdminView;
   state: AdminState | null;
   open: boolean;
-  onClose: () => void;
   onViewChange: (view: AdminView) => void;
 };
 
-export function AdminSidebar({ view, state, open, onClose, onViewChange }: SidebarProps) {
-  const connectionLabel = !state ? "確認中" : state.stale ? "Unity未受信" : "Unity接続中";
-  const connectionClass = !state ? "" : state.stale ? "stale" : "live";
+export function AdminSidebar({ view, state, open, onViewChange }: SidebarProps) {
+  const connectionLabel = !state
+    ? "確認中"
+    : !state.unityConnected
+      ? "Unity未接続"
+      : state.stale
+        ? "Snapshot更新待ち"
+        : "Unity接続中";
+  const connectionClass = !state ? "" : !state.unityConnected || state.stale ? "stale" : "live";
 
   return (
     <aside className={`adminSidebar ${open ? "open" : ""}`}>
@@ -22,9 +27,6 @@ export function AdminSidebar({ view, state, open, onClose, onViewChange }: Sideb
           <strong>SmartParking</strong>
           <span>Operations Console</span>
         </div>
-        <button className="adminIconButton" type="button" aria-label="メニューを閉じる" onClick={onClose}>
-          ×
-        </button>
       </div>
       <nav className="adminNav" aria-label="管理メニュー">
         {navItems.map((item) => (
@@ -37,7 +39,7 @@ export function AdminSidebar({ view, state, open, onClose, onViewChange }: Sideb
         <span className={`statusPill ${connectionClass}`}>{connectionLabel}</span>
         <p>最終更新 {formatTime(state?.updatedAt)}</p>
         <p>snapshot v{state?.snapshotVersion ?? 0}</p>
-        <p>Command {state?.commandTarget ? "操作可能" : "受信待ち"}</p>
+        <p>Command {state?.unityConnected && state?.commandTarget ? "操作可能" : "受信待ち"}</p>
       </div>
     </aside>
   );

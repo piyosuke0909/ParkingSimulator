@@ -22,6 +22,14 @@ function unique(values: string[]) {
   return Array.from(new Set(values));
 }
 
+const policyAreaDisplayOrder = ["B", "D", "A", "C"];
+
+function policyAreaOrder(areaId: string) {
+  const normalized = areaId.trim().toUpperCase().replace(/^AREA-/, "");
+  const index = policyAreaDisplayOrder.indexOf(normalized);
+  return index === -1 ? policyAreaDisplayOrder.length : index;
+}
+
 function policyStatus(policy: AdminPolicy, areaId: string) {
   if (hasArea(policy, "closedAreaIds", areaId)) {
     return "案内停止";
@@ -71,7 +79,9 @@ function policyReason(area: AreaStatus, policy: AdminPolicy) {
 
 export function PolicyView({ state, ai, policy, commandBusyAreas, onSetAreaPolicy, onOpenArea }: Props) {
   const areas = state?.areas ?? [];
+  const policyAreas = [...areas].sort((a, b) => policyAreaOrder(a.areaId) - policyAreaOrder(b.areaId));
   const commandUnavailable =
+    state?.unityConnected !== true ||
     Boolean(state?.stale) ||
     !state?.commandTarget ||
     state?.commandTargetMatchesSnapshot !== true;
@@ -112,10 +122,6 @@ export function PolicyView({ state, ai, policy, commandBusyAreas, onSetAreaPolic
             </button>
           </div>
         </div>
-        {!state?.stale && !state?.commandTarget ? <p className="adminNotice">UnityのCommand受信接続を待っています。</p> : null}
-        {!state?.stale && state?.commandTarget && !state.commandTargetMatchesSnapshot ? (
-          <p className="adminNotice">表示中のUnity状態と操作先が一致するまでCommand操作を停止しています。</p>
-        ) : null}
 
         <div className="policyDecision">
           <div>
@@ -144,7 +150,7 @@ export function PolicyView({ state, ai, policy, commandBusyAreas, onSetAreaPolic
           </div>
         </div>
         <div className="policyAreaGrid">
-          {areas.map((area) => (
+          {policyAreas.map((area) => (
             <section className={`policyAreaCard ${riskClass(area.riskLevel)}`} key={area.areaId}>
               <div className="policyAreaTop">
                 <button type="button" onClick={() => onOpenArea(area.areaId)}>
@@ -191,6 +197,17 @@ export function PolicyView({ state, ai, policy, commandBusyAreas, onSetAreaPolic
                   onClick={() => requestPolicy("restrictedAreaIds", area.areaId, "RESTRICTED")}
                 >
                   誘導制限
+                </button>
+                <button
+                  type="button"
+                  disabled={
+                    commandUnavailable ||
+                    commandBusyAreas.has(area.areaId) ||
+                    policyStatus(policy, area.areaId) === "通常"
+                  }
+                  onClick={() => void onSetAreaPolicy(area.areaId, "NORMAL")}
+                >
+                  方針解除
                 </button>
               </div>
             </section>

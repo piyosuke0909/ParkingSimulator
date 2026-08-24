@@ -75,6 +75,8 @@ export type AdminState = ParkingStatus & {
   logs: { id: string; timestamp: string; type: string; message: string }[];
   areaPolicies: Record<string, AreaPolicyValue>;
   commands: AdminCommand[];
+  unityConnected: boolean;
+  runtimeOnlineSeconds?: number;
   commandTarget?: { sourceId: string; sessionId: string; runId: string } | null;
   snapshotIdentity?: { sourceId: string; scene: string; sessionId?: string | null; runId?: string | null } | null;
   commandTargetMatchesSnapshot: boolean;

@@ -1,0 +1,18 @@
+SmartParking P3 Backend 次工程
+
+1. Docker Desktopを用意する。
+2. .env.example を .env へコピーし、POSTGRES_PASSWORDを設定する。
+3. docker compose up --build を実行する。
+4. /api/health と /docs を確認する。
+5. smoke_test.bat を実行し、Backend単体の往復を確認する。
+6. UnityのBase URLを http://localhost:8000 にして実Backendへ接続する。
+7. Unityで Snapshot/Event が204、Command GETが200になることを確認する。
+8. /admin から A=CLOSED を登録し、Unity反映→SUCCEEDEDまで確認する。
+9. ここまで通った後、現在のFrontendが使用している旧MVP APIを洗い出す。
+10. 必要なFrontend APIだけPostgreSQL基準で実装し、WebGL版Unityと同一Webサイトへ統合する。
+
+注意:
+- 旧 /api/unity/snapshot はP3正式APIではない。
+- 本番WebGLへ固定秘密API Keyを埋め込まない。
+- .envはGitへ含めない。
+- Command v1.0はSET_AREA_POLICYのみ。新Command Type追加は結合完了後に行う。

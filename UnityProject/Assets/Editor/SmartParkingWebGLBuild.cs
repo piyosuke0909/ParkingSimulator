@@ -8,7 +8,6 @@ public static class SmartParkingWebGLBuild
 {
     private const string ScenePath = "Assets/Scenes/Parking/SampleScene.unity";
     private const string OutputPath = "../../WebApp/frontend/public/unity-build";
-    private const string BackendBridgeName = "BackendBridge";
 
     [MenuItem("SmartParking/Build WebGL")]
     public static void Build()
@@ -53,18 +52,6 @@ public static class SmartParkingWebGLBuild
         var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
         P3BackendSetupWizard.CreateOrUpdateSetup();
 
-        GameObject bridge = GameObject.Find(BackendBridgeName);
-        if (bridge != null)
-        {
-            UnityStateExporter legacyExporter = bridge.GetComponent<UnityStateExporter>();
-            if (legacyExporter != null && legacyExporter.enabled)
-            {
-                Undo.RecordObject(legacyExporter, "Disable Legacy Snapshot Exporter");
-                legacyExporter.enabled = false;
-                EditorUtility.SetDirty(legacyExporter);
-            }
-        }
-
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
     }
@@ -84,6 +71,17 @@ public static class SmartParkingWebGLBuild
             style = style.Replace(
                 "#unity-footer { position: relative }",
                 "#unity-footer { position: absolute; left: 0; right: 0; bottom: 0; height: 38px; background: rgba(31,31,32,0.8) }");
+
+            const string adminEmbedStyle =
+                "\n.admin-embed #unity-logo,\n" +
+                ".admin-embed #unity-footer {\n" +
+                "  display: none !important;\n" +
+                "}\n";
+            if (!style.Contains(".admin-embed #unity-logo"))
+            {
+                style += adminEmbedStyle;
+            }
+
             File.WriteAllText(stylePath, style);
         }
 
@@ -91,6 +89,18 @@ public static class SmartParkingWebGLBuild
         if (File.Exists(indexPath))
         {
             string html = File.ReadAllText(indexPath);
+
+            const string adminEmbedClassScript =
+                "    <script>\n" +
+                "      if (new URLSearchParams(window.location.search).get(\"embed\") === \"admin\") {\n" +
+                "        document.body.classList.add(\"admin-embed\");\n" +
+                "      }\n" +
+                "    </script>\n";
+            if (!html.Contains("document.body.classList.add(\"admin-embed\")"))
+            {
+                html = html.Replace("<body>", "<body>\n" + adminEmbedClassScript);
+            }
+
             html = html.Replace(
                 "        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:\n\n        canvas.style.width = \"960px\";\n        canvas.style.height = \"600px\";",
                 "        // Desktop style: fill the iframe supplied by the admin screen.\n        canvas.style.width = \"100vw\";\n        canvas.style.height = \"100vh\";");
