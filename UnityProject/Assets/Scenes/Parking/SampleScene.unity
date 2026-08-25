@@ -20599,7 +20599,7 @@ MonoBehaviour:
   enableEventTransmission: 1
   enableHealthCheck: 1
   enableCommandPolling: 1
-  baseUrl: http://localhost:8000
+  baseUrl: https://smartparking-staging-api.onrender.com
   healthEndpoint: /api/health
   snapshotEndpoint: /api/v1/snapshots
   eventEndpoint: /api/v1/events
